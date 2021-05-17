@@ -1,17 +1,17 @@
-
 const toDTO = (model) => {
 
-    const { _id, nome, status } = model;
-  
-    return {
-      id: _id,
-      nome,
-      status
-    }
-  
+  const { _id, nome, status, imagem } = model;
+
+  return {
+    id: _id,
+    nome,
+    status,
+    imagem: `/static/categorias/${imagem.nome}`
   }
-  
-  
-  module.exports = {
-    toDTO,
-  }
+
+}
+
+
+module.exports = {
+  toDTO,
+}

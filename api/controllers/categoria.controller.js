@@ -22,6 +22,8 @@ const cria = async (req, res, next) => {
   const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
   const dadoRetorno = resultadoServico.sucesso ? { data: resultadoServico.data } : { detalhes: resultadoServico.detalhes };
 
+  console.log(resultadoServico);
+
   return res.status(codigoRetorno).send(dadoRetorno);
 
 }

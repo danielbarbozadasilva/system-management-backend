@@ -1,15 +1,13 @@
-const validaDTO = require('../../utils/middlewares/validate-dto.middleware');
-const categoriaController = require('../../controllers/categoria.controller');
 const joi = require('joi');
+const validaDTO = require('../../utils/middlewares/validate-dto.middleware');
 const fileUploadMiddleware = require('../../utils/middlewares/fileUploadMiddleware');
+const categoriaController = require('../../controllers/categoria.controller');
 
 module.exports = (router) => {
 
   router
     .route('/categoria')
-    .get(
-      categoriaController.lista
-    )
+    .get(categoriaController.lista)
     .post(
       fileUploadMiddleware('categorias'),
       validaDTO('body', {
@@ -25,22 +23,20 @@ module.exports = (router) => {
           'any.required': `"status" é um campo obrigatório`,
           'booleam.empty': `"status" não deve ser vazio`,
         }),
-
+      }, {
+        allowUnknown: true,
       }),
-      categoriaController.cria
-    )
+
+       categoriaController.cria)
 
 
   router
     .route('/categoria/:idcategoria')
-    .get(
-      categoriaController.buscaPorId
-    )
-    .put(
-      validaDTO('param', {
+    .get(categoriaController.buscaPorId)
+    .put( validaDTO('param', {
         idcategoria: joi.string().required().messages({
-          'any.required': `"id" é um campo obrigatório`,
-          'string.empty': `"id" não deve ser vazio`,
+          'any.required': `"nome" é um campo obrigatório`,
+          'string.empty': `"nome" não deve ser vazio`,
         }),
       }),
       validaDTO('body', {
@@ -57,18 +53,12 @@ module.exports = (router) => {
           'booleam.empty': `"status" não deve ser vazio`,
         }),
 
-      }),
-      categoriaController.altera
-    )
-    .delete(
-      validaDTO('param', {
+      }), categoriaController.altera)
+
+    .delete( validaDTO('param', {
         idcategoria: joi.string().required().messages({
           'any.required': `"nome" é um campo obrigatório`,
           'string.empty': `"nome" não deve ser vazio`,
         }),
-      }),
-      categoriaController.deleta
-    )
-
-
+      }), categoriaController.deleta)
 }

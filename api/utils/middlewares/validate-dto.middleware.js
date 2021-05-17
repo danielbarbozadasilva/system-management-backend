@@ -1,14 +1,14 @@
 const Joi = require('joi');
 
-// função que retorna um middleware
-const validaDTO = (tipo, parametro) => {
+const validaDTO = (tipo, parametro, opcoes = {}) => {
 
   return (req, res, next) => {
 
     const schema = Joi.object().keys(parametro);
 
     const result = schema.validate(req[tipo], {
-      allowUnknown: false
+      allowUnknown: false,
+      ...opcoes,
     });
 
 
@@ -36,5 +36,7 @@ const validaDTO = (tipo, parametro) => {
 
 }
 
-module.exports = validaDTO
 
+
+
+module.exports = validaDTO

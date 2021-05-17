@@ -8,6 +8,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+/* O express vai usar qualquer conteúdo estático que 
+esteja dentro do diretório que estou apontando */
+/* __dirname (/home/pc/Área de Trabalho/projeto04meu/backend/api/server.js)  */
+/* ('/..') - Subo um nível, saio do 'server.js' e vou para a 'RAIZ' e aponto para 'ARQUIVOS' */
+app.use('/static', express.static(__dirname + '/..' + '/arquivos'));
+
 const router = require('./routes/index');
 router(app);
 

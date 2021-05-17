@@ -1,10 +1,11 @@
 
 const { categoria } = require('../models/index');
 const categoriaMapper = require('../mappers/categoria.mapper');
+const fileUtils = require('../utils/file.util');
+
 
 const listaTodos = async () => {
 
-  // Retorna uma coleção vazia
   const listaCategoriasDB = await categoria.find({});
 
   return listaCategoriasDB.map(categortiaDB => {
@@ -17,13 +18,20 @@ const listaTodos = async () => {
 
 const criaCategoria = async (model) => {
 
-  // tratar nomes repetidos
-  // incluir nova categoria
+  // Tratar nomes repetidos e  incluir nova categoria
   const novaCategoria = await categoria.create({
     nome: model.nome,
     descricao: model.descricao,
-    status: model.status
+    status: model.status,
+    imagem: {
+      originalname: model.imagem.nomeOriginal,
+      nome: model.imagem.novoNome,
+      tipo: model.imagem.tipo
+    }
   })
+console.log(novaCategoria)
+  // Altero o caminho do original para destino definitivo (novo)
+  fileUtils.move(model.imagem.caminhoOriginal, model.imagem.novoCaminho);
 
   return {
     sucesso: true,
@@ -33,15 +41,8 @@ const criaCategoria = async (model) => {
 
 }
 
-// const novacategoria = await categoria.create({
-//   nome: model.nome,
-//   descricao: model.descricao,
-//   status: model.status,
-// })
 
 module.exports = {
-
   criaCategoria,
   listaTodos,
-
 }
