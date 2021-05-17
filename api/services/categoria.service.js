@@ -33,6 +33,11 @@ const criaCategoria = async (model) => {
 
 }
 
+// const novacategoria = await categoria.create({
+//   nome: model.nome,
+//   descricao: model.descricao,
+//   status: model.status,
+// })
 
 module.exports = {
 

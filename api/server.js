@@ -12,7 +12,7 @@ const router = require('./routes/index');
 router(app);
 
 const port = process.env.PORT ? Number(process.env.PORT) : 3001
-
+app.use('/static', express.static(__dirname + '/..' + '/arquivos'));
 app.listen(port, () => {
 });
 
