@@ -27,6 +27,8 @@ atravérs da ORM 'mongoose' */
 const usuarioSchema = require('./model.usuario');
 
 // possibilidade de listar qualquer usuário na coleção de usuario
+
+// O esquema pai é indefinido (undefined). Esquema filho (usuarioSchema) - da categoria
 const usuario = mongoose.model('usuario', createSchema(undefined, usuarioSchema, {
   discriminatorKey: 'kind',
 }));
@@ -37,8 +39,17 @@ const usuario = mongoose.model('usuario', createSchema(undefined, usuarioSchema,
 const administradorSchema = require('./model.administrador');
 const administrador = usuario.discriminator('adminsitardor', createSchema(usuarioSchema, administradorSchema,{}));
 
-// exporto o usuário
+
+const categoriaSchema = require('./model.categoria');
+
+// O esquema pai é indefinido (undefined). Esquema filho (categoriaSchema) - da categoria
+const categoria = mongoose.model('categoria', createSchema(undefined, categoriaSchema, {
+  collection: 'CategoriaCollection',
+}));
+
+
 module.exports = {
+  categoria,
   usuario,
-  administrador
+  administrador,
 }

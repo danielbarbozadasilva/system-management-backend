@@ -4,6 +4,7 @@ const categoriaMapper = require('../mappers/categoria.mapper');
 
 const listaTodos = async () => {
 
+  // Retorna uma coleção vazia
   const listaCategoriasDB = await categoria.find({});
 
   return listaCategoriasDB.map(categortiaDB => {

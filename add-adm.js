@@ -11,15 +11,15 @@ const mongoose = require("mongoose");
 mongoose.connect(db.uri, { useUnifiedTopology: true, useNewUrlParser: true });
 
 const { administrador } = require('./api/models/index');
-const criptografia = require('./api/utils/criptografia.utils');
+const criptografia = require('./api/utils/criptografia.util');
 
 
 const criaADM = async () => {
 
   await administrador.create({
-    email: 'ezer.adm@teste.com',
-    nome: 'ezer adm',
-    senha: criptografia.criaHash('123456')
+    email: 'daniel@gmail.com',
+    nome: 'daniel',
+    senha: criptografia.criaHash('daniel')
   });
 
 }
