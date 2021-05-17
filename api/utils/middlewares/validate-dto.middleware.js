@@ -38,8 +38,5 @@ const validaDTO = (tipo, parametro) => {
 
 
 
-module.exports = {
+module.exports = validaDTO
 
-  validaDTO,
-
-}

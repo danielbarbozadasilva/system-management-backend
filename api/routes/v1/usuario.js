@@ -1,6 +1,6 @@
 
 const usuarioController = require('../../controllers/usuario.controller');
-const { validaDTO } = require('../../util/middlewares/validate-dto.middleware');
+const validaDTO = require('../../utils/middlewares/validate-dto.middleware');
 
 
 const joi = require('joi');
