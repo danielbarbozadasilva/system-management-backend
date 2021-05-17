@@ -1,7 +1,7 @@
 const validaDTO = require('../../utils/middlewares/validate-dto.middleware');
 const categoriaController = require('../../controllers/categoria.controller');
 const joi = require('joi');
-
+const fileUploadMiddleware = require('../../utils/middlewares/fileUploadMiddleware');
 
 module.exports = (router) => {
 
@@ -11,6 +11,7 @@ module.exports = (router) => {
       categoriaController.lista
     )
     .post(
+      fileUploadMiddleware('categorias'),
       validaDTO('body', {
         nome: joi.string().required().messages({
           'any.required': `"nome" é um campo obrigatório`,
@@ -38,22 +39,22 @@ module.exports = (router) => {
     .put(
       validaDTO('param', {
         idcategoria: joi.string().required().messages({
-          'any.required': `"ID" é um campo obrigatório`,
-          'string.empty': `"ID" não deve ser vazio`,
+          'any.required': `"id" é um campo obrigatório`,
+          'string.empty': `"id" não deve ser vazio`,
         }),
       }),
       validaDTO('body', {
         nome: joi.string().required().messages({
-          'any.required': `"Nome" é um campo obrigatório`,
-          'string.empty': `"Nome" não deve ser vazio`,
+          'any.required': `"nome" é um campo obrigatório`,
+          'string.empty': `"nome" não deve ser vazio`,
         }),
         descricao: joi.string().required().messages({
-          'any.required': `"Descrição" é um campo obrigatório`,
-          'string.empty': `"Descrição" não deve ser vazio`,
+          'any.required': `"descricao" é um campo obrigatório`,
+          'string.empty': `"descricao" não deve ser vazio`,
         }),
         status: joi.boolean().required().messages({
-          'any.required': `"Status" é um campo obrigatório`,
-          'booleam.empty': `"Status" não deve ser vazio`,
+          'any.required': `"status" é um campo obrigatório`,
+          'booleam.empty': `"status" não deve ser vazio`,
         }),
 
       }),
