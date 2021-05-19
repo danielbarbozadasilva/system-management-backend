@@ -16,6 +16,6 @@ module.exports = (app) => {
   routesV1Usuarios(routesV1);
   routesV1Categorias(routesV1);
 
-  app.use('/v1', routesV1);
+  app.use('/v1', routesV1)
 
 }
