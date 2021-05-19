@@ -4,9 +4,17 @@ const moment = require('moment');
 const fs = require('fs');
 const uuid = require('uuid').v4;
 
-const criaEndereco = (destino, arquivoNome) => {
-  // retorna o endereço do meu arquivo
+/* Cria o endereço apartir de um endereço raiz, 
+passando o destino e o nome do arquivo(caso seja relevante)  */
+const criaEndereco = (destino, arquivoNome = "") => {
+
+    // retorna o endereço do meu arquivo
   return path.join(enderecoRaiz, destino, arquivoNome);
+}
+
+/* Função que cria o endereço para download */
+const criaEnderecoDownload = (origem, arquivoNome) => {
+  return path.join('/static', origem, arquivoNome);
 }
 
 const criaNome = (tipo) => {
@@ -14,16 +22,25 @@ const criaNome = (tipo) => {
   return `${uuid()}.${tipoTratado}`;
 }
 
+/* Move o arquivo */ 
 const move = (temporario, definitivo) => {
   return fs.renameSync(temporario, definitivo);
 }
 
+const remove = (origem, arquivo) => {
+  const enderecoArquivo = criaEndereco(origem, arquivo);
+  // Verifica se existe, em caso afirmativo ele remove 
+  if (fs.existsSync(enderecoArquivo))
+    fs.unlinkSync(enderecoArquivo);
 
-  
-  module.exports = {
-    criaEndereco,
-    criaNome,
-    move,
-    // remove,
-  }
-  
+  return;
+}
+
+
+module.exports = {
+  criaEndereco,
+  criaEnderecoDownload,
+  criaNome,
+  move,
+  remove,
+}

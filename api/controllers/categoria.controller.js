@@ -1,54 +1,92 @@
 const categoriaService = require('../services/categoria.service');
 
-const altera = (req, res, next) => {
+// Função que lista todas as categorias
+const listaTodasAsCategorias = async (req, res, next) => {
 
-  return res.status(200).send();
+  const result = await categoriaService.listaTodos();
 
+  return res.status(200).send({ data: result });
 }
 
-const deleta = (req, res, next) => {
 
-  return res.status(200).send();
+const buscarPorId = async (req, res, next) => {
 
+  // pega o ID
+  const { params } = req;
+
+  // Verifica se a categoria existe
+  const categoria = await categoriaService.buscaPorId(params.categoriaid);
+
+  // Caso não exista
+  if (!categoria)
+    return res.status(404).send({
+      detalhes: [
+        "categoria informada nao existe"
+      ]
+    });
+
+  // Caso exista retorna a categoria
+  return res.status(200).send(categoria);
 }
 
-const cria = async (req, res, next) => {
+
+
+const criarCategoria = async (req, res, next) => {
 
   const { body } = req;
 
 
   const resultadoServico = await categoriaService.criaCategoria(body);
-
+  
   const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
   const dadoRetorno = resultadoServico.sucesso ? { data: resultadoServico.data } : { detalhes: resultadoServico.detalhes };
-
-  console.log(resultadoServico);
 
   return res.status(codigoRetorno).send(dadoRetorno);
 
 }
 
-const buscaPorId = (req, res, next) => {
 
-  return res.status(200).send([]);
+const alterarCategoria = async (req, res, next) => {
+
+  // Precisa pegar dados do parametro e do 'body'
+  const { params, body } = req;
+
+  const resultadoServico = await categoriaService.alteraCategoria(params.categoriaid, body);
+  
+  // 200 - sucesso | 400 (Bad request) - em caso de falha
+  const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
+  const dadoRetorno = resultadoServico.sucesso ? { data: resultadoServico.data } : { detalhes: resultadoServico.detalhes };
+
+  return res.status(codigoRetorno).send(dadoRetorno);
 
 }
 
-const lista = async (req, res, next) => {
+const deletarCategoria = async (req, res, next) => {
+  
+  // Pega o parametro
+  const { params } = req;
 
-  const result = await categoriaService.listaTodos();
+  // Passa o parametro para a função de deleção (service)
+  const resultadoServico = await categoriaService.deleta(params.categoriaid);
 
-  return res.status(200).send({ data: result });
+  // 200 - sucesso | 400 (Bad request) - em caso de falha
+  const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
+
+  const dadoRetorno = resultadoServico.sucesso ? {
+    mensagem: resultadoServico.mensagem
+  } : { detalhes: resultadoServico.detalhes };
+
+  // codigo do serviço  e o seu respectivo tratamento
+  return res.status(codigoRetorno).send(dadoRetorno);
 
 }
-
 
 
 
 module.exports = {
-  buscaPorId,
-  lista,
-  cria,
-  altera,
-  deleta,
+  listaTodasAsCategorias,
+  buscarPorId,
+  criarCategoria,
+  deletarCategoria,
+  alterarCategoria,
 }
