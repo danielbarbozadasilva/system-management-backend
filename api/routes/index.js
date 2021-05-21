@@ -1,8 +1,13 @@
+/* Arquivo central de rotas, responsável pela associação de todas
+as rotas contruídas seguimentadas por negórcio e o contexto do negócio */
+
 const { Router } = require('express');
 const { name, version } = require('../../package.json');
 
-
+/* É necessário expor uma rota de autenticação de usuários */
 const routesV1Usuarios = require('./v1/usuario');
+
+/* Manter Categoria - todas as operações que representam o CRUD */
 const routesV1Categorias = require('./v1/categoria');
 
 module.exports = (app) => {

@@ -33,14 +33,15 @@ const buscarPorId = async (req, res, next) => {
 
 const criarCategoria = async (req, res, next) => {
 
+  // recolhe as informações que vem da request
   const { body } = req;
-
-
+  
+  // invoca o serviço
   const resultadoServico = await categoriaService.criaCategoria(body);
   
+  // obtem a resposta do serviço e prepara o retorno
   const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
   const dadoRetorno = resultadoServico.sucesso ? { data: resultadoServico.data } : { detalhes: resultadoServico.detalhes };
-
   return res.status(codigoRetorno).send(dadoRetorno);
 
 }
@@ -51,6 +52,7 @@ const alterarCategoria = async (req, res, next) => {
   // Precisa pegar dados do parametro e do 'body'
   const { params, body } = req;
 
+  // invoca o serviço de negócio, representa a operação de négocio que quero realizar 
   const resultadoServico = await categoriaService.alteraCategoria(params.categoriaid, body);
   
   // 200 - sucesso | 400 (Bad request) - em caso de falha

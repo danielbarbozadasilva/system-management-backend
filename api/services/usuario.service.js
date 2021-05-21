@@ -2,10 +2,12 @@ const { usuario } = require('../models/index');
 const criptografia = require('../utils/criptografia.util');
 const usuarioMapper = require('../mappers/usuario.mapper');
 
+// Função responsável por validar se o usuário existe
 const usuarioEValido = async (email, senha) => {
   return await usuario.findOne({ email, senha: criptografia.criaHash(senha) }) ? true : false;
 }
 
+// Função responsável por criar a credencial do usuário
 const criaCredencial = async (usuarioEmail) => {
 
   const usuarioDB = await usuario.findOne({
@@ -21,6 +23,7 @@ const criaCredencial = async (usuarioEmail) => {
 
 }
 
+// Função responsável por autenticar do usuário
 const autenticar = async (email, senha) => {
 
   const resultadoDB = await usuarioEValido(email, senha);
@@ -44,6 +47,7 @@ const autenticar = async (email, senha) => {
 
 }
 
+// Função que cria o usuário no sistema
 const cria = async () => {
 
   return usuario.create({

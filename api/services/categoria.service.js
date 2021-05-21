@@ -7,13 +7,14 @@ const buscaPorId = async (categoriaid) => {
 
   const categoriaDB = await categoria.findById(categoriaid);
 
-  if (categoriaDB)
-  // retorno o resultado da transformação do meu 'mapper', ou seja a minha saida do 'endpoint'
+  if (categoriaDB) 
   return categoriaMapper.toDTO(categoriaDB);
+  // retorno o resultado da transformação do meu 'mapper', ou seja a minha saida do 'endpoint'
 
   return;
 
 }
+
 const listaTodos = async () => {
 
   const listaCategoriasDB = await categoria.find({});
@@ -29,6 +30,7 @@ const listaTodos = async () => {
 const criaCategoria = async (model) => {
   
   const categoriaDB = await categoria.findOne({ nome: model.nome });
+  
   // valido, caso não encontre a categoria na base de dados
   if (categoriaDB) {
     return {
@@ -78,9 +80,9 @@ const deleta = async (categoriaId) => {
   }
 
   // Criar tratamento para quando existem produtos associados a categoria
-
+  const { imagem } = categoriaDB;  
+  
   // Remove o arquivo
-  const { imagem } = categoriaDB;
   fileUtils.remove('categorias', imagem.nome);
 
   // Deletar do banco de dados
@@ -92,7 +94,6 @@ const deleta = async (categoriaId) => {
     sucesso: true,
     mensagem: 'Operação realizada com sucesso.'
   }
-
 
 }
 
@@ -111,6 +112,7 @@ const alteraCategoria = async (categoriaId, model) => {
       ]
     };
   }
+
   /* Ele não caiu no 'if', então ele existe. Preciso remover o arquivo (o arquivo que ele já tem) 
   (da onde eu quero retornar | o nome do elemento que eu quero remover */
   fileUtils.remove('categorias', categoriaDB.imagem.nome);
@@ -143,6 +145,5 @@ module.exports = {
   criaCategoria,
   alteraCategoria,
   listaTodos,
-  deleta,
-
+  deleta
 }
