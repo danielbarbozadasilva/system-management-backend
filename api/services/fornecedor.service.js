@@ -1,6 +1,6 @@
 const { fornecedor } = require('../models/index');
-const { validaEmailExiste } = require('../services/usuario.service');
-const { criaHash } = require('../utils/criptografia.utils');
+const { validaEmailExiste } = require('./usuario.service');
+const { criaHash } = require('../utils/criptografia.util');
 
 const validaSeCnpjJaExiste = async (cnpj) => {
 

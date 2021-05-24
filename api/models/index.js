@@ -39,7 +39,7 @@ const administrador = usuario.discriminator('name', createSchema(usuarioSchema, 
 
 
 /* FORNECEDOR */
-const fornecedorSchema = require('./fornecedor');
+const fornecedorSchema = require('./model.fornecedor');
 const fornecedor = usuario.discriminator('fornecedor', createSchema(usuarioSchema, fornecedorSchema, {}));
 
 
@@ -49,7 +49,6 @@ const categoriaSchema = require('./model.categoria');
 const categoria = mongoose.model('categoria', createSchema(undefined, categoriaSchema, {
   collection: 'CategoriaCollection',
 }));
-
 
 module.exports = {
   categoria,
