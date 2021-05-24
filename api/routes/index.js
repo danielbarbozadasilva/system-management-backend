@@ -10,6 +10,9 @@ const routesV1Usuarios = require('./v1/usuario');
 /* Manter Categoria - todas as operações que representam o CRUD */
 const routesV1Categorias = require('./v1/categoria');
 
+/* Manter Fornecedores - todas as operações que representam o CRUD */
+const routesV1Fornecedores = require('./v1/fornecedores');
+
 module.exports = (app) => {
 
   app.get('/', (req, res, next) => {
@@ -20,7 +23,8 @@ module.exports = (app) => {
 
   routesV1Usuarios(routesV1);
   routesV1Categorias(routesV1);
-
+  routesV1Fornecedores(routesV1);
+  
   app.use('/v1', routesV1);
 
 }
