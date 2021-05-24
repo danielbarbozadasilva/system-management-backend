@@ -1,5 +1,5 @@
 const { fornecedor } = require('../models/index');
-const { validaSeEmailJaExiste } = require('../services/usuario.service');
+const { validaEmailExiste } = require('../services/usuario.service');
 const { criaHash } = require('../utils/criptografia.utils');
 
 const validaSeCnpjJaExiste = async (cnpj) => {
@@ -28,7 +28,7 @@ const cria = async (model) => {
     }
 
   // Caso o e-mail já exista
-  if (await validaSeEmailJaExiste(email))
+  if (await validaEmailExiste(email))
     return {
       sucesso: false,
       mensagem: 'operação não pode ser realizada',
@@ -56,5 +56,5 @@ const cria = async (model) => {
 }
 
 module.exports = {
-  cria,
+  cria
 }

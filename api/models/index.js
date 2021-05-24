@@ -38,18 +38,17 @@ const administradorSchema = require('./model.administrador');
 const administrador = usuario.discriminator('name', createSchema(usuarioSchema, administradorSchema,{}));
 
 
+/* FORNECEDOR */
+const fornecedorSchema = require('./fornecedor');
+const fornecedor = usuario.discriminator('fornecedor', createSchema(usuarioSchema, fornecedorSchema, {}));
+
+
 /* CATEGORIA */
 const categoriaSchema = require('./model.categoria');
 // O esquema pai é indefinido (undefined). Esquema filho (categoriaSchema) - da categoria
 const categoria = mongoose.model('categoria', createSchema(undefined, categoriaSchema, {
   collection: 'CategoriaCollection',
 }));
-
-
-/* FORNECEDOR */
-const fornecedorSchema = require('./fornecedor');
-const fornecedor = usuario.discriminator('fornecedor', createSchema(usuarioSchema, fornecedorSchema, {}));
-
 
 
 module.exports = {

@@ -57,7 +57,16 @@ const cria = async () => {
 
 }
 
+const validaEmailExiste = async (email) => {
+
+  const usuarios = await usuario.find({ email });
+
+  return usuarios.length > 0 ? true : false;
+
+}
+
 module.exports = {
   autenticar,
   cria,
+  validaEmailExiste
 }
