@@ -2,6 +2,8 @@ const { fornecedor } = require('../models/index');
 const { validaEmailExiste } = require('./usuario.service');
 const { criaHash } = require('../utils/criptografia.util');
 
+const { criaHash } = require('../utils/criptografia.utils');
+
 const validaSeCnpjJaExiste = async (cnpj) => {
 
   const result = await fornecedor.find({
@@ -12,8 +14,24 @@ const validaSeCnpjJaExiste = async (cnpj) => {
 
 }
 
-const cria = async (model) => {
 
+const alteraStatus = async (id, status) => {
+  const fornecedorDB = await fornecedor.findById(id);
+  if (!fornecedorDB) {
+
+    return {
+      sucesso: false,
+      mensagem: 'operação não pode ser realizada',
+      detalhes: [
+        'Não existe fornecedor cadastrado para o fornecedor id informado'
+      ],
+    };
+  }
+  fornecedorDB.status = status;
+  return fornecedorDB.save();
+}
+
+const cria = async (model) => {
 
   const { email, cnpj, senha, ...resto } = model;
 
@@ -55,6 +73,17 @@ const cria = async (model) => {
 
 }
 
+
+const listaTodos = async (filtro) => {
+  const resultadoDB = await fornecedor.find();
+  return resultadoDB.map(item => {
+    return toListItemDTO(item);
+  })
+
+}
+
 module.exports = {
-  cria
+  alteraStatus,
+  cria,
+  listaTodos
 }
