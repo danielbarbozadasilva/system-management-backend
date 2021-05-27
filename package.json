@@ -19,6 +19,7 @@
   },
   "homepage": "https://gitlab.com/daniel.bsilva/projeto-04#readme",
   "dependencies": {
+    "@ssttevee/multipart-parser": "^0.1.8",
     "cors": "^2.8.5",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
