@@ -50,7 +50,7 @@ const criaCategoria = async (model) => {
     imagem: {
       nomeOriginal: model.imagem.nomeOriginal,
       nome: model.imagem.novoNome,
-      tipo: model.imagem.tipo,
+      tipo: model.imagem.tipo
     }
   })
 

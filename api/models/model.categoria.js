@@ -23,7 +23,7 @@
     tipo: {
       type: String,
       required: false,
-    },
+    }
 
   }
 }
