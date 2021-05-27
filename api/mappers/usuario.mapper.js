@@ -15,9 +15,7 @@ const trataTipoUsuario = (tipo) => {
   
     const { id, email, kind, nome, nomeFantasia } = model;
   
-    // pega o nome do usuário, empresa ou nomefantasia
-    console.log("nome: ", nome);
-  
+    // pega o nome do usuário, empresa ou nomefantasia  
     return {
       id,
       email,

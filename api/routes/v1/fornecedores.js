@@ -4,7 +4,7 @@ const fornecedorController = require('../../controllers/fornecedor.controller');
 
 module.exports = (router) => {
 
-  router.route('/fornecedor')
+  router.route('/fornecedor').get(fornecedorController.lista)
     .post(
       validaDTO('body', {
         cnpj: joi.string().required().messages({
@@ -48,4 +48,29 @@ module.exports = (router) => {
       fornecedorController.criarFornecedor
     )
 
+    /* Ativa o Fornecedor */
+    router.route('/fornecedor/:fornecedorid/ativa').put(
+      validaDTO('params', {
+        fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
+          'any.required': `"fornecedor id" é um campo obrigatório`,
+          'string.empty': `"fornecedor id" não deve ser vazio`,
+          'string.pattern.base': `"fornecedor id" fora do formato experado`,
+        }),
+      }),
+      fornecedorController.ativa
+    )
+
+  /* Inativa o Fornecedor */
+  router.route('/fornecedor/:fornecedorid/inativa').put(
+      validaDTO('params', {
+        fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
+          'any.required': `"fornecedor id" é um campo obrigatório`,
+          'string.empty': `"fornecedor id" não deve ser vazio`,
+          'string.pattern.base': `"fornecedor id" fora do formato experado`,
+        }),
+      }),
+      fornecedorController.inativa
+    )
+
 }
+

@@ -1,11 +1,9 @@
 const { fornecedor } = require('../models/index');
 const { validaEmailExiste } = require('./usuario.service');
 const { criaHash } = require('../utils/criptografia.util');
-
-const { criaHash } = require('../utils/criptografia.utils');
+const {toListItemDTO} = require('../mappers/fornecedor.mapper');
 
 const validaSeCnpjJaExiste = async (cnpj) => {
-
   const result = await fornecedor.find({
     cnpj
   });
@@ -32,7 +30,6 @@ const alteraStatus = async (id, status) => {
 }
 
 const cria = async (model) => {
-
   const { email, cnpj, senha, ...resto } = model;
 
   // Caso o CNPJ já exista
@@ -54,7 +51,8 @@ const cria = async (model) => {
         'Já existe usuário cadastrado para o email informado'
       ],
     }
-    // Caso nem o e-mail e o CNPJ existam, ele cria o fornecedor
+
+  // Caso nem o e-mail e o CNPJ existam, ele cria o fornecedor
   const novoFornecedor = await fornecedor.create({
     email,
     cnpj,

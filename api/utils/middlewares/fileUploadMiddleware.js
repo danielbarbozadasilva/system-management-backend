@@ -24,8 +24,6 @@ const fileUpload = (destino) => {
             ]
           });
         }
-        console.log('filees',files)
-
 
         // se não caiu na validação acima, RECEBI UM ARQUIVO COM O NOME DE 'IMAGEM'
         const novoNome = fileUtils.criaNome(files.imagem.type);
