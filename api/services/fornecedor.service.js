@@ -1,20 +1,21 @@
 const { fornecedor } = require('../models/index');
-const { validaEmailExiste } = require('./usuario.service');
+const { toListItemDTO } = require('../mappers/fornecedor.mapper');
+const { validaSeEmailJaExiste } = require('../services/usuario.service');
 const { criaHash } = require('../utils/criptografia.util');
-const {toListItemDTO} = require('../mappers/fornecedor.mapper');
+const emailUtils = require('../utils/email.utils');
 
 const validaSeCnpjJaExiste = async (cnpj) => {
-  const result = await fornecedor.find({
-    cnpj
-  });
+
+  const result = await fornecedor.find({cnpj});
 
   return result.length > 0 ? true : false;
-
+  
 }
 
-
 const alteraStatus = async (id, status) => {
+
   const fornecedorDB = await fornecedor.findById(id);
+
   if (!fornecedorDB) {
 
     return {
@@ -24,15 +25,35 @@ const alteraStatus = async (id, status) => {
         'Não existe fornecedor cadastrado para o fornecedor id informado'
       ],
     };
+
   }
+
+
   fornecedorDB.status = status;
-  return fornecedorDB.save();
+  await fornecedorDB.save();
+
+  emailUtils.enviar({
+    destinatario: fornecedor,
+    remetente: process.env.SENDGRID_REMETENTE
+  })
+
+  return {
+    sucesso: true,
+    mensagem: 'Operação realizada com sucesso',
+    data: {
+      ...toListItemDTO(fornecedorDB.toJSON())
+    }
+  }
+
 }
 
 const cria = async (model) => {
+
+  // console.log('fornecedor.service');
+
   const { email, cnpj, senha, ...resto } = model;
 
-  // Caso o CNPJ já exista
+  //TODO: cnpj ja existente
   if (await validaSeCnpjJaExiste(cnpj))
     return {
       sucesso: false,
@@ -42,8 +63,8 @@ const cria = async (model) => {
       ],
     }
 
-  // Caso o e-mail já exista
-  if (await validaEmailExiste(email))
+  //TODO: email ja existente
+  if (await validaSeEmailJaExiste(email))
     return {
       sucesso: false,
       mensagem: 'operação não pode ser realizada',
@@ -52,7 +73,6 @@ const cria = async (model) => {
       ],
     }
 
-  // Caso nem o e-mail e o CNPJ existam, ele cria o fornecedor
   const novoFornecedor = await fornecedor.create({
     email,
     cnpj,
@@ -65,15 +85,23 @@ const cria = async (model) => {
     sucesso: true,
     mensagem: 'Operação realizada com sucesso',
     data: {
-      ...novoFornecedor
+      ...toListItemDTO(novoFornecedor)
     }
   }
 
 }
 
-
 const listaTodos = async (filtro) => {
+
+  // const { status } = filtro;
+
+  // const body = {};
+
+  // if (status)
+  //   body.status = status;
+
   const resultadoDB = await fornecedor.find();
+
   return resultadoDB.map(item => {
     return toListItemDTO(item);
   })
@@ -83,5 +111,5 @@ const listaTodos = async (filtro) => {
 module.exports = {
   alteraStatus,
   cria,
-  listaTodos
+  listaTodos,
 }

@@ -13,7 +13,7 @@ const criarFornecedor = async (req, res, next) => {
   const dadoRetorno = result.sucesso ? { data: result.data } : { detalhes: result.detalhes };
  
   // codigo do serviço  e o seu respectivo tratamento
-  return res.status(codigoRetorno).send(dadoRetorno);
+  return res.status(codigoRetorno).send(...dadoRetorno);
 
 }
 
@@ -29,7 +29,7 @@ const ativa = async (req, res, next) => {
   const dadoRetorno = resultadoServico.sucesso ? { data: resultadoServico.data } : { detalhes: resultadoServico.detalhes };
 
   // tratar saída
-  return res.status(200).send({
+  return res.status(codigoRetorno).send({
     mensagem: 'operaçao realizada com sucesso',
     ...dadoRetorno
   });
