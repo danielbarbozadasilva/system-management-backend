@@ -1,15 +1,18 @@
 const { fornecedor } = require('../models/index');
 const { toListItemDTO } = require('../mappers/fornecedor.mapper');
 const { validaSeEmailJaExiste } = require('../services/usuario.service');
-const { criaHash } = require('../utils/criptografia.util');
+
+const { criaHash } = require('../utils/criptografia.utils');
 const emailUtils = require('../utils/email.utils');
 
 const validaSeCnpjJaExiste = async (cnpj) => {
 
-  const result = await fornecedor.find({cnpj});
+  const result = await fornecedor.find({
+    cnpj
+  });
 
   return result.length > 0 ? true : false;
-  
+
 }
 
 const alteraStatus = async (id, status) => {
@@ -28,14 +31,21 @@ const alteraStatus = async (id, status) => {
 
   }
 
-
   fornecedorDB.status = status;
+
   await fornecedorDB.save();
 
-  emailUtils.enviar({
-    destinatario: fornecedor,
-    remetente: process.env.SENDGRID_REMETENTE
-  })
+  if (status === 'Ativo') {
+
+    //TODO: adicionar o envio de email
+    emailUtils.enviar({
+      destinatario: fornecedorDB.email,
+      remetente: process.env.SENDGRID_REMETENTE,
+      assunto: `Confirmação do cadastro de ${fornecedorDB.nomeFantasia}`,
+      corpo: `sua conta do projeto 04 já esta liberada para uso para uso já`,
+    });
+
+  }
 
   return {
     sucesso: true,
