@@ -45,7 +45,7 @@ module.exports = (router) => {
           'string.empty': `"senha" não deve ser vazio`,
         }),
       }),
-      fornecedorController.criarFornecedor
+      fornecedorController.cria
     )
 
     /* Ativa o Fornecedor */
@@ -61,7 +61,7 @@ module.exports = (router) => {
     )
 
   /* Inativa o Fornecedor */
-  router.route('/fornecedor/:fornecedorid/inativa').put(
+  router.route('/fornecedor/:fornecedorid/inativar').put(
       validaDTO('params', {
         fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
           'any.required': `"fornecedor id" é um campo obrigatório`,

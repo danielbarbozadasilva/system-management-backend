@@ -82,7 +82,7 @@ module.exports = (router) => {
 
        .put(
          /* ao alterar uma categoria precisa-se associar a uma imagem */
-         fileUploadMiddleware('categorias'),
+         fileUploadMiddleware('categorias', true),
           // Regex para validar o formato do ID do 'Mongo'
          validaDTO('params', {
            categoriaid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({

@@ -1,15 +1,13 @@
 const { fornecedor } = require('../models/index');
 const { toListItemDTO } = require('../mappers/fornecedor.mapper');
-const { validaSeEmailJaExiste } = require('../services/usuario.service');
+const { validaEmailExiste } = require('../services/usuario.service');
 
-const { criaHash } = require('../utils/criptografia.utils');
+const { criaHash } = require('../utils/criptografia.util');
 const emailUtils = require('../utils/email.utils');
 
 const validaSeCnpjJaExiste = async (cnpj) => {
 
-  const result = await fornecedor.find({
-    cnpj
-  });
+  const result = await fornecedor.find({ cnpj });
 
   return result.length > 0 ? true : false;
 
@@ -36,15 +34,18 @@ const alteraStatus = async (id, status) => {
   await fornecedorDB.save();
 
   if (status === 'Ativo') {
+    console.log('email'+fornecedorDB.email)
+    console.log('remetente'+process.env.SENDGRID_REMETENTE)
 
-    //TODO: adicionar o envio de email
-    emailUtils.enviar({
-      destinatario: fornecedorDB.email,
-      remetente: process.env.SENDGRID_REMETENTE,
-      assunto: `Confirmação do cadastro de ${fornecedorDB.nomeFantasia}`,
-      corpo: `sua conta do projeto 04 já esta liberada para uso para uso já`,
-    });
-
+    try {
+      // adicionar o envio de email
+      emailUtils.enviar({
+        destinatario: fornecedorDB.email,
+        remetente: process.env.SENDGRID_REMETENTE,
+        assunto: `Confirmação do cadastro de ${fornecedorDB.nomeFantasia}`,
+        corpo: `sua conta do projeto 04 já esta liberada para uso para uso já`,
+      });
+    } catch (error) { console.log(error.message); }
   }
 
   return {
@@ -59,11 +60,9 @@ const alteraStatus = async (id, status) => {
 
 const cria = async (model) => {
 
-  // console.log('fornecedor.service');
-
   const { email, cnpj, senha, ...resto } = model;
 
-  //TODO: cnpj ja existente
+  // cnpj ja existente
   if (await validaSeCnpjJaExiste(cnpj))
     return {
       sucesso: false,
@@ -73,8 +72,8 @@ const cria = async (model) => {
       ],
     }
 
-  //TODO: email ja existente
-  if (await validaSeEmailJaExiste(email))
+  // email ja existente
+  if (await validaEmailExiste(email))
     return {
       sucesso: false,
       mensagem: 'operação não pode ser realizada',
@@ -101,6 +100,7 @@ const cria = async (model) => {
 
 }
 
+
 const listaTodos = async (filtro) => {
 
   // const { status } = filtro;
@@ -121,5 +121,5 @@ const listaTodos = async (filtro) => {
 module.exports = {
   alteraStatus,
   cria,
-  listaTodos,
+  listaTodos
 }
