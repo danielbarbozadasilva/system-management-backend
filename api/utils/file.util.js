@@ -43,5 +43,5 @@ module.exports = {
   criaEnderecoDownload,
   criaNome,
   move,
-  remove,
+  remove
 }

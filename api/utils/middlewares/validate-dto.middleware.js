@@ -37,6 +37,4 @@ const validaDTO = (tipo, parametro, opcoes = {}) => {
 }
 
 
-
-
 module.exports = validaDTO

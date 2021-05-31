@@ -29,6 +29,6 @@ const validaToken = (token) => {
 module.exports = {
   criaHash,
   criaToken,
-  validaToken,
+  validaToken
 }
 

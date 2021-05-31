@@ -69,5 +69,3 @@ const fileUpload = (destino, isUpdate = false) => {
 
 
 module.exports = fileUpload;
-
-module.exports = fileUpload;
