@@ -19,7 +19,7 @@ module.exports = (router) => {
       um arquivo vinculado a 'request'. O 'middleware' é associado a esta
       rota especifica, passando para ele qual é o destino final das imagens
       que será recebido neste 'endpoint' */
-      fileUploadMiddleware('categorias'),
+      fileUploadMiddleware('categoria'),
       
       /* Na vadidação de 'DTO', os dados recebidos são cruzados contra um esquema
       de validação e informará ao usuário em caso de problemas, encerrando a 
@@ -82,7 +82,7 @@ module.exports = (router) => {
 
        .put(
          /* ao alterar uma categoria precisa-se associar a uma imagem */
-         fileUploadMiddleware('categorias', true),
+         fileUploadMiddleware('categoria', true),
           // Regex para validar o formato do ID do 'Mongo'
          validaDTO('params', {
            categoriaid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({

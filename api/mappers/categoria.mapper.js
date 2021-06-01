@@ -12,7 +12,7 @@ const toItemListaDTO = (model) => {
     nome,
     descricao,
     status,
-    imagem: fileUtils.criaEnderecoDownload('categorias', imagem.nome),
+    imagem: fileUtils.criaEnderecoDownload('categoria', imagem.nome),
   }
 
 }
@@ -27,7 +27,7 @@ const toDTO = (model) => {
     nome,
     descricao,
     status,
-    imagem: fileUtils.criaEnderecoDownload('categorias', imagem.nome),
+    imagem: fileUtils.criaEnderecoDownload('categoria', imagem.nome),
   }
 
 }

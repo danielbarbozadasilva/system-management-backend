@@ -18,7 +18,6 @@ const router = require('./routes/index');
 router(app);
 
 const port = process.env.PORT ? Number(process.env.PORT) : 3001
-app.use('/static', express.static(__dirname + '/..' + '/arquivos'));
 /* pega as informações e colocar como 'true*, ZERA o MODAL
 para que o contador da barra de progresso fique sempre ZERO */
 

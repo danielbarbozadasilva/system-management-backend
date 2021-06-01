@@ -20,7 +20,8 @@ const criaEnderecoDownload = (origem, arquivoNome) => {
 
 const criaNome = (tipo) => {
   const tipoTratado = tipo.split('/')[1];
-  return `${uuid()}.${tipoTratado}`;
+  const x = `${uuid()}.${tipoTratado}`
+  return x;
 }
 
 /* Move o arquivo */ 
@@ -30,9 +31,14 @@ const move = (temporario, definitivo) => {
 
 const remove = (origem, arquivo) => {
   const enderecoArquivo = criaEndereco(origem, arquivo);
+  console.log('endorigem:'+origem)
+  console.log('arquivo:'+arquivo)
+  console.log('endarquivo:'+enderecoArquivo)
+
   // Verifica se existe, em caso afirmativo ele remove 
   if (fs.existsSync(enderecoArquivo))
     fs.unlinkSync(enderecoArquivo);
+
 
   return;
 }

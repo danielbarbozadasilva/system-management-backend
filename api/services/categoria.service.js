@@ -50,10 +50,10 @@ const listaTodos = async () => {
 
 const criaCategoria = async (model) => {
 
-  //TODO: tratar nomes repetidos
+  //tratar nomes repetidos
 
 
-  //TODO: incluir nova categoria
+  // incluir nova categoria
 
   const novaCategoria = await categoria.create({
     nome: model.nome,
@@ -66,7 +66,7 @@ const criaCategoria = async (model) => {
     }
   })
 
-  //TODO: mover arquivo para destino definitivo
+  // mover arquivo para destino definitivo
   fileUtils.move(model.imagem.caminhoOriginal, model.imagem.novoCaminho);
 
   return {
@@ -79,7 +79,7 @@ const criaCategoria = async (model) => {
 
 const deleta = async (categoriaId) => {
 
-  //TODO: localizar documento
+  // localizar documento
   const categoriaDB = await categoria.findOne({ _id: categoriaId });
 
   console.log(categoriaDB);
@@ -99,11 +99,11 @@ const deleta = async (categoriaId) => {
     };
   }
 
-  //TODO: criar tratamento para quando existem produtos associados a categoria
+  // criar tratamento para quando existem produtos associados a categoria
 
-  //TODO: destruir a imagem
+  // destruir a imagem
   const { imagem } = categoriaDB;
-  fileUtils.remove('categorias', imagem.nome);
+  fileUtils.remove('categoria', imagem.nome);
 
   //TODO: deleta do banco
   await categoria.remove(categoriaDB);
@@ -134,13 +134,13 @@ const alteraCategoria = async (categoriaId, model) => {
   categoriaDB.nome = model.nome;
   categoriaDB.descricao = model.descricao;
   categoriaDB.status = model.status;
-
-  if (model.imagem) {
-    //TODO: remover arquivo existente
-    fileUtils.remove('categorias', categoriaDB.imagem.nome);
-    //TODO: mover arquivo para destino definitivo
+  
+  if (typeof model.imagem === "object")  {
+    // remover arquivo existente
+    fileUtils.remove('categoria', categoriaDB.imagem.nome);
+    // mover arquivo para destino definitivo
     fileUtils.move(model.imagem.caminhoOriginal, model.imagem.novoCaminho);
-    //TODO: salvar na base
+    // salvar na base
     categoriaDB.imagem = {
       nomeOriginal: model.imagem.nomeOriginal,
       nome: model.imagem.novoNome,
