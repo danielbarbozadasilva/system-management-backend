@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  mongodb:
+    image : mongo
+    container_name: projeto04
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /root/mongodb:/data/db
+    ports:
+      - 27017:27017
+    restart: always
+  server:
+    build: .
+    command: >
+      sh -c "rm -rfv ./temp/* && npm install && npm run dev"
+    container_name:  api-medescavator
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_HOST: mongodb
+    ports:
+      - 8000:8000
+    restart: always
+    volumes:
+      - ./:/home/node/app
+    links:
+      - mongodb
