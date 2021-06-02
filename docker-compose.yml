@@ -18,6 +18,8 @@ services:
     container_name:  api-medescavator
     depends_on:
       - mongodb
+    env_file:
+      - .env  
     environment:
       MONGO_HOST: mongodb
     ports:
