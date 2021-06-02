@@ -3,7 +3,7 @@ const validaDTO = require('../../utils/middlewares/validate-dto.middleware');
 const fornecedorController = require('../../controllers/fornecedor.controller');
 const produtoController = require('../../controllers/produto.controller');
 
-const fileUploadMiddleware = require('../../utils/middlewares/file-upload.middleware');
+const fileUploadMiddleware = require('../../utils/middlewares/fileUploadMiddleware');
 
 module.exports = (router) => {
 
@@ -65,7 +65,7 @@ module.exports = (router) => {
     )
 
   /* Inativa o Fornecedor */
-  router.route('/fornecedor/:fornecedorid/inativar').put(
+  router.route('/fornecedor/:fornecedorid/inativa').put(
       validaDTO('params', {
         fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
           'any.required': `"fornecedor id" é um campo obrigatório`,

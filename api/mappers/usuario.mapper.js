@@ -21,13 +21,11 @@ const toUserDTO = (model) => {
 
   const { id, email, kind, nome, nomeFantasia } = model;
 
-  console.log("nome: ", nome);
-
   return {
     id,
     email,
     nome: nome ? nome : nomeFantasia,
-    tipoUsuario: trataTipoUsuario(kind),
+    tipoUsuario: 1,
   }
 
 }

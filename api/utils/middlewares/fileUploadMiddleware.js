@@ -30,12 +30,14 @@ const fileUpload = (destino, isUpdate = false) => {
       // files (mesmo nome que vai estar no meu frontend)
       // caso não tenha um atributo de um nome 'imagem'
       if (!files.imagem && !isUpdate) {
-        return res.status(400).send({
+         res.status(400).send({
           mensagem: 'não foi possível realizar a operação',
           detalhes: [
             '"imagem" é de preenchimento obrigatório.'
           ]
+
         });
+        return;
       }
 
 
