@@ -21,7 +21,7 @@ services:
     environment:
       MONGO_HOST: mongodb
     ports:
-      - 8000:8000
+      - 3011:3011
     restart: always
     volumes:
       - ./:/home/node/app
