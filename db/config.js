@@ -6,7 +6,7 @@ if (nodeenvironment === "development") {
 }
 
 module.exports = {
-  uri: `mongodb://${process.env.MONGO_HOST}/${process.env.MONGO_DB_NAME}`
+  uri: `mongodb://${process.env.MONGO_HOST}:27017/${process.env.MONGO_DB_NAME}`
 }
 
 
