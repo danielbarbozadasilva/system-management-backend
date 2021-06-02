@@ -1,6 +1,9 @@
 const joi = require('joi');
 const validaDTO = require('../../utils/middlewares/validate-dto.middleware');
 const fornecedorController = require('../../controllers/fornecedor.controller');
+const produtoController = require('../../controllers/produto.controller');
+
+const fileUploadMiddleware = require('../../utils/middlewares/file-upload.middleware');
 
 module.exports = (router) => {
 
@@ -15,11 +18,6 @@ module.exports = (router) => {
           'any.required': `"nomeFantasia" é um campo obrigatório`,
           'string.empty': `"nomeFantasia" não deve ser vazio`,
         }),
-        responsavel: joi.string().required().messages({
-            'any.required': `"responsavel" é um campo obrigatório`,
-            'string.empty': `"responsavel" não deve ser vazio`,
-          }),
-        // Responsável pelo fornecedor
         endereco: joi.string().required().messages({
           'any.required': `"endereco" é um campo obrigatório`,
           'string.empty': `"endereco" não deve ser vazio`,
@@ -31,6 +29,10 @@ module.exports = (router) => {
         cidade: joi.string().required().messages({
           'any.required': `"cidade" é um campo obrigatório`,
           'string.empty': `"cidade" não deve ser vazio`,
+        }),
+        responsavel: joi.string().required().messages({
+          'any.required': `"responsavel" é um campo obrigatório`,
+          'string.empty': `"responsavel" não deve ser vazio`,
         }),
         telefone: joi.string().required().messages({
           'any.required': `"telefone" é um campo obrigatório`,
@@ -47,6 +49,8 @@ module.exports = (router) => {
       }),
       fornecedorController.cria
     )
+
+
 
     /* Ativa o Fornecedor */
     router.route('/fornecedor/:fornecedorid/ativa').put(
@@ -72,5 +76,41 @@ module.exports = (router) => {
       fornecedorController.inativa
     )
 
+    router
+    .route('/fornecedor/:fornecedorid/produto')
+    // .get()
+    .post(
+      fileUploadMiddleware('produtos'),
+      validaDTO('params', {
+        fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
+          'any.required': `"fornecedor id" é um campo obrigatório`,
+          'string.empty': `"fornecedor id" não deve ser vazio`,
+          'string.pattern.base': `"fornecedor id" fora do formato experado`,
+        }),
+      }),
+      validaDTO('body', {
+        nome: joi.string().required().messages({
+          'any.required': `"nome" é um campo obrigatório`,
+          'string.empty': `"nome" não deve ser vazio`,
+        }),
+        descricao: joi.string().required().messages({
+          'any.required': `"descricao" é um campo obrigatório`,
+          'string.empty': `"descricao" não deve ser vazio`,
+        }),
+        categoriaid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
+          'any.required': `"categoria id" é um campo obrigatório`,
+          'string.empty': `"categoria id" não deve ser vazio`,
+          'string.pattern.base': `"categoria id" fora do formato experado`,
+        }),
+        preco: joi.number().required().messages({
+          'any.required': `"preco" é um campo obrigatório`,
+        }),
+      }, {
+        allowUnknown: true,
+      }),
+      produtoController.cria
+    )
+
 }
+
 

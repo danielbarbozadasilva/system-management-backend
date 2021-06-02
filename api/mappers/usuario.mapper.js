@@ -4,6 +4,12 @@ const trataTipoUsuario = (tipo) => {
     case "administrador":
       return 1;
 
+    case "fornecedor":
+      return 2;
+
+    case "usuario":
+      return 3;
+      
     default:
       break;
   }
