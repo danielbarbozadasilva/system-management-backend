@@ -14,7 +14,7 @@ services:
   server:
     build: .
     command: >
-      sh -c "rm -rfv ./temp/* && npm install && npm run dev"
+      sh -c "rm -rfv ./arquivos/temp/* && npm install && npm run dev"
     container_name:  api-medescavator
     depends_on:
       - mongodb
