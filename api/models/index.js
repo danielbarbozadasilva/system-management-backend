@@ -50,9 +50,20 @@ const categoria = mongoose.model('categoria', createSchema(undefined, categoriaS
   collection: 'CategoriaCollection',
 }));
 
+/* PRODUTO */
+const produtoSchema = require('./produto');
+const produto = mongoose.model('produto', createSchema(undefined, produtoSchema, {
+  collection: 'ProdutoCollection',
+  toJSON: {
+    virtuals: true,
+  }
+}));
+
 module.exports = {
   categoria,
   usuario,
   administrador,
-  fornecedor
+  fornecedor,
+  produto
 }
+

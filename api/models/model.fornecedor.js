@@ -1,3 +1,6 @@
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
 const fornecedorSchema = {
 
   cnpj: {
@@ -5,14 +8,6 @@ const fornecedorSchema = {
     required: true,
   },
   nomeFantasia: {
-    type: String,
-    required: true,
-  },
-  responsavel: {
-    type: String,
-    required: true,
-  },
-  telefone: {
     type: String,
     required: true,
   },
@@ -28,12 +23,23 @@ const fornecedorSchema = {
     type: String,
     required: true,
   },
-
-  // Analise | Ativo | Inativo
-  status: {
+  responsavel: {
     type: String,
     required: true,
   },
+  telefone: {
+    type: String,
+    required: true,
+  },
+  status: {          // Analise | Ativo | Inativo
+    type: String,
+    required: true,
+  },
+
+  produtos: [{
+    type: Schema.Types.ObjectId,
+    ref: 'produto'
+  }]
 
 }
 

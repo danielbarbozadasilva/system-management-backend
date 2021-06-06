@@ -7,9 +7,9 @@ const trataTipoUsuario = (tipo) => {
     case "fornecedor":
       return 2;
 
-    case "usuario":
+    case "cliente":
       return 3;
-      
+
     default:
       break;
   }
@@ -21,11 +21,13 @@ const toUserDTO = (model) => {
 
   const { id, email, kind, nome, nomeFantasia } = model;
 
+  console.log("nome: ", nome);
+
   return {
     id,
     email,
     nome: nome ? nome : nomeFantasia,
-    tipoUsuario: 1,
+    tipoUsuario: trataTipoUsuario(kind),
   }
 
 }
@@ -34,3 +36,5 @@ const toUserDTO = (model) => {
 module.exports = {
   toUserDTO,
 }
+
+

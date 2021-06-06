@@ -23,7 +23,12 @@
     tipo: {
       type: String,
       required: false,
-    }
+    },
+  },
 
-  }
+  produtos: [{
+    type: Schema.Types.ObjectId,
+    ref: 'produto'
+  }]
+
 }

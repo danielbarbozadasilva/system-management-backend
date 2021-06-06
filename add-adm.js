@@ -19,7 +19,8 @@ const criaADM = async () => {
   await administrador.create({
     email: 'daniel@gmail.com',
     nome: 'daniel',
-    senha: criptografia.criaHash('daniel')
+    senha: criptografia.criaHash('daniel'),
+    tipo:1
   });
 
 }

@@ -51,8 +51,6 @@ module.exports = (router) => {
   )
 
 
-
-
     /* Ativa o Fornecedor */
     router.route('/fornecedor/:fornecedorid/ativa').put(
       validaDTO('params', {
@@ -77,9 +75,7 @@ module.exports = (router) => {
       fornecedorController.inativa
     )
 
-    router
-    .route('/fornecedor/:fornecedorid/produto')
-    // .get()
+    router.route('/fornecedor/:fornecedorid/produto')
     .post(
       fileUploadMiddleware('produtos'),
       validaDTO('params', {
