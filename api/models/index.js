@@ -51,7 +51,7 @@ const categoria = mongoose.model('categoria', createSchema(undefined, categoriaS
 }));
 
 /* PRODUTO */
-const produtoSchema = require('./produto');
+const produtoSchema = require('./model.produto');
 const produto = mongoose.model('produto', createSchema(undefined, produtoSchema, {
   collection: 'ProdutoCollection',
   toJSON: {

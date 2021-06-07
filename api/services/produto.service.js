@@ -1,5 +1,5 @@
 const { produto, categoria, fornecedor } = require('../models/index');
-const fileUtils = require('../utils/file.utils');
+const fileUtils = require('../utils/file.util');
 
 const cria = async (model) => {
 
