@@ -13,10 +13,22 @@ const cria = async (req, res, next) => {
   const dadoRetorno = resultadoServico.sucesso ? { data: resultadoServico.data } : { detalhes: resultadoServico.detalhes };
 
   return res.status(codigoRetorno).send(dadoRetorno);
+
 }
 
+const lista = async (req, res, next) => {
 
+  const { query } = req;
+
+  console.log(query);
+
+  const result = await produtoService.pesquisaPorFiltros(query);
+
+  return res.status(200).send({ data: result });
+
+}
 
 module.exports = {
   cria,
+  lista,
 }

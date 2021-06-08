@@ -1,13 +1,17 @@
 const { fornecedor } = require('../models/index');
 const { toListItemDTO } = require('../mappers/fornecedor.mapper');
-const { validaEmailExiste } = require('../services/usuario.service');
+const { validaSeEmailJaExiste } = require('../services/usuario.service');
 
 const { criaHash } = require('../utils/criptografia.util');
 const emailUtils = require('../utils/email.utils');
 
+const produtoMapper = require('../mappers/produto.mapper');
+
 const validaSeCnpjJaExiste = async (cnpj) => {
 
-  const result = await fornecedor.find({ cnpj });
+  const result = await fornecedor.find({
+    cnpj
+  });
 
   return result.length > 0 ? true : false;
 
@@ -34,18 +38,14 @@ const alteraStatus = async (id, status) => {
   await fornecedorDB.save();
 
   if (status === 'Ativo') {
-    console.log('email'+fornecedorDB.email)
-    console.log('remetente'+process.env.SENDGRID_REMETENTE)
 
-    try {
-      // adicionar o envio de email
-      emailUtils.enviar({
-        destinatario: fornecedorDB.email,
-        remetente: process.env.SENDGRID_REMETENTE,
-        assunto: `Confirmação do cadastro de ${fornecedorDB.nomeFantasia}`,
-        corpo: `sua conta do projeto 04 já esta liberada para uso para uso já`,
-      });
-    } catch (error) { console.log(error.message); }
+    // adicionar o envio de email
+    emailUtils.enviar({
+      destinatario: fornecedorDB.email,
+      remetente: process.env.SENDGRID_REMETENTE,
+      assunto: `Confirmação do cadastro de ${fornecedorDB.nomeFantasia}`,
+      corpo: `sua conta do projeto 04 já esta liberada para uso para uso já`,
+    });
   }
 
   return {
@@ -55,7 +55,6 @@ const alteraStatus = async (id, status) => {
       ...toListItemDTO(fornecedorDB.toJSON())
     }
   }
-
 }
 
 const cria = async (model) => {
@@ -73,7 +72,7 @@ const cria = async (model) => {
     }
 
   // email ja existente
-  if (await validaEmailExiste(email))
+  if (await validaSeEmailJaExiste(email))
     return {
       sucesso: false,
       mensagem: 'operação não pode ser realizada',
@@ -100,15 +99,7 @@ const cria = async (model) => {
 
 }
 
-
 const listaTodos = async (filtro) => {
-
-  // const { status } = filtro;
-
-  // const body = {};
-
-  // if (status)
-  //   body.status = status;
 
   const resultadoDB = await fornecedor.find();
 
@@ -118,8 +109,25 @@ const listaTodos = async (filtro) => {
 
 }
 
+const listaProdutosByFornecedor = async (fornecedorid, fornecedorlogadoid) => {
+
+  // verificar se fornecedor informado e o mesmo que o logado
+
+  const fornecedorFromDB = await fornecedor.findById(fornecedorid).populate('produtos');
+
+  console.log(JSON.stringify(fornecedorFromDB.produtos));
+
+  const fornecedorAsJSON = fornecedorFromDB.toJSON()
+
+  return fornecedorAsJSON.produtos.map(item => {
+    return produtoMapper.toItemListaDTO(item);
+  })
+
+}
+
 module.exports = {
   alteraStatus,
   cria,
-  listaTodos
+  listaProdutosByFornecedor,
+  listaTodos,
 }

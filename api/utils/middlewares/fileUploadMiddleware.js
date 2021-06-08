@@ -16,7 +16,7 @@ const fileUpload = (destino, isUpdate = false) => {
 
       req.body = {
         // O DTO olha para o BODY para fazer a validação 
-        
+
         // campos do formulario, sem a imagem
         ...fields,
 
@@ -29,8 +29,8 @@ const fileUpload = (destino, isUpdate = false) => {
       }
       // files (mesmo nome que vai estar no meu frontend)
       // caso não tenha um atributo de um nome 'imagem'
-      if (!files.imagem && !isUpdate) {
-         res.status(400).send({
+      if ((!files.imagem || files.imagem.name === '') && !isUpdate) {
+        res.status(400).send({
           mensagem: 'não foi possível realizar a operação',
           detalhes: [
             '"imagem" é de preenchimento obrigatório.'
@@ -58,7 +58,6 @@ const fileUpload = (destino, isUpdate = false) => {
         }
 
       }
-
 
       // No final faço o 'NEXT' para a minha 'REQUEST' ir para o próximo nível
       return next();

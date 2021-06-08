@@ -21,7 +21,7 @@ const toUserDTO = (model) => {
 
   const { id, email, kind, nome, nomeFantasia } = model;
 
-  console.log("nome: ", nome);
+  console.log("nome: ", nome,'f', nomeFantasia);
 
   return {
     id,
