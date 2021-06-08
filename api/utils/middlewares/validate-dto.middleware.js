@@ -3,7 +3,7 @@ const Joi = require('joi');
 const validaDTO = (tipo, parametro, opcoes = {}) => {
 
   return (req, res, next) => {
-console.log('aqui executou valida dto')
+
     const schema = Joi.object().keys(parametro);
 
     const result = schema.validate(req[tipo], {

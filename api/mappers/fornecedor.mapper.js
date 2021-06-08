@@ -8,7 +8,7 @@ const toListItemDTO = (model) => {
       id: _id,
       cnpj,
       nomeFantasia,
-      status,
+      status
     }
   
   }

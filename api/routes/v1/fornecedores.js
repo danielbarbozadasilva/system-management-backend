@@ -7,8 +7,7 @@ const fileUploadMiddleware = require('../../utils/middlewares/fileUploadMiddlewa
 
 module.exports = (router) => {
 
-  router.route('/fornecedor')
-    .get(fornecedorController.lista,)
+  router.route('/fornecedor').get(fornecedorController.lista)
     .post(validaDTO('body', {
         cnpj: joi.string().required().messages({
           'any.required': `"cnpj" é um campo obrigatório`,

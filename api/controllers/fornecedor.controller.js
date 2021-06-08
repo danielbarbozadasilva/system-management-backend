@@ -48,7 +48,7 @@ const lista = async (req, res, next) => {
   const data = await fornecedorService.listaTodos();
 
   return res.status(200).send({
-    data,
+    data
   })
 
 }

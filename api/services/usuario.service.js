@@ -51,7 +51,7 @@ const autenticar = async (email, senha) => {
 const cria = async () => {
 
   return usuario.create({
-    email: 'daniel@email.com',
+    email: 'daniel80barboza@gmail.com',
     senha: md5(`123456${process.env.MD5_SECRET}`)
   });
 

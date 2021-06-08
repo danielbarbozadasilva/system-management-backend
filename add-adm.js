@@ -17,10 +17,11 @@ const criptografia = require('./api/utils/criptografia.util');
 const criaADM = async () => {
 
   await administrador.create({
-    email: 'daniel@gmail.com',
+ 
+    email: 'danielbarboza56hotmail.com',
     nome: 'daniel',
     senha: criptografia.criaHash('daniel'),
-    tipo:1
+    tipo: 1
   });
 
 }

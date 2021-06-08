@@ -35,7 +35,7 @@ const usuario = mongoose.model('usuario', createSchema(undefined, usuarioSchema,
 // o admin tem email e senha em comum
 // o admin tem o nome como sendo algo único dele
 const administradorSchema = require('./model.administrador');
-const administrador = usuario.discriminator('name', createSchema(usuarioSchema, administradorSchema,{}));
+const administrador = usuario.discriminator('administrador', createSchema(usuarioSchema, administradorSchema,{}));
 
 
 /* FORNECEDOR */

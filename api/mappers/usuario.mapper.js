@@ -16,17 +16,14 @@ const trataTipoUsuario = (tipo) => {
 
 }
 
-
 const toUserDTO = (model) => {
 
   const { id, email, kind, nome, nomeFantasia } = model;
 
-  console.log("nome: ", nome,'f', nomeFantasia);
-
   return {
     id,
     email,
-    nome: nome ? nome : nomeFantasia,
+    nome: nome? nome : nomeFantasia,
     tipoUsuario: trataTipoUsuario(kind),
   }
 
@@ -36,5 +33,4 @@ const toUserDTO = (model) => {
 module.exports = {
   toUserDTO,
 }
-
 
