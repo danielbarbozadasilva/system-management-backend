@@ -8,8 +8,7 @@ const produtoController = require('../../controllers/produto.controller');
 module.exports = (router) => {
 
   router
-    .route('/produto')
-    .get(
+    .route('/produto').get(
 
       validaDTO('query', {
         categoriaid: joi.string().regex(/^[0-9a-fA-F]{24}$/).messages({

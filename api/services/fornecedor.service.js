@@ -115,8 +115,6 @@ const listaProdutosByFornecedor = async (fornecedorid, fornecedorlogadoid) => {
 
   const fornecedorFromDB = await fornecedor.findById(fornecedorid).populate('produtos');
 
-  console.log(JSON.stringify(fornecedorFromDB.produtos));
-
   const fornecedorAsJSON = fornecedorFromDB.toJSON()
 
   return fornecedorAsJSON.produtos.map(item => {

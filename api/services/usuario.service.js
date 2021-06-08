@@ -57,7 +57,7 @@ const cria = async () => {
 
 }
 
-const validaEmailExiste = async (email) => {
+const validaSeEmailJaExiste = async (email) => {
 
   const usuarios = await usuario.find({ email });
 
@@ -68,5 +68,5 @@ const validaEmailExiste = async (email) => {
 module.exports = {
   autenticar,
   cria,
-  validaEmailExiste
+  validaSeEmailJaExiste
 }

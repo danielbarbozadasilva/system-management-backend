@@ -12,9 +12,6 @@ const init = async () => {
       categoria.findById('60b77e0a4539b11caa5df071').populate('produtos'),
       fornecedor.findById('60be0415648d6ea9d843ac7b').populate('produtos')
     ])
-    
-    console.log(JSON.stringify(forncedorFromDB));
-    console.log(JSON.stringify(categoriaFromDB));
 
   } catch (error) {
     console.log(error);

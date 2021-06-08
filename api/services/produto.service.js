@@ -74,12 +74,15 @@ const pesquisaPorFiltros = async (filtros) => {
 
   const filtroMongo = {};
 
+  // se eu tenho o valor eu anexo ao meu filtro senão passa batido
   if (filtros.categoriaid)
     filtroMongo.categoria = filtros.categoriaid;
 
+  // se eu tenho o valor eu anexo ao meu filtro senão passa batido
   if (filtros.fornecedorid)
     filtroMongo.fornecedor = filtros.fornecedorid;
 
+  // se eu tenho o valor eu anexo ao meu filtro senão passa batido
   if (filtros.nomelike)
     filtroMongo.nome = { $regex: '.*' + filtros.nomelike + '.*' };
 
@@ -89,7 +92,7 @@ const pesquisaPorFiltros = async (filtros) => {
 
   return resultadoDB.map(item => {
     // substituir por DTO
-    return produtoMapper.toItemListaDTO(item); 
+    return produtoMapper.toItemListaDTO(item);
   });
 
 }
