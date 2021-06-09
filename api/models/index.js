@@ -59,11 +59,17 @@ const produto = mongoose.model('produto', createSchema(undefined, produtoSchema,
   }
 }));
 
+/* CLIENTE */
+const clienteSchema = require('./model.cliente');
+const cliente = usuario.discriminator('cliente', createSchema(usuarioSchema, clienteSchema, {}));
+
+
 module.exports = {
   categoria,
   usuario,
   administrador,
   fornecedor,
-  produto
+  produto,
+  cliente
 }
 

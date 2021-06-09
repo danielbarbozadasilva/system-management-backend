@@ -1,5 +1,5 @@
 const { fornecedor } = require('../models/index');
-const { toListItemDTO } = require('../mappers/fornecedor.mapper');
+const { toListItemDTO, toDTO } = require('../mappers/fornecedor.mapper');
 const { validaSeEmailJaExiste } = require('../services/usuario.service');
 
 const { criaHash } = require('../utils/criptografia.util');
@@ -39,13 +39,14 @@ const alteraStatus = async (id, status) => {
 
   if (status === 'Ativo') {
 
-    // adicionar o envio de email
+    //TODO: adicionar o envio de email
     emailUtils.enviar({
       destinatario: fornecedorDB.email,
       remetente: process.env.SENDGRID_REMETENTE,
       assunto: `Confirmação do cadastro de ${fornecedorDB.nomeFantasia}`,
       corpo: `sua conta do projeto 04 já esta liberada para uso para uso já`,
     });
+
   }
 
   return {
@@ -55,13 +56,16 @@ const alteraStatus = async (id, status) => {
       ...toListItemDTO(fornecedorDB.toJSON())
     }
   }
+
 }
 
 const cria = async (model) => {
 
+  // console.log('fornecedor.service');
+
   const { email, cnpj, senha, ...resto } = model;
 
-  // cnpj ja existente
+  //TODO: cnpj ja existente
   if (await validaSeCnpjJaExiste(cnpj))
     return {
       sucesso: false,
@@ -71,7 +75,7 @@ const cria = async (model) => {
       ],
     }
 
-  // email ja existente
+  //TODO: email ja existente
   if (await validaSeEmailJaExiste(email))
     return {
       sucesso: false,
@@ -104,23 +108,19 @@ const listaTodos = async (filtro) => {
   const resultadoDB = await fornecedor.find();
 
   return resultadoDB.map(item => {
-    return toListItemDTO(item);
+    return toDTO(item.toJSON());
   })
 
 }
 
 const listaProdutosByFornecedor = async (fornecedorid, fornecedorlogadoid) => {
-
-  // verificar se fornecedor informado e o mesmo que o logado
-
+  //TODO: verificar se fornecedor informado e o mesmo que o logado
   const fornecedorFromDB = await fornecedor.findById(fornecedorid).populate('produtos');
-
-  const fornecedorAsJSON = fornecedorFromDB.toJSON()
-
+  // console.log(JSON.stringify(fornecedorFromDB.produtos));
+  const fornecedorAsJSON = fornecedorFromDB.toJSON();
   return fornecedorAsJSON.produtos.map(item => {
     return produtoMapper.toItemListaDTO(item);
-  })
-
+  });
 }
 
 module.exports = {

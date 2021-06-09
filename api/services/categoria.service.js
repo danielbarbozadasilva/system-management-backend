@@ -89,6 +89,8 @@ const deleta = async (categoriaId) => {
   console.log(categoriaDBAsJson);
 
   if (!categoriaDB) {
+    
+    throw new ErroRegraDeNegocio('')
 
     return {
       sucesso: false,
@@ -134,8 +136,8 @@ const alteraCategoria = async (categoriaId, model) => {
   categoriaDB.nome = model.nome;
   categoriaDB.descricao = model.descricao;
   categoriaDB.status = model.status;
-  
-  if (typeof model.imagem === "object")  {
+
+  if (typeof model.imagem === "object") {
     // remover arquivo existente
     fileUtils.remove('categoria', categoriaDB.imagem.nome);
     // mover arquivo para destino definitivo

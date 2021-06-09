@@ -16,6 +16,8 @@ const routesV1Fornecedores = require('./v1/fornecedores');
 /* Manter Produtos - todas as operações que representam o CRUD */
 const routesV1Produtos = require('./v1/produtos');
 
+const routesV1Cliente = require('./v1/cliente');
+
 
 module.exports = (app) => {
 
@@ -29,7 +31,8 @@ module.exports = (app) => {
   routesV1Categorias(routesV1);
   routesV1Fornecedores(routesV1);
   routesV1Produtos(routesV1);
-  
+  routesV1Cliente(routesV1);
+
   app.use('/v1', routesV1);
 
 }

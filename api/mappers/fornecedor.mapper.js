@@ -1,29 +1,31 @@
 
 const toListItemDTO = (model) => {
 
-    const { _id, cnpj, nomeFantasia, status } = model;
-  
-    // vai devolver
-    return {
-      id: _id,
-      cnpj,
-      nomeFantasia,
-      status
-    }
-  
+  const { _id, email, cnpj, nomeFantasia, status } = model;
+
+  return {
+    id: _id,
+    email,
+    cnpj,
+    nomeFantasia,
+    status,
   }
-  
-  const toDTO = (model) => {
-  
-    return {
-  
-    }
-  
+
+}
+
+const toDTO = (model) => {
+
+  const { _id, senha, createdAt, updatedAt, __v, kind, produtos, ...resto } = model;
+
+  return {
+    id: _id,
+    ...resto,
   }
-  
-  
-  module.exports = {
-    toListItemDTO,
-    toDTO,
-  }
-  
+
+}
+
+
+module.exports = {
+  toListItemDTO,
+  toDTO,
+}
