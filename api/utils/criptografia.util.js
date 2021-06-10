@@ -2,7 +2,6 @@
 /* Para o negócio a mudança de token é irrelevante, mas para segurança é sim */
 const md5 = require('md5');
 const jwt = require('jsonwebtoken');
-
 const md5HashSecret = process.env.MD5_SECRET;
 const jwtHashSecret = process.env.JWT_SECRET;
 const jwtTimeLimit = process.env.JWT_VALID_TIME;
@@ -18,17 +17,24 @@ const criaToken = (model) => {
   })
 }
 
+const decodificaToken = (token) => {
+  return jwt.decode(token);
+}
+
 const validaToken = (token) => {
   try {
-    return jwt.verify(token, jwtHashSecret);
+    jwt.verify(token, jwtHashSecret);
+    return true;
   } catch (error) {
-    return undefined;
+    return false;
   }
 }
+
 
 module.exports = {
   criaHash,
   criaToken,
-  validaToken
+  validaToken,
+  decodificaToken
 }
 

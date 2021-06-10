@@ -4,8 +4,7 @@ const clienteController = require('../../controllers/cliente.controller');
 
 module.exports = (router) => {
 
-  router.route('/cliente')
-    .post(
+  router.route('/cliente').post(
       validaDTO('body', {
         nome: joi.string().required().messages({
           'any.required': `"nome" é um campo obrigatório`,
@@ -24,7 +23,16 @@ module.exports = (router) => {
         cidade: joi.string().required().messages({
           'any.required': `"cidade" é um campo obrigatório`,
           'string.empty': `"cidade" não deve ser vazio`,
-        })
+        }),
+        email: joi.string().email().required().messages({
+          'any.required': `"email" é um campo obrigatório`,
+          'string.empty': `"email" não deve ser vazio`,
+        }),
+        senha: joi.string().required().messages({
+          'any.required': `"senha" é um campo obrigatório`,
+          'string.empty': `"senha" não deve ser vazio`,
+        }),
+
         
       }),
       clienteController.cria

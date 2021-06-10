@@ -39,7 +39,7 @@ const alteraStatus = async (id, status) => {
 
   if (status === 'Ativo') {
 
-    //TODO: adicionar o envio de email
+    // Adicionar o envio de email
     emailUtils.enviar({
       destinatario: fornecedorDB.email,
       remetente: process.env.SENDGRID_REMETENTE,
@@ -61,11 +61,9 @@ const alteraStatus = async (id, status) => {
 
 const cria = async (model) => {
 
-  // console.log('fornecedor.service');
-
   const { email, cnpj, senha, ...resto } = model;
 
-  //TODO: cnpj ja existente
+  // cnpj ja existente
   if (await validaSeCnpjJaExiste(cnpj))
     return {
       sucesso: false,
@@ -75,7 +73,7 @@ const cria = async (model) => {
       ],
     }
 
-  //TODO: email ja existente
+  // email ja existente
   if (await validaSeEmailJaExiste(email))
     return {
       sucesso: false,
@@ -114,9 +112,9 @@ const listaTodos = async (filtro) => {
 }
 
 const listaProdutosByFornecedor = async (fornecedorid, fornecedorlogadoid) => {
-  //TODO: verificar se fornecedor informado e o mesmo que o logado
+  // verificar se fornecedor informado e o mesmo que o logado
   const fornecedorFromDB = await fornecedor.findById(fornecedorid).populate('produtos');
-  // console.log(JSON.stringify(fornecedorFromDB.produtos));
+
   const fornecedorAsJSON = fornecedorFromDB.toJSON();
   return fornecedorAsJSON.produtos.map(item => {
     return produtoMapper.toItemListaDTO(item);

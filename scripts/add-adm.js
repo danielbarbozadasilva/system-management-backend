@@ -5,19 +5,17 @@ if (node_environment === 'development') {
   require('dotenv').config();
 }
 
-const db = require('./db/config');
+const db = require('../db/config');
 
 const mongoose = require("mongoose");
 mongoose.connect(db.uri, { useUnifiedTopology: true, useNewUrlParser: true });
 
-const { administrador } = require('./api/models/index');
-const criptografia = require('./api/utils/criptografia.util');
-
+const { administrador } = require('../api/models/index');
+const criptografia = require('../api/utils/criptografia.util');
 
 const criaADM = async () => {
 
   await administrador.create({
- 
     email: 'danielbarboza56hotmail.com',
     nome: 'daniel',
     senha: criptografia.criaHash('daniel'),

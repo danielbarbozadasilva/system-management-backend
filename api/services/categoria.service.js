@@ -3,28 +3,6 @@ const categoriaMapper = require('../mappers/categoria.mapper');
 const fileUtils = require('../utils/file.util');
 
 
-// const validaSeCategoriaExiste = (categoriaId) => {
-
-//   const categoriaDB = await categoria.findOne({ _id: categoriaId });
-
-//   if (!categoriaDB) {
-//     return {
-//       sucesso: false,
-//       detalhes: [
-//         '"categoriaid" não existe.'
-//       ]
-//     };
-//   }
-
-//   return {
-//     sucesso: true,
-//     data: categoriaDB
-//   }
-
-// }
-
-
-
 const buscaPorId = async (categoriaid) => {
 
   const categoriaDB = await categoria.findById(categoriaid);
@@ -49,11 +27,6 @@ const listaTodos = async () => {
 }
 
 const criaCategoria = async (model) => {
-
-  //tratar nomes repetidos
-
-
-  // incluir nova categoria
 
   const novaCategoria = await categoria.create({
     nome: model.nome,

@@ -2,6 +2,30 @@ const { usuario } = require('../models/index');
 const criptografia = require('../utils/criptografia.util');
 const usuarioMapper = require('../mappers/usuario.mapper');
 
+const perfis = [
+  {
+    id: '1',
+    descricao: 'administrador',
+    funcionalidades: [
+      'CRIA_CATEGORIA'
+    ]
+  },
+  {
+    id: '2',
+    descricao: 'fornecedor',
+    funcionalidades: [
+
+    ]
+  },
+  {
+    id: '3',
+    descricao: 'cliente',
+    funcionalidades: [
+    ]
+  },
+];
+
+
 // Função responsável por validar se o usuário existe
 const usuarioEValido = async (email, senha) => {
   return await usuario.findOne({ email, senha: criptografia.criaHash(senha) }) ? true : false;
@@ -65,8 +89,19 @@ const validaSeEmailJaExiste = async (email) => {
 
 }
 
+const buscarPefilPorId = (perfilId) => {
+  const result = perfis.find(item => Number(item.id) === Number(perfilId));
+  return result;
+}
+
+const validaFuncionalidadeNoPerfil = (perfilId, funcionalidade) => {
+  const perfil = buscarPefilPorId(perfilId);
+  return perfil.funcionalidades.includes(funcionalidade);
+}
+
 module.exports = {
   autenticar,
   cria,
-  validaSeEmailJaExiste
+  validaSeEmailJaExiste,
+  validaFuncionalidadeNoPerfil
 }
