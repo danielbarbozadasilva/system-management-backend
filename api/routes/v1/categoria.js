@@ -11,25 +11,22 @@ module.exports = (router) => {
 
   router
     .route('/categoria').get(categoriaController.listaTodasAsCategorias)
-    
-    .post(
-      // autorizacaoMiddlewate('CRIA_CATEGORIA'),
+
+    .post(// autorizacaoMiddlewate('CRIA_CATEGORIA'),
+
+      fileUploadMiddleware('categoria'),
       /* 'Middleware' responsável por auxiliar no upload do arquivo.
       Apartir deste middleware a aplicação consegue identificar se existe
       um arquivo vinculado a 'request'. O 'middleware' é associado a esta
       rota especifica, passando para ele qual é o destino final das imagens
       que será recebido neste 'endpoint' */
-
-      fileUploadMiddleware('categoria'),
-      /* Na vadidação de 'DTO', os dados recebidos são cruzados contra um esquema
-      de validação e informará ao usuário em caso de problemas, encerrando a 
-      'request' neste ponto, não indo ao próximo nível da 'request' que é o método
-      do controlador. Ele para na validação do 'DTO', porque neste caso não há informações
-      necessárias para seguir. Caso o cenário seja positivo, a validação dos dados do 
-      esquema esteja de acordo, irá para o próximo nível que são os métodos do controller. */
-
       validaDTO('body', {
-      
+        /* Na vadidação de 'DTO', os dados recebidos são cruzados contra um esquema
+        de validação e informará ao usuário em caso de problemas, encerrando a 
+        'request' neste ponto, não indo ao próximo nível da 'request' que é o método
+        do controlador. Ele para na validação do 'DTO', porque neste caso não há informações
+        necessárias para seguir. Caso o cenário seja positivo, a validação dos dados do 
+        esquema esteja de acordo, irá para o próximo nível que são os métodos do controller. */
         nome: joi.string().required().messages({
           'any.required': `"nome" é um campo obrigatório`,
           'string.empty': `"nome" não deve ser vazio`,
@@ -50,20 +47,20 @@ module.exports = (router) => {
 
 
   router.route('/categoria/:categoriaid').get(
-      /*a validação de 'DTO' será no 'params', validação de uma
-        'regular expression' que é capaz de identificar padrões em textos
-        A validação é realizada em cima do valor do 'params' e cruzando ele
-        com uma 'regular expression' para verificar se o 'ID' corresponde ao
-        padrão de um 'ID' do 'MongoDB'*/
-      validaDTO('params', {
-        // Regex para validar o formato do ID do 'Mongo'
-        categoriaid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
-          'any.required': `"categoria id" é um campo obrigatório`,
-          'string.empty': `"categoria id" não deve ser vazio`,
-        }),
+    /*a validação de 'DTO' será no 'params', validação de uma
+      'regular expression' que é capaz de identificar padrões em textos
+      A validação é realizada em cima do valor do 'params' e cruzando ele
+      com uma 'regular expression' para verificar se o 'ID' corresponde ao
+      padrão de um 'ID' do 'MongoDB'*/
+    validaDTO('params', {
+      // Regex para validar o formato do ID do 'Mongo'
+      categoriaid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
+        'any.required': `"categoria id" é um campo obrigatório`,
+        'string.empty': `"categoria id" não deve ser vazio`,
       }),
-      categoriaController.buscarPorId
-    )
+    }),
+    categoriaController.buscarPorId
+  )
 
     .delete(
       validaDTO('params', {
