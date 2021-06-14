@@ -7,14 +7,27 @@ const perfis = [
     id: '1',
     descricao: 'administrador',
     funcionalidades: [
-      'CRIA_CATEGORIA'
+      'ALTERA_CATEGORIA',
+      'CRIA_CATEGORIA',
+      'PESQUISA_CATEGORIA',
+      'REMOVE_CATEGORIA',
+      'PESQUISA_FORNECEDOR',
+      'PESQUISA_FORNECEDOR_ID',
+      'ATIVAR_FORNECEDOR',
+      'INATIVAR_FORNECEDOR',
+      'PESQUISA_FORNECEDOR_PRODUTO',
     ]
   },
   {
     id: '2',
     descricao: 'fornecedor',
     funcionalidades: [
-
+      'ALTERA_FORNECEDOR',
+      'PESQUISA_FORNECEDOR_ID',
+      'PESQUISA_PRODUTO',
+      'CRIA_PRODUTO',
+      'REMOVE_PRODUTO',
+      'PESQUISA_FORNECEDOR_PRODUTO',
     ]
   },
   {
@@ -26,12 +39,17 @@ const perfis = [
 ];
 
 
-// Função responsável por validar se o usuário existe
+const validaSeEmailJaExiste = async (email) => {
+
+  const usuarios = await usuario.find({ email });
+
+  return usuarios.length > 0 ? true : false;
+}
+
 const usuarioEValido = async (email, senha) => {
   return await usuario.findOne({ email, senha: criptografia.criaHash(senha) }) ? true : false;
 }
 
-// Função responsável por criar a credencial do usuário
 const criaCredencial = async (usuarioEmail) => {
 
   const usuarioDB = await usuario.findOne({
@@ -44,10 +62,8 @@ const criaCredencial = async (usuarioEmail) => {
     token: criptografia.criaToken(usuarioDTO),
     usuarioDTO,
   };
-
 }
 
-// Função responsável por autenticar do usuário
 const autenticar = async (email, senha) => {
 
   const resultadoDB = await usuarioEValido(email, senha);
@@ -71,24 +87,18 @@ const autenticar = async (email, senha) => {
 
 }
 
-// Função que cria o usuário no sistema
+// Cria o usuário no sistema
 const cria = async () => {
 
   return usuario.create({
-    email: 'daniel80barboza@gmail.com',
-    senha: md5(`123456${process.env.MD5_SECRET}`)
+    email: 'daniel@gmail.com',
+    senha: md5(`daniel${process.env.MD5_SECRET}`)
   });
 
 }
 
-const validaSeEmailJaExiste = async (email) => {
 
-  const usuarios = await usuario.find({ email });
-
-  return usuarios.length > 0 ? true : false;
-
-}
-
+// remover do servico de usuarios
 const buscarPefilPorId = (perfilId) => {
   const result = perfis.find(item => Number(item.id) === Number(perfilId));
   return result;

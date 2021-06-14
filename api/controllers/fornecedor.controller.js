@@ -53,6 +53,14 @@ const lista = async (req, res, next) => {
 
 }
 
+const buscaPorId = async (req, res, next) => {
+
+  return res.status(200).send({
+  })
+
+}
+
+
 const buscaProdutosPorFornecedor = async (req, res, next) => {
 
   const { params } = req;
@@ -65,10 +73,45 @@ const buscaProdutosPorFornecedor = async (req, res, next) => {
 
 }
 
+const curtidasRecebidas = async (req, res, next) => {
+
+  return res.status(200).send({
+    data: []
+  })
+
+}
+
+const recebeCurtidas = async (req, res, next) => {
+
+  const { body } = req;
+
+  console.log(body);
+
+  return res.status(200).send({
+    data: {
+
+    }
+  });
+
+}
+
+const pesquisarCurtidasRecebidas = async (req, res, next) => {
+
+  return res.status(200).send({
+    data: []
+  })
+
+}
+
+
 module.exports = {
   ativa,
   buscaProdutosPorFornecedor,
   cria,
   inativa,
   lista,
+  curtidasRecebidas,
+  buscaPorId,
+  recebeCurtidas
+
 }

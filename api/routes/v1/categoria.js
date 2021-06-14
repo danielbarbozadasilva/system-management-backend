@@ -8,13 +8,12 @@ const categoriaController = require('../../controllers/categoria.controller');
 para uma 'web api', o qual permite ao usuário acessar comandos 
 apartir de rotas que representam operações de negócio */
 module.exports = (router) => {
-
-  router
-    .route('/categoria').get(categoriaController.listaTodasAsCategorias)
-
-    .post(// autorizacaoMiddlewate('CRIA_CATEGORIA'),
-
-      fileUploadMiddleware('categoria'),
+   // Listar todas as categoria
+  router.route('/categoria').get(categoriaController.listaTodasAsCategorias)
+  autorizacaoMiddlewate('PESQUISA_CATEGORIA')
+    
+  // Inserir uma categoria
+    .post(AtualizarautorizacaoMiddlewate('CRIA_CATEGORIA'), fileUploadMiddleware('categoria'),
       /* 'Middleware' responsável por auxiliar no upload do arquivo.
       Apartir deste middleware a aplicação consegue identificar se existe
       um arquivo vinculado a 'request'. O 'middleware' é associado a esta
@@ -45,13 +44,14 @@ module.exports = (router) => {
       categoriaController.criarCategoria
     )
 
-
+  // Pesquisar categoria por ID
   router.route('/categoria/:categoriaid').get(
     /*a validação de 'DTO' será no 'params', validação de uma
       'regular expression' que é capaz de identificar padrões em textos
       A validação é realizada em cima do valor do 'params' e cruzando ele
       com uma 'regular expression' para verificar se o 'ID' corresponde ao
       padrão de um 'ID' do 'MongoDB'*/
+    autorizacaoMiddlewate('PESQUISA_CATEGORIA'),
     validaDTO('params', {
       // Regex para validar o formato do ID do 'Mongo'
       categoriaid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
@@ -62,7 +62,8 @@ module.exports = (router) => {
     categoriaController.buscarPorId
   )
 
-    .delete(
+    // Deletar categoria
+    .delete(autorizacaoMiddlewate('DELETA_CATEGORIA'),
       validaDTO('params', {
         categoriaid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
           'any.required': `"categoria id" é um campo obrigatório`,
@@ -72,8 +73,10 @@ module.exports = (router) => {
       }),
       categoriaController.deletarCategoria
     )
-    .put(
-      fileUploadMiddleware('categoria', true),
+
+    // Atualizar categoria
+    .put(autorizacaoMiddlewate('ALTERA_CATEGORIA'),
+      fileUploadMiddleware('categorias', true),
       validaDTO('params', {
         categoriaid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
           'any.required': `"categoria id" é um campo obrigatório`,
@@ -99,5 +102,4 @@ module.exports = (router) => {
       }),
       categoriaController.alterarCategoria
     )
-
 }

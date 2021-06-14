@@ -20,9 +20,9 @@ const criaEnderecoDownload = (origem, arquivoNome) => {
 
 const criaNome = (tipo) => {
   const tipoTratado = tipo.split('/')[1];
-  const x = `${uuid()}.${tipoTratado}`
-  return x;
+  return `${uuid()}.${tipoTratado}`;
 }
+
 
 /* Move o arquivo */ 
 const move = (temporario, definitivo) => {
@@ -38,8 +38,6 @@ const remove = (origem, arquivo) => {
   // Verifica se existe, em caso afirmativo ele remove 
   if (fs.existsSync(enderecoArquivo))
     fs.unlinkSync(enderecoArquivo);
-
-
   return;
 }
 

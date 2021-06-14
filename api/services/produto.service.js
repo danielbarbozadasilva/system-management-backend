@@ -97,7 +97,95 @@ const pesquisaPorFiltros = async (filtros) => {
 
 }
 
+const deleta = async ({ fornecedorId, produtoId, usuarioId }) => {
+
+  const [fornecedorDB, produtoDB] = await Promise.all([
+    fornecedor.findById(fornecedorId),
+    produto.findById(produtoId),
+  ]);
+
+  // fonecedor existe
+  if (!fornecedorDB) {
+    return {
+      sucesso: false,
+      mensagem: 'operação não pode ser realizada',
+      detalhes: [
+        'O fornecedor informado não existe.'
+      ],
+    }
+  }
+
+  // verificar se o fornecedor informado e o mesmo logado
+  if (fornecedorId !== usuarioId) {
+    return {
+      sucesso: false,
+      mensagem: 'operação não pode ser realizada',
+      detalhes: [
+        'O produto a ser excluido não pertence ao fornecedor.'
+      ],
+    }
+  }
+
+  // valida se produto existe
+  if (!produtoDB) {
+    return {
+      sucesso: false,
+      mensagem: 'operação não pode ser realizada',
+      detalhes: [
+        'O produto informado não existe.'
+      ],
+    }
+  }
+
+  console.log(produtoDB.fornecedor.toString());
+
+  // validar se produto pertence ao fornecedor
+  if (produtoDB.fornecedor.toString() !== fornecedorId) {
+    return {
+      sucesso: false,
+      mensagem: 'operação não pode ser realizada',
+      detalhes: [
+        'O fornecedor informado e inválido.'
+      ],
+    }
+  }
+
+  // pesquisar categoria e remover o produto a ser excluido
+  const categoriaDB = await categoria.findById(produtoDB.categoria);
+  categoriaDB.produtos = categoriaDB.produtos.filter(item => {
+    return item.toString() !== produtoId
+  });
+
+  // remover produto do fornecedor
+  fornecedorDB.produtos = fornecedorDB.produtos.filter(item => {
+    return item.toString() !== produtoId
+  });
+
+
+  // excluir do produto da base
+  await Promise.all([
+    categoriaDB.save(),
+    fornecedorDB.save(),
+    produto.deleteOne(produtoDB)
+  ]);
+
+  // remover imagem do produto
+  const { imagem } = produtoDB;
+  fileUtils.remove('produtos', imagem.nome);
+
+  return {
+    sucesso: true,
+    mensagem: 'operação realizada com sucesso',
+    data: {
+      id: produtoId,
+      nome: produtoDB.nome,
+    },
+  }
+
+}
+
 module.exports = {
   cria,
-  pesquisaPorFiltros
+  pesquisaPorFiltros,
+  deleta,
 }
