@@ -2,17 +2,19 @@ const joi = require('joi');
 const validaDTO = require('../../utils/middlewares/validate-dto.middleware');
 const fornecedorController = require('../../controllers/fornecedor.controller');
 const produtoController = require('../../controllers/produto.controller');
-
+const autorizacaoMiddlewate = require('../../utils/middlewares/authorization.middleware');
 const fileUploadMiddleware = require('../../utils/middlewares/fileUploadMiddleware');
 
 module.exports = (router) => {
 
   // Listar todos os Fornecedores
   router.route('/fornecedor').get(
-    autorizacaoMiddlewate('PESQUISA_FORNECEDOR'), fornecedorController.lista)
+    autorizacaoMiddlewate('PESQUISA_FORNECEDOR'), 
+    fornecedorController.lista,
+    )
 
     // Inserir um Fornecedor
-    .post(validaDTO('body', {
+    router.route('/fornecedor').post(validaDTO('body', {
       cnpj: joi.string().required().messages({
         'any.required': `"cnpj" é um campo obrigatório`,
         'string.empty': `"cnpj" não deve ser vazio`,

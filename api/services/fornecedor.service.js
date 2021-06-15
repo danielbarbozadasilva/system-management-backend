@@ -8,21 +8,13 @@ const emailUtils = require('../utils/email.utils');
 const produtoMapper = require('../mappers/produto.mapper');
 
 const validaSeCnpjJaExiste = async (cnpj) => {
-
-  const result = await fornecedor.find({
-    cnpj
-  });
-
+  const result = await fornecedor.find({cnpj});
   return result.length > 0 ? true : false;
-
 }
 
 const alteraStatus = async (id, status) => {
-
   const fornecedorDB = await fornecedor.findById(id);
-
   if (!fornecedorDB) {
-
     return {
       sucesso: false,
       mensagem: 'operação não pode ser realizada',
@@ -30,11 +22,9 @@ const alteraStatus = async (id, status) => {
         'Não existe fornecedor cadastrado para o fornecedor id informado'
       ],
     };
-
   }
 
   fornecedorDB.status = status;
-
   await fornecedorDB.save();
 
   if (status === 'Ativo') {
