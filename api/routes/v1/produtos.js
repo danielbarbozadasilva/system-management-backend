@@ -50,10 +50,10 @@ module.exports = (router) => {
       produtoController.listaPorId)
   
 
+   // Rota para inserir produto
   router.route('/produto').post(
     middleTeste,
     fileUploadMiddleware('produtos', true),
-
     validaDTO('query', {
       categoriaid: joi.string().regex(/^[0-9a-fA-F]{24}$/).messages({
         'any.required': `"categoria id" é um campo obrigatório`,

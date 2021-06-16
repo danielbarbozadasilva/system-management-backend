@@ -1,7 +1,7 @@
 const criptografiaUitls = require('../criptografia.util');
 const usuarioService = require('../../services/usuario.service');
-const autorizar = (rota = '*') => {
 
+const autorizar = (rota = '*') => {
   return async (req, res, next) => {
 
     const { token } = req.headers;

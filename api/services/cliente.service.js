@@ -6,7 +6,7 @@ const { criaHash } = require('../utils/criptografia.util');
 
 const cria = async (model) => {
 
-  const { email, senha, ...resto } = model;
+  const { id, email, senha, ...resto } = model;
 
   // Email ja existe
   if (await validaSeEmailJaExiste(email))
@@ -19,6 +19,7 @@ const cria = async (model) => {
     }
 
   const novoCliente = await cliente.create({
+    id,
     email,
     ...resto,
     senha: criaHash(senha),

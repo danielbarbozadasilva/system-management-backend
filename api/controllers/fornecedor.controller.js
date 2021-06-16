@@ -1,4 +1,5 @@
 const fornecedorService = require('../services/fornecedor.service');
+const curtidaService = require('../services/curtida.service');
 
 const ativa = async (req, res, next) => {
 
@@ -99,15 +100,15 @@ const curtidasRecebidas = async (req, res, next) => {
   })
 
 }
-
 const recebeCurtidas = async (req, res, next) => {
 
-
   const { params, usuario } = req;
+  
+  console.log(params)
 
   const result = await curtidaService.cria(params.fornecedorid, usuario.id);
 
-  //TODO: tratar saida e finalizar enpoint
+  // tratar saida e finalizar enpoint
   const codigoRetorno = result.sucesso ? 200 : 400;
   const dadoRetorno = result.sucesso ? { data: result.data } : { detalhes: result.detalhes };
 

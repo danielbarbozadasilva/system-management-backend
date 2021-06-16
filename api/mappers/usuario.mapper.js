@@ -18,10 +18,10 @@ const trataTipoUsuario = (tipo) => {
 
 const toUserDTO = (model) => {
 
-  const { id, email, kind, nome, nomeFantasia } = model;
+  const { _id, email, kind, nome, nomeFantasia } = model;
 
   return {
-    id,
+    id:_id,
     email,
     nome: nome? nome : nomeFantasia,
     tipoUsuario: trataTipoUsuario(kind),
@@ -32,5 +32,6 @@ const toUserDTO = (model) => {
 
 module.exports = {
   toUserDTO,
+  trataTipoUsuario
 }
 

@@ -6,11 +6,10 @@ const autorizacaoMiddlewate = require('../../utils/middlewares/authorization.mid
 const fileUploadMiddleware = require('../../utils/middlewares/fileUploadMiddleware');
 
 const middleTeste = (req, res, next) => {
-  console.log('------------------'+JSON.stringify(req.body))
+  console.log('------------------' + JSON.stringify(req.body))
   next()
 
 }
-
 
 module.exports = (router) => {
 
@@ -76,30 +75,6 @@ module.exports = (router) => {
     }),
     fornecedorController.cria
   )
-
-
-  router.route('/fornecedor/fornecedorid/curtidas')
-    .get(
-      // autorizacaoMiddlewate('PESQUISA_FORNECEDOR'),
-      validaDTO('params', {
-        fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
-          'any.required': `"fornecedor id" é um campo obrigatório`,
-          'string.empty': `"fornecedor id" não deve ser vazio`,
-          'string.pattern.base': `"fornecedor id" fora do formato experado`,
-        }),
-      }),
-      fornecedorController.curtidasRecebidas,
-    )
-    .post(validaDTO('params', {
-      fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
-        'any.required': `"cliente id" é um campo obrigatório`,
-        'string.empty': `"cliente id" não deve ser vazio`,
-        'string.pattern.base': `"cliente id" fora do formato experado`,
-      }),
-    }),
-      fornecedorController.recebeCurtidas,
-    )
-
 
   // Atualizar o status do Fornecedor para Ativo
   router.route('/fornecedor/:fornecedorid/ativa').put(

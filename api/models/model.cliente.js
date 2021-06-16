@@ -8,7 +8,7 @@ const clienteSchema = {
     required: true,
   },
 
-  nascimento: {
+  data_nascimento: {
     type: String,
     required: true,
   },

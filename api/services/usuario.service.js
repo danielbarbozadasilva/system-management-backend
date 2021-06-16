@@ -105,7 +105,6 @@ const validaSeEmailJaExiste = async (email) => {
 
 }
 
-//NOVO
 const usuarioEValido = async (email, senha) => {
   return await usuario.findOne({ email, senha: criptografia.criaHash(senha) }) ? true : false;
 }
@@ -158,8 +157,7 @@ const cria = async () => {
 }
 
 
-//TODO: remover do servico de usuarios
-
+// remover do servico de usuarios
 const buscarPefilPorId = (perfilId) => {
   const result = perfis.find(item => Number(item.id) === Number(perfilId));
   return result;
