@@ -55,12 +55,24 @@ const lista = async (req, res, next) => {
 }
 
 const buscaPorId = async (req, res, next) => {
-  const { fornecedorid } = req.params;
 
-console.log(id)
-  const data = await fornecedorService.listaProdutosID(fornecedorid);
-console.log(data)
-  return res.status(200).send({data})
+  const { fornecedorid } = req.params;
+  const { id, tipoUsuario } = req.usuario;
+
+  const result = await fornecedorService.buscaPorId(fornecedorid, { id, tipo: tipoUsuario });
+
+  const codigoRetorno = result.sucesso ? 200 : 400;
+  const dadoRetorno = result.sucesso ? { data: result.data } : { detalhes: result.detalhes };
+
+  return res.status(codigoRetorno).send(dadoRetorno);
+
+}
+
+const pesquisarCurtidasRecebidas = async (req, res, next) => {
+
+  return res.status(200).send({
+    data: []
+  })
 
 }
 
@@ -99,15 +111,6 @@ const recebeCurtidas = async (req, res, next) => {
 
 }
 
-const pesquisarCurtidasRecebidas = async (req, res, next) => {
-
-  return res.status(200).send({
-    data: []
-  })
-
-}
-
-
 module.exports = {
   ativa,
   buscaProdutosPorFornecedor,
@@ -116,7 +119,5 @@ module.exports = {
   lista,
   curtidasRecebidas,
   buscaPorId,
-  recebeCurtidas,
-  pesquisarCurtidasRecebidas
-
+  recebeCurtidas
 }

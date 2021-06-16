@@ -1,6 +1,6 @@
 const { fornecedor } = require('../models/index');
 const { toListItemDTO, toDTO } = require('../mappers/fornecedor.mapper');
-const { validaSeEmailJaExiste } = require('../services/usuario.service');
+const { validaSeEmailJaExiste, buscaTipoUsuarioPorId } = require('../services/usuario.service');
 
 const { criaHash } = require('../utils/criptografia.util');
 const emailUtils = require('../utils/email.utils');
@@ -8,13 +8,21 @@ const emailUtils = require('../utils/email.utils');
 const produtoMapper = require('../mappers/produto.mapper');
 
 const validaSeCnpjJaExiste = async (cnpj) => {
-  const result = await fornecedor.find({ cnpj });
+
+  const result = await fornecedor.find({
+    cnpj
+  });
+
   return result.length > 0 ? true : false;
+
 }
 
 const alteraStatus = async (id, status) => {
+
   const fornecedorDB = await fornecedor.findById(id);
+
   if (!fornecedorDB) {
+
     return {
       sucesso: false,
       mensagem: 'operação não pode ser realizada',
@@ -22,14 +30,16 @@ const alteraStatus = async (id, status) => {
         'Não existe fornecedor cadastrado para o fornecedor id informado'
       ],
     };
+
   }
 
   fornecedorDB.status = status;
+
   await fornecedorDB.save();
 
   if (status === 'Ativo') {
 
-    // Adicionar o envio de email
+    // adicionar o envio de email
     emailUtils.enviar({
       destinatario: fornecedorDB.email,
       remetente: process.env.SENDGRID_REMETENTE,
@@ -50,12 +60,9 @@ const alteraStatus = async (id, status) => {
 }
 
 const cria = async (model) => {
-
-  // console.log('fornecedor.service');
-
   const { email, cnpj, senha, ...resto } = model;
 
-  //TODO: cnpj ja existente
+  // cnpj ja existente
   if (await validaSeCnpjJaExiste(cnpj))
     return {
       sucesso: false,
@@ -65,7 +72,6 @@ const cria = async (model) => {
       ],
     }
 
-  //TODO: email ja existente
   if (await validaSeEmailJaExiste(email))
     return {
       sucesso: false,
@@ -90,9 +96,7 @@ const cria = async (model) => {
       ...toListItemDTO(novoFornecedor)
     }
   }
-
 }
-
 
 const listaTodos = async (filtro) => {
 
@@ -101,30 +105,57 @@ const listaTodos = async (filtro) => {
   return resultadoDB.map(item => {
     return toDTO(item.toJSON());
   })
-}
 
-const listaProdutosID = async (id) => {
-  const resultadoDB = await fornecedor.findById(id);
-  console.log(resultadoDB)
-  return resultadoDB.map(item => {
-    return toDTO(item.toJSON());
-  })
 }
 
 const listaProdutosByFornecedor = async (fornecedorid, fornecedorlogadoid) => {
   // verificar se fornecedor informado e o mesmo que o logado
   const fornecedorFromDB = await fornecedor.findById(fornecedorid).populate('produtos');
-
   const fornecedorAsJSON = fornecedorFromDB.toJSON();
   return fornecedorAsJSON.produtos.map(item => {
     return produtoMapper.toItemListaDTO(item);
   });
 }
 
+const buscaPorId = async (fornecedorid, { id, tipo }) => {
+
+  const fornecedorDB = await fornecedor.findById(fornecedorid);
+
+  // fornecedor pesdquisado existe
+  if (!fornecedorDB) {
+    return {
+      sucesso: false,
+      mensagem: "operação não pode ser realizada",
+      detalhes: [
+        "o fornecedor pesquisado não existe"
+      ]
+    }
+  }
+
+  const tipoUsuario = buscaTipoUsuarioPorId(tipo);
+  // o usuario logado e um fornecedor, se sim ele e o mesmo que o fornecedor pesquisado
+  if (tipoUsuario.descricao === "fornecedor") {
+    if (fornecedorid !== id) {
+      return {
+        sucesso: false,
+        mensagem: "operação não pode ser realizada",
+        detalhes: [
+          "o usuário não pode realizar esta operação"
+        ]
+      }
+    }
+  }
+  return {
+    sucesso: true,
+    data: toDTO(fornecedorDB.toJSON()),
+  }
+}
+
+
 module.exports = {
   alteraStatus,
+  buscaPorId,
   cria,
   listaProdutosByFornecedor,
   listaTodos,
-  listaProdutosID
 }
