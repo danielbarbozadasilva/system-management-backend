@@ -87,15 +87,12 @@ const perfis = [
 ];
 
 
-
-
 const buscaTipoUsuarioPorId = (tipoUsuarioId) => {
   return perfis.find(item => {
     return item.id === tipoUsuarioId
   })
 
 }
-
 
 const validaSeEmailJaExiste = async (email) => {
 
@@ -150,7 +147,7 @@ const autenticar = async (email, senha) => {
 const cria = async () => {
 
   return usuario.create({
-    email: 'testeezer@email.com',
+    email: 'daniel80barboza@email.com',
     senha: md5(`123456${process.env.MD5_SECRET}`)
   });
 

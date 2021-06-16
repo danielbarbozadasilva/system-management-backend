@@ -3,7 +3,6 @@ const usuarioService = require('../../services/usuario.service');
 
 const autorizar = (rota = '*') => {
   return async (req, res, next) => {
-
     const { token } = req.headers;
 
     if (!token) {
@@ -46,10 +45,7 @@ const autorizar = (rota = '*') => {
 
 
     return next();
-
   }
-
 }
 
 module.exports = autorizar;
-
