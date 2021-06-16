@@ -68,6 +68,7 @@ const buscaPorId = async (req, res, next) => {
 
 }
 
+
 const pesquisarCurtidasRecebidas = async (req, res, next) => {
 
   return res.status(200).send({
@@ -91,6 +92,8 @@ const buscaProdutosPorFornecedor = async (req, res, next) => {
 
 const curtidasRecebidas = async (req, res, next) => {
 
+
+
   return res.status(200).send({
     data: []
   })
@@ -99,15 +102,16 @@ const curtidasRecebidas = async (req, res, next) => {
 
 const recebeCurtidas = async (req, res, next) => {
 
-  const { body } = req;
 
-  console.log(body);
+  const { params, usuario } = req;
 
-  return res.status(200).send({
-    data: {
+  const result = await curtidaService.cria(params.fornecedorid, usuario.id);
 
-    }
-  });
+  //TODO: tratar saida e finalizar enpoint
+  const codigoRetorno = result.sucesso ? 200 : 400;
+  const dadoRetorno = result.sucesso ? { data: result.data } : { detalhes: result.detalhes };
+
+  return res.status(codigoRetorno).send(dadoRetorno);
 
 }
 

@@ -30,14 +30,6 @@ const buscarPorId = async (req, res, next) => {
 }
 
 
-
-const ListarProdutosPorCategoria = async (req,res,next) => {
-  const { categoria } = req.params;
-
-  const lista = await categoriaService.pesquisaPorFiltros(categoria)
-
-  return res.status(200).send(lista)
-} 
   
 const criarCategoria = async (req, res, next) => {
 
@@ -98,6 +90,5 @@ module.exports = {
   buscarPorId,
   criarCategoria,
   deletarCategoria,
-  alterarCategoria,
-  ListarProdutosPorCategoria
+  alterarCategoria
 }

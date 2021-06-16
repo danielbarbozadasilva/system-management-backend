@@ -1,6 +1,6 @@
 const produtoService = require('../services/produto.service');
-const cria = async (req, res, next) => {
 
+const cria = async (req, res, next) => {
   const { body, params } = req;
 
   const resultadoServico = await produtoService.cria({
@@ -28,7 +28,20 @@ const lista = async (req, res, next) => {
 }
 
 
-  const remove = async (req, res, next) => {
+const listaPorId = async (req, res, next) => {
+
+  const { query } = req;
+
+  console.log(query);
+
+  const result = await produtoService.listaAvancadaID(query);
+
+  return res.status(200).send({ data: result });
+
+}
+
+
+const remove = async (req, res, next) => {
 
   const { fornecedorid, produtoid } = req.params;
   console.log(req.params);
@@ -43,8 +56,17 @@ const lista = async (req, res, next) => {
 
 }
 
+
+const advancedList = async (req, res, next) => {
+  const lista = await produtoService.listaAvancada(req.params.params, req.params.value)
+
+  return res.status(200).send(lista)
+}
+
 module.exports = {
   cria,
   remove,
-  lista
+  lista,
+  advancedList,
+  listaPorId
 }

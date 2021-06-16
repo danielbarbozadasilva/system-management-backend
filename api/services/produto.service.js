@@ -2,18 +2,12 @@ const { produto, categoria, fornecedor } = require('../models/index');
 const fileUtils = require('../utils/file.util');
 const produtoMapper = require('../mappers/produto.mapper');
 
-// const listaAvancada = async (id) => {
-//   if(id){
-//   return produto.findById({categoria:id})
-//   }
-//   return produto.find({})
-//   } 
-
+// Insere o produto
 const cria = async (model) => {
-
+  console.log('-----------'+ JSON.stringify(model))
   const [categoriaDB, fornecedorDB] = await Promise.all([
     categoria.findById(model.categoriaid),
-    fornecedor.findById(model.fornecedorid),
+    fornecedor.findById(model.fornecedorid)
   ]);
 
   // existe o id do fornecedor
@@ -75,6 +69,20 @@ const cria = async (model) => {
     }
   }
 
+}
+
+const listaAvancada = async (params, value) => {
+  if (params) {
+    return produto.find({ [params]: value })
+  }
+  return produto.find({})
+}
+
+const listaAvancadaID = async (params, value) => {
+  if (params) {
+    return produto.findById({ [params]: value })
+  }
+  return produto.find({})
 }
 
 const pesquisaPorFiltros = async (filtros) => {
@@ -192,5 +200,7 @@ const deleta = async ({ fornecedorId, produtoId, usuarioId }) => {
 module.exports = {
   cria,
   pesquisaPorFiltros,
-  deleta
+  deleta,
+  listaAvancada,
+  listaAvancadaID
 }

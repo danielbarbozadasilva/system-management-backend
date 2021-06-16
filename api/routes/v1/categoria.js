@@ -9,45 +9,41 @@ para uma 'web api', o qual permite ao usuário acessar comandos
 apartir de rotas que representam operações de negócio */
 module.exports = (router) => {
 
-  router.route('/categoria')
-  .get(
-    categoriaController.listaTodasAsCategorias,
-    autorizacaoMiddlewate('PESQUISA_CATEGORIA'),
-  )
+  router.route('/categoria').get(categoriaController.listaTodasAsCategorias)
 
-    .post(
-      autorizacaoMiddlewate('CRIA_CATEGORIA'),
-      fileUploadMiddleware('categoria'),
+  .post(
+    autorizacaoMiddlewate('CRIA_CATEGORIA'),
+    fileUploadMiddleware('categoria'),
 
-      /* 'Middleware' responsável por auxiliar no upload do arquivo.
-      Apartir deste middleware a aplicação consegue identificar se existe
-      um arquivo vinculado a 'request'. O 'middleware' é associado a esta
-      rota especifica, passando para ele qual é o destino final das imagens
-      que será recebido neste 'endpoint' */
-      validaDTO('body', {
-        /* Na vadidação de 'DTO', os dados recebidos são cruzados contra um esquema
-        de validação e informará ao usuário em caso de problemas, encerrando a 
-        'request' neste ponto, não indo ao próximo nível da 'request' que é o método
-        do controlador. Ele para na validação do 'DTO', porque neste caso não há informações
-        necessárias para seguir. Caso o cenário seja positivo, a validação dos dados do 
-        esquema esteja de acordo, irá para o próximo nível que são os métodos do controller. */
-        nome: joi.string().required().messages({
-          'any.required': `"nome" é um campo obrigatório`,
-          'string.empty': `"nome" não deve ser vazio`,
-        }),
-        descricao: joi.string().required().messages({
-          'any.required': `"descricao" é um campo obrigatório`,
-          'string.empty': `"descricao" não deve ser vazio`,
-        }),
-        status: joi.boolean().required().messages({
-          'any.required': `"status" é um campo obrigatório`,
-          'booleam.empty': `"status" não deve ser vazio`,
-        }),
-      }, {
-        allowUnknown: true,
+    /* 'Middleware' responsável por auxiliar no upload do arquivo.
+    Apartir deste middleware a aplicação consegue identificar se existe
+    um arquivo vinculado a 'request'. O 'middleware' é associado a esta
+    rota especifica, passando para ele qual é o destino final das imagens
+    que será recebido neste 'endpoint' */
+    validaDTO('body', {
+      /* Na vadidação de 'DTO', os dados recebidos são cruzados contra um esquema
+      de validação e informará ao usuário em caso de problemas, encerrando a 
+      'request' neste ponto, não indo ao próximo nível da 'request' que é o método
+      do controlador. Ele para na validação do 'DTO', porque neste caso não há informações
+      necessárias para seguir. Caso o cenário seja positivo, a validação dos dados do 
+      esquema esteja de acordo, irá para o próximo nível que são os métodos do controller. */
+      nome: joi.string().required().messages({
+        'any.required': `"nome" é um campo obrigatório`,
+        'string.empty': `"nome" não deve ser vazio`,
       }),
-      categoriaController.criarCategoria
-    )
+      descricao: joi.string().required().messages({
+        'any.required': `"descricao" é um campo obrigatório`,
+        'string.empty': `"descricao" não deve ser vazio`,
+      }),
+      status: joi.boolean().required().messages({
+        'any.required': `"status" é um campo obrigatório`,
+        'booleam.empty': `"status" não deve ser vazio`,
+      }),
+    }, {
+      allowUnknown: true,
+    }),
+    categoriaController.criarCategoria
+  )
 
 
   // Pesquisar categoria por ID
@@ -110,6 +106,5 @@ module.exports = (router) => {
       }),
       categoriaController.alterarCategoria
     )
-  router.route('/categoria/:categoria/produto')
-    .get(categoriaController.ListarProdutosPorCategoria)
+    
 }

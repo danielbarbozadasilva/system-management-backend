@@ -31,7 +31,7 @@ const fornecedorSchema = {
     type: String,
     required: true,
   },
-  status: {          // Analise | Ativo | Inativo
+  status: {          
     type: String,
     required: true,
   },
@@ -39,7 +39,12 @@ const fornecedorSchema = {
   produtos: [{
     type: Schema.Types.ObjectId,
     ref: 'produto'
-  }]
+  }],
+
+  curtidas: [{
+    type: Schema.Types.ObjectId,
+    ref: 'curtida'
+  }],
 
 }
 

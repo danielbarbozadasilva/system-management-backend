@@ -43,14 +43,24 @@ const fornecedorSchema = require('./model.fornecedor');
 const fornecedor = usuario.discriminator('fornecedor', createSchema(usuarioSchema, fornecedorSchema, {}));
 
 
-/* CATEGORIA */
+
+/* CLIENTE */
+const clienteSchema = require('./model.cliente');
+const cliente = usuario.discriminator('cliente', createSchema(usuarioSchema, clienteSchema, {}));
+
+
+
+// CATEGORIA
 const categoriaSchema = require('./model.categoria');
-// O esquema pai é indefinido (undefined). Esquema filho (categoriaSchema) - da categoria
 const categoria = mongoose.model('categoria', createSchema(undefined, categoriaSchema, {
   collection: 'CategoriaCollection',
+  toJSON: {
+    virtuals: true,
+  },
 }));
 
-/* PRODUTO */
+
+// PRODUTO
 const produtoSchema = require('./model.produto');
 const produto = mongoose.model('produto', createSchema(undefined, produtoSchema, {
   collection: 'ProdutoCollection',
@@ -59,10 +69,15 @@ const produto = mongoose.model('produto', createSchema(undefined, produtoSchema,
   }
 }));
 
-/* CLIENTE */
-const clienteSchema = require('./model.cliente');
-const cliente = usuario.discriminator('cliente', createSchema(usuarioSchema, clienteSchema, {}));
 
+// CURTIDAS
+const curtidaSchema = require('./model.curtida');
+const curtida = mongoose.model('curtida', createSchema(undefined, curtidaSchema, {
+  collection: 'curtidaCollection',
+  toJSON: {
+    virtuals: true,
+  }
+}));
 
 module.exports = {
   categoria,
@@ -70,6 +85,6 @@ module.exports = {
   administrador,
   fornecedor,
   produto,
+  curtida,
   cliente
 }
-

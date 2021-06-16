@@ -48,6 +48,7 @@ const usuarioMapper = require('../mappers/usuario.mapper');
 //   },
 // ];
 
+
 const perfis = [
   {
     id: 1,
@@ -80,6 +81,7 @@ const perfis = [
     id: 3,
     descricao: 'cliente',
     funcionalidades: [
+      'CURTIDA_CRIA'
     ]
   },
 ];
@@ -96,19 +98,24 @@ const buscaTipoUsuarioPorId = (tipoUsuarioId) => {
 
 
 const validaSeEmailJaExiste = async (email) => {
+
   const usuarios = await usuario.find({ email });
+
   return usuarios.length > 0 ? true : false;
 
 }
 
+//NOVO
 const usuarioEValido = async (email, senha) => {
   return await usuario.findOne({ email, senha: criptografia.criaHash(senha) }) ? true : false;
 }
 
 const criaCredencial = async (usuarioEmail) => {
+
   const usuarioDB = await usuario.findOne({
     email: usuarioEmail
   });
+
   const usuarioDTO = usuarioMapper.toUserDTO(usuarioDB);
 
   return {
@@ -119,6 +126,7 @@ const criaCredencial = async (usuarioEmail) => {
 }
 
 const autenticar = async (email, senha) => {
+
   const resultadoDB = await usuarioEValido(email, senha);
 
   if (!resultadoDB) {
@@ -131,6 +139,7 @@ const autenticar = async (email, senha) => {
     }
   }
 
+
   return {
     sucesso: true,
     mensagem: "usuário autenticado com sucesso",
@@ -140,6 +149,7 @@ const autenticar = async (email, senha) => {
 }
 
 const cria = async () => {
+
   return usuario.create({
     email: 'testeezer@email.com',
     senha: md5(`123456${process.env.MD5_SECRET}`)
@@ -147,7 +157,9 @@ const cria = async () => {
 
 }
 
-// remover do servico de usuarios
+
+//TODO: remover do servico de usuarios
+
 const buscarPefilPorId = (perfilId) => {
   const result = perfis.find(item => Number(item.id) === Number(perfilId));
   return result;
