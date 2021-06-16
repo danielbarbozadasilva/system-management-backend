@@ -78,9 +78,9 @@ const listaAvancada = async (params, value) => {
   return produto.find({})
 }
 
-const listaAvancadaID = async (params, value) => {
-  if (params) {
-    return produto.findById({ [params]: value })
+const listaAvancadaID = async (id) => {
+  if (id) {
+    return produto.findById(id)
   }
   return produto.find({})
 }

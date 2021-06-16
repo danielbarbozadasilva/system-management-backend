@@ -34,6 +34,7 @@ module.exports = (router) => {
 
   // Inserir um Fornecedor
   router.route('/fornecedor').post(
+    autorizacaoMiddlewate('ADICIONA_FORNECEDOR'),
     middleTeste,
     validaDTO('body', {
       cnpj: joi.string().required().messages({
@@ -102,10 +103,7 @@ module.exports = (router) => {
     fornecedorController.inativa,
   )
 
-  router
-    .route('/fornecedor/:fornecedorid/curtidas')
-    .get(
-      // autorizacaoMiddlewate('PESQUISA_FORNECEDOR'),
+  router.route('/fornecedor/:fornecedorid/curtidas').get(
       validaDTO('params', {
         fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
           'any.required': `"fornecedor id" é um campo obrigatório`,
@@ -130,7 +128,7 @@ module.exports = (router) => {
 
   router.route('/fornecedor/:fornecedorid/produto')
     .get(
-      autorizacaoMiddlewate('PESQUISA_FORNECEDOR_PRODUTO'),
+      // autorizacaoMiddlewate('PESQUISA_FORNECEDOR_PRODUTO'),
       validaDTO('params', {
         fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
           'any.required': `"fornecedor id" é um campo obrigatório`,

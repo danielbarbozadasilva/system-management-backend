@@ -34,7 +34,7 @@ const listaPorId = async (req, res, next) => {
 
   console.log(query);
 
-  const result = await produtoService.listaAvancadaID(query);
+  const result = await produtoService.listaAvancadaID(query.id);
 
   return res.status(200).send({ data: result });
 
