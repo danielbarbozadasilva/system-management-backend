@@ -36,6 +36,7 @@ const cria = async (req, res, next) => {
 
   const result = await fornecedorService.cria(body);
 
+  //TODO: tratar saida e finalizar enpoint
   const codigoRetorno = result.sucesso ? 200 : 400;
   const dadoRetorno = result.sucesso ? { data: result.data } : { detalhes: result.detalhes };
 
@@ -54,9 +55,12 @@ const lista = async (req, res, next) => {
 }
 
 const buscaPorId = async (req, res, next) => {
+  const { fornecedorid } = req.params;
 
-  return res.status(200).send({
-  })
+console.log(id)
+  const data = await fornecedorService.listaProdutosID(fornecedorid);
+console.log(data)
+  return res.status(200).send({data})
 
 }
 
@@ -112,6 +116,7 @@ module.exports = {
   lista,
   curtidasRecebidas,
   buscaPorId,
-  recebeCurtidas
+  recebeCurtidas,
+  pesquisarCurtidasRecebidas
 
 }

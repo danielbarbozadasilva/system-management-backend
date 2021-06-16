@@ -14,6 +14,31 @@ const buscaPorId = async (categoriaid) => {
 
 }
 
+const pesquisaPorFiltros = async (filtros) => {
+
+  const filtroMongo = {};
+
+  // se eu tenho o valor eu anexo ao meu filtro senão passa batido
+  if (filtros.categoria)
+    filtroMongo.categoria = filtros.categoria;
+
+  // se eu tenho o valor eu anexo ao meu filtro senão passa batido
+  if (filtros.fornecedor)
+    filtroMongo.fornecedor = filtros.fornecedor;
+
+  // se eu tenho o valor eu anexo ao meu filtro senão passa batido
+  if (filtros.nomelike)
+    filtroMongo.nome = { $regex: '.*' + filtros.nomelike + '.*' };
+
+  const resultadoDB = await produto.find(filtroMongo);
+
+  return resultadoDB.map(item => {
+    // substituir por DTO
+    return categoriaMapper.toItemListaDTO(item);
+  });
+
+}
+
 const listaTodos = async () => {
 
   const listaCategoriasDB = await categoria.find({});
@@ -139,5 +164,6 @@ module.exports = {
   alteraCategoria,
   listaTodos,
   deleta,
+  pesquisaPorFiltros
 
 }

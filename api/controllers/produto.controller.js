@@ -27,7 +27,8 @@ const lista = async (req, res, next) => {
 
 }
 
-const remove = async (req, res, next) => {
+
+  const remove = async (req, res, next) => {
 
   const { fornecedorid, produtoid } = req.params;
   console.log(req.params);
@@ -45,5 +46,5 @@ const remove = async (req, res, next) => {
 module.exports = {
   cria,
   remove,
-  lista,
+  lista
 }

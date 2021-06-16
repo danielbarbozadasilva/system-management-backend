@@ -8,7 +8,7 @@ const emailUtils = require('../utils/email.utils');
 const produtoMapper = require('../mappers/produto.mapper');
 
 const validaSeCnpjJaExiste = async (cnpj) => {
-  const result = await fornecedor.find({cnpj});
+  const result = await fornecedor.find({ cnpj });
   return result.length > 0 ? true : false;
 }
 
@@ -51,9 +51,11 @@ const alteraStatus = async (id, status) => {
 
 const cria = async (model) => {
 
+  // console.log('fornecedor.service');
+
   const { email, cnpj, senha, ...resto } = model;
 
-  // cnpj ja existente
+  //TODO: cnpj ja existente
   if (await validaSeCnpjJaExiste(cnpj))
     return {
       sucesso: false,
@@ -63,7 +65,7 @@ const cria = async (model) => {
       ],
     }
 
-  // email ja existente
+  //TODO: email ja existente
   if (await validaSeEmailJaExiste(email))
     return {
       sucesso: false,
@@ -91,6 +93,7 @@ const cria = async (model) => {
 
 }
 
+
 const listaTodos = async (filtro) => {
 
   const resultadoDB = await fornecedor.find();
@@ -98,7 +101,14 @@ const listaTodos = async (filtro) => {
   return resultadoDB.map(item => {
     return toDTO(item.toJSON());
   })
+}
 
+const listaProdutosID = async (id) => {
+  const resultadoDB = await fornecedor.findById(id);
+  console.log(resultadoDB)
+  return resultadoDB.map(item => {
+    return toDTO(item.toJSON());
+  })
 }
 
 const listaProdutosByFornecedor = async (fornecedorid, fornecedorlogadoid) => {
@@ -116,4 +126,5 @@ module.exports = {
   cria,
   listaProdutosByFornecedor,
   listaTodos,
+  listaProdutosID
 }

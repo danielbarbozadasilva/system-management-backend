@@ -9,13 +9,11 @@ para uma 'web api', o qual permite ao usuário acessar comandos
 apartir de rotas que representam operações de negócio */
 module.exports = (router) => {
 
-  router.route('/categoria').get(
-    autorizacaoMiddlewate('PESQUISA_CATEGORIA'),
-    categoriaController.listaTodasAsCategorias,
+  router.route('/categoria').get(categoriaController.listaTodasAsCategorias)
 
-  ).post(
+  .post(
     autorizacaoMiddlewate('CRIA_CATEGORIA'),
-    fileUploadMiddleware('categorias'),
+    fileUploadMiddleware('categoria'),
 
     /* 'Middleware' responsável por auxiliar no upload do arquivo.
     Apartir deste middleware a aplicação consegue identificar se existe
@@ -67,7 +65,8 @@ module.exports = (router) => {
   )
 
     // Deletar categoria
-    .delete(autorizacaoMiddlewate('DELETA_CATEGORIA'),
+    .delete(
+      autorizacaoMiddlewate('REMOVE_CATEGORIA'),
       validaDTO('params', {
         categoriaid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
           'any.required': `"categoria id" é um campo obrigatório`,
@@ -79,8 +78,9 @@ module.exports = (router) => {
     )
 
     // Atualizar categoria
-    .put(autorizacaoMiddlewate('ALTERA_CATEGORIA'),
-      fileUploadMiddleware('categorias', true),
+    .put(
+      autorizacaoMiddlewate('ALTERA_CATEGORIA'),
+      fileUploadMiddleware('categoria', true),
       validaDTO('params', {
         categoriaid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
           'any.required': `"categoria id" é um campo obrigatório`,
@@ -106,4 +106,6 @@ module.exports = (router) => {
       }),
       categoriaController.alterarCategoria
     )
+    router.route('/categoria/:categoria/produto')
+    .get(categoriaController.ListarProdutosPorCategoria)
 }

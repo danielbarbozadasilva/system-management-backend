@@ -2,6 +2,13 @@ const { produto, categoria, fornecedor } = require('../models/index');
 const fileUtils = require('../utils/file.util');
 const produtoMapper = require('../mappers/produto.mapper');
 
+// const listaAvancada = async (id) => {
+//   if(id){
+//   return produto.findById({categoria:id})
+//   }
+//   return produto.find({})
+//   } 
+
 const cria = async (model) => {
 
   const [categoriaDB, fornecedorDB] = await Promise.all([
@@ -75,18 +82,16 @@ const pesquisaPorFiltros = async (filtros) => {
   const filtroMongo = {};
 
   // se eu tenho o valor eu anexo ao meu filtro senão passa batido
-  if (filtros.categoriaid)
-    filtroMongo.categoria = filtros.categoriaid;
+  if (filtros.categoria)
+    filtroMongo.categoria = filtros.categoria;
 
   // se eu tenho o valor eu anexo ao meu filtro senão passa batido
-  if (filtros.fornecedorid)
-    filtroMongo.fornecedor = filtros.fornecedorid;
+  if (filtros.fornecedor)
+    filtroMongo.fornecedor = filtros.fornecedor;
 
   // se eu tenho o valor eu anexo ao meu filtro senão passa batido
   if (filtros.nomelike)
     filtroMongo.nome = { $regex: '.*' + filtros.nomelike + '.*' };
-
-  console.log(filtroMongo);
 
   const resultadoDB = await produto.find(filtroMongo);
 
@@ -187,5 +192,5 @@ const deleta = async ({ fornecedorId, produtoId, usuarioId }) => {
 module.exports = {
   cria,
   pesquisaPorFiltros,
-  deleta,
+  deleta
 }

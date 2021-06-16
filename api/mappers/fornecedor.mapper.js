@@ -15,7 +15,7 @@ const toListItemDTO = (model) => {
 
 const toDTO = (model) => {
 
-  const { _id, senha, createdAt, updatedAt, __v, kind, produtos, ...resto } = model;
+  const { _id, senha, createdAt, updatedAt, __v, kind, ...resto } = model;
 
   return {
     id: _id,

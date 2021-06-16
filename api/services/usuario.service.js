@@ -29,11 +29,21 @@ const perfis = [
       'REMOVE_PRODUTO',
       'PESQUISA_FORNECEDOR_PRODUTO',
     ]
-  },
-  {
+  },{
     id: '3',
     descricao: 'cliente',
     funcionalidades: [
+      'PESQUISA_CATEGORIA',
+      'PESQUISA_PRODUTO',
+      'PESQUISA_FORNECEDOR_PRODUTO',
+    ]
+  },{
+    id: '4',
+    descricao: 'global',
+    funcionalidades: [
+      'PESQUISA_CATEGORIA',
+      'PESQUISA_PRODUTO',
+      'PESQUISA_FORNECEDOR_PRODUTO',
     ]
   },
 ];

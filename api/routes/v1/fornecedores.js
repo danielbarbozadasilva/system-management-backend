@@ -9,66 +9,68 @@ module.exports = (router) => {
 
   // Listar todos os Fornecedores
   router.route('/fornecedor').get(
-    autorizacaoMiddlewate('PESQUISA_FORNECEDOR'), 
+    autorizacaoMiddlewate('PESQUISA_FORNECEDOR'),
     fornecedorController.lista,
-    )
-
-    // Inserir um Fornecedor
-    router.route('/fornecedor').post(validaDTO('body', {
-      cnpj: joi.string().required().messages({
-        'any.required': `"cnpj" é um campo obrigatório`,
-        'string.empty': `"cnpj" não deve ser vazio`,
-      }),
-      nomeFantasia: joi.string().required().messages({
-        'any.required': `"nomeFantasia" é um campo obrigatório`,
-        'string.empty': `"nomeFantasia" não deve ser vazio`,
-      }),
-      endereco: joi.string().required().messages({
-        'any.required': `"endereco" é um campo obrigatório`,
-        'string.empty': `"endereco" não deve ser vazio`,
-      }),
-      uf: joi.string().required().messages({
-        'any.required': `"uf" é um campo obrigatório`,
-        'string.empty': `"uf" não deve ser vazio`,
-      }),
-      cidade: joi.string().required().messages({
-        'any.required': `"cidade" é um campo obrigatório`,
-        'string.empty': `"cidade" não deve ser vazio`,
-      }),
-      responsavel: joi.string().required().messages({
-        'any.required': `"responsavel" é um campo obrigatório`,
-        'string.empty': `"responsavel" não deve ser vazio`,
-      }),
-      telefone: joi.string().required().messages({
-        'any.required': `"telefone" é um campo obrigatório`,
-        'string.empty': `"telefone" não deve ser vazio`,
-      }),
-      email: joi.string().email().required().messages({
-        'any.required': `"email" é um campo obrigatório`,
-        'string.empty': `"email" não deve ser vazio`,
-      }),
-      senha: joi.string().required().messages({
-        'any.required': `"senha" é um campo obrigatório`,
-        'string.empty': `"senha" não deve ser vazio`,
+  )
+  
+  // Listar Fornecedor por ID
+  router.route('/fornecedor/fornecedorid')
+  .get(
+    // autorizacaoMiddlewate('PESQUISA_FORNECEDOR'),
+    validaDTO('params', {
+      fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
+        'any.required': `"fornecedor id" é um campo obrigatório`,
+        'string.empty': `"fornecedor id" não deve ser vazio`,
+        'string.pattern.base': `"fornecedor id" fora do formato experado`,
       }),
     }),
-      fornecedorController.cria
-    )
-    router.route('/fornecedor/fornecedorid')
-    .get(
-      // autorizacaoMiddlewate('PESQUISA_FORNECEDOR'),
-      validaDTO('params', {
-        fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
-          'any.required': `"fornecedor id" é um campo obrigatório`,
-          'string.empty': `"fornecedor id" não deve ser vazio`,
-          'string.pattern.base': `"fornecedor id" fora do formato experado`,
-        }),
-      }),
-      fornecedorController.buscaPorId,
-    )
+    fornecedorController.buscaPorId,
+  )
 
-  router
-    .route('/fornecedor/fornecedorid/curtidas')
+  // Inserir um Fornecedor
+  router.route('/fornecedor').post(validaDTO('body', {
+    cnpj: joi.string().required().messages({
+      'any.required': `"cnpj" é um campo obrigatório`,
+      'string.empty': `"cnpj" não deve ser vazio`,
+    }),
+    nomeFantasia: joi.string().required().messages({
+      'any.required': `"nomeFantasia" é um campo obrigatório`,
+      'string.empty': `"nomeFantasia" não deve ser vazio`,
+    }),
+    endereco: joi.string().required().messages({
+      'any.required': `"endereco" é um campo obrigatório`,
+      'string.empty': `"endereco" não deve ser vazio`,
+    }),
+    uf: joi.string().required().messages({
+      'any.required': `"uf" é um campo obrigatório`,
+      'string.empty': `"uf" não deve ser vazio`,
+    }),
+    cidade: joi.string().required().messages({
+      'any.required': `"cidade" é um campo obrigatório`,
+      'string.empty': `"cidade" não deve ser vazio`,
+    }),
+    responsavel: joi.string().required().messages({
+      'any.required': `"responsavel" é um campo obrigatório`,
+      'string.empty': `"responsavel" não deve ser vazio`,
+    }),
+    telefone: joi.string().required().messages({
+      'any.required': `"telefone" é um campo obrigatório`,
+      'string.empty': `"telefone" não deve ser vazio`,
+    }),
+    email: joi.string().email().required().messages({
+      'any.required': `"email" é um campo obrigatório`,
+      'string.empty': `"email" não deve ser vazio`,
+    }),
+    senha: joi.string().required().messages({
+      'any.required': `"senha" é um campo obrigatório`,
+      'string.empty': `"senha" não deve ser vazio`,
+    }),
+  }),
+    fornecedorController.cria
+  )
+
+
+  router.route('/fornecedor/fornecedorid/curtidas')
     .get(
       // autorizacaoMiddlewate('PESQUISA_FORNECEDOR'),
       validaDTO('params', {
@@ -107,14 +109,14 @@ module.exports = (router) => {
 
   // Atualizar o status do Fornecedor para Inativo
   router.route('/fornecedor/:fornecedorid/inativa').put(
-    autorizacaoMiddlewate('INATIVAR_FORNECEDOR'), 
+    autorizacaoMiddlewate('INATIVAR_FORNECEDOR'),
     validaDTO('params', {
-    fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
-      'any.required': `"fornecedor id" é um campo obrigatório`,
-      'string.empty': `"fornecedor id" não deve ser vazio`,
-      'string.pattern.base': `"fornecedor id" fora do formato experado`,
+      fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
+        'any.required': `"fornecedor id" é um campo obrigatório`,
+        'string.empty': `"fornecedor id" não deve ser vazio`,
+        'string.pattern.base': `"fornecedor id" fora do formato experado`,
+      }),
     }),
-  }),
     fornecedorController.inativa,
   )
 
@@ -161,22 +163,22 @@ module.exports = (router) => {
       produtoController.cria
     )
 
-    router.route('/fornecedor/:fornecedorid/produto/:produtoid').delete(
-      autorizacaoMiddlewate('REMOVE_PRODUTO'),
-      validaDTO('params', {
-        fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
-          'any.required': `"fornecedor id" é um campo obrigatório`,
-          'string.empty': `"fornecedor id" não deve ser vazio`,
-          'string.pattern.base': `"fornecedor id" fora do formato experado`,
-        }),
-        produtoid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
-          'any.required': `"fornecedor id" é um campo obrigatório`,
-          'string.empty': `"fornecedor id" não deve ser vazio`,
-          'string.pattern.base': `"fornecedor id" fora do formato experado`,
-        }),
+  router.route('/fornecedor/:fornecedorid/produto/:produtoid').delete(
+    autorizacaoMiddlewate('REMOVE_PRODUTO'),
+    validaDTO('params', {
+      fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
+        'any.required': `"fornecedor id" é um campo obrigatório`,
+        'string.empty': `"fornecedor id" não deve ser vazio`,
+        'string.pattern.base': `"fornecedor id" fora do formato experado`,
       }),
-      produtoController.remove
-    )
+      produtoid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
+        'any.required': `"fornecedor id" é um campo obrigatório`,
+        'string.empty': `"fornecedor id" não deve ser vazio`,
+        'string.pattern.base': `"fornecedor id" fora do formato experado`,
+      }),
+    }),
+    produtoController.remove
+  )
 
 }
 

@@ -31,6 +31,14 @@ const buscarPorId = async (req, res, next) => {
 
 
 
+const ListarProdutosPorCategoria = async (req,res,next) => {
+  const { categoria } = req.params;
+
+  const lista = await categoriaService.pesquisaPorFiltros(categoria)
+
+  return res.status(200).send(lista)
+} 
+  
 const criarCategoria = async (req, res, next) => {
 
   // recolhe as informações que vem da request
@@ -91,4 +99,5 @@ module.exports = {
   criarCategoria,
   deletarCategoria,
   alterarCategoria,
+  ListarProdutosPorCategoria
 }
