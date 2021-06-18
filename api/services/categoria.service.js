@@ -1,4 +1,4 @@
-const { categoria } = require('../models/index');
+const { categoria, produto } = require('../models/index');
 const categoriaMapper = require('../mappers/categoria.mapper');
 const fileUtils = require('../utils/file.util');
 
@@ -13,6 +13,13 @@ const buscaPorId = async (categoriaid) => {
   return;
 
 }
+
+
+const listaAvancada = async (req) => {
+  const { id } = req.params;
+  return (await categoria.findById(id).populate('produtos'))?.produtos
+}
+
 
 const pesquisaPorFiltros = async (filtros) => {
 
@@ -87,7 +94,7 @@ const deleta = async (categoriaId) => {
   console.log(categoriaDBAsJson);
 
   if (!categoriaDB) {
-    
+
     throw new ErroRegraDeNegocio('')
 
     return {
@@ -164,6 +171,6 @@ module.exports = {
   alteraCategoria,
   listaTodos,
   deleta,
-  pesquisaPorFiltros
-
+  pesquisaPorFiltros,
+  listaAvancada
 }

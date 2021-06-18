@@ -28,12 +28,7 @@ module.exports = (router) => {
     }),
     produtoController.lista)
 
-  /////////////////////////////////////////////////////////////
-  // Produtos por Categorias
-  router.route('/produto/advanced/:params/:value')
-    .get(produtoController.advancedList)
-  ///////////////////////////////////////////////////////////////
-
+ 
 
   router.route('/produto/:id').get(
     validaDTO('query', {

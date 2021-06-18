@@ -44,6 +44,11 @@ module.exports = (router) => {
     }),
     categoriaController.criarCategoria
   )
+ /////////////////////////////////////////////////////////////
+  // Produtos por Categorias
+  router.route('/categoria/advanced/:id')
+    .get(categoriaController.advancedList)
+  ///////////////////////////////////////////////////////////////
 
 
   // Pesquisar categoria por ID

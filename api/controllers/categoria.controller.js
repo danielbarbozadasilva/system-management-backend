@@ -30,6 +30,10 @@ const buscarPorId = async (req, res, next) => {
 }
 
 
+const advancedList = async (req, res, next) => {
+  const lista = await categoriaService.listaAvancada(req)
+  return res.status(200).send(lista)
+}
   
 const criarCategoria = async (req, res, next) => {
 
@@ -90,5 +94,6 @@ module.exports = {
   buscarPorId,
   criarCategoria,
   deletarCategoria,
-  alterarCategoria
+  alterarCategoria,
+  advancedList
 }

@@ -57,16 +57,10 @@ const remove = async (req, res, next) => {
 }
 
 
-const advancedList = async (req, res, next) => {
-  const lista = await produtoService.listaAvancada(req.params.params, req.params.value)
-
-  return res.status(200).send(lista)
-}
 
 module.exports = {
   cria,
   remove,
   lista,
-  advancedList,
   listaPorId
 }
