@@ -39,7 +39,7 @@ const alteraStatus = async (id, status) => {
 
   if (status === 'Ativo') {
 
-    // adicionar o envio de email
+    //TODO: adicionar o envio de email
     emailUtils.enviar({
       destinatario: fornecedorDB.email,
       remetente: process.env.SENDGRID_REMETENTE,
@@ -60,9 +60,12 @@ const alteraStatus = async (id, status) => {
 }
 
 const cria = async (model) => {
+
+  // console.log('fornecedor.service');
+
   const { email, cnpj, senha, ...resto } = model;
 
-  // cnpj ja existente
+  //TODO: cnpj ja existente
   if (await validaSeCnpjJaExiste(cnpj))
     return {
       sucesso: false,
@@ -72,6 +75,7 @@ const cria = async (model) => {
       ],
     }
 
+  //TODO: email ja existente
   if (await validaSeEmailJaExiste(email))
     return {
       sucesso: false,
@@ -96,11 +100,17 @@ const cria = async (model) => {
       ...toListItemDTO(novoFornecedor)
     }
   }
+
 }
 
 const listaTodos = async (filtro) => {
 
-  const resultadoDB = await fornecedor.find();
+  const resultadoDB = await fornecedor.find({}).populate({
+    path: 'curtidas', model: 'curtida',
+    populate: {
+      path: 'cliente', model: 'cliente'
+    }
+  });
 
   return resultadoDB.map(item => {
     return toDTO(item.toJSON());
@@ -109,8 +119,9 @@ const listaTodos = async (filtro) => {
 }
 
 const listaProdutosByFornecedor = async (fornecedorid, fornecedorlogadoid) => {
-  // verificar se fornecedor informado e o mesmo que o logado
+  //TODO: verificar se fornecedor informado e o mesmo que o logado
   const fornecedorFromDB = await fornecedor.findById(fornecedorid).populate('produtos');
+  // console.log(JSON.stringify(fornecedorFromDB.produtos));
   const fornecedorAsJSON = fornecedorFromDB.toJSON();
   return fornecedorAsJSON.produtos.map(item => {
     return produtoMapper.toItemListaDTO(item);
@@ -121,7 +132,7 @@ const buscaPorId = async (fornecedorid, { id, tipo }) => {
 
   const fornecedorDB = await fornecedor.findById(fornecedorid);
 
-  // fornecedor pesdquisado existe
+  //TODO: fornecedor pesdquisado existe
   if (!fornecedorDB) {
     return {
       sucesso: false,
@@ -133,7 +144,7 @@ const buscaPorId = async (fornecedorid, { id, tipo }) => {
   }
 
   const tipoUsuario = buscaTipoUsuarioPorId(tipo);
-  // o usuario logado e um fornecedor, se sim ele e o mesmo que o fornecedor pesquisado
+  //TODO: o usuario logado e um fornecedor, se sim ele e o mesmo que o fornecedor pesquisado
   if (tipoUsuario.descricao === "fornecedor") {
     if (fornecedorid !== id) {
       return {
@@ -145,10 +156,13 @@ const buscaPorId = async (fornecedorid, { id, tipo }) => {
       }
     }
   }
+
   return {
     sucesso: true,
     data: toDTO(fornecedorDB.toJSON()),
   }
+
+
 }
 
 

@@ -7,6 +7,7 @@ const fileUtils = require('../file.util');
 // Função que me retorna um middleware
 const fileUpload = (destino, isUpdate = false) => {
 
+
   const form = formidable.IncomingForm();
   form.uploadDir = fileUtils.criaEndereco('temp');
 
@@ -16,7 +17,7 @@ const fileUpload = (destino, isUpdate = false) => {
 
       req.body = {
         // O DTO olha para o BODY para fazer a validação 
-        
+
         // campos do formulario, sem a imagem
         ...fields,
 
@@ -29,20 +30,26 @@ const fileUpload = (destino, isUpdate = false) => {
       }
       // files (mesmo nome que vai estar no meu frontend)
       // caso não tenha um atributo de um nome 'imagem'
-      if (!files.imagem && !isUpdate) {
-         res.status(400).send({
+
+
+      // if (!files.imagem && !isUpdate) {
+      if ((!files.imagem || files.imagem.name === '') && !isUpdate) {
+
+
+        return res.status(400).send({
           mensagem: 'não foi possível realizar a operação',
           detalhes: [
             '"imagem" é de preenchimento obrigatório.'
           ]
-
         });
-        return;
+
       }
 
 
 
-      if (files.imagem) {
+
+      if (files.imagem && files.imagem.name !== '') {
+
         // se não caiu na validação acima, RECEBI UM ARQUIVO COM O NOME DE 'IMAGEM'
         const novoNome = fileUtils.criaNome(files.imagem.type);
 
@@ -56,18 +63,13 @@ const fileUpload = (destino, isUpdate = false) => {
           novoNome,
           novoCaminho,
         }
-
       }
-
 
       // No final faço o 'NEXT' para a minha 'REQUEST' ir para o próximo nível
       return next();
 
     });
-
   }
-
 }
-
 
 module.exports = fileUpload;

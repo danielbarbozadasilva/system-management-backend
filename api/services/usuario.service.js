@@ -65,6 +65,7 @@ const perfis = [
       'ATIVAR_FORNECEDOR',
       'INATIVAR_FORNECEDOR',
       'PESQUISA_FORNECEDOR_PRODUTO',
+      'DELETA_CATEGORIA',
     ]
   },
   {
@@ -80,7 +81,7 @@ const perfis = [
       'CRIA_PRODUTO',
       'REMOVE_PRODUTO',
       'PESQUISA_FORNECEDOR_PRODUTO',
-      
+
     ]
   },
   {
@@ -96,12 +97,14 @@ const perfis = [
 ];
 
 
+
 const buscaTipoUsuarioPorId = (tipoUsuarioId) => {
   return perfis.find(item => {
     return item.id === tipoUsuarioId
   })
 
 }
+
 
 const validaSeEmailJaExiste = async (email) => {
 
@@ -111,6 +114,7 @@ const validaSeEmailJaExiste = async (email) => {
 
 }
 
+//NOVO
 const usuarioEValido = async (email, senha) => {
   return await usuario.findOne({ email, senha: criptografia.criaHash(senha) }) ? true : false;
 }
@@ -156,14 +160,15 @@ const autenticar = async (email, senha) => {
 const cria = async () => {
 
   return usuario.create({
-    email: 'daniel80barboza@email.com',
-    senha: md5(`123456${process.env.MD5_SECRET}`)
+    email: 'daniel80barboza@gmail.com',
+    senha: md5(`daniel${process.env.MD5_SECRET}`)
   });
 
 }
 
 
-// remover do servico de usuarios
+//TODO: remover do servico de usuarios
+
 const buscarPefilPorId = (perfilId) => {
   const result = perfis.find(item => Number(item.id) === Number(perfilId));
   return result;

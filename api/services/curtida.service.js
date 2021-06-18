@@ -2,6 +2,8 @@ const { fornecedor, cliente, curtida } = require('../models/index');
 
 const cria = async (fornecedorid, usuarioid) => {
 
+
+
   const [fornecedorDB, clienteDB] = await Promise.all([
     fornecedor.findById(fornecedorid),
     cliente.findById(usuarioid),
