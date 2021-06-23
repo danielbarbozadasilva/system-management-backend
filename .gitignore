@@ -1,6 +1,8 @@
-arquivos
 .env
+arquivos/**
 node_modules
 .DS_Store
+.vscode/*
+arquivos
 .vscode
 .env/

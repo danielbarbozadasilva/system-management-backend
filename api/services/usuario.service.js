@@ -1,103 +1,53 @@
-const { usuario } = require('../models/index');
-const criptografia = require('../utils/criptografia.util');
-const usuarioMapper = require('../mappers/usuario.mapper');
-
-// const perfis = [
-//   {
-//     id: '1',
-//     descricao: 'administrador',
-//     funcionalidades: [
-//       'ALTERA_CATEGORIA',
-//       'CRIA_CATEGORIA',
-//       'PESQUISA_CATEGORIA',
-//       'REMOVE_CATEGORIA',
-//       'PESQUISA_FORNECEDOR',
-//       'PESQUISA_FORNECEDOR_ID',
-//       'ATIVAR_FORNECEDOR',
-//       'INATIVAR_FORNECEDOR',
-//       'PESQUISA_FORNECEDOR_PRODUTO',
-//     ]
-//   },
-//   {
-//     id: '2',
-//     descricao: 'fornecedor',
-//     funcionalidades: [
-//       'ALTERA_FORNECEDOR',
-//       'PESQUISA_FORNECEDOR_ID',
-//       'PESQUISA_PRODUTO',
-//       'CRIA_PRODUTO',
-//       'REMOVE_PRODUTO',
-//       'PESQUISA_FORNECEDOR_PRODUTO',
-//     ]
-//   },{
-//     id: '3',
-//     descricao: 'cliente',
-//     funcionalidades: [
-//       'PESQUISA_CATEGORIA',
-//       'PESQUISA_PRODUTO',
-//       'PESQUISA_FORNECEDOR_PRODUTO',
-//     ]
-//   },{
-//     id: '4',
-//     descricao: 'global',
-//     funcionalidades: [
-//       'PESQUISA_CATEGORIA',
-//       'PESQUISA_PRODUTO',
-//       'PESQUISA_FORNECEDOR_PRODUTO',
-//     ]
-//   },
-// ];
-
+const { usuario } = require("../models/index");
+const criptografia = require("../utils/criptografia.util");
+const usuarioMapper = require("../mappers/usuario.mapper");
 
 const perfis = [
   {
     id: 1,
-    descricao: 'administrador',
+    descricao: "administrador",
     funcionalidades: [
-      'ALTERA_CATEGORIA',
-      'CRIA_CATEGORIA',
+      "ALTERA_CATEGORIA",
+      "CRIA_CATEGORIA",
       // 'PESQUISA_CATEGORIA',
-      'REMOVE_CATEGORIA',
-      'ALTERA_CATEGORIA',
+      "REMOVE_CATEGORIA",
+      "ALTERA_CATEGORIA",
       // 'PESQUISA_FORNECEDOR',
-      'PESQUISA_FORNECEDOR_ID',
-      'ADICIONA_FORNECEDOR',
-      'ATIVAR_FORNECEDOR',
-      'INATIVAR_FORNECEDOR',
-      'PESQUISA_FORNECEDOR_PRODUTO',
-      'DELETA_CATEGORIA',
-    ]
+      "PESQUISA_FORNECEDOR_ID",
+      "ADICIONA_FORNECEDOR",
+      "ATIVAR_FORNECEDOR",
+      "INATIVAR_FORNECEDOR",
+      "PESQUISA_FORNECEDOR_PRODUTO",
+      "DELETA_CATEGORIA",
+    ],
   },
   {
     id: 2,
-    descricao: 'fornecedor',
+    descricao: "fornecedor",
     funcionalidades: [
-      'ALTERA_FORNECEDOR',
-      'PESQUISA_FORNECEDOR_ID',
+      "ALTERA_FORNECEDOR",
+      "PESQUISA_FORNECEDOR_ID",
       // 'PESQUISA_PRODUTO',
-      'ATUALIZAR_PRODUTO',
-      'INSERIR_PRODUTO',
-      'EXCLUIR_PRODUTO',
-      'CRIA_PRODUTO',
-      'REMOVE_PRODUTO',
-      'PESQUISA_FORNECEDOR_PRODUTO',
-
-    ]
+      "ATUALIZAR_PRODUTO",
+      "INSERIR_PRODUTO",
+      "EXCLUIR_PRODUTO",
+      "CRIA_PRODUTO",
+      "REMOVE_PRODUTO",
+      "PESQUISA_FORNECEDOR_PRODUTO",
+    ],
   },
   {
     id: 3,
-    descricao: 'cliente',
+    descricao: "cliente",
     funcionalidades: [
-      'CURTIDA_CRIA',
-      'PESQUISA_FORNECEDOR_ID',
-      'PESQUISA_FORNECEDOR_PRODUTO',
+      "CURTIDA_CRIA",
+      "CURTIDA_REMOVE",
+      "PESQUISA_FORNECEDOR_ID",
+      "PESQUISA_FORNECEDOR_PRODUTO",
       // 'PESQUISA_CATEGORIA'
-    ]
+    ],
   },
 ];
-
-
-
 const buscaTipoUsuarioPorId = (tipoUsuarioId) => {
   return perfis.find(item => {
     return item.id === tipoUsuarioId
@@ -105,6 +55,18 @@ const buscaTipoUsuarioPorId = (tipoUsuarioId) => {
 
 }
 
+const validaSeUsuarioValido = async (usuario) => {
+
+  // const usuarioDB = await usuario.findOne({ email });
+
+  if (!usuario)
+    return false;
+
+  if (usuario.kind === "fornecedor")
+    return usuario.status === "Ativo" ? true : false;
+
+  return true;
+}
 
 const validaSeEmailJaExiste = async (email) => {
 
@@ -116,7 +78,7 @@ const validaSeEmailJaExiste = async (email) => {
 
 //NOVO
 const usuarioEValido = async (email, senha) => {
-  return await usuario.findOne({ email, senha: criptografia.criaHash(senha) }) ? true : false;
+  return await usuario.findOne({ email, senha: criptografia.criaHash(senha) })
 }
 
 const criaCredencial = async (usuarioEmail) => {
@@ -148,6 +110,18 @@ const autenticar = async (email, senha) => {
     }
   }
 
+  if (!(await validaSeUsuarioValido(resultadoDB))) {
+
+    return {
+      sucesso: false,
+      mensagem: "não foi possivel autenticar o usuario",
+      detalhes: [
+        "usuário ou senha inválido",
+      ],
+    }
+
+  }
+
 
   return {
     sucesso: true,
@@ -160,8 +134,8 @@ const autenticar = async (email, senha) => {
 const cria = async () => {
 
   return usuario.create({
-    email: 'daniel80barboza@gmail.com',
-    senha: md5(`daniel${process.env.MD5_SECRET}`)
+    email: 'testeezer@email.com',
+    senha: md5(`123456${process.env.MD5_SECRET}`)
   });
 
 }
@@ -184,5 +158,6 @@ module.exports = {
   buscaTipoUsuarioPorId,
   cria,
   validaSeEmailJaExiste,
+  validaSeUsuarioValido,
   validaFuncionalidadeNoPerfil
 }

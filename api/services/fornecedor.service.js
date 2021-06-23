@@ -1,186 +1,143 @@
-const { fornecedor, produto } = require('../models/index');
-const { toListItemDTO, toDTO } = require('../mappers/fornecedor.mapper');
-const { validaSeEmailJaExiste, buscaTipoUsuarioPorId } = require('../services/usuario.service');
+const { fornecedor } = require("../models/index");
+const { toListItemDTO, toDTO } = require("../mappers/fornecedor.mapper");
+const {
+  validaSeEmailJaExiste,
+  buscaTipoUsuarioPorId,
+} = require("../services/usuario.service");
 
-const { criaHash } = require('../utils/criptografia.util');
-const emailUtils = require('../utils/email.utils');
+const { criaHash } = require("../utils/criptografia.util");
+const emailUtils = require("../utils/email.utils");
 
-const produtoMapper = require('../mappers/produto.mapper');
+const produtoMapper = require("../mappers/produto.mapper");
 
 const validaSeCnpjJaExiste = async (cnpj) => {
-
   const result = await fornecedor.find({
-    cnpj
+    cnpj,
   });
 
   return result.length > 0 ? true : false;
-
-}
+};
 
 const alteraStatus = async (id, status) => {
-
   const fornecedorDB = await fornecedor.findById(id);
 
   if (!fornecedorDB) {
-
     return {
       sucesso: false,
-      mensagem: 'operação não pode ser realizada',
+      mensagem: "operação não pode ser realizada",
       detalhes: [
-        'Não existe fornecedor cadastrado para o fornecedor id informado'
+        "Não existe fornecedor cadastrado para o fornecedor id informado",
       ],
     };
-
   }
 
   fornecedorDB.status = status;
 
   await fornecedorDB.save();
 
-  if (status === 'Ativo') {
-
-    //TODO: adicionar o envio de email
+  if (status === "Ativo") {
     emailUtils.enviar({
       destinatario: fornecedorDB.email,
       remetente: process.env.SENDGRID_REMETENTE,
       assunto: `Confirmação do cadastro de ${fornecedorDB.nomeFantasia}`,
       corpo: `sua conta do projeto 04 já esta liberada para uso para uso já`,
     });
-
   }
 
   return {
     sucesso: true,
-    mensagem: 'Operação realizada com sucesso',
+    mensagem: "Operação realizada com sucesso",
     data: {
-      ...toListItemDTO(fornecedorDB.toJSON())
-    }
-  }
-
-}
+      ...toListItemDTO(fornecedorDB.toJSON()),
+    },
+  };
+};
 
 const cria = async (model) => {
-
-  // console.log('fornecedor.service');
-
   const { email, cnpj, senha, ...resto } = model;
 
-  //TODO: cnpj ja existente
   if (await validaSeCnpjJaExiste(cnpj))
     return {
       sucesso: false,
-      mensagem: 'operação não pode ser realizada',
-      detalhes: [
-        'Já existe fornecedor cadastrado para o cnpj informado'
-      ],
-    }
+      mensagem: "operação não pode ser realizada",
+      detalhes: ["Já existe fornecedor cadastrado para o cnpj informado"],
+    };
 
-  //TODO: email ja existente
   if (await validaSeEmailJaExiste(email))
     return {
       sucesso: false,
-      mensagem: 'operação não pode ser realizada',
-      detalhes: [
-        'Já existe usuário cadastrado para o email informado'
-      ],
-    }
+      mensagem: "operação não pode ser realizada",
+      detalhes: ["Já existe usuário cadastrado para o email informado"],
+    };
 
   const novoFornecedor = await fornecedor.create({
     email,
     cnpj,
     ...resto,
     senha: criaHash(senha),
-    status: 'Analise'
+    status: "Analise",
   });
 
   return {
     sucesso: true,
-    mensagem: 'Operação realizada com sucesso',
+    mensagem: "Operação realizada com sucesso",
     data: {
-      ...toListItemDTO(novoFornecedor)
-    }
-  }
-
-}
+      ...toListItemDTO(novoFornecedor),
+    },
+  };
+};
 
 const listaTodos = async (filtro) => {
-
   const resultadoDB = await fornecedor.find({}).populate({
-    path: 'curtidas', model: 'curtida',
+    path: "curtidas",
+    model: "curtida",
     populate: {
-      path: 'cliente', model: 'cliente'
-    }
+      path: "cliente",
+      model: "cliente",
+    },
   });
 
-  return resultadoDB.map(item => {
+  return resultadoDB.map((item) => {
     return toDTO(item.toJSON());
-  })
+  });
+};
 
-}
+const listaProdutosPorFornecedor = async (fornecedorid, fornecedorlogadoid) => {
+  return (await fornecedor.findById(fornecedorid).populate("produto"))?.produto;
+};
 
-const listaProdutosByFornecedor = async (fornecedorid, fornecedorlogadoid) => {
-  //TODO: verificar se fornecedor informado e o mesmo que o logado
-  // console.log('------------------------',fornecedorid)
-
-  // const fornecedorFromDB = await fornecedor.findById(fornecedorid).populate('produtos');
-  // console.log('---------------------',fornecedorFromDB);
-  
-  // const fornecedorAsJSON = fornecedorFromDB.toJSON();
-  // return fornecedorAsJSON.produtos.map(item => {
-  //   return produtoMapper.toItemListaDTO(item);
-  // });
-  console.log('---',fornecedorid);
-  
-  // retorna o id e popula produtos
-  return (await fornecedor.findById(fornecedorid).populate('produto'))?.produto
-}
-
-
-
-
-
-const buscaPorId = async (fornecedorid, { id, tipo }) => {
-
+const listarPorId = async (fornecedorid, { id, tipo }) => {
   const fornecedorDB = await fornecedor.findById(fornecedorid);
 
-  //TODO: fornecedor pesdquisado existe
   if (!fornecedorDB) {
     return {
       sucesso: false,
       mensagem: "operação não pode ser realizada",
-      detalhes: [
-        "o fornecedor pesquisado não existe"
-      ]
-    }
+      detalhes: ["o fornecedor pesquisado não existe"],
+    };
   }
 
   const tipoUsuario = buscaTipoUsuarioPorId(tipo);
-  //TODO: o usuario logado e um fornecedor, se sim ele e o mesmo que o fornecedor pesquisado
   if (tipoUsuario.descricao === "fornecedor") {
     if (fornecedorid !== id) {
       return {
         sucesso: false,
         mensagem: "operação não pode ser realizada",
-        detalhes: [
-          "o usuário não pode realizar esta operação"
-        ]
-      }
+        detalhes: ["o usuário não pode realizar esta operação"],
+      };
     }
   }
 
   return {
     sucesso: true,
     data: toDTO(fornecedorDB.toJSON()),
-  }
-
-
-}
-
+  };
+};
 
 module.exports = {
   alteraStatus,
-  buscaPorId,
+  listarPorId,
   cria,
-  listaProdutosByFornecedor,
+  listaProdutosPorFornecedor,
   listaTodos,
-}
+};
