@@ -46,7 +46,7 @@ module.exports = (router) => {
   )
  /////////////////////////////////////////////////////////////
   // Produtos por Categorias
-  router.route('/categoria/advanced/:id')
+  router.route('/categoria/:id/produto')
     .get(categoriaController.advancedList)
   ///////////////////////////////////////////////////////////////
 

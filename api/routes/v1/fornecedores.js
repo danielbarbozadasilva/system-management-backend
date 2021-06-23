@@ -125,19 +125,6 @@ module.exports = (router) => {
       fornecedorController.recebeCurtidas,
     )
 
-
-  router.route('/fornecedor/:fornecedorid/produto')
-    .get(
-      // autorizacaoMiddlewate('PESQUISA_FORNECEDOR_PRODUTO'),
-      validaDTO('params', {
-        fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
-          'any.required': `"fornecedor id" é um campo obrigatório`,
-          'string.empty': `"fornecedor id" não deve ser vazio`,
-          'string.pattern.base': `"fornecedor id" fora do formato experado`,
-        }),
-      }),
-      fornecedorController.buscaProdutosPorFornecedor
-    )
     .post(
       autorizacaoMiddlewate('CRIA_PRODUTO'),
       fileUploadMiddleware('produtos'),
@@ -190,6 +177,21 @@ module.exports = (router) => {
       produtoController.remove
     )
 
+
+    router.route('/fornecedor/:fornecedorid/produto')
+    .get(
+      // autorizacaoMiddlewate('PESQUISA_FORNECEDOR_PRODUTO'),
+      validaDTO('params', {
+        fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
+          'any.required': `"fornecedor id" é um campo obrigatório`,
+          'string.empty': `"fornecedor id" não deve ser vazio`,
+          'string.pattern.base': `"fornecedor id" fora do formato experado`,
+        }),
+      }),
+      fornecedorController.buscaProdutosPorFornecedor
+    )
+
+    
 }
 
 

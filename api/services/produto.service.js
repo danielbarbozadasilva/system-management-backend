@@ -289,12 +289,12 @@ const pesquisaPorFiltros = async (filtros) => {
   const filtroMongo = {};
 
   // se eu tenho o valor eu anexo ao meu filtro senão passa batido
-  if (filtros.categoriaid)
-    filtroMongo.categoria = filtros.categoriaid;
+  if (filtros.categoria)
+    filtroMongo.categoria = filtros.categoria;
 
   // se eu tenho o valor eu anexo ao meu filtro senão passa batido
-  if (filtros.fornecedorid)
-    filtroMongo.fornecedor = filtros.fornecedorid;
+  if (filtros.fornecedor)
+    filtroMongo.fornecedor = filtros.fornecedor;
 
   // se eu tenho o valor eu anexo ao meu filtro senão passa batido
   if (filtros.nomelike)

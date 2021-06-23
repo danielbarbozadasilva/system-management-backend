@@ -17,6 +17,9 @@ const buscaPorId = async (categoriaid) => {
 
 const listaAvancada = async (req) => {
   const { id } = req.params;
+  console.log('---',id);
+  
+  // retorna o id e popula produtos
   return (await categoria.findById(id).populate('produtos'))?.produtos
 }
 

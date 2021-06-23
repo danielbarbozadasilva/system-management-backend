@@ -1,4 +1,4 @@
-const { fornecedor } = require('../models/index');
+const { fornecedor, produto } = require('../models/index');
 const { toListItemDTO, toDTO } = require('../mappers/fornecedor.mapper');
 const { validaSeEmailJaExiste, buscaTipoUsuarioPorId } = require('../services/usuario.service');
 
@@ -120,13 +120,24 @@ const listaTodos = async (filtro) => {
 
 const listaProdutosByFornecedor = async (fornecedorid, fornecedorlogadoid) => {
   //TODO: verificar se fornecedor informado e o mesmo que o logado
-  const fornecedorFromDB = await fornecedor.findById(fornecedorid).populate('produtos');
-  // console.log(JSON.stringify(fornecedorFromDB.produtos));
-  const fornecedorAsJSON = fornecedorFromDB.toJSON();
-  return fornecedorAsJSON.produtos.map(item => {
-    return produtoMapper.toItemListaDTO(item);
-  });
+  // console.log('------------------------',fornecedorid)
+
+  // const fornecedorFromDB = await fornecedor.findById(fornecedorid).populate('produtos');
+  // console.log('---------------------',fornecedorFromDB);
+  
+  // const fornecedorAsJSON = fornecedorFromDB.toJSON();
+  // return fornecedorAsJSON.produtos.map(item => {
+  //   return produtoMapper.toItemListaDTO(item);
+  // });
+  console.log('---',fornecedorid);
+  
+  // retorna o id e popula produtos
+  return (await fornecedor.findById(fornecedorid).populate('produto'))?.produto
 }
+
+
+
+
 
 const buscaPorId = async (fornecedorid, { id, tipo }) => {
 
