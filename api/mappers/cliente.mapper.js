@@ -13,11 +13,9 @@ const toListItemDTO = (model) => {
 }
 
 const toDTO = (model) => {
-
   return {
     ...model,
   }
-
 }
 
 
