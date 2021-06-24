@@ -10,7 +10,7 @@ const buscaPorId = async (categoriaid) => {
   return;
 };
 
-const produtosPorCategoria = async (req) => {
+const listaAvancada = async (req) => {
   const { id } = req.params;
   return (await categoria.findById(id).populate("produtos"))?.produtos;
 };
@@ -18,20 +18,16 @@ const produtosPorCategoria = async (req) => {
 const pesquisaPorFiltros = async (filtros) => {
   const filtroMongo = {};
 
-  // se eu tenho o valor eu anexo ao meu filtro senão passa batido
   if (filtros.categoria) filtroMongo.categoria = filtros.categoria;
 
-  // se eu tenho o valor eu anexo ao meu filtro senão passa batido
   if (filtros.fornecedor) filtroMongo.fornecedor = filtros.fornecedor;
 
-  // se eu tenho o valor eu anexo ao meu filtro senão passa batido
   if (filtros.nomelike)
     filtroMongo.nome = { $regex: ".*" + filtros.nomelike + ".*" };
 
   const resultadoDB = await produto.find(filtroMongo);
 
   return resultadoDB.map((item) => {
-    // substituir por DTO
     return categoriaMapper.toItemListaDTO(item);
   });
 };
@@ -56,7 +52,6 @@ const criaCategoria = async (model) => {
     },
   });
 
-  // mover arquivo para destino definitivo
   fileUtils.move(model.imagem.caminhoOriginal, model.imagem.novoCaminho);
 
   return {
@@ -68,6 +63,7 @@ const criaCategoria = async (model) => {
 
 const deleta = async (categoriaId) => {
   const categoriaDB = await categoria.findOne({ _id: categoriaId });
+
   const categoriaDBAsJson = categoriaDB.toJSON();
 
   if (!categoriaDB) {
@@ -76,14 +72,13 @@ const deleta = async (categoriaId) => {
     return {
       sucesso: false,
       mensagem: "não foi possível realizar a operação",
-      detalhes: ['"categoriaid" não existe.'],
+      detalhes: ['"categoriaid" não existe.']
     };
   }
 
   const { imagem } = categoriaDB;
   fileUtils.remove("categoria", imagem.nome);
 
-  // deleta do banco
   await categoria.remove(categoriaDB);
 
   return {
@@ -110,7 +105,6 @@ const alteraCategoria = async (categoriaId, model) => {
   if (typeof model.imagem === "object") {
     fileUtils.remove("categoria", categoriaDB.imagem.nome);
     fileUtils.move(model.imagem.caminhoOriginal, model.imagem.novoCaminho);
-
     categoriaDB.imagem = {
       nomeOriginal: model.imagem.nomeOriginal,
       nome: model.imagem.novoNome,
@@ -134,5 +128,5 @@ module.exports = {
   listaTodos,
   deleta,
   pesquisaPorFiltros,
-  produtosPorCategoria,
+  listaAvancada,
 };

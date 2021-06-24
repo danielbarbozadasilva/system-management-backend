@@ -2,12 +2,12 @@ const categoriaService = require("../services/categoria.service");
 
 const listaTodasAsCategorias = async (req, res, next) => {
   const result = await categoriaService.listaTodos();
-
   return res.status(200).send({ data: result });
 };
 
 const buscarPorId = async (req, res, next) => {
   const { params } = req;
+
   const categoria = await categoriaService.buscaPorId(params.categoriaid);
 
   if (!categoria)
@@ -18,8 +18,8 @@ const buscarPorId = async (req, res, next) => {
   return res.status(200).send(categoria);
 };
 
-const buscarProdutosCategoria = async (req, res, next) => {
-  const lista = await categoriaService.produtosPorCategoria(req);
+const advancedList = async (req, res, next) => {
+  const lista = await categoriaService.listaAvancada(req);
   return res.status(200).send(lista);
 };
 
@@ -27,15 +27,15 @@ const criarCategoria = async (req, res, next) => {
   const { body } = req;
 
   const resultadoServico = await categoriaService.criaCategoria(body);
+
   const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
   const dadoRetorno = resultadoServico.sucesso
     ? { data: resultadoServico.data }
     : { detalhes: resultadoServico.detalhes };
-
   return res.status(codigoRetorno).send(dadoRetorno);
 };
 
-const altera = async (req, res, next) => {
+const alterarCategoria = async (req, res, next) => {
   const { params, body } = req;
 
   const resultadoServico = await categoriaService.alteraCategoria(
@@ -55,7 +55,6 @@ const deletarCategoria = async (req, res, next) => {
   const { params } = req;
 
   const resultadoServico = await categoriaService.deleta(params.categoriaid);
-
   const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
 
   const dadoRetorno = resultadoServico.sucesso
@@ -72,6 +71,6 @@ module.exports = {
   buscarPorId,
   criarCategoria,
   deletarCategoria,
-  altera,
-  buscarProdutosCategoria,
+  alterarCategoria,
+  advancedList,
 };

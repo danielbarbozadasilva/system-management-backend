@@ -1,5 +1,3 @@
-/* utils - o que não faz parte da regra des negócio e é comum a todos */
-/* Para o negócio a mudança de token é irrelevante, mas para segurança é sim */
 const md5 = require('md5');
 const jwt = require('jsonwebtoken');
 const md5HashSecret = process.env.MD5_SECRET;

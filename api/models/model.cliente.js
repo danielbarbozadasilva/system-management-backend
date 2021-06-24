@@ -1,8 +1,7 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const clienteSchema = {
-
   nome: {
     type: String,
     required: true,
@@ -23,17 +22,17 @@ const clienteSchema = {
     required: true,
   },
 
-  status: {          // Analise | Ativo | Inativo
+  status: {
     type: String,
     required: true,
   },
 
-  curtidas: [{
-    type: Schema.Types.ObjectId,
-    ref: 'curtida'
-  }],
-
-}
-
+  curtidas: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "curtida",
+    },
+  ],
+};
 
 module.exports = clienteSchema;
