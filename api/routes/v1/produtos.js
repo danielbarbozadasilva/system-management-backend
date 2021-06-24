@@ -28,7 +28,8 @@ module.exports = (router) => {
       nomelike: joi.string(),
     }),
     produtoController.listarProdutos
-  );
+    )
+
 
   router.route("/produto/:id").get(
     validaDTO("query", {

@@ -6,7 +6,8 @@ const categoriaController = require('../../controllers/categoria.controller');
 
 module.exports = (router) => {
 
-  router.route('/categoria').get(categoriaController.listaTodasAsCategorias)
+  router.route('/categoria')
+  .get(categoriaController.listaTodasAsCategorias)
 
   .post(
     autorizacaoMiddlewate('CRIA_CATEGORIA'),

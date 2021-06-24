@@ -10,7 +10,7 @@ const buscaPorId = async (categoriaid) => {
   return;
 };
 
-const listaAvancada = async (req) => {
+const getCategoriaProduto = async (req) => {
   const { id } = req.params;
   return (await categoria.findById(id).populate("produtos"))?.produtos;
 };
@@ -128,5 +128,6 @@ module.exports = {
   listaTodos,
   deleta,
   pesquisaPorFiltros,
-  listaAvancada,
+  getCategoriaProduto,
+  
 };
