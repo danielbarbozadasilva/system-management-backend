@@ -25,9 +25,13 @@ const listaProdutoPorId = async (req, res, next) => {
 
 const listarProdutos = async (req, res, next) => {
   const { query } = req;
-  const result = await produtoService.listaAvancadaID(query.id);
+
+  console.log(query);
+
+  const result = await produtoService.pesquisaPorFiltros(query);
 
   return res.status(200).send({ data: result });
+
 };
 
 const removeProduto = async (req, res, next) => {

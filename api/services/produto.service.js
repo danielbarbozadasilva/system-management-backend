@@ -3,7 +3,7 @@ const fileUtils = require("../utils/file.util");
 const produtoMapper = require("../mappers/produto.mapper");
 
 const cria = async (model) => {
-  console.log("-----------" + JSON.stringify(model));
+
   const [categoriaDB, fornecedorDB] = await Promise.all([
     categoria.findById(model.categoriaid),
     fornecedor.findById(model.fornecedorid),
@@ -60,23 +60,31 @@ const cria = async (model) => {
 };
 
 const pesquisaPorFiltros = async (filtros) => {
+
   const filtroMongo = {};
 
-  if (filtros.categoriaid) filtroMongo.categoria = filtros.categoriaid;
+  if (filtros.categoriaid)
+    filtroMongo.categoria = filtros.categoriaid;
 
-  if (filtros.fornecedorid) filtroMongo.fornecedor = filtros.fornecedorid;
+  if (filtros.fornecedorid)
+    filtroMongo.fornecedor = filtros.fornecedorid;
 
   if (filtros.nomelike)
-    filtroMongo.nome = { $regex: ".*" + filtros.nomelike + ".*" };
+    filtroMongo.nome = { $regex: '.*' + filtros.nomelike + '.*' };
+
 
   const resultadoDB = await produto.find(filtroMongo).populate("categoria");
 
-  return resultadoDB.map((item) => {
+
+  return resultadoDB.map(item => {
     return produtoMapper.toItemListaDTO(item);
   });
-};
+
+}
+
 
 const deleta = async ({ fornecedorId, produtoId, usuarioId }) => {
+
   const [fornecedorDB, produtoDB] = await Promise.all([
     fornecedor.findById(fornecedorId),
     produto.findById(produtoId),
@@ -85,66 +93,77 @@ const deleta = async ({ fornecedorId, produtoId, usuarioId }) => {
   if (!fornecedorDB) {
     return {
       sucesso: false,
-      mensagem: "operação não pode ser realizada",
-      detalhes: ["O fornecedor informado não existe."],
-    };
+      mensagem: 'operação não pode ser realizada',
+      detalhes: [
+        'O fornecedor informado não existe.'
+      ],
+    }
   }
 
   //TODO: verificar se o fornecedor informado e o mesmo logado
   if (fornecedorId !== usuarioId) {
     return {
       sucesso: false,
-      mensagem: "operação não pode ser realizada",
-      detalhes: ["O produto a ser excluido não pertence ao fornecedor."],
-    };
+      mensagem: 'operação não pode ser realizada',
+      detalhes: [
+        'O produto a ser excluido não pertence ao fornecedor.'
+      ],
+    }
   }
 
   if (!produtoDB) {
     return {
       sucesso: false,
-      mensagem: "operação não pode ser realizada",
-      detalhes: ["O produto informado não existe."],
-    };
+      mensagem: 'operação não pode ser realizada',
+      detalhes: [
+        'O produto informado não existe.'
+      ],
+    }
   }
+
+
 
   if (produtoDB.fornecedor.toString() !== fornecedorId) {
     return {
       sucesso: false,
-      mensagem: "operação não pode ser realizada",
-      detalhes: ["O fornecedor informado e inválido."],
-    };
+      mensagem: 'operação não pode ser realizada',
+      detalhes: [
+        'O fornecedor informado e inválido.'
+      ],
+    }
   }
 
   const categoriaDB = await categoria.findById(produtoDB.categoria);
-  categoriaDB.produtos = categoriaDB.produtos.filter((item) => {
-    return item.toString() !== produtoId;
+  categoriaDB.produtos = categoriaDB.produtos.filter(item => {
+    return item.toString() !== produtoId
   });
 
-  fornecedorDB.produtos = fornecedorDB.produtos.filter((item) => {
-    return item.toString() !== produtoId;
+  fornecedorDB.produtos = fornecedorDB.produtos.filter(item => {
+    return item.toString() !== produtoId
   });
 
   await Promise.all([
     categoriaDB.save(),
     fornecedorDB.save(),
-    produto.deleteOne(produtoDB),
+    produto.deleteOne(produtoDB)
   ]);
 
   const { imagem } = produtoDB;
-  fileUtils.remove("produtos", imagem.nome);
+  fileUtils.remove('produtos', imagem.nome);
 
   return {
     sucesso: true,
-    mensagem: "operação realizada com sucesso",
+    mensagem: 'operação realizada com sucesso',
     data: {
       id: produtoId,
       nome: produtoDB.nome,
     },
-  };
-};
+  }
+
+}
 
 module.exports = {
   cria,
   pesquisaPorFiltros,
   deleta,
-};
+}

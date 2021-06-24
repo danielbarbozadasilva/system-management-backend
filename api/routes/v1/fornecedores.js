@@ -28,7 +28,7 @@ module.exports = (router) => {
   );
 
   router.route("/fornecedor").post(
-    autorizacaoMiddlewate("ADICIONA_FORNECEDOR"),
+    // autorizacaoMiddlewate("ADICIONA_FORNECEDOR"),
     validaDTO("body", {
       cnpj: joi.string().required().messages({
         "any.required": `"cnpj" é um campo obrigatório`,
@@ -116,7 +116,7 @@ module.exports = (router) => {
             "string.pattern.base": `"fornecedor id" fora do formato experado`,
           }),
       }),
-      fornecedorController.curtidasRecebidas
+      fornecedorController.pesquisarCurtidasRecebidas
     )
 
     .post(

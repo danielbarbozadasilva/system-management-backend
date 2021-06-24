@@ -1,5 +1,6 @@
 const fornecedorService = require("../services/fornecedor.service");
 const curtidaService = require("../services/curtida.service");
+const { copyFileSync } = require("fs");
 
 const ativa = async (req, res, next) => {
   const { fornecedorid } = req.params;
@@ -76,9 +77,14 @@ const buscaPorId = async (req, res, next) => {
 };
 
 const pesquisarCurtidasRecebidas = async (req, res, next) => {
-  return res.status(200).send({
-    data: [],
-  });
+  const { fornecedorid } = req.params;
+
+  const result = await fornecedorService.listaTodos(fornecedorid);
+
+ 
+
+  return res.status(200).send(result);
+  
 };
 
 const buscaProdutosPorFornecedor = async (req, res, next) => {
@@ -93,11 +99,12 @@ const buscaProdutosPorFornecedor = async (req, res, next) => {
   });
 };
 
-const curtidasRecebidas = async (req, res, next) => {
-  return res.status(200).send({
-    data: [],
-  });
-};
+// const curtidasRecebidas = async (req, res, next) => {
+  
+//   return res.status(200).send({
+//     data,
+//   });
+// };
 
 const recebeCurtidas = async (req, res, next) => {
   const { params, usuario } = req;
@@ -126,7 +133,7 @@ module.exports = {
   inserirFornecedor,
   inativa,
   listaFornecedores,
-  curtidasRecebidas,
+  // curtidasRecebidas,
   buscaPorId,
   recebeCurtidas,
   removeCurtidas,

@@ -1,17 +1,22 @@
-const { fornecedor, cliente, curtida } = require("../models/index");
+const { fornecedor, cliente, curtida } = require('../models/index');
 
-const criarCliente = async (fornecedorid, usuarioid) => {
+const cria = async (fornecedorid, usuarioid) => {
+
   const [fornecedorDB, clienteDB] = await Promise.all([
     fornecedor.findById(fornecedorid),
     cliente.findById(usuarioid),
   ]);
 
+
+
   if (!fornecedorDB) {
     return {
       sucesso: false,
       mensagem: "operação não pode ser realizada",
-      detalhes: ["o fornecedor pesquisado não existe"],
-    };
+      detalhes: [
+        "o fornecedor pesquisado não existe"
+      ]
+    }
   }
 
   const curtidaDB = await curtida.create({
@@ -22,7 +27,10 @@ const criarCliente = async (fornecedorid, usuarioid) => {
   fornecedorDB.curtidas = [...fornecedorDB.curtidas, curtidaDB._id];
   clienteDB.curtidas = [...clienteDB.curtidas, curtidaDB._id];
 
-  await Promise.all([fornecedorDB.save(), clienteDB.save()]);
+  await Promise.all([
+    fornecedorDB.save(),
+    clienteDB.save()
+  ]);
 
   return {
     sucesso: true,
@@ -30,41 +38,49 @@ const criarCliente = async (fornecedorid, usuarioid) => {
       id: curtidaDB._id,
       fornecedor: fornecedorDB.nomeFantasia,
       cliente: clienteDB.nome,
-    },
-  };
+    }
+  }
+
 };
 
-const removeCliente = async (fornecedorid, usuarioid) => {
-  const [fornecedorDB, usuarioDB, curtidaDB] = await Promise.all([
-    fornecedor.findById(fornecedorid),
-    cliente.findById(usuarioid),
-    curtida.findOne({ fornecedor: fornecedorid, cliente: usuarioid }),
-  ]);
+
+const remove = async (fornecedorid, usuarioid) => {
+
+  const [fornecedorDB, usuarioDB, curtidaDB] = await Promise
+    .all([
+      fornecedor.findById(fornecedorid),
+      cliente.findById(usuarioid),
+      curtida.findOne({ fornecedor: fornecedorid, cliente: usuarioid }),
+    ]);
 
   if (!fornecedorDB) {
     return {
       sucesso: false,
       mensagem: "operação não pode ser realizada",
-      detalhes: ["o fornecedor informado não existe"],
-    };
+      detalhes: [
+        "o fornecedor informado não existe"
+      ]
+    }
   }
 
   if (!curtidaDB) {
     return {
       sucesso: false,
       mensagem: "operação não pode ser realizada",
-      detalhes: ["não existem curtidas para os dados informados"],
-    };
+      detalhes: [
+        "não existem curtidas para os dados informados"
+      ]
+    }
   }
 
-  fornecedorDB.curtidas = fornecedorDB.curtidas.filter((item) => {
+  fornecedorDB.curtidas = fornecedorDB.curtidas.filter(item => {
     return item.toString() !== curtidaDB._id.toString();
-  });
+  })
 
   const curtida_id = curtidaDB._id.toString();
 
-  usuarioDB.curtidas = usuarioDB.curtidas.filter((item) => {
-    return item.toString() !== curtidaDB._id.toString();
+  usuarioDB.curtidas = usuarioDB.curtidas.filter(item => {
+    return item.toString() !== curtidaDB._id.toString()
   });
 
   await Promise.all([
@@ -77,12 +93,14 @@ const removeCliente = async (fornecedorid, usuarioid) => {
     sucesso: false,
     mensagem: "operação realizada com sucesso",
     data: {
-      id: curtida_id,
-    },
-  };
-};
+      id: curtida_id
+    }
+  }
+
+}
+
 
 module.exports = {
-  criarCliente,
-  removeCliente,
+  cria,
+  remove,
 }

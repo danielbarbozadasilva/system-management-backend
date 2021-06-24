@@ -58,11 +58,11 @@ const perfis = [
       'CRIA_CATEGORIA',
       'REMOVE_CATEGORIA',
       'PESQUISA_FORNECEDOR_ID',
-      'ADICIONA_FORNECEDOR',
+      "ADICIONA_FORNECEDOR",
       'ATIVAR_FORNECEDOR',
       'INATIVAR_FORNECEDOR',
       'PESQUISA_FORNECEDOR_PRODUTO',
-      'DELETA_CATEGORIA',
+      'DELETA_CATEGORIA'
     ]
   },
   {
@@ -76,7 +76,7 @@ const perfis = [
       'EXCLUIR_PRODUTO',
       'CRIA_PRODUTO',
       'REMOVE_PRODUTO',
-      'PESQUISA_FORNECEDOR_PRODUTO',
+      'PESQUISA_FORNECEDOR_PRODUTO'
 
     ]
   },
@@ -84,9 +84,10 @@ const perfis = [
     id: 3,
     descricao: 'cliente',
     funcionalidades: [
+      'CURTIDA_CRIA',
       'CURTIDA_REMOVE',
       'PESQUISA_FORNECEDOR_ID',
-      'PESQUISA_FORNECEDOR_PRODUTO',
+      'PESQUISA_FORNECEDOR_PRODUTO'
     ]
   },
 ];
