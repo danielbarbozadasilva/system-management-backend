@@ -99,12 +99,6 @@ const buscaProdutosPorFornecedor = async (req, res, next) => {
   });
 };
 
-// const curtidasRecebidas = async (req, res, next) => {
-  
-//   return res.status(200).send({
-//     data,
-//   });
-// };
 
 const recebeCurtidas = async (req, res, next) => {
   const { params, usuario } = req;

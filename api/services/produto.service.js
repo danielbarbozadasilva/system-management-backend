@@ -3,7 +3,6 @@ const fileUtils = require("../utils/file.util");
 const produtoMapper = require("../mappers/produto.mapper");
 
 const cria = async (model) => {
-  console.log("-----------" + JSON.stringify(model));
   const [categoriaDB, fornecedorDB] = await Promise.all([
     categoria.findById(model.categoriaid),
     fornecedor.findById(model.fornecedorid),
@@ -59,26 +58,24 @@ const cria = async (model) => {
   };
 };
 const pesquisaPorFiltros = async (filtros) => {
-  console.log(filtros.categoria);
   const filtroMongo = {};
 
-  // se eu tenho o valor eu anexo ao meu filtro senão passa batido
-  if (filtros.categoria) {  console.log('iltros.categoria');
+  if (filtros.categoria) { 
 
     filtroMongo.categoria = filtros.categoria;
   }
-  // se eu tenho o valor eu anexo ao meu filtro senão passa batido
-  if (filtros.fornecedor) {  console.log('filtros.for');
+
+  if (filtros.fornecedor) { 
 
     filtroMongo.fornecedor = filtros.fornecedor;
   }
-  // se eu tenho o valor eu anexo ao meu filtro senão passa batido
-  if (filtros.nomelike) {console.log('filtros.nomelike');
+
+  if (filtros.nomelike) {
     filtroMongo.nome = { $regex: ".*" + filtros.nomelike + ".*" };
   }
+
   const resultadoDB = await produto.find(filtroMongo);
 
-console.log('ddddddddddd',JSON.stringify(resultadoDB))
   return resultadoDB.map((item) => {
     return produtoMapper.toItemListaDTO(item);
   });
@@ -98,7 +95,6 @@ const deleta = async ({ fornecedorId, produtoId, usuarioId }) => {
     };
   }
 
-  // verificar se o fornecedor informado e o mesmo logado
   if (fornecedorId !== usuarioId) {
     return {
       sucesso: false,
@@ -154,5 +150,5 @@ const deleta = async ({ fornecedorId, produtoId, usuarioId }) => {
 module.exports = {
   cria,
   pesquisaPorFiltros,
-  deleta,
+  deleta
 };

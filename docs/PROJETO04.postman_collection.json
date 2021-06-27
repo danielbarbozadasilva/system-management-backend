@@ -109,7 +109,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/categoria/60d363f7d844d9a358e92e7a",
+							"raw": "http://localhost:3011/v1/categoria/60d7cc5fa110fd3313ccb953",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -118,7 +118,7 @@
 							"path": [
 								"v1",
 								"categoria",
-								"60d363f7d844d9a358e92e7a"
+								"60d7cc5fa110fd3313ccb953"
 							]
 						}
 					},
@@ -164,7 +164,7 @@
 							"formdata": [
 								{
 									"key": "nome",
-									"value": "xyz01qqdwqdx",
+									"value": "ddsdasdaas",
 									"type": "text"
 								},
 								{
@@ -175,7 +175,7 @@
 								{
 									"key": "imagem",
 									"type": "file",
-									"src": "/home/pc/Área de Trabalho/projeto04meu/frontend/web/src/assets/img/logo.png"
+									"src": "/home/pc/Área de Trabalho/projeto04meu/frontend/web/src/assets/img/cookies.jpg"
 								},
 								{
 									"key": "status",
@@ -239,7 +239,7 @@
 							"formdata": [
 								{
 									"key": "nome",
-									"value": "Cupcap",
+									"value": "dddddddddddddd",
 									"type": "text"
 								},
 								{
@@ -250,7 +250,7 @@
 								{
 									"key": "imagem",
 									"type": "file",
-									"src": "/home/pc/Área de Trabalho/projeto04meu/frontend/web/src/assets/img/cupcap.jpg"
+									"src": "/home/pc/Área de Trabalho/projeto04meu/frontend/web/src/assets/img/cookies.jpg"
 								},
 								{
 									"key": "status",
@@ -260,7 +260,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/categoria/60c3876f7e4a776d915a8b21",
+							"raw": "http://localhost:3011/v1/categoria/60d7b6c514123b1fcc055d6c",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -269,7 +269,7 @@
 							"path": [
 								"v1",
 								"categoria",
-								"60c3876f7e4a776d915a8b21"
+								"60d7b6c514123b1fcc055d6c"
 							]
 						}
 					},
@@ -315,7 +315,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/categoria/60d363f7d844d9a358e92e7a",
+							"raw": "http://localhost:3011/v1/categoria/60d7de738101dd4b65272e33",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -324,7 +324,7 @@
 							"path": [
 								"v1",
 								"categoria",
-								"60d363f7d844d9a358e92e7a"
+								"60d7de738101dd4b65272e33"
 							]
 						}
 					},
@@ -432,7 +432,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"daniel80barboza@gmail.com\",\n    \"senha\": \"daniel\"\n}",
+							"raw": "{\n    \"email\": \"daniel95barboza@gmail.com\",\n    \"senha\": \"daniel\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -497,7 +497,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"cnpj\": \"1231324322143xc42342334\",\n    \"nomeFantasia\": \"dani1231x324322143423423el\",\n    \"endereco\": \"Rua xyz\",\n    \"uf\": \"Rj\",\n    \"cidade\": \"rio de janeiro\",\n    \"responsavel\": \"Daniel\",\n    \"telefone\": \"2122332233\",\n    \"email\": \"danielcasdasd@gmail.com\",\n    \"senha\": \"asdasda\"\n}",
+							"raw": "{\n    \"cnpj\": \"11111111111111\",\n    \"nomeFantasia\": \"gabriel\",\n    \"endereco\": \"Rua xyz\",\n    \"uf\": \"Rj\",\n    \"cidade\": \"rio de janeiro\",\n    \"responsavel\": \"Daniel\",\n    \"telefone\": \"2122332233\",\n    \"email\": \"gabriel@gmail.com\",\n    \"senha\": \"gabriel\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -514,58 +514,6 @@
 							"path": [
 								"v1",
 								"fornecedor"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "fornecedor.inativar",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "token",
-								"value": "{{token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/inativa",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3011",
-							"path": [
-								"v1",
-								"fornecedor",
-								"60b7d8abe536e8407017542b",
-								"inativa"
 							]
 						}
 					},
@@ -630,62 +578,6 @@
 					"response": []
 				},
 				{
-					"name": "fornecedor.ativar",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "token",
-								"value": "{{token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": []
-						},
-						"url": {
-							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/ativa",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3011",
-							"path": [
-								"v1",
-								"fornecedor",
-								"60b7d8abe536e8407017542b",
-								"ativa"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "fornecedor.listarPorId",
 					"event": [
 						{
@@ -744,6 +636,169 @@
 					"response": []
 				},
 				{
+					"name": "fornecedor.ativar",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const options = {",
+									"url: 'http://localhost:3011/v1/auth', ",
+									"method: 'POST',",
+									"header: {",
+									"'Content-Type': 'application/json',",
+									"},",
+									"body: {",
+									"mode: 'raw',",
+									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+									"}",
+									"};",
+									"pm.sendRequest(options, function (err, res) {",
+									"pm.environment.set(\"token\", res.json().data.token);",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/ativa",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3011",
+							"path": [
+								"v1",
+								"fornecedor",
+								"60b7d8abe536e8407017542b",
+								"ativa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fornecedor.atualizarN",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const options = {",
+									"url: 'http://localhost:3011/v1/auth', ",
+									"method: 'POST',",
+									"header: {",
+									"'Content-Type': 'application/json',",
+									"},",
+									"body: {",
+									"mode: 'raw',",
+									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+									"}",
+									"};",
+									"pm.sendRequest(options, function (err, res) {",
+									"pm.environment.set(\"token\", res.json().data.token);",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3011",
+							"path": [
+								"v1",
+								"fornecedor",
+								"60b7d8abe536e8407017542b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fornecedor.inativar",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const options = {",
+									"url: 'http://localhost:3011/v1/auth', ",
+									"method: 'POST',",
+									"header: {",
+									"'Content-Type': 'application/json',",
+									"},",
+									"body: {",
+									"mode: 'raw',",
+									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+									"}",
+									"};",
+									"pm.sendRequest(options, function (err, res) {",
+									"pm.environment.set(\"token\", res.json().data.token);",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/inativa",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3011",
+							"path": [
+								"v1",
+								"fornecedor",
+								"60b7d8abe536e8407017542b",
+								"inativa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "fornecedorProdutos",
 					"event": [
 						{
@@ -779,7 +834,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/produto",
+							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/produto?=",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -790,65 +845,19 @@
 								"fornecedor",
 								"60b7d8abe536e8407017542b",
 								"produto"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "fornecedorCurtidas",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "token",
-								"value": "{{token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/curtidas",
-							"protocol": "http",
-							"host": [
-								"localhost"
 							],
-							"port": "3011",
-							"path": [
-								"v1",
-								"fornecedor",
-								"60b7d8abe536e8407017542b",
-								"curtidas"
+							"query": [
+								{
+									"key": "",
+									"value": ""
+								}
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "fornecedorIdCurtida",
+					"name": "fornecedorIdCurtir",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -903,6 +912,179 @@
 								"fornecedor",
 								"60b7d8abe536e8407017542b",
 								"curtidas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fornecedorListarCurtida",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const options = {",
+									"url: 'http://localhost:3011/v1/auth', ",
+									"method: 'POST',",
+									"header: {",
+									"'Content-Type': 'application/json',",
+									"},",
+									"body: {",
+									"mode: 'raw',",
+									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+									"}",
+									"};",
+									"pm.sendRequest(options, function (err, res) {",
+									"pm.environment.set(\"token\", res.json().data.token);",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/curtidas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3011",
+							"path": [
+								"v1",
+								"fornecedor",
+								"60b7d8abe536e8407017542b",
+								"curtidas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fornecedorCurtidas",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const options = {",
+									"url: 'http://localhost:3011/v1/auth', ",
+									"method: 'POST',",
+									"header: {",
+									"'Content-Type': 'application/json',",
+									"},",
+									"body: {",
+									"mode: 'raw',",
+									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+									"}",
+									"};",
+									"pm.sendRequest(options, function (err, res) {",
+									"pm.environment.set(\"token\", res.json().data.token);",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/curtidas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3011",
+							"path": [
+								"v1",
+								"fornecedor",
+								"60b7d8abe536e8407017542b",
+								"curtidas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "removeProduto",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const options = {",
+									"url: 'http://localhost:3011/v1/auth', ",
+									"method: 'POST',",
+									"header: {",
+									"'Content-Type': 'application/json',",
+									"},",
+									"body: {",
+									"mode: 'raw',",
+									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+									"}",
+									"};",
+									"pm.sendRequest(options, function (err, res) {",
+									"pm.environment.set(\"token\", res.json().data.token);",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/produto/60d7b51d14123b1fcc055d6b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3011",
+							"path": [
+								"v1",
+								"fornecedor",
+								"60b7d8abe536e8407017542b",
+								"produto",
+								"60d7b51d14123b1fcc055d6b"
 							]
 						}
 					},
@@ -1021,7 +1203,7 @@
 								},
 								{
 									"key": "descricao",
-									"value": "Bolo de Limão com cobertura2",
+									"value": "Bolo de Limão com cobertura",
 									"type": "text"
 								},
 								{
@@ -1031,7 +1213,7 @@
 								},
 								{
 									"key": "categoriaid",
-									"value": "60c9eb0c6a72872d4dcc1899",
+									"value": "60c387cc7e4a776d915a8b22",
 									"type": "text"
 								},
 								{
@@ -1042,7 +1224,7 @@
 								{
 									"key": "imagem",
 									"type": "file",
-									"src": "/home/pc/Área de Trabalho/projeto04meu/frontend/web/src/assets/img/ImagemPaes.png"
+									"src": "/home/pc/Área de Trabalho/projeto04meu/frontend/web/src/assets/img/boloLimao.jpg"
 								}
 							]
 						},
@@ -1135,6 +1317,58 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "ListarProdutosPorFornecedor",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const options = {",
+									"url: 'http://localhost:3011/v1/auth', ",
+									"method: 'POST',",
+									"header: {",
+									"'Content-Type': 'application/json',",
+									"},",
+									"body: {",
+									"mode: 'raw',",
+									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+									"}",
+									"};",
+									"pm.sendRequest(options, function (err, res) {",
+									"pm.environment.set(\"token\", res.json().data.token);",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/produto",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3011",
+							"path": [
+								"v1",
+								"fornecedor",
+								"60b7d8abe536e8407017542b",
+								"produto"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1178,7 +1412,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \n    \"nome\": \"Matheus Barboza\",\n    \"data_nascimento\": \"05/03/1997\",\n    \"uf\": \"RJ\",\n    \"cidade\": \"São Gonçalo\",\n    \"email\": \"daniel955barboza@gmail.com\",\n    \"senha\": \"daniel\"\n}",
+							"raw": "{\n    \n    \"nome\": \"Matheus Barboza\",\n    \"data_nascimento\": \"05/03/1997\",\n    \"uf\": \"RJ\",\n    \"cidade\": \"São Gonçalo\",\n    \"email\": \"danielvbbDaDrboza@gmail.com\",\n    \"senha\": \"daniel\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1195,27 +1429,6 @@
 							"path": [
 								"v1",
 								"cliente"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "cliente.remove",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3011/v1/cliente/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3011",
-							"path": [
-								"v1",
-								"cliente",
-								""
 							]
 						}
 					},

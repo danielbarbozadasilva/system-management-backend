@@ -39,8 +39,17 @@ const alteraStatus = async (id, status) => {
     emailUtils.enviar({
       destinatario: fornecedorDB.email,
       remetente: process.env.SENDGRID_REMETENTE,
-      assunto: `Confirmação do cadastro de ${fornecedorDB.nomeFantasia}`,
-      corpo: `sua conta do projeto 04 já esta liberada para uso para uso já`,
+      assunto: `Confirmação de cadastro ${fornecedorDB.nomeFantasia}`,
+      corpo: `Prezado ${fornecedorDB.nomeFantasia},\nO seu cadastro foi confirmado e sua conta está Ativada no Sistema REGALE.\n \nEssa é uma menssagem automática do Sistema. `,
+    });
+  }
+
+  if (status === "Inativo") {
+    emailUtils.enviar({
+      destinatario: fornecedorDB.email,
+      remetente: process.env.SENDGRID_REMETENTE,
+      assunto: `Aviso de Inativação ${fornecedorDB.nomeFantasia}`,
+      corpo: `Prezado ${fornecedorDB.nomeFantasia},\nO seu acesso ao Sistema REGALE está inativo.\n \nEssa é uma menssagem automática do Sistema. `,
     });
   }
 
@@ -103,7 +112,14 @@ const listaTodos = async (filtro) => {
 };
 
 const listaProdutosPorFornecedor = async (fornecedorid, fornecedorlogadoid) => {
-  return (await fornecedor.findById(fornecedorid).populate("produto"))?.produto;
+  const fornecedorFromDB = await fornecedor
+    .findById(fornecedorid)
+    .populate("produtos");
+
+  const fornecedorAsJSON = fornecedorFromDB.toJSON();
+  return fornecedorAsJSON.produtos.map((item) => {
+    return produtoMapper.toItemListaDTO(item);
+  });
 };
 
 const listarPorId = async (fornecedorid, { id, tipo }) => {

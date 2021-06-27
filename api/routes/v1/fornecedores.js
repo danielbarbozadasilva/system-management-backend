@@ -28,7 +28,7 @@ module.exports = (router) => {
   );
 
   router.route("/fornecedor").post(
-    // autorizacaoMiddlewate("ADICIONA_FORNECEDOR"),
+    autorizacaoMiddlewate("ADICIONA_FORNECEDOR"),
     validaDTO("body", {
       cnpj: joi.string().required().messages({
         "any.required": `"cnpj" é um campo obrigatório`,
@@ -134,6 +134,24 @@ module.exports = (router) => {
       }),
       fornecedorController.recebeCurtidas
     )
+
+    .delete(
+      autorizacaoMiddlewate("CURTIDA_REMOVE"),
+      validaDTO("params", {
+        fornecedorid: joi
+          .string()
+          .regex(/^[0-9a-fA-F]{24}$/)
+          .required()
+          .messages({
+            "any.required": `"fornecedor id" é um campo obrigatório`,
+            "string.empty": `"fornecedor id" não deve ser vazio`,
+            "string.pattern.base": `"fornecedor id" fora do formato experado`,
+          }),
+      }),
+      fornecedorController.removeCurtidas
+    );
+    
+
     router
     .route('/fornecedor/:fornecedorid/produto')
     .get(
@@ -193,20 +211,23 @@ module.exports = (router) => {
       produtoController.inserirProduto
     )
     
-    .delete(
-      autorizacaoMiddlewate("CURTIDA_REMOVE"),
-      validaDTO("params", {
-        fornecedorid: joi
-          .string()
-          .regex(/^[0-9a-fA-F]{24}$/)
-          .required()
-          .messages({
-            "any.required": `"fornecedor id" é um campo obrigatório`,
-            "string.empty": `"fornecedor id" não deve ser vazio`,
-            "string.pattern.base": `"fornecedor id" fora do formato experado`,
-          }),
+  
+    router
+    .route('/fornecedor/:fornecedorid/produto/:produtoid')
+    .delete(autorizacaoMiddlewate('REMOVE_PRODUTO'),
+      validaDTO('params', {
+        fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
+          'any.required': `"fornecedor id" é um campo obrigatório`,
+          'string.empty': `"fornecedor id" não deve ser vazio`,
+          'string.pattern.base': `"fornecedor id" fora do formato experado`,
+        }),
+        produtoid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
+          'any.required': `"fornecedor id" é um campo obrigatório`,
+          'string.empty': `"fornecedor id" não deve ser vazio`,
+          'string.pattern.base': `"fornecedor id" fora do formato experado`,
+        }),
       }),
-      fornecedorController.removeCurtidas
-    );
+      produtoController.removeProduto
+    )
 
 };
