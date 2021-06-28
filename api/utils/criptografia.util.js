@@ -11,7 +11,7 @@ const criaHash = (senha) => {
 
 const criaToken = (model) => {
   return jwt.sign({ ...model }, jwtHashSecret, {
-    expiresIn: `${jwtTimeLimit}ms`,
+    expiresIn: `${jwtTimeLimit}m`,
   })
 }
 
