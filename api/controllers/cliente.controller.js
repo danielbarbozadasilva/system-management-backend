@@ -23,8 +23,15 @@ const pesquisaPorId = async (req, res, next) => {
   return res.status(200).send({});
 };
 
+const listarTodosClientes = async (req, res, next) => {
+  const result = await clienteService.listaTodos();
+
+  return res.status(200).send(result);
+};
+
 module.exports = {
   cria,
   pesquisaPorId,
   pesquisarCurtidasRealizadas,
+  listarTodosClientes,
 };

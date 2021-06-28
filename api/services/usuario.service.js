@@ -163,8 +163,6 @@ const cria = async () => {
 
 }
 
-
-//TODO: remover do servico de usuarios
 const buscarPefilPorId = (perfilId) => {
   const result = perfis.find(item => Number(item.id) === Number(perfilId));
   return result;
@@ -179,6 +177,7 @@ module.exports = {
   autenticar,
   buscaTipoUsuarioPorId,
   cria,
+  criaCredencial,
   validaSeEmailJaExiste,
   validaFuncionalidadeNoPerfil
 }

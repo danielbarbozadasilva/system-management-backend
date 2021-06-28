@@ -31,9 +31,13 @@ module.exports = (router) => {
         "any.required": `"senha" é um campo obrigatório`,
         "string.empty": `"senha" não deve ser vazio`,
       }),
+      realizarLogin: joi.boolean().allow(null),
+
     }),
     clienteController.cria
-  );
+  )
+  .get(clienteController.listarTodosClientes);
+
   router.route("/cliente/:clienteid").get(
     validaDTO("params", {
       clienteid: joi
