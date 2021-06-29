@@ -41,6 +41,12 @@ const inativa = async (req, res, next) => {
 const inserirFornecedor = async (req, res, next) => {
   const { body } = req;
 
+  console.log('--------------------------------------')
+  console.log('--------------------------------------')
+  console.log(body)
+  console.log('--------------------------------------')
+  console.log('--------------------------------------')
+
   const result = await fornecedorService.cria(body);
 
   const codigoRetorno = result.sucesso ? 200 : 400;
