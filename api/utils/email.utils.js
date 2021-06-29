@@ -1,7 +1,5 @@
-
 const sendgrid = require('@sendgrid/mail');
 sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
-
 
 const enviar = async ({ destinatario, remetente, assunto, corpo }) => {
   const msg = {
@@ -12,7 +10,7 @@ const enviar = async ({ destinatario, remetente, assunto, corpo }) => {
   }
 
   await sendgrid.send(msg)
-  console.log('E-MAIL ENVIADO COM SUCESSSO');
+  console.log('O e-mail foi envia com sucesso!');
 }
 
 module.exports = {

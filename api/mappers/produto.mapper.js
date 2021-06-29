@@ -14,9 +14,6 @@ const toItemListaDTO = (model) => {
     preco: `R$ ${preco.toString().replace('.', ',')}`,
     imagem: fileUtils.criaEnderecoDownload('produtos', imagem.nome),
   }
-
 }
 
-module.exports = {
-  toItemListaDTO,
-}
+module.exports = {toItemListaDTO}

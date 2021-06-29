@@ -1,6 +1,5 @@
 const fileUtils = require('../utils/file.util');
 
-
 const toItemListaDTO = (model) => {
 
   const { _id, nome, descricao, status, imagem } = model;
@@ -12,7 +11,6 @@ const toItemListaDTO = (model) => {
     status,
     imagem: fileUtils.criaEnderecoDownload('categoria', imagem.nome),
   }
-
 }
 
 const toDTO = (model) => {
@@ -26,10 +24,9 @@ const toDTO = (model) => {
     status,
     imagem: fileUtils.criaEnderecoDownload('categoria', imagem.nome),
   }
-
 }
 
 module.exports = {
   toDTO,
-  toItemListaDTO,
+  toItemListaDTO
 }

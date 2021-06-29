@@ -61,12 +61,10 @@ const pesquisaPorFiltros = async (filtros) => {
   const filtroMongo = {};
 
   if (filtros.categoria) { 
-
     filtroMongo.categoria = filtros.categoria;
   }
 
   if (filtros.fornecedor) { 
-
     filtroMongo.fornecedor = filtros.fornecedor;
   }
 

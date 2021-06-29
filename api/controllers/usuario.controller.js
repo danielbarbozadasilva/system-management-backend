@@ -13,10 +13,6 @@ const auth = async (req, res, next) => {
     mensagem: resultadoServico.mensagem,
     ...dadoRetorno
   });
-
 }
 
-
-module.exports = {
-  auth
-}
+module.exports = {auth}

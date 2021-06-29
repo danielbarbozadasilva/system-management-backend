@@ -12,7 +12,6 @@ const toListItemDTO = (model) => {
     cidade,
     uf
   }
-
 }
 
 const toDTO = (model) => {
@@ -22,7 +21,4 @@ const toDTO = (model) => {
 }
 
 
-module.exports = {
-  toListItemDTO,
-  toDTO,
-}
+module.exports = {toListItemDTO, toDTO}

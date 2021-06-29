@@ -1,83 +1,79 @@
-
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-/* função que recebe um esquema pai e filho e objeto de opção, retorna uma nova instancia apartir da classe esquema */
 const createSchema = (modelPai, model, options = {}) => {
+  return new Schema(
+    {
+      ...modelPai,
+      ...model,
+    },
+    {
+      timestamps: true,
+      collection: "UsuariosCollection",
+      ...options,
+    }
+  );
+};
 
-/* cria  aligação com a estrutura que criamos e o banco de dados 
-atravérs da ORM 'mongoose' */
-  return new Schema({
-    ...modelPai,
-    ...model,
-  }, {
-    timestamps: true,
-    collection: 'UsuariosCollection',
-    ...options,
+const usuarioSchema = require("./model.usuario");
+
+const usuario = mongoose.model(
+  "usuario",
+  createSchema(undefined, usuarioSchema, {
+    discriminatorKey: "kind",
   })
+);
 
-}
+const administradorSchema = require("./model.administrador");
+const administrador = usuario.discriminator(
+  "administrador",
+  createSchema(usuarioSchema, administradorSchema, {})
+);
 
-/* USUÁRIO */
+const fornecedorSchema = require("./model.fornecedor");
+const fornecedor = usuario.discriminator(
+  "fornecedor",
+  createSchema(usuarioSchema, fornecedorSchema, {})
+);
 
-// ESQUEMA PAI (EMAIL E SENHA), FILHOS (TODOS OS ESQUEMAS DE USUÁRIOS) HERDAM EMAIL E SENHA
-// faz a ligação com o model usuário
-const usuarioSchema = require('./model.usuario');
-// possibilidade de listar qualquer usuário na coleção de usuario
-// O esquema pai é indefinido (undefined). Esquema filho (usuarioSchema) - da categoria
-const usuario = mongoose.model('usuario', createSchema(undefined, usuarioSchema, {
-  discriminatorKey: 'kind',
-}));
+const clienteSchema = require("./model.cliente");
+const cliente = usuario.discriminator(
+  "cliente",
+  createSchema(usuarioSchema, clienteSchema, {})
+);
 
-/* ADMINISTRADOR */
+const categoriaSchema = require("./model.categoria");
+const categoria = mongoose.model(
+  "categoria",
+  createSchema(undefined, categoriaSchema, {
+    collection: "CategoriaCollection",
+    toJSON: {
+      virtuals: true,
+    },
+  })
+);
 
-// não crio um Schema e sim uma relação através do discriminador. Vai me permitir setar o Schema
-// o admin tem email e senha em comum
-// o admin tem o nome como sendo algo único dele
-const administradorSchema = require('./model.administrador');
-const administrador = usuario.discriminator('administrador', createSchema(usuarioSchema, administradorSchema,{}));
+const produtoSchema = require("./model.produto");
+const produto = mongoose.model(
+  "produto",
+  createSchema(undefined, produtoSchema, {
+    collection: "ProdutoCollection",
+    toJSON: {
+      virtuals: true,
+    },
+  })
+);
 
-
-/* FORNECEDOR */
-const fornecedorSchema = require('./model.fornecedor');
-const fornecedor = usuario.discriminator('fornecedor', createSchema(usuarioSchema, fornecedorSchema, {}));
-
-
-
-/* CLIENTE */
-const clienteSchema = require('./model.cliente');
-const cliente = usuario.discriminator('cliente', createSchema(usuarioSchema, clienteSchema, {}));
-
-
-
-// CATEGORIA
-const categoriaSchema = require('./model.categoria');
-const categoria = mongoose.model('categoria', createSchema(undefined, categoriaSchema, {
-  collection: 'CategoriaCollection',
-  toJSON: {
-    virtuals: true,
-  },
-}));
-
-
-// PRODUTO
-const produtoSchema = require('./model.produto');
-const produto = mongoose.model('produto', createSchema(undefined, produtoSchema, {
-  collection: 'ProdutoCollection',
-  toJSON: {
-    virtuals: true,
-  }
-}));
-
-
-// CURTIDAS
-const curtidaSchema = require('./model.curtida');
-const curtida = mongoose.model('curtida', createSchema(undefined, curtidaSchema, {
-  collection: 'curtidaCollection',
-  toJSON: {
-    virtuals: true,
-  }
-}));
+const curtidaSchema = require("./model.curtida");
+const curtida = mongoose.model(
+  "curtida",
+  createSchema(undefined, curtidaSchema, {
+    collection: "curtidaCollection",
+    toJSON: {
+      virtuals: true,
+    },
+  })
+);
 
 module.exports = {
   categoria,
@@ -86,5 +82,5 @@ module.exports = {
   fornecedor,
   produto,
   curtida,
-  cliente
-}
+  cliente,
+};

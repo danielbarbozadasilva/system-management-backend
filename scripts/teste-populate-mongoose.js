@@ -12,7 +12,6 @@ const init = async () => {
       fornecedor.findById('60be0415648d6ea9d843ac7b').populate('produtos')
     ])
   } catch (error) {
-    console.log(error);
     throw error;
 
   }
