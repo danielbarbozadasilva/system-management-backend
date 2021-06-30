@@ -2,7 +2,7 @@ const toListItemDTO = (model) => {
   const { _id, email, cnpj, nomeFantasia, status } = model;
 
   return {
-    id: _id,
+    id:_id,
     email,
     cnpj,
     nomeFantasia,
@@ -24,12 +24,12 @@ const toDTO = (model) => {
   } = model;
 
   return {
-    id: _id,
+    id:_id,
     curtidas: curtidas.map((item) => {
       return {
-        id: item._id,
-        clienteId: item.cliente._id,
-        clienteNome: item.cliente.nome,
+        id:item._id,
+        clienteId:item.cliente._id,
+        clienteNome:item.cliente.nome,
       };
     }),
     ...resto,

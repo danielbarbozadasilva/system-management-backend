@@ -57,22 +57,31 @@ const listaFornecedores = async (req, res, next) => {
   });
 };
 
+
 const buscaPorId = async (req, res, next) => {
+
   const { fornecedorid } = req.params;
   const { id, tipoUsuario } = req.usuario;
 
-  const result = await fornecedorService.listarPorId(fornecedorid, {
-    id,
-    tipo: tipoUsuario,
-  });
+  const result = await fornecedorService.buscaPorId(fornecedorid, { id, tipo: tipoUsuario });
 
   const codigoRetorno = result.sucesso ? 200 : 400;
-  const dadoRetorno = result.sucesso
-    ? { data: result.data }
-    : { detalhes: result.detalhes };
+  const dadoRetorno = result.sucesso ? { data: result.data } : { detalhes: result.detalhes };
 
   return res.status(codigoRetorno).send(dadoRetorno);
-};
+
+}
+
+
+const listaProdutosByFornecedor = async (fornecedorid, fornecedorlogadoid) => {
+  // verificar se fornecedor informado e o mesmo que o logado
+  const fornecedorFromDB = await fornecedor.findById(fornecedorid).populate('produtos');
+  const fornecedorAsJSON = fornecedorFromDB.toJSON();
+  return fornecedorAsJSON.produtos.map(item => {
+    return produtoMapper.toItemListaDTO(item);
+  });
+}
+
 
 const pesquisarCurtidasRecebidas = async (req, res, next) => {
   const { fornecedorid } = req.params;
@@ -114,6 +123,7 @@ const removeCurtidas = async (req, res, next) => {
   return res.status(codigoRetorno).send(dadoRetorno);
 };
 
+
 module.exports = {
   ativa,
   inserirFornecedor,
@@ -124,4 +134,5 @@ module.exports = {
   removeCurtidas,
   pesquisarCurtidasRecebidas,
   buscaProdutosPorFornecedor,
+  listaProdutosByFornecedor
 };

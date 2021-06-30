@@ -6,7 +6,7 @@ const enviar = async ({ destinatario, remetente, assunto, corpo }) => {
     to: destinatario, 
     from: remetente, 
     subject: assunto,
-    text: corpo,
+    html: corpo,
   }
 
   await sendgrid.send(msg)

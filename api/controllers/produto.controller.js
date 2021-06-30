@@ -1,4 +1,5 @@
 const produtoService = require("../services/produto.service");
+const { produto, categoria, fornecedor } = require("../models/index");
 
 const inserirProduto = async (req, res, next) => {
   const { body, params } = req;
@@ -15,6 +16,7 @@ const inserirProduto = async (req, res, next) => {
 
   return res.status(codigoRetorno).send(dadoRetorno);
 };
+
 
 const listaProdutoPorId = async (req, res, next) => {
   const { query } = req;

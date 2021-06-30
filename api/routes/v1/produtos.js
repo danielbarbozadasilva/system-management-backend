@@ -79,5 +79,4 @@ module.exports = (router) => {
     }),
     produtoController.inserirProduto
   );
-
 };

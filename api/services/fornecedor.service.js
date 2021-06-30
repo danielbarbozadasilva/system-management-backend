@@ -1,14 +1,15 @@
 const { fornecedor } = require("../models/index");
+
 const { toListItemDTO, toDTO } = require("../mappers/fornecedor.mapper");
 const {
   validaSeEmailJaExiste,
   buscaTipoUsuarioPorId,
 } = require("../services/usuario.service");
-
 const { criaHash } = require("../utils/criptografia.util");
 const emailUtils = require("../utils/email.utils");
 
 const produtoMapper = require("../mappers/produto.mapper");
+const {Email} = require("../utils/email.mensagem")
 
 const validaSeCnpjJaExiste = async (cnpj) => {
   const result = await fornecedor.find({
@@ -40,8 +41,8 @@ const alteraStatus = async (id, status) => {
       destinatario: fornecedorDB.email,
       remetente: process.env.SENDGRID_REMETENTE,
       assunto: `Confirmação de cadastro ${fornecedorDB.nomeFantasia}`,
-      corpo: `Prezado ${fornecedorDB.nomeFantasia},\nO seu cadastro foi confirmado e sua conta está Ativada no Sistema REGALE.\n \nEssa é uma menssagem automática do Sistema. `,
-    });
+      corpo: Email('titulo', 'menssagem', `${process.env.URL}/signin`)
+      });
   }
 
   if (status === "Inativo") {
@@ -122,7 +123,10 @@ const listaProdutosPorFornecedor = async (fornecedorid, fornecedorlogadoid) => {
   });
 };
 
-const listarPorId = async (fornecedorid, { id, tipo }) => {
+
+
+
+const listarPorId = async (fornecedorid) => {
   const fornecedorDB = await fornecedor.findById(fornecedorid);
 
   if (!fornecedorDB) {
@@ -133,22 +137,12 @@ const listarPorId = async (fornecedorid, { id, tipo }) => {
     };
   }
 
-  const tipoUsuario = buscaTipoUsuarioPorId(tipo);
-  if (tipoUsuario.descricao === "fornecedor") {
-    if (fornecedorid !== id) {
-      return {
-        sucesso: false,
-        mensagem: "operação não pode ser realizada",
-        detalhes: ["o usuário não pode realizar esta operação"],
-      };
-    }
-  }
-
   return {
     sucesso: true,
-    data: toDTO(fornecedorDB.toJSON()),
+    data:fornecedorDB.toJSON(),
   };
 };
+
 
 module.exports = {
   alteraStatus,

@@ -1,36 +1,32 @@
 const criptografiaUitls = require('../criptografia.util');
 const usuarioService = require('../../services/usuario.service');
 
-const autorizar = (rota = '*') => {
-  return async (req, res, next) => {
-    const { token } = req.headers;
+const ErroUsuarioNaoAutorizado = require('../errors/erro-usuario-nao-autorizado');
+const ErroUsuarioNaoAutenticado = require('../errors/erro-usuario-nao-autenticado');
 
+
+const autorizar = (rota = '*') => {
+
+  return async (req, res, next) => {
+    const testerota = rota;
+    console.log(testerota);
+    const { token } = req.headers;
     if (!token) {
-      return res.status(403).send({
-        mensagem: "usuário não autorizado."
-      })
+      throw new ErroUsuarioNaoAutorizado("Usuário não autorizado.")
     }
 
     if (!criptografiaUitls.validaToken(token)) {
-      return res
-        .status(401)
-        .send({ mensagem: "usuário não autenticado." });
+      throw new ErroUsuarioNaoAutenticado("Usuário não autenticado.");
     }
 
     const { id, email, tipoUsuario } = criptografiaUitls.decodificaToken(token);
-
     if (!(await usuarioService.validaSeEmailJaExiste(email))) {
-      return res.status(403).send({
-        mensagem: "usuário não autorizado."
-      })
+      throw new ErroUsuarioNaoAutorizado("Usuário não autorizado.")
     }
-    if (rota != '*') {
 
-      if (!usuarioService.validaFuncionalidadeNoPerfil(tipoUsuario, rota))
-        return res.status(403).send({
-          mensagem: "usuário não autorizado."
-        })
-
+    if (testerota != '*') {
+      if (!usuarioService.validaFuncionalidadeNoPerfil(tipoUsuario, testerota))
+        throw new ErroUsuarioNaoAutorizado("Usuário não autorizado.");
     }
 
     req.usuario = {
@@ -38,10 +34,10 @@ const autorizar = (rota = '*') => {
       email,
       tipoUsuario,
     }
-
-
+    
     return next();
   }
 }
 
 module.exports = autorizar;
+
