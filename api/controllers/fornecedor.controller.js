@@ -61,9 +61,8 @@ const listaFornecedores = async (req, res, next) => {
 const buscaPorId = async (req, res, next) => {
 
   const { fornecedorid } = req.params;
-  const { id, tipoUsuario } = req.usuario;
 
-  const result = await fornecedorService.buscaPorId(fornecedorid, { id, tipo: tipoUsuario });
+  const result = await fornecedorService.listarPorId(fornecedorid);
 
   const codigoRetorno = result.sucesso ? 200 : 400;
   const dadoRetorno = result.sucesso ? { data: result.data } : { detalhes: result.detalhes };
