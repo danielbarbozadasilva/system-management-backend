@@ -1,6 +1,6 @@
 # INFNET-Desenvolvimento Full Stack - MERN - MONGO - EXPRESS - REACTJS - NODEJS
 
-O PROJETO é um Sistema de gerenciamento para Confeitarias, onde são listadas as confeitarias e seus respectivos produtos por categorias.
+O PROJETO consiste em um Sistema de gerenciamento para Confeitarias, onde são listadas as confeitarias e seus respectivos produtos por categorias.
 
 Os usuários do sistema são o Administrador, dono da confeitaria e o cliente.
 
