@@ -9,7 +9,8 @@ const { criaHash } = require("../utils/criptografia.util");
 const emailUtils = require("../utils/email.utils");
 
 const produtoMapper = require("../mappers/produto.mapper");
-const {Email} = require("../utils/email.mensagem")
+const {EmailHabilitar} = require("../utils/email.mensagem.habilitar")
+const {EmailDesativar} = require("../utils/email.mensagem.desativar")
 
 const validaSeCnpjJaExiste = async (cnpj) => {
   const result = await fornecedor.find({
@@ -40,8 +41,8 @@ const alteraStatus = async (id, status) => {
     emailUtils.enviar({
       destinatario: fornecedorDB.email,
       remetente: process.env.SENDGRID_REMETENTE,
-      assunto: `Confirmação de cadastro ${fornecedorDB.nomeFantasia}`,
-      corpo: Email('titulo', 'menssagem', `${process.env.URL}/signin`)
+      assunto: `Confirmação de Ativação ${fornecedorDB.nomeFantasia}`,
+      corpo: EmailHabilitar('titulo', 'menssagem', `${process.env.URL}/signin`)
       });
   }
 
@@ -49,9 +50,9 @@ const alteraStatus = async (id, status) => {
     emailUtils.enviar({
       destinatario: fornecedorDB.email,
       remetente: process.env.SENDGRID_REMETENTE,
-      assunto: `Aviso de Inativação ${fornecedorDB.nomeFantasia}`,
-      corpo: `Prezado ${fornecedorDB.nomeFantasia},\nO seu acesso ao Sistema REGALE está inativo.\n \nEssa é uma menssagem automática do Sistema. `,
-    });
+      assunto: `Confirmação de Inativação ${fornecedorDB.nomeFantasia}`,
+      corpo: EmailDesativar('titulo', 'menssagem', `${process.env.URL}/signin`)
+      });
   }
 
   return {

@@ -1,26 +1,6 @@
-const Email = (titulo, menssagem, url) => {
+const EmailHabilitar = (titulo, menssagem, url) => {
   return ` 
-    <p>&nbsp;</p>
-<!-- start preheader -->
-<div class="preheader" style="display: none; max-width: 0; max-height: 0; overflow: hidden; font-size: 1px; line-height: 1px; color: #fff; opacity: 0;">A preheader is the short summary text that follows the subject line when an email is viewed in the inbox.</div>
-<!-- end preheader -->
-<p></p>
-<!-- start body -->
-<table border="0" width="100%" cellspacing="0" cellpadding="0"><!-- start logo -->
-<tbody>
-<tr>
-<td align="center" bgcolor="#e9ecef"><!-- [if (gte mso 9)|(IE)]>
-        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
-        <tr>
-        <td align="center" valign="top" width="600">
-        <![endif]-->
-<table style="max-width: 600px;" border="0" width="100%" cellspacing="0" cellpadding="0">
-<tbody>
-<tr>
-<td style="padding: 36px 24px;" align="center" valign="top"><a style="display: inline-block;" href="https://sendgrid.com" target="_blank"> <img style="display: block; width: 48px; max-width: 48px; min-width: 48px;" src="./img/paste-logo-light@2x.png" alt="Logo" width="48" border="0" /> </a></td>
-</tr>
-</tbody>
-</table>
+ 
 <!-- [if (gte mso 9)|(IE)]>
         </td>
         </tr>
@@ -43,7 +23,7 @@ const Email = (titulo, menssagem, url) => {
 </tr>
 </tbody>
 </table>
-${titulo}</td>
+Sistema REGALE</td>
 </tr>
 <tr>
 <td align="center" bgcolor="#e9ecef">
@@ -51,7 +31,9 @@ ${titulo}</td>
 <tbody>
 <tr>
 <td style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;" align="left" bgcolor="#ffffff">
-<p style="margin: 0;">${menssagem}</p>
+<p style="margin: 0;">O seu acesso ao sistema REGALE foi Ativado pelo Administrador!
+
+E-mail automático, por favor não responder a este e-mail.</p>
 </td>
 </tr>
 <!-- end copy --> <!-- start button -->
@@ -131,4 +113,4 @@ ${titulo}</td>
     `;
 };
 
-module.exports = {Email}
+module.exports = {EmailHabilitar}
