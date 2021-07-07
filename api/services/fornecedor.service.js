@@ -99,9 +99,11 @@ const cria = async (model) => {
 };
 
 const listaTodos = async (filtro) => {
-  const resultadoDB = await fornecedor.find({}).populate({
+  const resultadoDB = await fornecedor.find({}).collation({'locale':'en'}).sort({"nomeFantasia":1})
+  .populate({
     path: "curtidas",
     model: "curtida",
+    
     populate: {
       path: "cliente",
       model: "cliente",
