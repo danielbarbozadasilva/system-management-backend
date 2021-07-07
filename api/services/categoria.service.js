@@ -33,7 +33,10 @@ const pesquisaPorFiltros = async (filtros) => {
 };
 
 const listaTodos = async () => {
-  const listaCategoriasDB = await categoria.find({});
+  const listaCategoriasDB = await categoria
+    .find({})
+    .collation({ locale: "en" })
+    .sort({ nome: 1 });
 
   return listaCategoriasDB.map((categortiaDB) => {
     return categoriaMapper.toItemListaDTO(categortiaDB);
@@ -72,7 +75,7 @@ const deleta = async (categoriaId) => {
     return {
       sucesso: false,
       mensagem: "não foi possível realizar a operação",
-      detalhes: ['"categoriaid" não existe.']
+      detalhes: ['"categoriaid" não existe.'],
     };
   }
 
@@ -129,5 +132,4 @@ module.exports = {
   deleta,
   pesquisaPorFiltros,
   getCategoriaProduto,
-  
 };

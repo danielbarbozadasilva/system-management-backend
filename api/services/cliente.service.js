@@ -4,7 +4,7 @@ const { toListItemDTO, toDTO } = require("../mappers/cliente.mapper");
 const { criaHash } = require("../utils/criptografia.util");
 
 const listaTodos = async () => {
-  const resultadoDB = await cliente.find({});
+  const resultadoDB = await cliente.find({}).collation({'locale':'en'}).sort({"nome":1});
 
   return resultadoDB.map((item) => {
     return toListItemDTO(item.toJSON());
