@@ -16,7 +16,7 @@ const cria = async (model) => {
         "Não existe fornecedor cadastrado para o fornecedor id informado",
       ],
     };
-  }
+  };
 
   if (!categoriaDB) {
     return {
