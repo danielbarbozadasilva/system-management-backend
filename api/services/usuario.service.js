@@ -28,10 +28,9 @@ const perfis = [
       "ATUALIZAR_PRODUTO",
       "PESQUISA_PRODUTO",
       "INSERIR_PRODUTO",
-      "EXCLUIR_PRODUTO",
       "CRIA_PRODUTO",
       "REMOVE_PRODUTO",
-      "PESQUISA_FORNECEDOR_PRODUTO",
+      "PESQUISA_FORNECEDOR_PRODUTO"
     ],
   },
   {

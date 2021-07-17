@@ -1355,7 +1355,7 @@ const EmailHabilitar = (titulo, menssagem, url) => {
 </html>
 
  
-    `;
+    `
 };
 
 module.exports = { EmailHabilitar };

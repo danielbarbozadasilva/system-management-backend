@@ -4,6 +4,8 @@ const fornecedorController = require("../../controllers/fornecedor.controller");
 const produtoController = require("../../controllers/produto.controller");
 const autorizacaoMiddlewate = require("../../utils/middlewares/authorization.middleware");
 const fileUploadMiddleware = require("../../utils/middlewares/fileUploadMiddleware");
+const asyncMiddleware = require('../../utils/middlewares/async-middleware');
+
 
 
 module.exports = (router) => {
@@ -214,11 +216,11 @@ module.exports = (router) => {
       produtoController.inserirProduto
     )
     
-  
-    router
+  router
     .route('/fornecedor/:fornecedorid/produto/:produtoid')
-    .delete(autorizacaoMiddlewate('REMOVE_PRODUTO'),
-      validaDTO('params', {
+    .delete(
+      (autorizacaoMiddlewate('REMOVE_PRODUTO')),
+      (validaDTO('params', {
         fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
           'any.required': `"fornecedor id" é um campo obrigatório`,
           'string.empty': `"fornecedor id" não deve ser vazio`,
@@ -229,9 +231,9 @@ module.exports = (router) => {
           'string.empty': `"fornecedor id" não deve ser vazio`,
           'string.pattern.base': `"fornecedor id" fora do formato experado`,
         }),
-      }),
-      produtoController.removeProduto
+      })),
+     (produtoController.removeProduto)
     )
-    
+
 
 };

@@ -57,6 +57,7 @@ const cria = async (model) => {
     },
   };
 };
+
 const pesquisaPorFiltros = async (filtros) => {
   const filtroMongo = {};
 

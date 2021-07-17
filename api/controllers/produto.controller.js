@@ -2,20 +2,21 @@ const produtoService = require("../services/produto.service");
 const { produto, categoria, fornecedor } = require("../models/index");
 
 const inserirProduto = async (req, res, next) => {
-  const { body, params } = req;
+
+  const { body, params, usuario } = req;
 
   const resultadoServico = await produtoService.cria({
     ...params,
     ...body,
+    fornecedorlogadoid: usuario.id
   });
 
-  const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
-  const dadoRetorno = resultadoServico.sucesso
-    ? { data: resultadoServico.data }
-    : { detalhes: resultadoServico.detalhes };
+  return res.status(200).send({
+    mensage: "Operacao realizada com sucesso.",
+    data: resultadoServico.data
+  });
 
-  return res.status(codigoRetorno).send(dadoRetorno);
-};
+}
 
 
 const listaProdutoPorId = async (req, res, next) => {
@@ -33,7 +34,10 @@ const listarProdutos = async (req, res, next) => {
 };
 
 const removeProduto = async (req, res, next) => {
+
   const { fornecedorid, produtoid } = req.params;
+  const { usuario } = req;
+
 
   const resultadoServico = await produtoService.deleta({ fornecedorId: fornecedorid, produtoId: produtoid, usuarioId: req.usuario.id });
 
@@ -41,7 +45,9 @@ const removeProduto = async (req, res, next) => {
   const dadoRetorno = resultadoServico.sucesso ? { mensagem: resultadoServico.mensagem, data: resultadoServico.data } : { detalhes: resultadoServico.detalhes };
 
   return res.status(codigoRetorno).send(dadoRetorno);
-};
+
+}
+
 
 module.exports = {
   inserirProduto,

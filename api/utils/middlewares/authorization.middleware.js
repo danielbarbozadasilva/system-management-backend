@@ -8,8 +8,8 @@ const ErroUsuarioNaoAutenticado = require('../errors/erro-usuario-nao-autenticad
 const autorizar = (rota = '*') => {
 
   return async (req, res, next) => {
-    const testerota = rota;
-    console.log(testerota);
+    const teste = rota;
+
     const { token } = req.headers;
     if (!token) {
       throw new ErroUsuarioNaoAutorizado("Usuário não autorizado.")
@@ -24,8 +24,8 @@ const autorizar = (rota = '*') => {
       throw new ErroUsuarioNaoAutorizado("Usuário não autorizado.")
     }
 
-    if (testerota != '*') {
-      if (!usuarioService.validaFuncionalidadeNoPerfil(tipoUsuario, testerota))
+    if (teste != '*') {
+      if (!usuarioService.validaFuncionalidadeNoPerfil(tipoUsuario, teste))
         throw new ErroUsuarioNaoAutorizado("Usuário não autorizado.");
     }
 
