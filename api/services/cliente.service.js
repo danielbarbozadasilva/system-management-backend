@@ -14,7 +14,7 @@ const listaTodos = async () => {
 const listaTodosCurtidos = async (filtro) => {
       const filtros = new ObjectID(filtro.trim());                                       
 
-  const resultadoDB = await cliente.find({ _id: filtros }).collation({'locale':'en'}).sort({"nome":1})
+  const resultadoDB = await cliente.find({ '_id': filtros }).collation({'locale':'en'}).sort({"nome":1})
   .populate({
     path: "curtidas",
     model: "curtida"
