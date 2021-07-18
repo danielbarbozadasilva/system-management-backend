@@ -14,10 +14,13 @@ const cria = async (req, res, next) => {
 };
 
 const pesquisarCurtidasRealizadas = async (req, res, next) => {
-  return res.status(200).send({
-    data: [],
-  });
+     const { clienteid } = req.params;
+console.log('e2323'+clienteid);
+  const result = await clienteService.listaTodosCurtidos(clienteid);
+
+  return res.status(200).send(result);
 };
+
 
 const pesquisaPorId = async (req, res, next) => {
   return res.status(200).send({});

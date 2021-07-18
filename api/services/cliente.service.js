@@ -11,6 +11,18 @@ const listaTodos = async () => {
   });
 };
 
+const listaTodosCurtidos = async (filtro) => {
+      const filtros = new ObjectID(filtro.trim());                                       
+
+  const resultadoDB = await cliente.find({ _id: filtros }).collation({'locale':'en'}).sort({"nome":1})
+  .populate({
+    path: "curtidas",
+    model: "curtida"
+  });
+
+  return resultadoDB
+};
+
 const cria = async (model) => {
   const { email, senha, ...resto } = model;
   if (await validaSeEmailJaExiste(email))
@@ -39,4 +51,5 @@ const cria = async (model) => {
 module.exports = {
   listaTodos,
   cria,
+  listaTodosCurtidos
 };

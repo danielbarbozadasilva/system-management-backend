@@ -15,7 +15,7 @@ module.exports = {
   },
 
   preco: {
-    type: Number,
+    type:mongoose.Decimal128,
     required: true,
   },
 

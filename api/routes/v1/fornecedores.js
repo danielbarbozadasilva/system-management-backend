@@ -156,7 +156,6 @@ module.exports = (router) => {
       fornecedorController.removeCurtidas
     );
     
-      // FUNCIONANDO NO ADMIN
     router.route('/fornecedor/:fornecedorid/produto')
     .get(
       // autorizacaoMiddlewate('PESQUISA_FORNECEDOR_PRODUTO'),
