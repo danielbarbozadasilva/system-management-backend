@@ -15,10 +15,10 @@ const cria = async (req, res, next) => {
 
 const pesquisarCurtidasRealizadas = async (req, res, next) => {
      const { clienteid } = req.params;
-console.log('e2323'+clienteid);
+console.log('======'+clienteid);
   const result = await clienteService.listaTodosCurtidos(clienteid);
 
-  return res.status(200).send(result);
+  return res.status(200).send(...result);
 };
 
 
