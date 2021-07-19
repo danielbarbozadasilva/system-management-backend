@@ -73,7 +73,8 @@ const pesquisaPorFiltros = async (filtros) => {
     filtroMongo.nome = { $regex: ".*" + filtros.nomelike + ".*" };
   }
 
-  const resultadoDB = await produto.find(filtroMongo).collation({'locale':'en'}).sort({"nome":1});
+  const resultadoDB = await produto.find(filtroMongo).collation({'locale':'en'}).sort({"nome":1}).populate("categoria");
+;
 
   return resultadoDB.map((item) => {
     return produtoMapper.toItemListaDTO(item);

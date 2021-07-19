@@ -2,7 +2,11 @@ const { validaSeEmailJaExiste } = require("./usuario.service");
 const { cliente } = require("../models/index");
 const { toListItemDTO } = require("../mappers/cliente.mapper");
 const { criaHash } = require("../utils/criptografia.util");
-const {toDTO, toListItemDTOFornec} = require("../mappers/fornecedor.mapper")
+
+const ErrorRegraDeNegocio = require('../utils/errors/erro-regra-negocio');
+
+const ErroUsuarioNaoAutorizado = require('../utils/errors/erro-usuario-nao-autorizado');
+
 
 const listaTodos = async () => {
   const resultadoDB = await cliente.find({}).collation({'locale':'en'}).sort({"nome":1});
@@ -12,24 +16,7 @@ const listaTodos = async () => {
   });
 };
 
-const listaTodosCurtidos = async (filtro) => {
-console.log('-------'+filtro);
-  const resultadoDB = await cliente.find({ '_id': filtro }).collation({'locale':'en'}).sort({"nome":1})
-  .populate({
-    path: "curtidas",
-    model: "curtida",
-    populate: {
-    path:  "fornecedor",
-     model: "fornecedor",
-    }
-  });
 
-   return resultadoDB.map((item) => {
-    return item.curtidas.map((c) => {
-      return c.fornecedor
-  });
-    });
-};
 const cria = async (model) => {
   const { email, senha, ...resto } = model;
   if (await validaSeEmailJaExiste(email))
@@ -55,8 +42,54 @@ const cria = async (model) => {
   };
 };
 
+
+const pesquisaPorId = async ({ usuario, clienteid }) => {
+
+  if (usuario.tipoUsuario !== 1) {
+    if (usuario.id !== clienteid)
+      throw new ErroUsuarioNaoAutorizado()
+  }
+
+  const resultadoDB = await cliente.find({ _id: clienteid }).populate({
+    path: 'curtidas', model: 'curtida',
+    populate: {
+      path: 'fornecedor', model: 'fornecedor'
+    }
+  });
+
+  if (!resultadoDB[0])
+    throw new ErrorRegraDeNegocio('Cliente não encontrado')
+
+
+  const { _id, curtidas, nome, email } = resultadoDB[0];
+
+  return {
+    data: {
+
+      id: _id,
+      nome,
+      email,
+
+      curtidas: curtidas ? curtidas.reduce((acc, item) => {
+
+        const { nomeFantasia, email } = item.fornecedor;
+
+        return [...acc, {
+          id: item._id,
+          nomeFantasia,
+          email,
+        }]
+
+      }, []) : [],
+
+    }
+  }
+
+}
+
+
 module.exports = {
   listaTodos,
   cria,
-  listaTodosCurtidos
+  pesquisaPorId
 };

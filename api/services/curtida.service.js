@@ -1,4 +1,5 @@
 const { fornecedor, cliente, curtida } = require('../models/index');
+const ErrorRegraDeNegocio = require('../utils/errors/erro-regra-negocio');
 
 const cria = async (fornecedorid, usuarioid) => {
 
@@ -7,16 +8,8 @@ const cria = async (fornecedorid, usuarioid) => {
     cliente.findById(usuarioid),
   ]);
 
-
-
   if (!fornecedorDB) {
-    return {
-      sucesso: false,
-      mensagem: "operação não pode ser realizada",
-      detalhes: [
-        "o fornecedor pesquisado não existe"
-      ]
-    }
+    throw new ErrorRegraDeNegocio('o fornecedor pesquisado não existe')
   }
 
   const curtidaDB = await curtida.create({
@@ -54,23 +47,11 @@ const remove = async (fornecedorid, usuarioid) => {
     ]);
 
   if (!fornecedorDB) {
-    return {
-      sucesso: false,
-      mensagem: "operação não pode ser realizada",
-      detalhes: [
-        "o fornecedor informado não existe"
-      ]
-    }
+    throw new ErrorRegraDeNegocio('o fornecedor informado não existe');
   }
 
   if (!curtidaDB) {
-    return {
-      sucesso: false,
-      mensagem: "operação não pode ser realizada",
-      detalhes: [
-        "não existem curtidas para os dados informados"
-      ]
-    }
+    throw new ErrorRegraDeNegocio('não existem curtidas para os dados informados');
   }
 
   fornecedorDB.curtidas = fornecedorDB.curtidas.filter(item => {
@@ -90,8 +71,6 @@ const remove = async (fornecedorid, usuarioid) => {
   ]);
 
   return {
-    sucesso: false,
-    mensagem: "operação realizada com sucesso",
     data: {
       id: curtida_id
     }

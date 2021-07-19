@@ -32,10 +32,6 @@ module.exports = (router) => {
     categoriaController.criarCategoria
   )
 
-  router.route('/categoria/advanced/:id')
-    .get(categoriaController.advancedList)
-
-    
   router.route('/categoria/:categoriaid').get(
     validaDTO('params', {
       categoriaid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({

@@ -13,18 +13,16 @@ const cria = async (req, res, next) => {
   return res.status(codigoRetorno).send(dadoRetorno);
 };
 
-const pesquisarCurtidasRealizadas = async (req, res, next) => {
-     const { clienteid } = req.params;
-console.log('======'+clienteid);
-  const result = await clienteService.listaTodosCurtidos(clienteid);
-
-  return res.status(200).send(...result);
-};
 
 
 const pesquisaPorId = async (req, res, next) => {
-  return res.status(200).send({});
-};
+
+  const { params, usuario } = req
+  const result = await clienteService.pesquisaPorId({ usuario, clienteid: params.clienteid });
+
+  return res.status(200).send(result);
+
+}
 
 const listarTodosClientes = async (req, res, next) => {
   const result = await clienteService.listaTodos();
@@ -35,6 +33,5 @@ const listarTodosClientes = async (req, res, next) => {
 module.exports = {
   cria,
   pesquisaPorId,
-  pesquisarCurtidasRealizadas,
   listarTodosClientes,
 };

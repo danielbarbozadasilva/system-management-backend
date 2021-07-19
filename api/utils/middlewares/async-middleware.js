@@ -1,9 +1,7 @@
 const ErrorGenerico = require('../errors/erro-generico');
 
 const asyncMiddleware = (fn, options) => (req, res, next) => {
-
-  fn(req, res, next)
-    .catch(err => {
+    fn(req, res, next).catch(err => {
       if (err instanceof ErrorGenerico) {
         return res.status(err.statusCode).send({
           detalhes: [

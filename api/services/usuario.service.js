@@ -13,6 +13,7 @@ const perfis = [
       "REMOVE_CATEGORIA",
       "PESQUISA_FORNECEDOR",
       "PESQUISA_FORNECEDOR_ID",
+      "PESQUISA_CLIENTE",
       "ATIVAR_FORNECEDOR",
       "INATIVAR_FORNECEDOR",
       "PESQUISA_FORNECEDOR_PRODUTO",
@@ -41,6 +42,9 @@ const perfis = [
       "CURTIDA_REMOVE",
       "PESQUISA_FORNECEDOR_ID",
       "PESQUISA_FORNECEDOR_PRODUTO",
+      "PESQUISA_CLIENTE",
+      "PESQUISA_CLIENTE_ID"
+      
     ],
   },
 ];

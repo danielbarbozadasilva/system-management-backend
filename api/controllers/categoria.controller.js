@@ -18,10 +18,6 @@ const buscarPorId = async (req, res, next) => {
   return res.status(200).send(categoria);
 };
 
-const advancedList = async (req, res, next) => {
-  const lista = await categoriaService.listaAvancada(req);
-  return res.status(200).send(lista);
-};
 
 const criarCategoria = async (req, res, next) => {
   const { body } = req;
@@ -72,5 +68,4 @@ module.exports = {
   criarCategoria,
   deletarCategoria,
   alterarCategoria,
-  advancedList,
 };
