@@ -147,7 +147,7 @@ const deleta = async ({ fornecedorId, produtoId, usuarioId }) => {
       nome: produtoDB.nome,
     },
   };
-};
+}
 
 const alteraProduto = async (produtoId, model) => {
   const produtoDB = await produto.findOne({ _id: produtoId });
