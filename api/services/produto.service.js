@@ -16,7 +16,7 @@ const cria = async (model) => {
         "Não existe fornecedor cadastrado para o fornecedor id informado",
       ],
     };
-  };
+  }
 
   if (!categoriaDB) {
     return {
@@ -61,11 +61,11 @@ const cria = async (model) => {
 const pesquisaPorFiltros = async (filtros) => {
   const filtroMongo = {};
 
-  if (filtros.categoria) { 
+  if (filtros.categoria) {
     filtroMongo.categoria = filtros.categoria;
   }
 
-  if (filtros.fornecedor) { 
+  if (filtros.fornecedor) {
     filtroMongo.fornecedor = filtros.fornecedor;
   }
 
@@ -73,9 +73,11 @@ const pesquisaPorFiltros = async (filtros) => {
     filtroMongo.nome = { $regex: ".*" + filtros.nomelike + ".*" };
   }
 
-  const resultadoDB = await produto.find(filtroMongo).collation({'locale':'en'}).sort({"nome":1}).populate("categoria");
-;
-
+  const resultadoDB = await produto
+    .find(filtroMongo)
+    .collation({ locale: "en" })
+    .sort({ nome: 1 })
+    .populate("categoria");
   return resultadoDB.map((item) => {
     return produtoMapper.toItemListaDTO(item);
   });
@@ -147,8 +149,47 @@ const deleta = async ({ fornecedorId, produtoId, usuarioId }) => {
   };
 };
 
+const alteraProduto = async (produtoId, model) => {
+  const produtoDB = await produto.findOne({ _id: produtoId });
+
+  if (!produtoDB) {
+    return {
+      sucesso: false,
+      mensagem: "não foi possível realizar a operação",
+      detalhes: ['"produtoid" não existe.'],
+    };
+  }
+  
+  produtoDB.nome = model.nome;
+  produtoDB.descricao = model.descricao;
+  produtoDB.status = model.status;
+  produtoDB.preco = model.preco;
+  produtoDB.categoriaId = model.categoriaId;
+  produtoDB.categoriaName = model.categoriaName;
+  produtoDB.fornecedorid = model.fornecedorid;
+
+  if (typeof model.imagem === "object") {
+    fileUtils.remove("produto", produtoDB.imagem.nome);
+    fileUtils.move(model.imagem.caminhoOriginal, model.imagem.novoCaminho);
+    produtoDB.imagem = {
+      nomeOriginal: model.imagem.nomeOriginal,
+      nome: model.imagem.novoNome,
+      tipo: model.imagem.tipo,
+    };
+  }
+
+  await produtoDB.save();
+
+  return {
+    sucesso: true,
+    mensagem: "operação relaizada com sucesso",
+    data: produtoMapper.toItemListaDTO(produtoDB),
+  };
+};
+
 module.exports = {
   cria,
   pesquisaPorFiltros,
-  deleta
+  deleta,
+  alteraProduto,
 };

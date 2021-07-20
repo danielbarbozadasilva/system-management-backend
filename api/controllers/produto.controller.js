@@ -19,9 +19,22 @@ const inserirProduto = async (req, res, next) => {
 }
 
 
+const alterarProduto = async (req, res, next) => {
+  const { params, body } = req;
+console.log(params.produtoid, body);
+  const resultadoServico = await produtoService.alteraProduto(params.produtoid, body);
+
+  const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
+  const dadoRetorno = resultadoServico.sucesso
+    ? { data: resultadoServico.data }
+    : { detalhes: resultadoServico.detalhes };
+
+  return res.status(codigoRetorno).send(dadoRetorno);
+};
+
 const listaProdutoPorId = async (req, res, next) => {
   const { query } = req;
-  const result = await produtoService.pesquisaPorFiltros(query);
+  const result = await produtoServialterarce.pesquisaPorFiltros(query);
 
   return res.status(200).send({ data: result });
 };
@@ -53,5 +66,6 @@ module.exports = {
   inserirProduto,
   removeProduto,
   listarProdutos,
-  listaProdutoPorId
+  listaProdutoPorId,
+  alterarProduto,
 };

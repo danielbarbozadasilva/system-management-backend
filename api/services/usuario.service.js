@@ -18,6 +18,7 @@ const perfis = [
       "INATIVAR_FORNECEDOR",
       "PESQUISA_FORNECEDOR_PRODUTO",
       "DELETA_CATEGORIA",
+      "ALTERA_PRODUTO",
     ],
   },
   {
@@ -31,7 +32,8 @@ const perfis = [
       "INSERIR_PRODUTO",
       "CRIA_PRODUTO",
       "REMOVE_PRODUTO",
-      "PESQUISA_FORNECEDOR_PRODUTO"
+      "PESQUISA_FORNECEDOR_PRODUTO",
+      "ALTERA_PRODUTO",
     ],
   },
   {
@@ -43,8 +45,7 @@ const perfis = [
       "PESQUISA_FORNECEDOR_ID",
       "PESQUISA_FORNECEDOR_PRODUTO",
       "PESQUISA_CLIENTE",
-      "PESQUISA_CLIENTE_ID"
-      
+      "PESQUISA_CLIENTE_ID",
     ],
   },
 ];

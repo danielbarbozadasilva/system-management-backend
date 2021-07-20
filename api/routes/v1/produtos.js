@@ -9,7 +9,7 @@ const produtoController = require("../../controllers/produto.controller");
 module.exports = (router) => {
   router.route("/produto").get(
     produtoController.listarProdutos
-    )
+  )
 
 
   router.route("/produto/:id").get(
@@ -35,6 +35,43 @@ module.exports = (router) => {
     produtoController.listaProdutoPorId
   );
 
+  router.route("/produto/:produtoid").put(
+    autorizacaoMiddlewate("ALTERA_PRODUTO"),
+    fileUploadMiddleware("produto", true),
+    validaDTO("params", {
+      produtoid: joi
+        .string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .messages({
+          "any.required": `"produto id" é um campo obrigatório`,
+          "string.empty": `"produto id" não deve ser vazio`,
+          "string.regex": `"produto id" fora do formato experado`,
+        }),
+    }),
+    validaDTO(
+      "body",
+      {
+        nome: joi.string().required().messages({
+          "any.required": `"nome" é um campo obrigatório`,
+          "string.empty": `"nome" não deve ser vazio`,
+        }),
+        descricao: joi.string().required().messages({
+          "any.required": `"descricao" é um campo obrigatório`,
+          "string.empty": `"descricao" não deve ser vazio`,
+        }),
+        status: joi.boolean().required().messages({
+          "any.required": `"status" é um campo obrigatório`,
+          "booleam.empty": `"status" não deve ser vazio`,
+        }),
+      },
+      {
+        allowUnknown: true,
+      }
+    ),
+    produtoController.alterarProduto
+  );
+
 
   router.route("/produto").post(
     autorizacaoMiddlewate("INSERIR_PRODUTO"),
@@ -56,9 +93,10 @@ module.exports = (router) => {
           "string.empty": `"fornecedor id" não deve ser vazio`,
           "string.pattern.base": `"fornecedor id" fora do formato experado`,
         }),
+      
       nomelike: joi.string(),
     }),
     produtoController.inserirProduto
   );
 
-};
+}
