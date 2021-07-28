@@ -141,13 +141,34 @@ const deleta = async ({ fornecedorId, produtoId, usuarioId }) => {
 
   return {
     sucesso: true,
-    mensagem: "operação realizada com sucesso",
+    mensagem: "Operação realizada com sucesso",
     data: {
       id: produtoId,
       nome: produtoDB.nome,
     },
   };
-}
+};
+
+
+const pesquisa = async (id) => {
+  const produtoDB = await produto.findOne({ _id: id });
+  
+
+  if (produtoDB) {
+    return {
+      sucesso: true,
+      mensagem: "operação relaizada com sucesso",
+      data: produtoMapper.toItemListaDTO(produtoDB),
+    }
+  } else {
+      return {
+        sucesso: false,
+        mensagem: "não foi possível realizar a operação",
+        detalhes: ['"produtoid" não existe.'],
+      };
+  }
+};
+
 
 const alteraProduto = async (produtoId, model) => {
   const produtoDB = await produto.findOne({ _id: produtoId });
@@ -159,11 +180,11 @@ const alteraProduto = async (produtoId, model) => {
       detalhes: ['"produtoid" não existe.'],
     };
   }
-  
+
   produtoDB.nome = model.nome;
   produtoDB.descricao = model.descricao;
   produtoDB.status = model.status;
-  produtoDB.preco = model.preco;
+  produtoDB.preco = (model.preco);
   produtoDB.categoriaId = model.categoriaId;
   produtoDB.categoriaName = model.categoriaName;
   produtoDB.fornecedorid = model.fornecedorid;
@@ -192,4 +213,5 @@ module.exports = {
   pesquisaPorFiltros,
   deleta,
   alteraProduto,
+  pesquisa,
 };

@@ -120,13 +120,15 @@ const listaProdutosPorFornecedor = async (fornecedorid, fornecedorlogadoid) => {
     .findById(fornecedorid)
     .populate("produtos");
 
-  const fornecedorAsJSON = fornecedorFromDB.toJSON();
-  return fornecedorAsJSON.produtos.map((item) => {
-    return produtoMapper.toItemListaDTO(item);
-  });
-};
-
-
+   if (!fornecedorFromDB) {
+     return {
+       sucesso: false,
+       mensagem: "operação não pode ser realizada",
+       detalhes: ["o fornecedor pesquisado não existe"],
+     };
+   }
+    return produtoMapper.toItemListaDTO(fornecedorFromDB);
+  }
 
 
 const listarPorId = async (fornecedorid) => {

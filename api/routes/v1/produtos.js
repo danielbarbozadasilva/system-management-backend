@@ -7,37 +7,13 @@ const produtoController = require("../../controllers/produto.controller");
 
 
 module.exports = (router) => {
-  router.route("/produto").get(
-    produtoController.listarProdutos
-  )
+  router.route("/produto").get(produtoController.listarProdutos)
 
+  router.route("/produto/:id").get(produtoController.listaId);
 
-  router.route("/produto/:id").get(
-    validaDTO("query", {
-      categoriaid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .messages({
-          "any.required": `"categoria id" é um campo obrigatório`,
-          "string.empty": `"categoria id" não deve ser vazio`,
-          "string.pattern.base": `"categoria id" fora do formato experado`,
-        }),
-      fornecedorid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .messages({
-          "any.required": `"fornecedor id" é um campo obrigatório`,
-          "string.empty": `"fornecedor id" não deve ser vazio`,
-          "string.pattern.base": `"fornecedor id" fora do formato experado`,
-        }),
-      nomelike: joi.string(),
-    }),
-    produtoController.listaProdutoPorId
-  );
 
   router.route("/produto/:produtoid").put(
-    autorizacaoMiddlewate("ALTERA_PRODUTO"),
-    fileUploadMiddleware("produto", true),
+    fileUploadMiddleware("produtos", true),
     validaDTO("params", {
       produtoid: joi
         .string()
@@ -59,10 +35,6 @@ module.exports = (router) => {
         descricao: joi.string().required().messages({
           "any.required": `"descricao" é um campo obrigatório`,
           "string.empty": `"descricao" não deve ser vazio`,
-        }),
-        status: joi.boolean().required().messages({
-          "any.required": `"status" é um campo obrigatório`,
-          "booleam.empty": `"status" não deve ser vazio`,
         }),
       },
       {
