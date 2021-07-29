@@ -190,7 +190,7 @@ const alteraProduto = async (produtoId, model) => {
   produtoDB.fornecedorid = model.fornecedorid;
 
   if (typeof model.imagem === "object") {
-    fileUtils.remove("produto", produtoDB.imagem.nome);
+    fileUtils.remove("produtos", produtoDB.imagem.nome);
     fileUtils.move(model.imagem.caminhoOriginal, model.imagem.novoCaminho);
     produtoDB.imagem = {
       nomeOriginal: model.imagem.nomeOriginal,
