@@ -13,8 +13,6 @@ const toItemListaDTO = (model) => {
     categoriaId,
     categoriaName,
   } = model;
-  console.log('id' + _id)
-  console.log("imagem.nome" + imagem.nome);
 
   return {
     id: _id,

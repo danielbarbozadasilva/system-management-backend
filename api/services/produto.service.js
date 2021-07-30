@@ -149,29 +149,30 @@ const deleta = async ({ fornecedorId, produtoId, usuarioId }) => {
   };
 };
 
-
 const pesquisa = async (id) => {
   const produtoDB = await produto.findOne({ _id: id });
-  
 
   if (produtoDB) {
     return {
       sucesso: true,
       mensagem: "operação relaizada com sucesso",
       data: produtoMapper.toItemListaDTO(produtoDB),
-    }
+    };
   } else {
-      return {
-        sucesso: false,
-        mensagem: "não foi possível realizar a operação",
-        detalhes: ['"produtoid" não existe.'],
-      };
+    return {
+      sucesso: false,
+      mensagem: "não foi possível realizar a operação",
+      detalhes: ['"produtoid" não existe.'],
+    };
   }
 };
 
-
 const alteraProduto = async (produtoId, model) => {
   const produtoDB = await produto.findOne({ _id: produtoId });
+
+  const [categoriaDB] = await Promise.all([
+    categoria.findById(model.categoria),
+  ]);
 
   if (!produtoDB) {
     return {
@@ -180,15 +181,15 @@ const alteraProduto = async (produtoId, model) => {
       detalhes: ['"produtoid" não existe.'],
     };
   }
-
+  
   produtoDB.nome = model.nome;
   produtoDB.descricao = model.descricao;
   produtoDB.status = model.status;
-  produtoDB.preco = (model.preco);
-  produtoDB.categoriaId = model.categoriaId;
+  produtoDB.preco = model.preco;
+  produtoDB.categoria = model.categoria;
   produtoDB.categoriaName = model.categoriaName;
   produtoDB.fornecedorid = model.fornecedorid;
-
+  
   if (typeof model.imagem === "object") {
     fileUtils.remove("produtos", produtoDB.imagem.nome);
     fileUtils.move(model.imagem.caminhoOriginal, model.imagem.novoCaminho);
@@ -198,9 +199,10 @@ const alteraProduto = async (produtoId, model) => {
       tipo: model.imagem.tipo,
     };
   }
-
+  
+  categoriaDB.produtos = [...categoriaDB.produtos, produtoDB._id];
   await produtoDB.save();
-
+  await categoriaDB.save();
   return {
     sucesso: true,
     mensagem: "operação relaizada com sucesso",

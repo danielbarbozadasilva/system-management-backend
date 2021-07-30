@@ -15,7 +15,7 @@ module.exports = (router) => {
   router.route("/produto/:produtoid").put(
     fileUploadMiddleware("produtos", true),
     validaDTO("query", {
-      categoriaid: joi
+      categoria: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .messages({
@@ -23,7 +23,7 @@ module.exports = (router) => {
           "string.empty": `"categoria id" não deve ser vazio`,
           "string.pattern.base": `"categoria id" fora do formato experado`,
         }),
-      fornecedorid: joi
+      fornecedor: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .messages({
