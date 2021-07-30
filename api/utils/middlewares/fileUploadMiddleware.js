@@ -68,11 +68,11 @@ const fileUpload = (destino, isUpdate = false) => {
 
       req.body.imagem = {
         tipo: files.imagem.type,
-        nomeOriginal: files.imagem.name,
+        nomeOriginal: files.imagem.nomeOriginal,
         caminhoOriginal: files.imagem.path,
         novoNome,
         novoCaminho,
-      }
+      };
     }
 
     next();

@@ -14,33 +14,27 @@ module.exports = (router) => {
 
   router.route("/produto/:produtoid").put(
     fileUploadMiddleware("produtos", true),
-    validaDTO("params", {
-      produtoid: joi
+    validaDTO("query", {
+      categoriaid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
         .messages({
-          "any.required": `"produto id" é um campo obrigatório`,
-          "string.empty": `"produto id" não deve ser vazio`,
-          "string.regex": `"produto id" fora do formato experado`,
+          "any.required": `"categoria id" é um campo obrigatório`,
+          "string.empty": `"categoria id" não deve ser vazio`,
+          "string.pattern.base": `"categoria id" fora do formato experado`,
         }),
+      fornecedorid: joi
+        .string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .messages({
+          "any.required": `"fornecedor id" é um campo obrigatório`,
+          "string.empty": `"fornecedor id" não deve ser vazio`,
+          "string.pattern.base": `"fornecedor id" fora do formato experado`,
+        }),
+
+      nomelike: joi.string(),
+      allowUnknown: true
     }),
-    validaDTO(
-      "body",
-      {
-        nome: joi.string().required().messages({
-          "any.required": `"nome" é um campo obrigatório`,
-          "string.empty": `"nome" não deve ser vazio`,
-        }),
-        descricao: joi.string().required().messages({
-          "any.required": `"descricao" é um campo obrigatório`,
-          "string.empty": `"descricao" não deve ser vazio`,
-        }),
-      },
-      {
-        allowUnknown: true,
-      }
-    ),
     produtoController.alterarProduto
   );
 

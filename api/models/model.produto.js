@@ -22,7 +22,7 @@ module.exports = {
   imagem: {
     nomeOriginal: {
       type: String,
-      required: true,
+      required: false,
     },
     nome: {
       type: String,
