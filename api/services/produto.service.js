@@ -4,8 +4,8 @@ const produtoMapper = require("../mappers/produto.mapper");
 
 const cria = async (model) => {
   const [categoriaDB, fornecedorDB] = await Promise.all([
-    categoria.findById(model.categoriaid),
-    fornecedor.findById(model.fornecedorid),
+    categoria.findById(model.categoria),
+    fornecedor.findById(model.fornecedorlogadoid),
   ]);
 
   if (!fornecedorDB) {
@@ -32,8 +32,8 @@ const cria = async (model) => {
     nome: model.nome,
     descricao: model.descricao,
     preco: model.preco,
-    categoria: model.categoriaid,
-    fornecedor: model.fornecedorid,
+    categoria: model.categoria,
+    fornecedor: model.fornecedorlogadoid,
     imagem: {
       nomeOriginal: model.imagem.nomeOriginal,
       nome: model.imagem.novoNome,
@@ -59,9 +59,10 @@ const cria = async (model) => {
 };
 
 
+////////////////////////////////////////////////////////////////////////////////
 const pesquisaPorFiltros = async (filtros) => {
   const filtroMongo = {};
-
+  console.log(filtros);
   if (filtros.categoria) {
     filtroMongo.categoria = filtros.categoria;
   }
@@ -76,7 +77,6 @@ const pesquisaPorFiltros = async (filtros) => {
 
   const resultadoDB = await produto
     .find(filtroMongo)
-    .collation({ locale: "en" })
     .sort({ nome: 1 })
     .populate("categoria");
   return resultadoDB.map((item) => {
@@ -114,7 +114,7 @@ const deleta = async ({ fornecedorId, produtoId, usuarioId }) => {
     };
   }
 
-  if (produtoDB.fornecedor.toString() !== fornecedorId) {
+  if (produtoDB.fornecedor?.toString() !== fornecedorId) {
     return {
       sucesso: false,
       mensagem: "operação não pode ser realizada",
@@ -134,11 +134,24 @@ const deleta = async ({ fornecedorId, produtoId, usuarioId }) => {
   await Promise.all([
     categoriaDB.save(),
     fornecedorDB.save(),
-    produto.deleteOne(produtoDB),
+    produto.deleteOne({ _id: produtoId }),
   ]);
 
   const { imagem } = produtoDB;
   fileUtils.remove("produtos", imagem.nome);
+
+  let categoriaArray = await categoria.find({ produtos: produtoId });
+  await Promise.all(
+    categoriaArray.map(async (item) => {
+      let categoriaProduto = item.produtos;
+      var index = categoriaProduto.findIndex((item) => item == produtoId);
+      categoriaProduto.splice(index, 1);
+      await categoria.updateOne(
+        { _id: item._id },
+        { produtos: categoriaProduto }
+      );
+    })
+  );
 
   return {
     sucesso: true,
@@ -156,7 +169,7 @@ const pesquisa = async (id) => {
   if (produtoDB) {
     return {
       sucesso: true,
-      mensagem: "operação relaizada com sucesso",
+      mensagem: "operação realizada com sucesso",
       data: produtoMapper.toItemListaDTO(produtoDB),
     };
   } else {
@@ -182,7 +195,7 @@ const alteraProduto = async (produtoId, model) => {
       detalhes: ['"produtoid" não existe.'],
     };
   }
-  
+
   produtoDB.nome = model.nome;
   produtoDB.descricao = model.descricao;
   produtoDB.status = model.status;
@@ -190,7 +203,7 @@ const alteraProduto = async (produtoId, model) => {
   produtoDB.categoria = model.categoria;
   produtoDB.categoriaName = model.categoriaName;
   produtoDB.fornecedorid = model.fornecedorid;
-  
+
   if (typeof model.imagem === "object") {
     fileUtils.remove("produtos", produtoDB.imagem.nome);
     fileUtils.move(model.imagem.caminhoOriginal, model.imagem.novoCaminho);
@@ -200,7 +213,7 @@ const alteraProduto = async (produtoId, model) => {
       tipo: model.imagem.tipo,
     };
   }
-  
+
   categoriaDB.produtos = [...categoriaDB.produtos, produtoDB._id];
   await produtoDB.save();
   await categoriaDB.save();

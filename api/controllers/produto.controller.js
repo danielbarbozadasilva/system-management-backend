@@ -7,7 +7,7 @@ const inserirProduto = async (req, res, next) => {
   const resultadoServico = await produtoService.cria({
     ...params,
     ...body,
-    fornecedorlogadoid: usuario.id,
+    fornecedorlogadoid: req.params.fornecedor,
   });
 
   return res.status(200).send({
