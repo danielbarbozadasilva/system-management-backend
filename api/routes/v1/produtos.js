@@ -5,12 +5,10 @@ const autorizacaoMiddlewate = require("../../utils/middlewares/authorization.mid
 
 const produtoController = require("../../controllers/produto.controller");
 
-
 module.exports = (router) => {
-  router.route("/produto").get(produtoController.listarProdutos)
+  router.route("/produto").get(produtoController.listarProdutos);
 
   router.route("/produto/:id").get(produtoController.listaId);
-
 
   router.route("/produto/:produtoid").put(
     fileUploadMiddleware("produtos", true),
@@ -33,11 +31,8 @@ module.exports = (router) => {
         }),
 
       nomelike: joi.string(),
-      allowUnknown: true
+      allowUnknown: true,
     }),
     produtoController.alterarProduto
   );
-
-
-
-}
+};

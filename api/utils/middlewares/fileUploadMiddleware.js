@@ -61,18 +61,18 @@ const fileUpload = (destino, isUpdate = false) => {
 
     }
 
-    if (files.imagem && files.imagem.name !== '') {
+  if (files.imagem && files.imagem.name !== '') {
 
       const novoNome = fileUtils.criaNome(files.imagem.type);
       const novoCaminho = fileUtils.criaEndereco(destino, novoNome);
 
       req.body.imagem = {
         tipo: files.imagem.type,
-        nomeOriginal: files.imagem.nomeOriginal,
+        nomeOriginal: files.imagem.name,
         caminhoOriginal: files.imagem.path,
         novoNome,
         novoCaminho,
-      };
+      }
     }
 
     next();
@@ -80,6 +80,7 @@ const fileUpload = (destino, isUpdate = false) => {
   }
 
 }
+
 
 
 module.exports = fileUpload;

@@ -35,7 +35,7 @@ const cria = async (model) => {
     categoria: model.categoria,
     fornecedor: model.fornecedorlogadoid,
     imagem: {
-      nomeOriginal: model.imagem.nomeOriginal,
+      nomeOriginal: model.imagem.path,
       nome: model.imagem.novoNome,
       tipo: model.imagem.tipo,
     },
@@ -74,7 +74,7 @@ const pesquisaPorFiltros = async (filtros) => {
   if (filtros.nomelike) {
     filtroMongo.nome = { $regex: ".*" + filtros.nomelike + ".*" };
   }
-
+console.log(filtroMongo.categoria)
   const resultadoDB = await produto
     .find(filtroMongo)
     .sort({ nome: 1 })
@@ -208,7 +208,7 @@ const alteraProduto = async (produtoId, model) => {
     fileUtils.remove("produtos", produtoDB.imagem.nome);
     fileUtils.move(model.imagem.caminhoOriginal, model.imagem.novoCaminho);
     produtoDB.imagem = {
-      nomeOriginal: model.imagem.nomeOriginal,
+      nomeOriginal: model.imagem.path,
       nome: model.imagem.novoNome,
       tipo: model.imagem.tipo,
     };
@@ -219,7 +219,7 @@ const alteraProduto = async (produtoId, model) => {
   await categoriaDB.save();
   return {
     sucesso: true,
-    mensagem: "operação relaizada com sucesso",
+    mensagem: "Operação relaizada com sucesso!",
     data: produtoMapper.toItemListaDTO(produtoDB),
   };
 };
