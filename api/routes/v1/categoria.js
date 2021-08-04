@@ -83,3 +83,5 @@ module.exports = (router) => {
       categoriaController.alterarCategoria
     )
 }
+
+
