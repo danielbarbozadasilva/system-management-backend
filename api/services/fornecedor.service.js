@@ -9,8 +9,8 @@ const { criaHash } = require("../utils/criptografia.util");
 const emailUtils = require("../utils/email.utils");
 
 const produtoMapper = require("../mappers/produto.mapper");
-const {EmailHabilitar} = require("../utils/email.mensagem.habilitar")
-const {EmailDesativar} = require("../utils/email.mensagem.desativar")
+const { EmailHabilitar } = require("../utils/email.mensagem.habilitar");
+const { EmailDesativar } = require("../utils/email.mensagem.desativar");
 
 const validaSeCnpjJaExiste = async (cnpj) => {
   const result = await fornecedor.find({
@@ -42,8 +42,8 @@ const alteraStatus = async (id, status) => {
       destinatario: fornecedorDB.email,
       remetente: process.env.SENDGRID_REMETENTE,
       assunto: `Confirmação de Ativação ${fornecedorDB.nomeFantasia}`,
-      corpo: EmailHabilitar('titulo', 'menssagem', `${process.env.URL}/signin`)
-      });
+      corpo: EmailHabilitar("titulo", "menssagem", `${process.env.URL}/signin`),
+    });
   }
 
   if (status === "Inativo") {
@@ -51,8 +51,8 @@ const alteraStatus = async (id, status) => {
       destinatario: fornecedorDB.email,
       remetente: process.env.SENDGRID_REMETENTE,
       assunto: `Confirmação de Inativação ${fornecedorDB.nomeFantasia}`,
-      corpo: EmailDesativar('titulo', 'menssagem', `${process.env.URL}/signin`)
-      });
+      corpo: EmailDesativar("titulo", "menssagem", `${process.env.URL}/signin`),
+    });
   }
 
   return {
@@ -99,16 +99,39 @@ const cria = async (model) => {
 };
 
 const listaTodos = async (filtro) => {
-  const resultadoDB = await fornecedor.find({}).collation({'locale':'en'}).sort({"nomeFantasia":1})
-  .populate({
-    path: "curtidas",
-    model: "curtida",
-    
-    populate: {
-      path: "cliente",
-      model: "cliente",
-    },
+  const resultadoDB = await fornecedor
+    .find({})
+    .collation({ locale: "en" })
+    .sort({ nomeFantasia: 1 })
+    .populate({
+      path: "curtidas",
+      model: "curtida",
+
+      populate: {
+        path: "cliente",
+        model: "cliente",
+      },
+    });
+
+  return resultadoDB.map((item) => {
+    return toDTO(item.toJSON());
   });
+};
+
+const fornecedorCurtidaProduto = async (filtro) => {
+  const resultadoDB = await fornecedor
+    .find({})
+    .collation({ locale: "en" })
+    .sort({ nomeFantasia: 1 })
+    .populate({
+      path: "curtidas",
+      model: "curtida",
+
+      populate: {
+        path: "produtos",
+        model: "produto",
+      },
+    });
 
   return resultadoDB.map((item) => {
     return toDTO(item.toJSON());
@@ -120,16 +143,15 @@ const listaProdutosPorFornecedor = async (fornecedorid, fornecedorlogadoid) => {
     .findById(fornecedorid)
     .populate("produtos");
 
-   if (!fornecedorFromDB) {
-     return {
-       sucesso: false,
-       mensagem: "operação não pode ser realizada",
-       detalhes: ["o fornecedor pesquisado não existe"],
-     };
-   }
-    return produtoMapper.toItemListaDTO(fornecedorFromDB);
+  if (!fornecedorFromDB) {
+    return {
+      sucesso: false,
+      mensagem: "operação não pode ser realizada",
+      detalhes: ["o fornecedor pesquisado não existe"],
+    };
   }
-
+  return fornecedorFromDB.toJSON();
+};
 
 const listarPorId = async (fornecedorid) => {
   const fornecedorDB = await fornecedor.findById(fornecedorid);
@@ -144,10 +166,9 @@ const listarPorId = async (fornecedorid) => {
 
   return {
     sucesso: true,
-    data:fornecedorDB.toJSON(),
+    data: fornecedorDB.toJSON(),
   };
 };
-
 
 module.exports = {
   alteraStatus,
@@ -155,4 +176,5 @@ module.exports = {
   cria,
   listaProdutosPorFornecedor,
   listaTodos,
+  fornecedorCurtidaProduto,
 };
