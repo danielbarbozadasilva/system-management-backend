@@ -4,14 +4,9 @@ const fornecedorController = require("../../controllers/fornecedor.controller");
 const produtoController = require("../../controllers/produto.controller");
 const autorizacaoMiddlewate = require("../../utils/middlewares/authorization.middleware");
 const fileUploadMiddleware = require("../../utils/middlewares/fileUploadMiddleware");
-const asyncMiddleware = require('../../utils/middlewares/async-middleware');
-
-
+const asyncMiddleware = require("../../utils/middlewares/async-middleware");
 
 module.exports = (router) => {
-
-
-
   router.route("/fornecedor").get(fornecedorController.listaFornecedores);
 
   router.route("/fornecedor/:fornecedorid").get(
@@ -32,7 +27,6 @@ module.exports = (router) => {
   );
 
   router.route("/fornecedor").post(
-
     // autorizacaoMiddlewate("ADICIONA_FORNECEDOR"),
     validaDTO("body", {
       cnpj: joi.string().required().messages({
@@ -155,88 +149,90 @@ module.exports = (router) => {
       }),
       fornecedorController.removeCurtidas
     );
-    
-  router
-    .route("/fornecedor/:fornecedorid/produto")
-    .get(
-      // autorizacaoMiddlewate('PESQUISA_FORNECEDOR_PRODUTO'),
-      validaDTO("params", {
-        fornecedorid: joi
+
+  router.route("/fornecedor/:fornecedorid/produto").get(
+    // autorizacaoMiddlewate('PESQUISA_FORNECEDOR_PRODUTO'),
+    validaDTO("params", {
+      fornecedorid: joi
+        .string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .messages({
+          "any.required": `"fornecedor id" é um campo obrigatório`,
+          "string.empty": `"fornecedor id" não deve ser vazio`,
+          "string.pattern.base": `"fornecedor id" fora do formato experado`,
+        }),
+    }),
+    fornecedorController.buscaProdutosPorFornecedor
+  );
+
+  router.route("/fornecedor/:fornecedor/produto").post(
+    autorizacaoMiddlewate("CRIA_PRODUTO"),
+    fileUploadMiddleware("produtos"),
+    validaDTO("params", {
+      fornecedor: joi
+        .string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .messages({
+          "any.required": `"fornecedor id" é um campo obrigatório`,
+          "string.empty": `"fornecedor id" não deve ser vazio`,
+          "string.pattern.base": `"fornecedor id" fora do formato experado`,
+        }),
+    }),
+    validaDTO(
+      "body",
+      {
+        nome: joi.string().required().messages({
+          "any.required": `"nome" é um campo obrigatório`,
+          "string.empty": `"nome" não deve ser vazio`,
+        }),
+        descricao: joi.string().required().messages({
+          "any.required": `"descricao" é um campo obrigatório`,
+          "string.empty": `"descricao" não deve ser vazio`,
+        }),
+        categoriaId: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
           .messages({
-            "any.required": `"fornecedor id" é um campo obrigatório`,
-            "string.empty": `"fornecedor id" não deve ser vazio`,
-            "string.pattern.base": `"fornecedor id" fora do formato experado`,
+            "any.required": `"categoria id" é um campo obrigatório`,
+            "string.empty": `"categoria id" não deve ser vazio`,
+            "string.pattern.base": `"categoria id" fora do formato experado`,
           }),
-      }),
-      fornecedorController.buscaProdutosPorFornecedor
-    );
-
-      router.route("/fornecedor/:fornecedor/produto").post(
-        autorizacaoMiddlewate("CRIA_PRODUTO"),
-        fileUploadMiddleware("produtos"),
-        validaDTO("params", {
-          fornecedor: joi
-            .string()
-            .regex(/^[0-9a-fA-F]{24}$/)
-            .required()
-            .messages({
-              "any.required": `"fornecedor id" é um campo obrigatório`,
-              "string.empty": `"fornecedor id" não deve ser vazio`,
-              "string.pattern.base": `"fornecedor id" fora do formato experado`,
-            }),
+        preco: joi.number().required().messages({
+          "any.required": `"preco" é um campo obrigatório`,
         }),
-        validaDTO(
-          "body",
-          {
-            nome: joi.string().required().messages({
-              "any.required": `"nome" é um campo obrigatório`,
-              "string.empty": `"nome" não deve ser vazio`,
-            }),
-            descricao: joi.string().required().messages({
-              "any.required": `"descricao" é um campo obrigatório`,
-              "string.empty": `"descricao" não deve ser vazio`,
-            }),
-            categoriaId: joi
-              .string()
-              .regex(/^[0-9a-fA-F]{24}$/)
-              .required()
-              .messages({
-                "any.required": `"categoria id" é um campo obrigatório`,
-                "string.empty": `"categoria id" não deve ser vazio`,
-                "string.pattern.base": `"categoria id" fora do formato experado`,
-              }),
-            preco: joi.number().required().messages({
-              "any.required": `"preco" é um campo obrigatório`,
-            }),
-          },
-          {
-            allowUnknown: true,
-          }
-        ),
-        produtoController.inserirProduto
-      );
-    
-  router
-    .route('/fornecedor/:fornecedorid/produto/:produtoid')
-    .delete(
-      (autorizacaoMiddlewate('REMOVE_PRODUTO')),
-      (validaDTO('params', {
-        fornecedorid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
-          'any.required': `"fornecedor id" é um campo obrigatório`,
-          'string.empty': `"fornecedor id" não deve ser vazio`,
-          'string.pattern.base': `"fornecedor id" fora do formato experado`,
-        }),
-        produtoid: joi.string().regex(/^[0-9a-fA-F]{24}$/).required().messages({
-          'any.required': `"fornecedor id" é um campo obrigatório`,
-          'string.empty': `"fornecedor id" não deve ser vazio`,
-          'string.pattern.base': `"fornecedor id" fora do formato experado`,
-        }),
-      })),
-     (produtoController.removeProduto)
-    )
+      },
+      {
+        allowUnknown: true,
+      }
+    ),
+    produtoController.inserirProduto
+  );
 
-
+  router.route("/fornecedor/:fornecedorid/produto/:produtoid").delete(
+    autorizacaoMiddlewate("REMOVE_PRODUTO"),
+    validaDTO("params", {
+      fornecedorid: joi
+        .string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .messages({
+          "any.required": `"fornecedor id" é um campo obrigatório`,
+          "string.empty": `"fornecedor id" não deve ser vazio`,
+          "string.pattern.base": `"fornecedor id" fora do formato experado`,
+        }),
+      produtoid: joi
+        .string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .messages({
+          "any.required": `"fornecedor id" é um campo obrigatório`,
+          "string.empty": `"fornecedor id" não deve ser vazio`,
+          "string.pattern.base": `"fornecedor id" fora do formato experado`,
+        }),
+    }),
+    produtoController.removeProduto
+  );
 };

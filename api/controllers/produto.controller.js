@@ -16,7 +16,6 @@ const inserirProduto = async (req, res, next) => {
   });
 };
 
-
 const alterarProduto = async (req, res, next) => {
   const { params, body } = req;
   const resultadoServico = await produtoService.alteraProduto(
@@ -72,5 +71,5 @@ module.exports = {
   listarProdutos,
   listaProdutoPorId,
   alterarProduto,
-  listaId
+  listaId,
 };

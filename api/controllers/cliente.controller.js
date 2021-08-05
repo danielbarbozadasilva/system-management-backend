@@ -13,16 +13,15 @@ const cria = async (req, res, next) => {
   return res.status(codigoRetorno).send(dadoRetorno);
 };
 
-
-
 const pesquisaPorId = async (req, res, next) => {
-
-  const { params, usuario } = req
-  const result = await clienteService.pesquisaPorId({ usuario, clienteid: params.clienteid });
+  const { params, usuario } = req;
+  const result = await clienteService.pesquisaPorId({
+    usuario,
+    clienteid: params.clienteid,
+  });
 
   return res.status(200).send(result);
-
-}
+};
 
 const listarTodosClientes = async (req, res, next) => {
   const result = await clienteService.listaTodos();

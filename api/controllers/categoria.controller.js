@@ -18,7 +18,6 @@ const buscarPorId = async (req, res, next) => {
   return res.status(200).send(categoria);
 };
 
-
 const criarCategoria = async (req, res, next) => {
   const { body } = req;
 

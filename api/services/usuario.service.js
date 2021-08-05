@@ -17,6 +17,7 @@ const perfis = [
       "ATIVAR_FORNECEDOR",
       "INATIVAR_FORNECEDOR",
       "PESQUISA_FORNECEDOR_PRODUTO",
+      "ADICIONA_FORNECEDOR",
       "DELETA_CATEGORIA",
       "ALTERA_PRODUTO",
     ],
@@ -34,6 +35,7 @@ const perfis = [
       "REMOVE_PRODUTO",
       "PESQUISA_FORNECEDOR_PRODUTO",
       "ALTERA_PRODUTO",
+      "PESQUISA_CLIENTE_ID"
     ],
   },
   {

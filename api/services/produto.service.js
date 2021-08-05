@@ -35,7 +35,7 @@ const cria = async (model) => {
     categoria: model.categoria,
     fornecedor: model.fornecedorlogadoid,
     imagem: {
-      nomeOriginal: model.imagem.path,
+      nomeOriginal: model.imagem.nomeOriginal,
       nome: model.imagem.novoNome,
       tipo: model.imagem.tipo,
     },
@@ -50,7 +50,7 @@ const cria = async (model) => {
 
   return {
     sucesso: true,
-    mensagem: "cadastro realizado com sucesso",
+    mensagem: "Cadastro realizado com sucesso",
     data: {
       id: novoProduto._id,
       nome: novoProduto.nome,
@@ -58,11 +58,8 @@ const cria = async (model) => {
   };
 };
 
-
-////////////////////////////////////////////////////////////////////////////////
 const pesquisaPorFiltros = async (filtros) => {
   const filtroMongo = {};
-  console.log(filtros);
   if (filtros.categoria) {
     filtroMongo.categoria = filtros.categoria;
   }
@@ -74,7 +71,7 @@ const pesquisaPorFiltros = async (filtros) => {
   if (filtros.nomelike) {
     filtroMongo.nome = { $regex: ".*" + filtros.nomelike + ".*" };
   }
-console.log(filtroMongo.categoria)
+
   const resultadoDB = await produto
     .find(filtroMongo)
     .sort({ nome: 1 })
@@ -93,7 +90,7 @@ const deleta = async ({ fornecedorId, produtoId, usuarioId }) => {
   if (!fornecedorDB) {
     return {
       sucesso: false,
-      mensagem: "operação não pode ser realizada",
+      mensagem: "Operação não pode ser realizada",
       detalhes: ["O fornecedor informado não existe."],
     };
   }
@@ -101,7 +98,7 @@ const deleta = async ({ fornecedorId, produtoId, usuarioId }) => {
   if (fornecedorId !== usuarioId) {
     return {
       sucesso: false,
-      mensagem: "operação não pode ser realizada",
+      mensagem: "Operação não pode ser realizada",
       detalhes: ["O produto a ser excluido não pertence ao fornecedor."],
     };
   }
@@ -109,7 +106,7 @@ const deleta = async ({ fornecedorId, produtoId, usuarioId }) => {
   if (!produtoDB) {
     return {
       sucesso: false,
-      mensagem: "operação não pode ser realizada",
+      mensagem: "Operação não pode ser realizada",
       detalhes: ["O produto informado não existe."],
     };
   }
@@ -208,7 +205,7 @@ const alteraProduto = async (produtoId, model) => {
     fileUtils.remove("produtos", produtoDB.imagem.nome);
     fileUtils.move(model.imagem.caminhoOriginal, model.imagem.novoCaminho);
     produtoDB.imagem = {
-      nomeOriginal: model.imagem.path,
+      nomeOriginal: model.imagem.nomeOriginal,
       nome: model.imagem.novoNome,
       tipo: model.imagem.tipo,
     };
@@ -219,7 +216,7 @@ const alteraProduto = async (produtoId, model) => {
   await categoriaDB.save();
   return {
     sucesso: true,
-    mensagem: "Operação relaizada com sucesso!",
+    mensagem: "Operação realizada com sucesso!",
     data: produtoMapper.toItemListaDTO(produtoDB),
   };
 };

@@ -49,7 +49,7 @@ const criaCategoria = async (model) => {
     descricao: model.descricao,
     status: model.status,
     imagem: {
-      nomeOriginal: model.imagem.path,
+      nomeOriginal: model.imagem.nomeOriginal,
       nome: model.imagem.novoNome,
       tipo: model.imagem.tipo,
     },
@@ -109,7 +109,7 @@ const alteraCategoria = async (categoriaId, model) => {
     fileUtils.remove("categoria", categoriaDB.imagem.nome);
     fileUtils.move(model.imagem.caminhoOriginal, model.imagem.novoCaminho);
     categoriaDB.imagem = {
-      nomeOriginal: model.imagem.path,
+      nomeOriginal: model.imagem.nomeOriginal,
       nome: model.imagem.novoNome,
       tipo: model.imagem.tipo,
     };
