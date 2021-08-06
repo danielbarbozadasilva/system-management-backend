@@ -74,8 +74,10 @@ const pesquisaPorFiltros = async (filtros) => {
 
   const resultadoDB = await produto
     .find(filtroMongo)
-    .sort({ nome: 1 })
-    .populate("categoria");
+    .sort({ preco: 1, descricao: 1, curtidas: 1 })
+    .populate("produto")
+    .populate("fornecedor");
+  
   return resultadoDB.map((item) => {
     return produtoMapper.toItemListaDTO(item);
   });

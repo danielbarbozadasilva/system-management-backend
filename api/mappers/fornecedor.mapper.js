@@ -10,17 +10,6 @@ const toListItemDTO = (model) => {
   };
 };
 
-const toListItemDTOFornec = (model) => {
-  const { _id, email, cnpj, nomeFantasia, status } = model;
-
-  return {
-    id:_id,
-    email,
-    cnpj,
-    nomeFantasia,
-    status,
-  };
-};
 
 const toDTO = (model) => {
   const {

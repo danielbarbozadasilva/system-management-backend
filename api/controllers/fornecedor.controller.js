@@ -1,6 +1,7 @@
 const fornecedorService = require("../services/fornecedor.service");
 const curtidaService = require("../services/curtida.service");
 const produtoMapper = require("../mappers/produto.mapper");
+const { produto, categoria, fornecedor } = require("../models/index");
 
 const ativa = async (req, res, next) => {
   const { fornecedorid } = req.params;
@@ -71,8 +72,25 @@ const buscaPorId = async (req, res, next) => {
   return res.status(codigoRetorno).send(dadoRetorno);
 };
 
-const listaProdutosByFornecedor = async (fornecedorid, fornecedorlogadoid) => {
+const getPesquisarFornecedorLocalidade = async (req, res, next) => {
+  const { uf, cidade } = req.query;
+  let filtro = {};
+  console.log(cidade);
+  if (cidade == undefined || cidade == "x") {
+    filtro = { uf };
+  } else {
+    filtro = { uf, cidade };
+  }
+  const resultadoDB = await fornecedor.find(filtro);
+  // .populate({
+  //   path: "produtos",
+  //   model: "produto",
+  // });
 
+  return res.send(resultadoDB);
+};
+
+const listaProdutosByFornecedor = async (fornecedorid, fornecedorlogadoid) => {
   const fornecedorFromDB = await fornecedor
     .findById(fornecedorid)
     .populate("produtos");
@@ -83,7 +101,7 @@ const listaProdutosByFornecedor = async (fornecedorid, fornecedorlogadoid) => {
 };
 
 const pesquisarCurtidasRecebidas = async (req, res, next) => {
-  const { fornecedorid, params, usuario  } = req.params;
+  const { fornecedorid, params, usuario } = req.params;
   const result = await fornecedorService.fornecedorCurtidaProduto({
     usuario,
     fornecedorid: params.fornecedorid,
@@ -92,20 +110,18 @@ const pesquisarCurtidasRecebidas = async (req, res, next) => {
 };
 
 const buscaProdutosPorFornecedor = async (req, res, next) => {
-  const { params } = req;
-  const data = await fornecedorService.listaProdutosPorFornecedor(
-    params.fornecedorid
-  );
+  const { fornecedorid } = req.params;
 
-  return res.status(200).send({
-    data,
-  });
+  const data = await fornecedorService.listaProdutosPorFornecedor(fornecedorid);
+
+  return res.status(200).send({ data });
 };
 
 const recebeCurtidas = async (req, res, next) => {
   const { params, usuario } = req;
+  const { fornecedorid } = req.params;
 
-  const result = await curtidaService.cria(params.fornecedorid, usuario.id);
+  const result = await curtidaService.cria(fornecedorid, usuario.id);
   const codigoRetorno = result.sucesso ? 200 : 400;
   const dadoRetorno = result.sucesso
     ? { data: result.data }
@@ -135,4 +151,5 @@ module.exports = {
   pesquisarCurtidasRecebidas,
   buscaProdutosPorFornecedor,
   listaProdutosByFornecedor,
+  getPesquisarFornecedorLocalidade,
 };

@@ -54,7 +54,6 @@ module.exports = (router) => {
           "string.pattern.base": `"cliente id" fora do formato experado`,
         }),
     }),
-    (clienteController.pesquisaPorId)
+    clienteController.pesquisaPorId
   );
-  
 };

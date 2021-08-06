@@ -138,18 +138,11 @@ const fornecedorCurtidaProduto = async (filtro) => {
   });
 };
 
-const listaProdutosPorFornecedor = async (fornecedorid, fornecedorlogadoid) => {
+const listaProdutosPorFornecedor = async (fornecedorid) => {
   const fornecedorFromDB = await fornecedor
-    .findById(fornecedorid)
-    .populate("produtos");
+    .findById({ fornecedorid })
+    .populate("produto");
 
-  if (!fornecedorFromDB) {
-    return {
-      sucesso: false,
-      mensagem: "operação não pode ser realizada",
-      detalhes: ["o fornecedor pesquisado não existe"],
-    };
-  }
   return fornecedorFromDB.toJSON();
 };
 

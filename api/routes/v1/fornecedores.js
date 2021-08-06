@@ -4,14 +4,15 @@ const fornecedorController = require("../../controllers/fornecedor.controller");
 const produtoController = require("../../controllers/produto.controller");
 const autorizacaoMiddlewate = require("../../utils/middlewares/authorization.middleware");
 const fileUploadMiddleware = require("../../utils/middlewares/fileUploadMiddleware");
-const asyncMiddleware = require("../../utils/middlewares/async-middleware");
 
 module.exports = (router) => {
   router.route("/fornecedor").get(fornecedorController.listaFornecedores);
 
-  router.route("/fornecedor/:fornecedorid").get(
-    // autorizacaoMiddlewate("PESQUISA_FORNECEDOR_ID"),
+  router
+    .route("/fornecedor/filtro")
+    .get(fornecedorController.getPesquisarFornecedorLocalidade);
 
+  router.route("/fornecedor/:fornecedorid").get(
     validaDTO("params", {
       fornecedorid: joi
         .string()
@@ -27,7 +28,7 @@ module.exports = (router) => {
   );
 
   router.route("/fornecedor").post(
-    // autorizacaoMiddlewate("ADICIONA_FORNECEDOR"),
+    autorizacaoMiddlewate("ADICIONA_FORNECEDOR"),
     validaDTO("body", {
       cnpj: joi.string().required().messages({
         "any.required": `"cnpj" é um campo obrigatório`,
@@ -121,7 +122,7 @@ module.exports = (router) => {
     .post(
       autorizacaoMiddlewate("CURTIDA_CRIA"),
       validaDTO("params", {
-        fornecedorid: joi
+        fornecedor: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
@@ -151,7 +152,6 @@ module.exports = (router) => {
     );
 
   router.route("/fornecedor/:fornecedorid/produto").get(
-    // autorizacaoMiddlewate('PESQUISA_FORNECEDOR_PRODUTO'),
     validaDTO("params", {
       fornecedorid: joi
         .string()

@@ -18,24 +18,19 @@ const perfis = [
       "INATIVAR_FORNECEDOR",
       "PESQUISA_FORNECEDOR_PRODUTO",
       "ADICIONA_FORNECEDOR",
-      "DELETA_CATEGORIA",
-      "ALTERA_PRODUTO",
     ],
   },
   {
     id: 2,
     descricao: "fornecedor",
     funcionalidades: [
-      "ALTERA_FORNECEDOR",
       "PESQUISA_FORNECEDOR_ID",
-      "ATUALIZAR_PRODUTO",
       "PESQUISA_PRODUTO",
-      "INSERIR_PRODUTO",
       "CRIA_PRODUTO",
       "REMOVE_PRODUTO",
       "PESQUISA_FORNECEDOR_PRODUTO",
-      "ALTERA_PRODUTO",
-      "PESQUISA_CLIENTE_ID"
+      "PESQUISA_CLIENTE_ID",
+      "CURTIDA_CRIA"
     ],
   },
   {

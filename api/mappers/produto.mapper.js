@@ -12,6 +12,7 @@ const toItemListaDTO = (model) => {
     fornecedor,
     categoriaId,
     categoriaName,
+    curtidas
   } = model;
 
   return {
@@ -24,6 +25,7 @@ const toItemListaDTO = (model) => {
     preco: String(preco),
     imagem: fileUtils.criaEnderecoDownload("produtos", imagem.nome),
     status: status,
+    curtidas
   };
 };
 
