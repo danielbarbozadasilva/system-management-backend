@@ -110,9 +110,8 @@ const pesquisarCurtidasRecebidas = async (req, res, next) => {
 };
 
 const buscaProdutosPorFornecedor = async (req, res, next) => {
-  const { fornecedorid } = req.params;
-
-  const data = await fornecedorService.listaProdutosPorFornecedor(fornecedorid);
+const id = req.params.fornecedorid;
+  const data = await fornecedorService.listaProdutosPorFornecedor(id);
 
   return res.status(200).send({ data });
 };

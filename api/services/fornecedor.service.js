@@ -100,18 +100,19 @@ const cria = async (model) => {
 
 const listaTodos = async (filtro) => {
   const resultadoDB = await fornecedor
-    .find({})
+.find({})
     .collation({ locale: "en" })
     .sort({ nomeFantasia: 1 })
     .populate({
       path: "curtidas",
       model: "curtida",
-
-      populate: {
-        path: "cliente",
+    }).populate({
+        path: "clientes",
         model: "cliente",
-      },
-    });
+    }).populate({
+        path: "produtos",
+        model: "produto",
+      })
 
   return resultadoDB.map((item) => {
     return toDTO(item.toJSON());
@@ -140,10 +141,10 @@ const fornecedorCurtidaProduto = async (filtro) => {
 
 const listaProdutosPorFornecedor = async (fornecedorid) => {
   const fornecedorFromDB = await fornecedor
-    .findById({ fornecedorid })
-    .populate("produto");
+    .findById({ _id: fornecedorid })
+    .populate("produtos");
 
-  return fornecedorFromDB.toJSON();
+  return fornecedorFromDB;
 };
 
 const listarPorId = async (fornecedorid) => {

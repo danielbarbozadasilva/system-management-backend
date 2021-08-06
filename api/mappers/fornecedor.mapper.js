@@ -33,6 +33,14 @@ const toDTO = (model) => {
         clienteNome:item.cliente.nome,
       };
     }),
+    produtos: produtos.map((item) => {
+      return {
+        id: item.id,
+        nome: item.nome,
+        descricao: item.descricao,
+        preco:item.preco
+      };
+    }),
     ...resto,
   };
 };
