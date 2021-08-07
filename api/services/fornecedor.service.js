@@ -1,4 +1,4 @@
-const { fornecedor } = require("../models/index");
+const { fornecedor, curtida, cliente } = require("../models/index");
 
 const { toListItemDTO, toDTO } = require("../mappers/fornecedor.mapper");
 const {
@@ -100,43 +100,68 @@ const cria = async (model) => {
 
 const listaTodos = async (filtro) => {
   const resultadoDB = await fornecedor
-.find({})
-    .collation({ locale: "en" })
-    .sort({ nomeFantasia: 1 })
-    .populate({
-      path: "curtidas",
-      model: "curtida",
-    }).populate({
-        path: "clientes",
-        model: "cliente",
-    }).populate({
-        path: "produtos",
-        model: "produto",
-      })
-
-  return resultadoDB.map((item) => {
-    return toDTO(item.toJSON());
-  });
-};
-
-const fornecedorCurtidaProduto = async (filtro) => {
-  const resultadoDB = await fornecedor
     .find({})
     .collation({ locale: "en" })
     .sort({ nomeFantasia: 1 })
     .populate({
       path: "curtidas",
       model: "curtida",
-
-      populate: {
-        path: "produtos",
-        model: "produto",
-      },
+    })
+    .populate({
+      path: "clientes",
+      model: "cliente",
+    })
+    .populate({
+      path: "produtos",
+      model: "produto",
     });
 
   return resultadoDB.map((item) => {
     return toDTO(item.toJSON());
   });
+};
+
+const listarCurtida = async (filtro) => {
+  const resultadoDB = await fornecedor.find({ _id: filtro }).populate({
+    path: "curtidas",
+    model: "curtida",
+    populate: {
+      path: "clientes",
+      model: "cliente",
+    },
+  })
+
+  return resultadoDB;
+};
+
+const fornecedorCurtidaProduto = async (fornecedorid, usuarioid) => {
+  const [fornecedorDB, clienteDB] = await Promise.all([
+    fornecedor.findById(fornecedorid),
+    cliente.findById(usuarioid),
+  ]);
+
+  if (!fornecedorDB) {
+    throw new ErrorRegraDeNegocio("o fornecedor pesquisado não existe");
+  }
+
+  const curtidaDB = await curtida.create({
+    fornecedor: fornecedorid,
+    cliente: usuarioid,
+  });
+
+  fornecedorDB.curtidas = [...fornecedorDB.curtidas, curtidaDB._id];
+  clienteDB.curtidas = [...clienteDB.curtidas, curtidaDB._id];
+
+  await Promise.all([fornecedorDB.save(), clienteDB.save()]);
+
+  return {
+    sucesso: true,
+    data: {
+      id: curtidaDB._id,
+      fornecedor: fornecedorDB.nomeFantasia,
+      cliente: clienteDB.nome,
+    },
+  };
 };
 
 const listaProdutosPorFornecedor = async (fornecedorid) => {
@@ -171,4 +196,5 @@ module.exports = {
   listaProdutosPorFornecedor,
   listaTodos,
   fornecedorCurtidaProduto,
+  listarCurtida,
 };

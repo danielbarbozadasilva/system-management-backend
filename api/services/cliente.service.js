@@ -51,7 +51,7 @@ const pesquisaPorId = async ({ usuario, clienteid }) => {
   // }
 
   const resultadoDB = await cliente.find({ _id: clienteid }).populate({
-    path: 'curtida', model: 'curtida',
+    path: 'curtidas', model: 'curtida',
     populate: {
       path: 'fornecedor', model: 'fornecedor'
     }

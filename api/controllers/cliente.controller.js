@@ -14,11 +14,8 @@ const cria = async (req, res, next) => {
 };
 
 const pesquisaPorId = async (req, res, next) => {
-  const { params, usuario } = req;
-  const result = await clienteService.pesquisaPorId({
-    usuario,
-    clienteid: params.clienteid,
-  });
+  const {params} = req
+  const result = await clienteService.pesquisaPorId(params.clienteid);
 
   return res.status(200).send(result);
 };

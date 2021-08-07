@@ -7,39 +7,8 @@ const autorizacaoMiddlewate = require("../../utils/middlewares/authorization.mid
 module.exports = (router) => {
   router
     .route("/cliente")
-    .post(
-      asyncMiddleware(
-        validaDTO("body", {
-          nome: joi.string().required().messages({
-            "any.required": `"nome" é um campo obrigatório`,
-            "string.empty": `"nome" não deve ser vazio`,
-          }),
-
-          nascimento: joi.date().format("DD/MM/YYYY").required().messages({
-            "any.required": `"nascimento" é um campo obrigatório`,
-            "date.format": `"nascimento" deve ser uma data válida "{#format}"`,
-          }),
-
-          uf: joi.string().required().messages({
-            "any.required": `"uf" é um campo obrigatório`,
-            "string.empty": `"uf" não deve ser vazio`,
-          }),
-          cidade: joi.string().required().messages({
-            "any.required": `"cidade" é um campo obrigatório`,
-            "string.empty": `"cidade" não deve ser vazio`,
-          }),
-          email: joi.string().email().required().messages({
-            "any.required": `"email" é um campo obrigatório`,
-            "string.empty": `"email" não deve ser vazio`,
-          }),
-          senha: joi.string().required().messages({
-            "any.required": `"senha" é um campo obrigatório`,
-            "string.empty": `"senha" não deve ser vazio`,
-          }),
-        })
-      ),
-      asyncMiddleware(clienteController.cria)
-    )
+    .post(clienteController.cria)
+    
     .get(asyncMiddleware(clienteController.listarTodosClientes));
 
   router.route("/cliente/:clienteid").get(

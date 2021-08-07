@@ -28,7 +28,7 @@ module.exports = (router) => {
   );
 
   router.route("/fornecedor").post(
-    autorizacaoMiddlewate("ADICIONA_FORNECEDOR"),
+    // autorizacaoMiddlewate("ADICIONA_FORNECEDOR"),
     validaDTO("body", {
       cnpj: joi.string().required().messages({
         "any.required": `"cnpj" é um campo obrigatório`,
@@ -102,6 +102,7 @@ module.exports = (router) => {
     fornecedorController.inativa
   );
 
+  
   router
     .route("/fornecedor/:fornecedorid/curtidas")
     .get(
@@ -122,7 +123,7 @@ module.exports = (router) => {
     .post(
       autorizacaoMiddlewate("CURTIDA_CRIA"),
       validaDTO("params", {
-        fornecedor: joi
+        fornecedorid: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
@@ -150,7 +151,7 @@ module.exports = (router) => {
       }),
       fornecedorController.removeCurtidas
     );
-
+    
   router.route("/fornecedor/:fornecedorid/produto").get(
     validaDTO("params", {
       fornecedorid: joi

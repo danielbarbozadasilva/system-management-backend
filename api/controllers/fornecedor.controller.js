@@ -3,6 +3,7 @@ const curtidaService = require("../services/curtida.service");
 const produtoMapper = require("../mappers/produto.mapper");
 const { produto, categoria, fornecedor } = require("../models/index");
 
+
 const ativa = async (req, res, next) => {
   const { fornecedorid } = req.params;
 
@@ -82,10 +83,6 @@ const getPesquisarFornecedorLocalidade = async (req, res, next) => {
     filtro = { uf, cidade };
   }
   const resultadoDB = await fornecedor.find(filtro);
-  // .populate({
-  //   path: "produtos",
-  //   model: "produto",
-  // });
 
   return res.send(resultadoDB);
 };
@@ -101,16 +98,17 @@ const listaProdutosByFornecedor = async (fornecedorid, fornecedorlogadoid) => {
 };
 
 const pesquisarCurtidasRecebidas = async (req, res, next) => {
-  const { fornecedorid, params, usuario } = req.params;
-  const result = await fornecedorService.fornecedorCurtidaProduto({
-    usuario,
-    fornecedorid: params.fornecedorid,
-  });
+
+const { fornecedorid } = req.params;
+
+  const result = await fornecedorService.fornecedorCurtidaProduto(fornecedorid);
   return res.status(200).send(result);
 };
 
+
+
 const buscaProdutosPorFornecedor = async (req, res, next) => {
-const id = req.params.fornecedorid;
+  const id = req.params.fornecedorid;
   const data = await fornecedorService.listaProdutosPorFornecedor(id);
 
   return res.status(200).send({ data });

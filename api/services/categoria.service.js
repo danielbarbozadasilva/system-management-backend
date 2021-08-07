@@ -36,7 +36,7 @@ const listaTodos = async () => {
   const listaCategoriasDB = await categoria
     .find({})
     .collation({ locale: "en" })
-    .sort({ nome: 1 });
+    .sort({ descricao: 1 });
 
   return listaCategoriasDB.map((categortiaDB) => {
     return categoriaMapper.toItemListaDTO(categortiaDB);

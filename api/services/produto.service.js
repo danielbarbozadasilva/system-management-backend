@@ -76,7 +76,8 @@ const pesquisaPorFiltros = async (filtros) => {
     .find(filtroMongo)
     .sort({ preco: 1, descricao: 1, curtidas: 1 })
     .populate("produto")
-    .populate("fornecedor");
+    .populate("fornecedor")
+    .populate("categoria");
   
   return resultadoDB.map((item) => {
     return produtoMapper.toItemListaDTO(item);
