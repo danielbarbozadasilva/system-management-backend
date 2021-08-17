@@ -20,6 +20,8 @@ const criaADM = async () => {
     senha: criptografia.criaHash('daniel'),
     tipo: 1
   });
+  
+  console.log("Administrador adicionado a Base de Dados")
 
 }
 

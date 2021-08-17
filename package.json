@@ -1,10 +1,13 @@
 {
+  "author": "Daniel Barboza da Silva",
+  "license": "MIT",
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "backend - Sistema de gestão de confeitarias",
   "main": "index.js",
   "scripts": {
     "start": "node ./index.js",
+    "add-admin": "node ./scripts/add-adm.js",
     "dev": "nodemon ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,8 +15,6 @@
     "type": "git",
     "url": "git+https://gitlab.com/daniel.bsilva/projeto-04.git"
   },
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://gitlab.com/daniel.bsilva/projeto-04/issues"
   },

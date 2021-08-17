@@ -57,8 +57,6 @@ const pesquisaPorId = async ({ usuario, clienteid }) => {
     }
   });
 
-  if (!resultadoDB[0])
-    throw new ErrorRegraDeNegocio('Cliente não encontrado')
 
 
   const { _id, curtidas, nome, email } = resultadoDB[0];
