@@ -7,8 +7,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./index.js",
-    "add-admin": "node ./scripts/add-adm.js",
     "dev": "nodemon ./index.js",
+    "add-seed": "node ./scripts/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -37,6 +37,7 @@
     "md5": "^2.3.0",
     "moment": "^2.29.1",
     "mongoose": "^5.12.9",
+    "mongoose-data-seed": "^2.1.6",
     "nodemon": "^2.0.7",
     "npm": "^7.15.0",
     "path": "^0.12.7",

@@ -1,4 +1,6 @@
 const produtoService = require("../services/produto.service");
+const curtidaService = require("../services/curtida.service");
+
 const { produto, categoria, fornecedor } = require("../models/index");
 
 const inserirProduto = async (req, res, next) => {
@@ -65,6 +67,32 @@ const removeProduto = async (req, res, next) => {
   return res.status(codigoRetorno).send(dadoRetorno);
 };
 
+const curtirProduto = async (req, res, next) => {
+  const { params, usuario } = req;
+  const { fornecedorid } = req.params;
+
+  const result = await curtidaService.criaCurtidaProduto(fornecedorid, produtoid);
+  const codigoRetorno = result.sucesso ? 200 : 400;
+  const dadoRetorno = result.sucesso
+    ? { data: result.data }
+    : { detalhes: result.detalhes };
+
+  return res.status(codigoRetorno).send(dadoRetorno);
+}
+
+const removerProdutoCurtidas = async (req, res, next) => {
+  const { usuario, params } = req;
+  const result = await curtidaService.removeCurtidaProduto(params.fornecedorid, produtoid);
+  const codigoRetorno = result.sucesso ? 200 : 400;
+  const dadoRetorno = result.sucesso
+    ? { data: result.data }
+    : { detalhes: result.detalhes };
+  return res.status(codigoRetorno).send(dadoRetorno);
+};
+
+
+
+
 module.exports = {
   inserirProduto,
   removeProduto,
@@ -72,4 +100,6 @@ module.exports = {
   listaProdutoPorId,
   alterarProduto,
   listaId,
+  curtirProduto,
+  removerProdutoCurtidas,
 };

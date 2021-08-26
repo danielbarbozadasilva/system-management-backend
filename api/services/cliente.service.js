@@ -51,12 +51,15 @@ const pesquisaPorId = async ({ usuario, clienteid }) => {
   // }
 
   const resultadoDB = await cliente.find({ _id: clienteid }).populate({
-    path: 'curtidas', model: 'curtida',
+    path: 'curtida', model: 'curtida',
     populate: {
       path: 'fornecedor', model: 'fornecedor'
     }
-  });
+  })
 
+
+
+  if (!resultadoDB[0]) throw new ErrorRegraDeNegocio("Cliente não encontrado");
 
 
   const { _id, curtidas, nome, email } = resultadoDB[0];

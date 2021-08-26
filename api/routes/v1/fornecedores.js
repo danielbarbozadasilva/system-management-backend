@@ -28,7 +28,6 @@ module.exports = (router) => {
   );
 
   router.route("/fornecedor").post(
-    // autorizacaoMiddlewate("ADICIONA_FORNECEDOR"),
     validaDTO("body", {
       cnpj: joi.string().required().messages({
         "any.required": `"cnpj" é um campo obrigatório`,
@@ -236,4 +235,55 @@ module.exports = (router) => {
     }),
     produtoController.removeProduto
   );
+
+
+  router.route("/fornecedor/:fornecedorid/produto/:produtoid").post(
+    autorizacaoMiddlewate("CURTIR_PRODUTO"),
+    validaDTO("params", {
+      fornecedorid: joi
+        .string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .messages({
+          "any.required": `"fornecedor id" é um campo obrigatório`,
+          "string.empty": `"fornecedor id" não deve ser vazio`,
+          "string.pattern.base": `"fornecedor id" fora do formato experado`,
+        }),
+      produtoid: joi
+        .string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .messages({
+          "any.required": `"fornecedor id" é um campo obrigatório`,
+          "string.empty": `"fornecedor id" não deve ser vazio`,
+          "string.pattern.base": `"fornecedor id" fora do formato experado`,
+        }),
+    }),
+    produtoController.curtirProduto
+  );
+
+   router.route("/fornecedor/:fornecedorid/produto/:produtoid").delete(
+     autorizacaoMiddlewate("REMOVE_CURTIDA_PRODUTO"),
+     validaDTO("params", {
+       fornecedorid: joi
+         .string()
+         .regex(/^[0-9a-fA-F]{24}$/)
+         .required()
+         .messages({
+           "any.required": `"fornecedor id" é um campo obrigatório`,
+           "string.empty": `"fornecedor id" não deve ser vazio`,
+           "string.pattern.base": `"fornecedor id" fora do formato experado`,
+         }),
+       produtoid: joi
+         .string()
+         .regex(/^[0-9a-fA-F]{24}$/)
+         .required()
+         .messages({
+           "any.required": `"fornecedor id" é um campo obrigatório`,
+           "string.empty": `"fornecedor id" não deve ser vazio`,
+           "string.pattern.base": `"fornecedor id" fora do formato experado`,
+         }),
+     }),
+     produtoController.removerProdutoCurtidas
+   );
 };

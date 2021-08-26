@@ -129,7 +129,7 @@ const listarCurtida = async (filtro) => {
       path: "clientes",
       model: "cliente",
     },
-  })
+  });
 
   return resultadoDB;
 };
