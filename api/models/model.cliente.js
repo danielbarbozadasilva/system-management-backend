@@ -25,14 +25,7 @@ const clienteSchema = {
   status: {
     type: String,
     required: true,
-  },
-
-  curtidas: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "curtida",
-    },
-  ],
+  }
 };
 
 module.exports = clienteSchema;

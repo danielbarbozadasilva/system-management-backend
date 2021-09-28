@@ -54,14 +54,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/categoria",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"categoria"
-							]
+							"path": ["v1", "categoria"]
 						}
 					},
 					"response": []
@@ -111,15 +106,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/categoria/60d7cc5fa110fd3313ccb953",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"categoria",
-								"60d7cc5fa110fd3313ccb953"
-							]
+							"path": ["v1", "categoria", "60d7cc5fa110fd3313ccb953"]
 						}
 					},
 					"response": []
@@ -187,14 +176,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/categoria",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"categoria"
-							]
+							"path": ["v1", "categoria"]
 						}
 					},
 					"response": []
@@ -262,15 +246,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/categoria/60d7b6c514123b1fcc055d6c",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"categoria",
-								"60d7b6c514123b1fcc055d6c"
-							]
+							"path": ["v1", "categoria", "60d7b6c514123b1fcc055d6c"]
 						}
 					},
 					"response": []
@@ -317,15 +295,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/categoria/60d7de738101dd4b65272e33",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"categoria",
-								"60d7de738101dd4b65272e33"
-							]
+							"path": ["v1", "categoria", "60d7de738101dd4b65272e33"]
 						}
 					},
 					"response": []
@@ -368,14 +340,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/produto?categoria=60c3876f7e4a776d915a8b21",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"produto"
-							],
+							"path": ["v1", "produto"],
 							"query": [
 								{
 									"key": "categoria",
@@ -397,19 +364,14 @@
 						{
 							"listen": "test",
 							"script": {
-								"exec": [
-									"var jsonResult = JSON.parse(responseBody);",
-									"postman.setEnvironmentVariable(\"token\", jsonResult.data.token);"
-								],
+								"exec": ["var jsonResult = JSON.parse(responseBody);", "postman.setEnvironmentVariable(\"token\", jsonResult.data.token);"],
 								"type": "text/javascript"
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
-								"exec": [
-									""
-								],
+								"exec": [""],
 								"type": "text/javascript"
 							}
 						}
@@ -442,14 +404,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/auth",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"auth"
-							]
+							"path": ["v1", "auth"]
 						}
 					},
 					"response": []
@@ -457,7 +414,7 @@
 			]
 		},
 		{
-			"name": "Fornecedor",
+			"name": "fornecedor",
 			"item": [
 				{
 					"name": "fornecedor.inserir",
@@ -507,14 +464,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/fornecedor",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"fornecedor"
-							]
+							"path": ["v1", "fornecedor"]
 						}
 					},
 					"response": []
@@ -564,15 +516,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/fornecedor/",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"fornecedor",
-								""
-							]
+							"path": ["v1", "fornecedor", ""]
 						}
 					},
 					"response": []
@@ -622,15 +568,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"fornecedor",
-								"60b7d8abe536e8407017542b"
-							]
+							"path": ["v1", "fornecedor", "60b7d8abe536e8407017542b"]
 						}
 					},
 					"response": []
@@ -677,16 +617,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/ativa",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"fornecedor",
-								"60b7d8abe536e8407017542b",
-								"ativa"
-							]
+							"path": ["v1", "fornecedor", "60b7d8abe536e8407017542b", "ativa"]
 						}
 					},
 					"response": []
@@ -733,15 +666,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"fornecedor",
-								"60b7d8abe536e8407017542b"
-							]
+							"path": ["v1", "fornecedor", "60b7d8abe536e8407017542b"]
 						}
 					},
 					"response": []
@@ -784,16 +711,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/inativa",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"fornecedor",
-								"60b7d8abe536e8407017542b",
-								"inativa"
-							]
+							"path": ["v1", "fornecedor", "60b7d8abe536e8407017542b", "inativa"]
 						}
 					},
 					"response": []
@@ -836,16 +756,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/produto?=",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"fornecedor",
-								"60b7d8abe536e8407017542b",
-								"produto"
-							],
+							"path": ["v1", "fornecedor", "60b7d8abe536e8407017542b", "produto"],
 							"query": [
 								{
 									"key": "",
@@ -903,16 +816,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/curtidas",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"fornecedor",
-								"60b7d8abe536e8407017542b",
-								"curtidas"
-							]
+							"path": ["v1", "fornecedor", "60b7d8abe536e8407017542b", "curtidas"]
 						}
 					},
 					"response": []
@@ -967,16 +873,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/curtidas",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"fornecedor",
-								"60b7d8abe536e8407017542b",
-								"curtidas"
-							]
+							"path": ["v1", "fornecedor", "60b7d8abe536e8407017542b", "curtidas"]
 						}
 					},
 					"response": []
@@ -1019,16 +918,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/curtidas",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"fornecedor",
-								"60b7d8abe536e8407017542b",
-								"curtidas"
-							]
+							"path": ["v1", "fornecedor", "60b7d8abe536e8407017542b", "curtidas"]
 						}
 					},
 					"response": []
@@ -1075,17 +967,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/produto/60d7b51d14123b1fcc055d6b",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"fornecedor",
-								"60b7d8abe536e8407017542b",
-								"produto",
-								"60d7b51d14123b1fcc055d6b"
-							]
+							"path": ["v1", "fornecedor", "60b7d8abe536e8407017542b", "produto", "60d7b51d14123b1fcc055d6b"]
 						}
 					},
 					"response": []
@@ -1145,15 +1029,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/produto/",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"produto",
-								""
-							]
+							"path": ["v1", "produto", ""]
 						}
 					},
 					"response": []
@@ -1231,14 +1109,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/produto",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"produto"
-							],
+							"path": ["v1", "produto"],
 							"query": [
 								{
 									"key": "",
@@ -1305,21 +1178,15 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/produto/60ca0c7ffa76d356a88c0ca5",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"produto",
-								"60ca0c7ffa76d356a88c0ca5"
-							]
+							"path": ["v1", "produto", "60ca0c7ffa76d356a88c0ca5"]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "ListarProdutosPorFornecedor",
+					"name": "ListarProdutosPorfornecedor",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -1356,16 +1223,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/produto",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"fornecedor",
-								"60b7d8abe536e8407017542b",
-								"produto"
-							]
+							"path": ["v1", "fornecedor", "60b7d8abe536e8407017542b", "produto"]
 						}
 					},
 					"response": []
@@ -1422,14 +1282,9 @@
 						"url": {
 							"raw": "http://localhost:3011/v1/cliente",
 							"protocol": "http",
-							"host": [
-								"localhost"
-							],
+							"host": ["localhost"],
 							"port": "3011",
-							"path": [
-								"v1",
-								"cliente"
-							]
+							"path": ["v1", "cliente"]
 						}
 					},
 					"response": []

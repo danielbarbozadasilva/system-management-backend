@@ -5,24 +5,67 @@ const asyncMiddleware = require("../../utils/middlewares/async-middleware");
 const autorizacaoMiddlewate = require("../../utils/middlewares/authorization.middleware");
 
 module.exports = (router) => {
-  router
-    .route("/cliente")
-    .post(clienteController.cria)
-    
-    .get(asyncMiddleware(clienteController.listarTodosClientes));
+	router
+		.route("/cliente")
+		.post(clienteController.cria)
 
-  router.route("/cliente/:clienteid").get(
-    validaDTO("params", {
-      clienteid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          "any.required": `"cliente id" é um campo obrigatório`,
-          "string.empty": `"cliente id" não deve ser vazio`,
-          "string.pattern.base": `"cliente id" fora do formato experado`,
-        }),
-    }),
-    clienteController.pesquisaPorId
-  );
+		.get(asyncMiddleware(clienteController.listarTodosClientes));
+
+	router.route("/cliente/:clienteid").get(
+		validaDTO("params", {
+			clienteid: joi
+				.string()
+				.regex(/^[0-9a-fA-F]{24}$/)
+				.required()
+				.messages({
+					"any.required": `"cliente id" é um campo obrigatório`,
+					"string.empty": `"cliente id" não deve ser vazio`,
+					"string.pattern.base": `"cliente id" fora do formato experado`,
+				}),
+		}),
+		clienteController.pesquisaPorId
+	);
+
+	router
+		.route("/cliente/:clienteid/fornecedor/:fornecedorid")
+		.post(
+			autorizacaoMiddlewate("CURTIDA_CRIA"),
+			validaDTO("params", {
+				clienteid: joi
+					.string()
+					.regex(/^[0-9a-fA-F]{24}$/)
+					.required()
+					.messages({
+						"any.required": `"cliente id" é um campo obrigatório`,
+						"string.empty": `"cliente id" não deve ser vazio`,
+						"string.pattern.base": `"cliente id" fora do formato experado`,
+					}),
+				fornecedorid: joi
+					.string()
+					.regex(/^[0-9a-fA-F]{24}$/)
+					.required()
+					.messages({
+						"any.required": `"fornecedor id" é um campo obrigatório`,
+						"string.empty": `"fornecedor id" não deve ser vazio`,
+						"string.pattern.base": `"fornecedor id" fora do formato experado`,
+					}),
+			}),
+			clienteController.curtefornecedor
+		)
+
+		.delete(
+			autorizacaoMiddlewate("CURTIDA_REMOVE"),
+			validaDTO("params", {
+				fornecedorid: joi
+					.string()
+					.regex(/^[0-9a-fA-F]{24}$/)
+					.required()
+					.messages({
+						"any.required": `"fornecedor id" é um campo obrigatório`,
+						"string.empty": `"fornecedor id" não deve ser vazio`,
+						"string.pattern.base": `"fornecedor id" fora do formato experado`,
+					}),
+			}),
+			clienteController.removeCurtidafornecedor
+		);
 };
