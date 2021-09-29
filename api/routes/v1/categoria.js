@@ -6,35 +6,34 @@ const categoriaController = require("../../controllers/categoria.controller");
 
 module.exports = (router) => {
   router
-    .route("/categoria")
-    .get(categoriaController.listaTodasAsCategorias)
+		.route("/categoria")
+		.get(categoriaController.listaTodasAsCategorias)
 
-    .post(
-      autorizacaoMiddlewate("CRIA_CATEGORIA"),
-      fileUploadMiddleware("categoria"),
-
-      validaDTO(
-        "body",
-        {
-          nome: joi.string().required().messages({
-            "any.required": `"nome" é um campo obrigatório`,
-            "string.empty": `"nome" não deve ser vazio`,
-          }),
-          descricao: joi.string().required().messages({
-            "any.required": `"descricao" é um campo obrigatório`,
-            "string.empty": `"descricao" não deve ser vazio`,
-          }),
-          status: joi.boolean().required().messages({
-            "any.required": `"status" é um campo obrigatório`,
-            "booleam.empty": `"status" não deve ser vazio`,
-          }),
-        },
-        {
-          allowUnknown: true,
-        }
-      ),
-      categoriaController.criarCategoria
-    );
+		.post(
+			autorizacaoMiddlewate("CRIA_CATEGORIA"),
+			fileUploadMiddleware("categoria"),
+			validaDTO(
+				"body",
+				{
+					nome: joi.string().required().messages({
+						"any.required": `"nome" é um campo obrigatório`,
+						"string.empty": `"nome" não deve ser vazio`,
+					}),
+					descricao: joi.string().required().messages({
+						"any.required": `"descricao" é um campo obrigatório`,
+						"string.empty": `"descricao" não deve ser vazio`,
+					}),
+					status: joi.boolean().required().messages({
+						"any.required": `"status" é um campo obrigatório`,
+						"booleam.empty": `"status" não deve ser vazio`,
+					}),
+				},
+				{
+					allowUnknown: true,
+				}
+			),
+			categoriaController.createCategory
+		);
 
   router
     .route("/categoria/:categoriaid")

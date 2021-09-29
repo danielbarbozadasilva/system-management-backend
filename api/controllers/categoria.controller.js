@@ -18,16 +18,14 @@ const buscarPorId = async (req, res, next) => {
   return res.status(200).send(categoria);
 };
 
-const criarCategoria = async (req, res, next) => {
-  const { body } = req;
+const createCategory = async (req, res, next) => {
+	const { body } = req;
 
-  const resultadoServico = await categoriaService.criaCategoria(body);
+	const resultadoServico = await categoriaService.insertCategory(body);
 
-  const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
-  const dadoRetorno = resultadoServico.sucesso
-    ? { data: resultadoServico.data }
-    : { detalhes: resultadoServico.detalhes };
-  return res.status(codigoRetorno).send(dadoRetorno);
+	const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
+	const dadoRetorno = resultadoServico.sucesso ? { data: resultadoServico.data } : { detalhes: resultadoServico.detalhes };
+	return res.status(codigoRetorno).send(dadoRetorno);
 };
 
 const alterarCategoria = async (req, res, next) => {
@@ -64,7 +62,7 @@ const deletarCategoria = async (req, res, next) => {
 module.exports = {
   listaTodasAsCategorias,
   buscarPorId,
-  criarCategoria,
+  createCategory,
   deletarCategoria,
   alterarCategoria,
 };

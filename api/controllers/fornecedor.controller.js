@@ -1,4 +1,4 @@
-const fornecedorService = require("../services/fornecedor.service");
+const providerServices = require("../services/fornecedor.service");
 const curtidaService = require("../services/curtida.service");
 const produtoMapper = require("../mappers/produto.mapper");
 const { produto, categoria, fornecedor } = require("../models/index");
@@ -6,7 +6,7 @@ const { produto, categoria, fornecedor } = require("../models/index");
 const activeProvider = async (req, res, next) => {
 	const { fornecedorid } = req.params;
 
-	const resultadoServico = await fornecedorService.alteraStatus(fornecedorid, "Ativo");
+	const resultadoServico = await providerServices.alteraStatus(fornecedorid, "Ativo");
 	const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
 	const dadoRetorno = resultadoServico.sucesso ? { data: resultadoServico.data } : { detalhes: resultadoServico.detalhes };
 
@@ -18,7 +18,7 @@ const activeProvider = async (req, res, next) => {
 const disableProvider = async (req, res, next) => {
 	const { fornecedorid } = req.params;
 
-	const resultadoServico = await fornecedorService.alteraStatus(fornecedorid, "Inativo");
+	const resultadoServico = await providerServices.alteraStatus(fornecedorid, "Inativo");
 
 	const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
 	const dadoRetorno = resultadoServico.sucesso ? { data: resultadoServico.data } : { detalhes: resultadoServico.detalhes };
@@ -31,7 +31,7 @@ const disableProvider = async (req, res, next) => {
 
 const insertProvider = async (req, res, next) => {
 	const { body } = req;
-	const result = await fornecedorService.createProvider(body);
+	const result = await providerServices.createProvider(body);
 
 	const codigoRetorno = result.sucesso ? 200 : 400;
 	const dadoRetorno = result.sucesso ? { data: result.data } : { detalhes: result.detalhes };
@@ -42,7 +42,7 @@ const insertProvider = async (req, res, next) => {
 const updateProvider = async (req, res, next) => {
 	const { body } = req;
 	const fornecedorid  = req.params.id;
-	const result = await fornecedorService.updateProvider(fornecedorid, body);
+	const result = await providerServices.updateProvider(fornecedorid, body);
 
 	const codigoRetorno = result.sucesso ? 200 : 400;
 	const dadoRetorno = result.sucesso ? { data: result.data } : { detalhes: result.detalhes };
@@ -53,7 +53,7 @@ const updateProvider = async (req, res, next) => {
 const buscaPorId = async (req, res, next) => {
 	const { fornecedorid } = req.params;
 
-	const result = await fornecedorService.listarPorId(fornecedorid);
+	const result = await providerServices.listarPorId(fornecedorid);
 
 	const codigoRetorno = result.sucesso ? 200 : 400;
 	const dadoRetorno = result.sucesso ? { data: result.data } : { detalhes: result.detalhes };
@@ -62,7 +62,7 @@ const buscaPorId = async (req, res, next) => {
 };
 
 const listafornecedores = async (req, res, next) => {
-	const resultadoDB = await fornecedorService.listaTodos();
+	const resultadoDB = await providerServices.listaTodos();
 	return res.status(200).send(resultadoDB);
 };
 
@@ -89,13 +89,13 @@ const listaProdutosByfornecedor = async (fornecedorid, fornecedorlogadoid) => {
 const pesquisarCurtidasRecebidas = async (req, res, next) => {
 	const { fornecedorid } = req.params;
 
-	const result = await fornecedorService.fornecedorCurtidaProduto(fornecedorid);
+	const result = await providerServices.fornecedorCurtidaProduto(fornecedorid);
 	return res.status(200).send(result);
 };
 
 const buscaProdutosPorfornecedor = async (req, res, next) => {
 	const id = req.params.fornecedorid;
-	const data = await fornecedorService.listaProdutosPorfornecedor(id);
+	const data = await providerServices.listaProdutosPorfornecedor(id);
 
 	return res.status(200).send({ data });
 };

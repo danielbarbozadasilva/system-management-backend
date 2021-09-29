@@ -39,7 +39,7 @@ const listaTodos = async () => {
 	});
 };
 
-const criaCategoria = async (model) => {
+const insertCategory = async (model) => {
 	const novaCategoria = await categoria.create({
 		nome: model.nome,
 		descricao: model.descricao,
@@ -122,7 +122,7 @@ const alteraCategoria = async (categoriaId, model) => {
 
 module.exports = {
 	buscaPorId,
-	criaCategoria,
+	insertCategory,
 	alteraCategoria,
 	listaTodos,
 	deleta,
