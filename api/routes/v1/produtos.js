@@ -19,7 +19,7 @@ module.exports = (router) => {
 				.messages({
 					"any.required": `"categoria id" é um campo obrigatório`,
 					"string.empty": `"categoria id" não deve ser vazio`,
-					"string.pattern.base": `"categoria id" fora do formato experado`,
+					"string.pattern.base": `"categoria id" fora do formato esperado`,
 				}),
 			fornecedor: joi
 				.string()
@@ -27,7 +27,7 @@ module.exports = (router) => {
 				.messages({
 					"any.required": `"fornecedor id" é um campo obrigatório`,
 					"string.empty": `"fornecedor id" não deve ser vazio`,
-					"string.pattern.base": `"fornecedor id" fora do formato experado`,
+					"string.pattern.base": `"fornecedor id" fora do formato esperado`,
 				}),
 
 			nomelike: joi.string(),

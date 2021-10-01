@@ -50,23 +50,12 @@ const updateProvider = async (req, res, next) => {
 	return res.status(codigoRetorno).send(dadoRetorno);
 };
 
-const buscaPorId = async (req, res, next) => {
-	const { fornecedorid } = req.params;
-
-	const result = await providerServices.listarPorId(fornecedorid);
-
-	const codigoRetorno = result.sucesso ? 200 : 400;
-	const dadoRetorno = result.sucesso ? { data: result.data } : { detalhes: result.detalhes };
-
-	return res.status(codigoRetorno).send(dadoRetorno);
-};
-
-const listafornecedores = async (req, res, next) => {
-	const resultadoDB = await providerServices.listaTodos();
+const listAllProviders = async (req, res, next) => {
+	const resultadoDB = await providerServices.listAll();
 	return res.status(200).send(resultadoDB);
 };
 
-const getPesquisarfornecedorLocalidade = async (req, res, next) => {
+const listAllProvidersLocation = async (req, res, next) => {
 	const { uf, cidade } = req.query;
 	let filtro = {};
 	if (cidade == undefined || cidade == "x") {
@@ -78,6 +67,17 @@ const getPesquisarfornecedorLocalidade = async (req, res, next) => {
 	return res.send(resultadoDB);
 };
 
+const listById = async (req, res, next) => {
+	const { fornecedorid } = req.params;
+
+	const result = await providerServices.listProviderById(fornecedorid);
+
+	const codigoRetorno = result.sucesso ? 200 : 400;
+	const dadoRetorno = result.sucesso ? { data: result.data } : { detalhes: result.detalhes };
+
+	return res.status(codigoRetorno).send(dadoRetorno);
+};
+
 const listaProdutosByfornecedor = async (fornecedorid, fornecedorlogadoid) => {
 	const fornecedorFromDB = await fornecedor.findById(fornecedorid).populate("produtos");
 	const fornecedorAsJSON = fornecedorFromDB.toJSON();
@@ -86,16 +86,16 @@ const listaProdutosByfornecedor = async (fornecedorid, fornecedorlogadoid) => {
 	});
 };
 
-const pesquisarCurtidasRecebidas = async (req, res, next) => {
+const searchLikesReceived = async (req, res, next) => {
 	const { fornecedorid } = req.params;
 
 	const result = await providerServices.fornecedorCurtidaProduto(fornecedorid);
 	return res.status(200).send(result);
 };
 
-const buscaProdutosPorfornecedor = async (req, res, next) => {
+const searchProductsProvider = async (req, res, next) => {
 	const id = req.params.fornecedorid;
-	const data = await providerServices.listaProdutosPorfornecedor(id);
+	const data = await providerServices.listProductsProvider(id);
 
 	return res.status(200).send({ data });
 };
@@ -105,10 +105,10 @@ module.exports = {
 	disableProvider,
 	insertProvider,
 	updateProvider,
-	listafornecedores,
-	buscaPorId,
-	pesquisarCurtidasRecebidas,
-	buscaProdutosPorfornecedor,
+	listAllProviders,
+	listById,
+	searchLikesReceived,
+	searchProductsProvider,
 	listaProdutosByfornecedor,
-	getPesquisarfornecedorLocalidade,
+	listAllProvidersLocation,
 };

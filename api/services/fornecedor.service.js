@@ -1,13 +1,11 @@
 const { fornecedor, curtida, cliente } = require("../models/index");
 
-const { toListItemDTO, toDTOLikeCase, toDTO } = require("../mappers/fornecedor.mapper");
+const { toListItemDTO, toDTOLikeCase } = require("../mappers/fornecedor.mapper");
 const { validaSeEmailJaExiste, validaSeCnpjJaExiste, buscaTipoUsuarioPorId } = require("../services/usuario.service");
 const { criaHash } = require("../utils/criptografia.util");
 const emailUtils = require("../utils/email.utils");
 const { EmailHabilitar } = require("../utils/email.mensagem.habilitar");
 const { EmailDesativar } = require("../utils/email.mensagem.desativar");
-
-// ----OK-----------------------------------------------------------------------------
 
 const createProvider = async (model) => {
 	const { cnpj, nomeFantasia, endereco, uf, cidade, responsavel, telefone, email, senha, status } = model;
@@ -49,7 +47,6 @@ const createProvider = async (model) => {
 
 const updateProvider = async (fornecedorid, body) => {
 	const { cnpj, nomeFantasia, endereco, uf, cidade, responsavel, telefone, email, senha, status } = body;
-	console.log("---------", fornecedorid);
 
 	if (await validaSeCnpjJaExiste(cnpj)) {
 		return {
@@ -68,35 +65,34 @@ const updateProvider = async (fornecedorid, body) => {
 	}
 
 	const newProvider = await fornecedor.update(
-			{ _id: fornecedorid },
-			{
-				$set: {
-					cnpj: cnpj,
-					nomeFantasia: nomeFantasia,
-					endereco: endereco,
-					uf: uf,
-					cidade: cidade,
-					responsavel: responsavel,
-					telefone: telefone,
-					email: email,
-					senha: criaHash(senha),
-					status: "Analise",
-				},
-			}
-		);
-
-		return {
-			sucesso: true,
-			mensagem: "Operação realizada com sucesso",
-			data: {
-				...toDTOLikeCase(newProvider),
+		{ _id: fornecedorid },
+		{
+			$set: {
+				cnpj: cnpj,
+				nomeFantasia: nomeFantasia,
+				endereco: endereco,
+				uf: uf,
+				cidade: cidade,
+				responsavel: responsavel,
+				telefone: telefone,
+				email: email,
+				senha: criaHash(senha),
+				status: "Analise",
 			},
-		};
+		}
+	);
+
+	return {
+		sucesso: true,
+		mensagem: "Operação realizada com sucesso",
+		data: {
+			...toDTOLikeCase(newProvider),
+		},
+	};
 };
 
-const listaTodos = async () => {
+const listAll = async () => {
 	const resultadoDB = await fornecedor.find({}).sort({ nomeFantasia: 1 });
-
 	return resultadoDB;
 };
 
@@ -142,9 +138,8 @@ const alteraStatus = async (id, status) => {
 	};
 };
 
-// ---------------------------------------------------------------------------------
 
-const listarCurtida = async (filtro) => {
+const listLikeClient = async (filtro) => {
 	const resultadoDB = await fornecedor.find({ _id: filtro }).populate({
 		path: "curtidas",
 		model: "curtida",
@@ -157,7 +152,7 @@ const listarCurtida = async (filtro) => {
 	return resultadoDB;
 };
 
-const fornecedorCurtidaProduto = async (fornecedorid, usuarioid) => {
+const likeProduct = async (fornecedorid, usuarioid) => {
 	const [fornecedorDB, clienteDB] = await Promise.all([fornecedor.findById(fornecedorid), cliente.findById(usuarioid)]);
 
 	if (!fornecedorDB) {
@@ -184,13 +179,12 @@ const fornecedorCurtidaProduto = async (fornecedorid, usuarioid) => {
 	};
 };
 
-const listaProdutosPorfornecedor = async (fornecedorid) => {
+const listProductsProvider = async (fornecedorid) => {
 	const fornecedorFromDB = await fornecedor.findById({ _id: fornecedorid }).populate("produtos");
-
 	return fornecedorFromDB;
 };
 
-const listarPorId = async (fornecedorid) => {
+const listProviderById = async (fornecedorid) => {
 	const fornecedorDB = await fornecedor.findById(fornecedorid);
 
 	if (!fornecedorDB) {
@@ -211,9 +205,9 @@ module.exports = {
 	createProvider,
 	updateProvider,
 	alteraStatus,
-	listarPorId,
-	listaProdutosPorfornecedor,
-	listaTodos,
-	fornecedorCurtidaProduto,
-	listarCurtida,
+	listProviderById,
+	listProductsProvider,
+	listAll,
+	likeProduct,
+	listLikeClient,
 };

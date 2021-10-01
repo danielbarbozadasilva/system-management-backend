@@ -1,21 +1,16 @@
 const produtoService = require("../services/produto.service");
 const curtidaService = require("../services/curtida.service");
 
-const { produto, categoria, fornecedor } = require("../models/index");
+const listarProdutos = async (req, res, next) => {
+	const { query } = req;
+	const result = await produtoService.pesquisaPorFiltros(query);
+	return res.status(200).send({ data: result });
+};
 
-const inserirProduto = async (req, res, next) => {
-	const { body, params, usuario } = req;
-
-	const resultadoServico = await produtoService.cria({
-		...params,
-		...body,
-		fornecedorlogadoid: req.params.fornecedor,
-	});
-
-	return res.status(200).send({
-		mensage: "Operacao realizada com sucesso.",
-		data: resultadoServico.data,
-	});
+const listaId = async (req, res, next) => {
+	const { id } = req.params;
+	const result = await produtoService.pesquisa(id);
+	return res.status(200).send({ data: result });
 };
 
 const alterarProduto = async (req, res, next) => {
@@ -27,19 +22,24 @@ const alterarProduto = async (req, res, next) => {
 	return res.status(codigoRetorno).send(dadoRetorno);
 };
 
-const listaId = async (req, res, next) => {
-	const { id } = req.params;
-	const result = await produtoService.pesquisa(id);
-	return res.status(200).send({ data: result });
+const inserirProduto = async (req, res, next) => {
+	const { body, params, usuario } = req;
+
+	const resultadoServico = await produtoService.cria({
+		...params,
+		...body,
+		fornecedorlogadoid: req.params.fornecedor,
+	});
+
+	return res.status(200).send({
+		mensagem: "Operacao realizada com sucesso.",
+		data: resultadoServico.data,
+	});
 };
+
+
 
 const listaProdutoPorId = async (req, res, next) => {
-	const { query } = req;
-	const result = await produtoService.pesquisaPorFiltros(query);
-	return res.status(200).send({ data: result });
-};
-
-const listarProdutos = async (req, res, next) => {
 	const { query } = req;
 	const result = await produtoService.pesquisaPorFiltros(query);
 	return res.status(200).send({ data: result });

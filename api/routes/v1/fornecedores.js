@@ -6,9 +6,9 @@ const autorizacaoMiddlewate = require("../../utils/middlewares/authorization.mid
 const fileUploadMiddleware = require("../../utils/middlewares/fileUploadMiddleware");
 
 module.exports = (router) => {
-	router.route("/fornecedor").get(fornecedorController.listafornecedores);
+	router.route("/fornecedor").get(fornecedorController.listAllProviders);
 
-	router.route("/fornecedor/filtro").get(fornecedorController.getPesquisarfornecedorLocalidade);
+	router.route("/fornecedor/filtro").get(fornecedorController.listAllProvidersLocation);
 
 	router.route("/fornecedor/:fornecedorid").get(
 		validaDTO("params", {
@@ -22,7 +22,7 @@ module.exports = (router) => {
 					"string.pattern.base": `"fornecedor id" fora do formato esperado`,
 				}),
 		}),
-		fornecedorController.buscaPorId
+		fornecedorController.listById
 	);
 
 	router.route("/fornecedor").post(
@@ -166,7 +166,7 @@ module.exports = (router) => {
 					"string.pattern.base": `"fornecedor id" fora do formato esperado`,
 				}),
 		}),
-		fornecedorController.pesquisarCurtidasRecebidas
+		fornecedorController.searchLikesReceived
 	);
 
 	router.route("/fornecedor/:fornecedorid/produto").get(
@@ -181,7 +181,7 @@ module.exports = (router) => {
 					"string.pattern.base": `"fornecedor id" fora do formato esperado`,
 				}),
 		}),
-		fornecedorController.buscaProdutosPorfornecedor
+		fornecedorController.searchProductsProvider
 	);
 
 	router.route("/fornecedor/:fornecedor/produto").post(

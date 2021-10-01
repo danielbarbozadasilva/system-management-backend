@@ -177,7 +177,6 @@ const alteraProduto = async (produtoId, model) => {
 	produtoDB.status = model.status;
 	produtoDB.preco = model.preco;
 	produtoDB.categoria = model.categoria;
-	produtoDB.categoriaName = model.categoriaName;
 	produtoDB.fornecedorid = model.fornecedorid;
 
 	if (typeof model.imagem === "object") {
