@@ -1,9 +1,9 @@
+const joi = require('joi');
 
 const usuarioController = require('../../controllers/usuario.controller');
 const validaDTO = require('../../utils/middlewares/validate-dto.middleware');
 
 
-const joi = require('joi');
 
 module.exports = (router) => {
 

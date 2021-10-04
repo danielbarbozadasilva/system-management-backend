@@ -20,7 +20,7 @@ module.exports = (router) => {
 				.messages({
 					"any.required": `"cliente id" é um campo obrigatório`,
 					"string.empty": `"cliente id" não deve ser vazio`,
-					"string.pattern.base": `"cliente id" fora do formato experado`,
+					"string.pattern.base": `"cliente id" fora do formato esperado`,
 				}),
 		}),
 		clienteController.pesquisaPorId
@@ -38,7 +38,7 @@ module.exports = (router) => {
 					.messages({
 						"any.required": `"cliente id" é um campo obrigatório`,
 						"string.empty": `"cliente id" não deve ser vazio`,
-						"string.pattern.base": `"cliente id" fora do formato experado`,
+						"string.pattern.base": `"cliente id" fora do formato esperado`,
 					}),
 				fornecedorid: joi
 					.string()
@@ -47,7 +47,7 @@ module.exports = (router) => {
 					.messages({
 						"any.required": `"fornecedor id" é um campo obrigatório`,
 						"string.empty": `"fornecedor id" não deve ser vazio`,
-						"string.pattern.base": `"fornecedor id" fora do formato experado`,
+						"string.pattern.base": `"fornecedor id" fora do formato esperado`,
 					}),
 			}),
 			clienteController.curtefornecedor
@@ -63,7 +63,7 @@ module.exports = (router) => {
 					.messages({
 						"any.required": `"fornecedor id" é um campo obrigatório`,
 						"string.empty": `"fornecedor id" não deve ser vazio`,
-						"string.pattern.base": `"fornecedor id" fora do formato experado`,
+						"string.pattern.base": `"fornecedor id" fora do formato esperado`,
 					}),
 			}),
 			clienteController.removeCurtidafornecedor

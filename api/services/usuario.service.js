@@ -49,9 +49,6 @@ const validaSeCnpjJaExiste = async (cnpj) => {
 	return result.length > 0 ? true : false;
 };
 
-const usuarioEValido = async (email, senha) => {
-	return (await usuario.findOne({ email, senha: criptografia.criaHash(senha) })) ? true : false;
-};
 
 const criaCredencial = async (usuarioEmail) => {
 	const usuarioDB = await usuario.findOne({
@@ -66,6 +63,7 @@ const criaCredencial = async (usuarioEmail) => {
 
 const autenticar = async (email, senha) => {
 	const resultadoDB = await usuarioEValido(email, senha);
+	console.log(email, senha);
 	if (!resultadoDB) {
 		return {
 			sucesso: false,
@@ -87,6 +85,12 @@ const cria = async () => {
 		senha: md5(`daniel${process.env.MD5_SECRET}`),
 	});
 };
+
+const usuarioEValido = async (email, senha) => {
+	return (await usuario.findOne({ email, senha: criptografia.criaHash(senha) })) ? true : false;
+};
+
+
 
 const buscarPefilPorId = (perfilId) => {
 	const result = perfis.find((item) => Number(item.id) === Number(perfilId));
