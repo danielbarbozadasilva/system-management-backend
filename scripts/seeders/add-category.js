@@ -1,5 +1,6 @@
 const { categoria } = require("../../api/models/index");
 const node_environment = process.env.NODE_ENV || "development";
+const fileUtils = require("../../api/utils/file.util");
 
 if (node_environment === "development") {
 	require("dotenv").config();
@@ -17,10 +18,10 @@ const createCategory = async () => {
 		status: true,
 		imagem: {
 			nomeOriginal: "boloLimao.jpg",
-			nome: "001cbd16-2828-449b-a1e8-570eb84619e3.jpeg",
+			nome: fileUtils.criaNome("image/jpeg"),
 			tipo: "image/jpeg",
-		}
-	})
+		},
+	});
 }
 
 createCategory();
