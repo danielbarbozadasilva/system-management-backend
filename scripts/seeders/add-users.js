@@ -1,16 +1,5 @@
 const { administrador, fornecedor, cliente } = require("../../api/models/index");
-const criptografia = require("../../api/utils/criptografia.util");
-const node_environment = process.env.NODE_ENV || "development";
 const md5 = require("md5");
-
-if (node_environment === "development") {
-	require("dotenv").config();
-}
-
-const db = require("../../db/config");
-
-const mongoose = require("mongoose");
-mongoose.connect(db.uri, { useUnifiedTopology: true, useNewUrlParser: true });
 
 const createUsers = async () => {
 	await administrador.create({
@@ -33,7 +22,7 @@ const createUsers = async () => {
 		}),
 		await cliente.create({
 			kind: "cliente",
-			nome: "Cliente-Daniel",
+			nome: "Daniel",
 			data_nascimento: "05/03/1997",
 			uf: "RJ",
 			cidade: "Rio de janeiro",
