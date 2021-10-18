@@ -35,7 +35,7 @@ module.exports = (router) => {
 			categoriaController.createCategory
 		);
 
-  router
+	router
 		.route("/categoria/:categoriaid")
 		.get(
 			validaDTO("params", {
@@ -86,7 +86,7 @@ module.exports = (router) => {
 				}
 			),
 			categoriaController.alterarCategoria
-  )
+		)
     
 		.delete(
 			autorizacaoMiddlewate("REMOVE_CATEGORIA"),
