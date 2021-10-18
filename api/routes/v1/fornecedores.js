@@ -209,7 +209,7 @@ module.exports = (router) => {
 					"any.required": `"descricao" é um campo obrigatório`,
 					"string.empty": `"descricao" não deve ser vazio`,
 				}),
-				categoriaId: joi
+				categoria: joi
 					.string()
 					.regex(/^[0-9a-fA-F]{24}$/)
 					.required()

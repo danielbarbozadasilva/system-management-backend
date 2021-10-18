@@ -4,7 +4,7 @@ const produtoMapper = require("../mappers/produto.mapper");
 
 const cria = async (model) => {
 	const [categoriaDB, fornecedorDB] = await Promise.all([categoria.findById(model.categoria), fornecedor.findById(model.fornecedorlogadoid)]);
-
+	
 	if (!fornecedorDB) {
 		return {
 			sucesso: false,
@@ -34,10 +34,6 @@ const cria = async (model) => {
 		},
 	});
 
-	categoriaDB.produtos = [...categoriaDB.produtos, novoProduto._id];
-	fornecedorDB.produtos = [...fornecedorDB.produtos, novoProduto._id];
-
-	await Promise.all([categoriaDB.save(), fornecedorDB.save()]);
 
 	fileUtils.move(model.imagem.caminhoOriginal, model.imagem.novoCaminho);
 
