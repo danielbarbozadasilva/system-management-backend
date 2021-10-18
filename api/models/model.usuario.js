@@ -11,7 +11,6 @@ const usuarioSchema = {
 
 }
 
-
 module.exports = usuarioSchema;
 
 
