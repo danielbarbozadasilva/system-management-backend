@@ -254,7 +254,7 @@ module.exports = (router) => {
 		produtoController.removeProduto
 	);
 
-	router.route("/fornecedor/:fornecedorid/produto/:produtoid").post(
+	router.route("/fornecedor/:fornecedorid/produto/:produtoid/curtida").post(
 		autorizacaoMiddlewate("CURTIR_PRODUTO"),
 		validaDTO("params", {
 			fornecedorid: joi
@@ -279,7 +279,7 @@ module.exports = (router) => {
 		produtoController.curtirProduto
 	);
 
-	router.route("/fornecedor/:fornecedorid/produto/:produtoid").delete(
+	router.route("/fornecedor/:fornecedorid/produto/:produtoid/curtida").delete(
 		autorizacaoMiddlewate("REMOVE_CURTIDA_PRODUTO"),
 		validaDTO("params", {
 			fornecedorid: joi

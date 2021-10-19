@@ -1,65 +1,77 @@
-const { fornecedor, cliente, curtida } = require("../models/index");
+const { fornecedor, produto, curtida } = require("../models/index");
 const ErrorRegraDeNegocio = require("../utils/errors/erro-regra-negocio");
 
-const criaCurtida = async (fornecedorid, usuarioid) => {
-	const [fornecedorDB, clienteDB] = await Promise.all([fornecedor.findById(fornecedorid), cliente.findById(usuarioid)]);
+const criaCurtida = async (fornecedorid, produtoid) => {
+	try {
+		const [fornecedorDB, produtoDB, curtidaDB] = await Promise.all([
+			fornecedor.findById(fornecedorid),
+			produto.findById(produtoid),
+			curtida.findOne({ fornecedor: fornecedorid, produto: produtoid }),
+		]);
+	} catch (error) {
+		if (!fornecedorDB) {
+			throw new ErrorRegraDeNegocio("o fornecedor informado não existe");
+			return {
+				sucesso: false,
+			};
+		} else if (!produtoDB) {
+			throw new ErrorRegraDeNegocio("produto informado não existe");
+			return {
+				sucesso: false,
+			};
+		}
+	}
 
-	// if (!fornecedorDB) {
-	//   throw new ErrorRegraDeNegocio("o fornecedor pesquisado não existe");
-	// }
-
-	const curtidaDB = await curtida.create({
+	curtidaDB = await curtida.create({
 		fornecedor: fornecedorid,
-		cliente: usuarioid,
+		produto: produtoid,
 	});
 
-	fornecedorDB.curtidas = [...fornecedorDB.curtidas, curtidaDB._id];
-	clienteDB.curtidas = [...clienteDB.curtidas, curtidaDB._id];
-
-	await Promise.all([fornecedorDB.save(), clienteDB.save()]);
+	await Promise.all([curtidaDB.save()]);
 
 	return {
 		sucesso: true,
 		data: {
 			id: curtidaDB._id,
-			fornecedor: fornecedorDB.nomeFantasia,
-			cliente: clienteDB.nome,
+			fornecedor: curtidaDB.fornecedor,
+			produto: curtidaDB.produto,
 		},
 	};
 };
 
-const removeCurtida = async (fornecedorid, usuarioid) => {
-	const [fornecedorDB, usuarioDB, curtidaDB] = await Promise.all([
-		fornecedor.findById(fornecedorid),
-		cliente.findById(usuarioid),
-		curtida.findOne({ fornecedor: fornecedorid, cliente: usuarioid }),
-	]);
-
-	if (!fornecedorDB) {
-		throw new ErrorRegraDeNegocio("o fornecedor informado não existe");
+const removeCurtida = async (fornecedorid, produtoid) => {
+	try {
+		const [fornecedorDB, produtoDB, curtidaDB] = await Promise.all([
+			fornecedor.findById(fornecedorid),
+			produto.findById(produtoid),
+			curtida.findOne({ fornecedor: fornecedorid, produto: produtoid }),
+		]);
+		const curtida_id = curtidaDB._id.toString();
+		await Promise.all([curtida.remove(curtidaDB)]);
+		return {
+			sucesso: true,
+			data: {
+				id: curtida_id,
+			},
+		};
+	} catch (error) {
+		if (!fornecedorDB) {
+			throw new ErrorRegraDeNegocio("o fornecedor informado não existe");
+			return {
+				sucesso: false,
+			};
+		} else if (!produtoDB) {
+			throw new ErrorRegraDeNegocio("produto informado não existe");
+			return {
+				sucesso: false,
+			};
+		} else if (!curtidaDB) {
+			throw new ErrorRegraDeNegocio("A curtida não existe");
+			return {
+				sucesso: false,
+			};
+		}
 	}
-
-	if (!curtidaDB) {
-		throw new ErrorRegraDeNegocio("não existem curtidas para os dados informados");
-	}
-
-	fornecedorDB.curtidas = fornecedorDB.curtidas.filter((item) => {
-		return item.toString() !== curtidaDB._id.toString();
-	});
-
-	const curtida_id = curtidaDB._id.toString();
-
-	usuarioDB.curtidas = usuarioDB.curtidas.filter((item) => {
-		return item.toString() !== curtidaDB._id.toString();
-	});
-
-	await Promise.all([fornecedorDB.save(), usuarioDB.save(), curtida.remove(curtidaDB)]);
-
-	return {
-		data: {
-			id: curtida_id,
-		},
-	};
 };
 
 module.exports = {
