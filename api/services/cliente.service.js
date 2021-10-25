@@ -45,8 +45,14 @@ const pesquisaPorId = async (clienteid) => {
 	return resultadoDB;
 };
 
+const listaCurtida = async (clienteid) => {
+	const resultadoDB = await cliente.find({ _id: clienteid });
+	return resultadoDB;
+};
+
 module.exports = {
 	listaTodos,
+	listaCurtida,
 	cria,
 	pesquisaPorId,
 };

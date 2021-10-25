@@ -10,7 +10,7 @@ module.exports = (router) => {
 		.get(categoriaController.listaTodasAsCategorias)
 
 		.post(
-			autorizacaoMiddlewate("CRIA_CATEGORIA"),
+			autorizacaoMiddlewate("CRIAR_CATEGORIA"),
 			fileUploadMiddleware("categoria"),
 			validaDTO(
 				"body",
@@ -52,7 +52,7 @@ module.exports = (router) => {
 		)
 
 		.put(
-			autorizacaoMiddlewate("ALTERA_CATEGORIA"),
+			autorizacaoMiddlewate("ALTERAR_CATEGORIA"),
 			fileUploadMiddleware("categoria", true),
 			validaDTO("params", {
 				categoriaid: joi
@@ -87,7 +87,7 @@ module.exports = (router) => {
 			),
 			categoriaController.alterarCategoria
 		)
-    
+
 		.delete(
 			autorizacaoMiddlewate("REMOVE_CATEGORIA"),
 			validaDTO("params", {

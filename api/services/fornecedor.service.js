@@ -152,33 +152,6 @@ const listLikeClient = async (filtro) => {
 	return resultadoDB;
 };
 
-const likeProduct = async (fornecedorid, usuarioid) => {
-	const [fornecedorDB, clienteDB] = await Promise.all([fornecedor.findById(fornecedorid), cliente.findById(usuarioid)]);
-
-	if (!fornecedorDB) {
-		throw new ErrorRegraDeNegocio("o fornecedor pesquisado não existe");
-	}
-
-	const curtidaDB = await curtida.create({
-		fornecedor: fornecedorid,
-		cliente: usuarioid,
-	});
-
-	fornecedorDB.curtidas = [...fornecedorDB.curtidas, curtidaDB._id];
-	clienteDB.curtidas = [...clienteDB.curtidas, curtidaDB._id];
-
-	await Promise.all([fornecedorDB.save(), clienteDB.save()]);
-
-	return {
-		sucesso: true,
-		data: {
-			id: curtidaDB._id,
-			fornecedor: fornecedorDB.nomeFantasia,
-			cliente: clienteDB.nome,
-		},
-	};
-};
-
 const listProductsProvider = async (fornecedorid) => {
 	const fornecedorFromDB = await fornecedor.findById({ _id: fornecedorid }).populate("produtos");
 	return fornecedorFromDB;
@@ -208,6 +181,5 @@ module.exports = {
 	listProviderById,
 	listProductsProvider,
 	listAll,
-	likeProduct,
-	listLikeClient,
+	listLikeClient
 };

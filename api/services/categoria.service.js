@@ -34,8 +34,8 @@ const pesquisaPorFiltros = async (filtros) => {
 const listaTodos = async () => {
 	const listaCategoriasDB = await categoria.find({}).collation({ locale: "en" }).sort({ descricao: 1 });
 
-	return listaCategoriasDB.map((categortiaDB) => {
-		return categoriaMapper.toItemListaDTO(categortiaDB);
+	return listaCategoriasDB.map((category) => {
+		return categoriaMapper.toItemListaDTO(category);
 	});
 };
 
@@ -115,7 +115,7 @@ const alteraCategoria = async (categoriaId, model) => {
 
 	return {
 		sucesso: true,
-		mensagem: "operação relaizada com sucesso",
+		mensagem: "sucess",
 		data: categoriaMapper.toDTO(categoriaDB),
 	};
 };

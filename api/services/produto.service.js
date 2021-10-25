@@ -158,8 +158,6 @@ const pesquisa = async (id) => {
 const alteraProduto = async (produtoId, model) => {
 	const produtoDB = await produto.findOne({ _id: produtoId });
 
-	const [categoriaDB] = await Promise.all([categoria.findById(model.categoria)]);
-
 	if (!produtoDB) {
 		return {
 			sucesso: false,
@@ -173,7 +171,7 @@ const alteraProduto = async (produtoId, model) => {
 	produtoDB.status = model.status;
 	produtoDB.preco = model.preco;
 	produtoDB.categoria = model.categoria;
-	produtoDB.fornecedorid = model.fornecedorid;
+	produtoDB.fornecedor = model.fornecedor;
 
 	if (typeof model.imagem === "object") {
 		fileUtils.remove("produtos", produtoDB.imagem.nome);
@@ -185,9 +183,8 @@ const alteraProduto = async (produtoId, model) => {
 		};
 	}
 
-	categoriaDB.produtos = [...categoriaDB.produtos, produtoDB._id];
 	await produtoDB.save();
-	await categoriaDB.save();
+
 	return {
 		sucesso: true,
 		mensagem: "Operação realizada com sucesso!",

@@ -64,7 +64,8 @@ const curtirProduto = async (req, res, next) => {
 	const { params, usuario } = req;
 	const { fornecedorid, produtoid } = req.params;
 
-	const result = await curtidaService.criaCurtida(fornecedorid, produtoid);
+	const result = await curtidaService.criaCurtidaFornecedorProduto(fornecedorid, produtoid);
+	console.log('++++++++++++++++++'+result)
 	const codigoRetorno = result.sucesso ? 200 : 400;
 	const dadoRetorno = result.sucesso ? { data: result.data } : { detalhes: result.detalhes };
 
@@ -73,7 +74,7 @@ const curtirProduto = async (req, res, next) => {
 
 const removerProdutoCurtidas = async (req, res, next) => {
 	const { usuario, params } = req;
-	const result = await curtidaService.removeCurtida(params.fornecedorid, params.produtoid);
+	const result = await curtidaService.removeCurtidaFornecedorProduto(params.fornecedorid, params.produtoid);
 	const codigoRetorno = result.sucesso ? 200 : 400;
 	const dadoRetorno = result.sucesso ? { data: result.data } : { detalhes: result.detalhes };
 	return res.status(codigoRetorno).send(dadoRetorno);

@@ -67,7 +67,7 @@ module.exports = (router) => {
 		}),
 		fornecedorController.insertProvider
 	);
-	
+
 	router.route("/fornecedor/:id").put(
 		autorizacaoMiddlewate("ATUALIZAR_FORNECEDOR"),
 		validaDTO("params", {
