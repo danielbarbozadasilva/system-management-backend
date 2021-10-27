@@ -3,7 +3,6 @@ const administradorSchema = {
     type: String,
     required: true,
   },
-}
-
+};
 
 module.exports = administradorSchema;

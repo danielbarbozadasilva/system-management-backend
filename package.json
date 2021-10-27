@@ -1,49 +1,50 @@
 {
-	"author": "Daniel Barboza da Silva",
-	"license": "MIT",
-	"name": "backend",
-	"version": "1.0.0",
-	"description": "backend - Sistema de gestão de confeitarias",
-	"main": "index.js",
-	"scripts": {
-		"start": "node ./index.js",
-		"dev": "nodemon ./index.js",
-		"add-seeders": "node ./scripts/seeders/index.js",
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://gitlab.com/daniel.bsilva/projeto-04.git"
-	},
-	"bugs": {
-		"url": "https://gitlab.com/daniel.bsilva/projeto-04/issues"
-	},
-	"homepage": "https://gitlab.com/daniel.bsilva/projeto-04#readme",
-	"dependencies": {
-		"@joi/date": "^2.1.0",
-		"@sendgrid/mail": "^7.4.4",
-		"@ssttevee/multipart-parser": "^0.1.8",
-		"cors": "^2.8.5",
-		"dotenv": "^9.0.2",
-		"express": "^4.17.1",
-		"formable": "^0.0.1",
-		"formidable": "^1.2.2",
-		"fs": "^0.0.1-security",
-		"http-status": "^1.5.0",
-		"install": "^0.13.0",
-		"joi": "^17.4.0",
-		"jsonwebtoken": "^8.5.1",
-		"lodash": "^4.17.21",
-		"md5": "^2.3.0",
-		"moment": "^2.29.1",
-		"mongoose": "^5.12.9",
-		"mongoose-data-seed": "^2.1.6",
-		"nodemon": "^2.0.7",
-		"npm": "^7.15.0",
-		"path": "^0.12.7",
-		"uuid": "^8.3.2"
-	},
-	"devDependencies": {
-		"eslint": "^7.30.0"
-	}
+  "author": "Daniel Barboza da Silva",
+  "license": "MIT",
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "backend - Sistema de gestão de confeitarias",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js",
+    "dev": "nodemon ./index.js",
+    "add-seeders": "node ./scripts/seeders/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/daniel.bsilva/projeto-04.git"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/daniel.bsilva/projeto-04/issues"
+  },
+  "homepage": "https://gitlab.com/daniel.bsilva/projeto-04#readme",
+  "dependencies": {
+    "@joi/date": "^2.1.0",
+    "@sendgrid/mail": "^7.4.4",
+    "@ssttevee/multipart-parser": "^0.1.8",
+    "cors": "^2.8.5",
+    "dotenv": "^9.0.2",
+    "express": "^4.17.1",
+    "formable": "^0.0.1",
+    "formidable": "^1.2.2",
+    "fs": "^0.0.1-security",
+    "http-status": "^1.5.0",
+    "install": "^0.13.0",
+    "joi": "^17.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "md5": "^2.3.0",
+    "moment": "^2.29.1",
+    "mongoose": "^5.12.9",
+    "mongoose-data-seed": "^2.1.6",
+    "nodemon": "^2.0.7",
+    "npm": "^7.15.0",
+    "path": "^0.12.7",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "eslint": "^7.30.0",
+    "prettier": "2.4.1"
+  }
 }

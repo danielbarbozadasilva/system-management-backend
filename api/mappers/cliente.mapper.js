@@ -1,7 +1,5 @@
-
 const toListItemDTO = (model) => {
-
-  const { _id, email, nome, status, data_nascimento, cidade, uf} = model;
+  const { _id, email, nome, status, data_nascimento, cidade, uf } = model;
 
   return {
     id: _id,
@@ -10,15 +8,14 @@ const toListItemDTO = (model) => {
     status,
     data_nascimento,
     cidade,
-    uf
-  }
-}
+    uf,
+  };
+};
 
 const toDTO = (model) => {
   return {
     ...model,
-  }
-}
+  };
+};
 
-
-module.exports = {toListItemDTO, toDTO}
+module.exports = { toListItemDTO, toDTO };

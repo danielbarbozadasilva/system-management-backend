@@ -19,13 +19,15 @@ const buscarPorId = async (req, res, next) => {
 };
 
 const createCategory = async (req, res, next) => {
-	const { body } = req;
+  const { body } = req;
 
-	const resultadoServico = await categoriaService.insertCategory(body);
+  const resultadoServico = await categoriaService.insertCategory(body);
 
-	const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
-	const dadoRetorno = resultadoServico.sucesso ? { data: resultadoServico.data } : { detalhes: resultadoServico.detalhes };
-	return res.status(codigoRetorno).send(dadoRetorno);
+  const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
+  const dadoRetorno = resultadoServico.sucesso
+    ? { data: resultadoServico.data }
+    : { detalhes: resultadoServico.detalhes };
+  return res.status(codigoRetorno).send(dadoRetorno);
 };
 
 const alterarCategoria = async (req, res, next) => {

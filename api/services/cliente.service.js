@@ -8,51 +8,54 @@ const ErrorRegraDeNegocio = require("../utils/errors/erro-regra-negocio");
 const ErroUsuarioNaoAutorizado = require("../utils/errors/erro-usuario-nao-autorizado");
 
 const listaTodos = async () => {
-	const resultadoDB = await cliente.find({}).collation({ locale: "en" }).sort({ nome: 1 });
+  const resultadoDB = await cliente
+    .find({})
+    .collation({ locale: "en" })
+    .sort({ nome: 1 });
 
-	return resultadoDB.map((item) => {
-		return toListItemDTO(item.toJSON());
-	});
+  return resultadoDB.map((item) => {
+    return toListItemDTO(item.toJSON());
+  });
 };
 
 const cria = async (model) => {
-	const { email, senha, ...resto } = model;
-	if (await validaSeEmailJaExiste(email))
-		return {
-			sucesso: false,
-			mensagem: "operação não pode ser realizada",
-			detalhes: ["Já existe usuário cadastrado para o email informado"],
-		};
+  const { email, senha, ...resto } = model;
+  if (await validaSeEmailJaExiste(email))
+    return {
+      sucesso: false,
+      mensagem: "operação não pode ser realizada",
+      detalhes: ["Já existe usuário cadastrado para o email informado"],
+    };
 
-	const novoCliente = await cliente.create({
-		email,
-		...resto,
-		senha: criaHash(senha),
-		status: "Ativo",
-	});
+  const novoCliente = await cliente.create({
+    email,
+    ...resto,
+    senha: criaHash(senha),
+    status: "Ativo",
+  });
 
-	return {
-		sucesso: true,
-		mensagem: "Operação realizada com sucesso",
-		data: {
-			...toListItemDTO(novoCliente),
-		},
-	};
+  return {
+    sucesso: true,
+    mensagem: "Operação realizada com sucesso",
+    data: {
+      ...toListItemDTO(novoCliente),
+    },
+  };
 };
 
 const pesquisaPorId = async (clienteid) => {
-	const resultadoDB = await cliente.find({ _id: clienteid });
-	return resultadoDB;
+  const resultadoDB = await cliente.find({ _id: clienteid });
+  return resultadoDB;
 };
 
 const listaCurtida = async (clienteid) => {
-	const resultadoDB = await cliente.find({ _id: clienteid });
-	return resultadoDB;
+  const resultadoDB = await cliente.find({ _id: clienteid });
+  return resultadoDB;
 };
 
 module.exports = {
-	listaTodos,
-	listaCurtida,
-	cria,
-	pesquisaPorId,
+  listaTodos,
+  listaCurtida,
+  cria,
+  pesquisaPorId,
 };

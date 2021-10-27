@@ -1,5 +1,4 @@
 const usuarioSchema = {
-
   email: {
     type: String,
     required: true,
@@ -8,10 +7,6 @@ const usuarioSchema = {
     type: String,
     required: true,
   },
-
-}
+};
 
 module.exports = usuarioSchema;
-
-
-

@@ -25,7 +25,7 @@ const clienteSchema = {
   status: {
     type: String,
     required: true,
-  }
+  },
 };
 
 module.exports = clienteSchema;
