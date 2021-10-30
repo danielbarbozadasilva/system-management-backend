@@ -31,7 +31,6 @@ const perfis = [
       "REMOVE_PRODUTO",
       "PESQUISA_FORNECEDOR_PRODUTO",
       "PESQUISA_CLIENTE_ID",
-      "CURTIDA_CRIA",
       "CURTIR_PRODUTO",
       "REMOVE_CURTIDA_PRODUTO",
     ],

@@ -48,10 +48,10 @@ const curtefornecedor = async (req, res, next) => {
 };
 
 const removeCurtidafornecedor = async (req, res, next) => {
-  const { usuario, params } = req;
+  const { params } = req;
   const result = await curtidaService.removeCurtidaClienteFornecedor(
     params.fornecedorid,
-    usuario.id
+    params.clienteid
   );
   const codigoRetorno = result.sucesso ? 200 : 400;
   const dadoRetorno = result.sucesso

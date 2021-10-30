@@ -73,6 +73,7 @@ const curtirProduto = async (req, res, next) => {
     fornecedorid,
     produtoid
   );
+
   const codigoRetorno = result.sucesso ? 200 : 400;
   const dadoRetorno = result.sucesso
     ? { data: result.data }
