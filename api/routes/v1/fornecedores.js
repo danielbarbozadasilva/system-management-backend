@@ -187,7 +187,7 @@ module.exports = (router) => {
   );
 
   router.route("/fornecedor/:fornecedor/produto").post(
-    autorizacaoMiddlewate("CRIA_PRODUTO"),
+    autorizacaoMiddlewate("CRIAR_PRODUTO"),
     fileUploadMiddleware("produtos"),
     validaDTO("params", {
       fornecedor: joi

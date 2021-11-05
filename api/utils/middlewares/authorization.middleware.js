@@ -6,34 +6,48 @@ const ErroUsuarioNaoAutenticado = require("../errors/erro-usuario-nao-autenticad
 
 const autorizar = (rota = "*") => {
   return async (req, res, next) => {
-    const teste = rota;
+    new Promise(function (resolve, reject) {
+      setTimeout(function () {
+        const teste = rota;
+        const { token } = req.headers;
+        if (!token) {
+          return reject(
+            new ErroUsuarioNaoAutenticado("Usuário não autenticado!")
+          );
+        }
 
-    const { token } = req.headers;
-    if (!token) {
-      throw new ErroUsuarioNaoAutorizado("Usuário não autorizado.");
-    }
+        if (!criptografiaUitls.validaToken(token)) {
+          return reject(
+            new ErroUsuarioNaoAutenticado("Usuário não autenticado!")
+          );
+        }
 
-    if (!criptografiaUitls.validaToken(token)) {
-      throw new ErroUsuarioNaoAutenticado("Usuário não autenticado.");
-    }
+        const { id, email, tipoUsuario } =
+          criptografiaUitls.decodificaToken(token);
 
-    const { id, email, tipoUsuario } = criptografiaUitls.decodificaToken(token);
-    if (!(await usuarioService.validaSeEmailJaExiste(email))) {
-      throw new ErroUsuarioNaoAutorizado("Usuário não autorizado.");
-    }
+        if (!usuarioService.validaSeEmailJaExiste(email)) {
+          return reject(
+            new ErroUsuarioNaoAutorizado("Usuário não autorizado!")
+          );
+        }
 
-    if (teste != "*") {
-      if (!usuarioService.validaFuncionalidadeNoPerfil(tipoUsuario, teste))
-        throw new ErroUsuarioNaoAutorizado("Usuário não autorizado.");
-    }
-
-    req.usuario = {
-      id,
-      email,
-      tipoUsuario,
-    };
-
-    return next();
+        if (teste != "*") {
+          if (
+            usuarioService.validaFuncionalidadeNoPerfil(tipoUsuario, teste) ===
+            false
+          ) {
+            return reject(
+              new ErroUsuarioNaoAutorizado("Usuário não autorizado!")
+            );
+          }
+        }
+        return resolve(next());
+      }, 1000);
+    }).catch(function (e) {
+      return res
+        .status(e.statusCode)
+        .send({ success: false, error: { message: e.message } });
+    });
   };
 };
 

@@ -27,7 +27,7 @@ const perfis = [
     funcionalidades: [
       "PESQUISA_FORNECEDOR_ID",
       "PESQUISA_PRODUTO",
-      "CRIA_PRODUTO",
+      "CRIAR_PRODUTO",
       "REMOVE_PRODUTO",
       "PESQUISA_FORNECEDOR_PRODUTO",
       "PESQUISA_CLIENTE_ID",
@@ -45,14 +45,19 @@ const perfis = [
       "PESQUISA_FORNECEDOR_PRODUTO",
       "PESQUISA_CLIENTE",
       "PESQUISA_CLIENTE_ID",
-    ],
-  },
+    ]
+  }
 ];
 
 const buscaTipoUsuarioPorId = (tipoUsuarioId) => {
   return perfis.find((item) => {
     return item.id === tipoUsuarioId;
   });
+};
+
+const validaFuncionalidadeNoPerfil = (perfilId, funcionalidade) => {
+  const perfil = buscaTipoUsuarioPorId(perfilId);
+  return perfil.funcionalidades.includes(funcionalidade)? true : false;
 };
 
 const validaSeEmailJaExiste = async (email) => {
@@ -107,15 +112,6 @@ const usuarioEValido = async (email, senha) => {
     : false;
 };
 
-const buscarPefilPorId = (perfilId) => {
-  const result = perfis.find((item) => Number(item.id) === Number(perfilId));
-  return result;
-};
-
-const validaFuncionalidadeNoPerfil = (perfilId, funcionalidade) => {
-  const perfil = buscarPefilPorId(perfilId);
-  return perfil.funcionalidades.includes(funcionalidade);
-};
 
 module.exports = {
   autenticar,
