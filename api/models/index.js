@@ -42,11 +42,11 @@ const cliente = usuario.discriminator(
   createSchema(usuarioSchema, clienteSchema, {})
 );
 
-const categoriaSchema = require("./model.categoria");
-const categoria = mongoose.model(
-  "categoria",
-  createSchema(undefined, categoriaSchema, {
-    collection: "CategoriaCollection",
+const categorySchema = require("./model.category");
+const category = mongoose.model(
+  "category",
+  createSchema(undefined, categorySchema, {
+    collection: "categoryCollection",
     toJSON: {
       virtuals: true,
     },
@@ -76,7 +76,7 @@ const curtida = mongoose.model(
 );
 
 module.exports = {
-  categoria,
+  category,
   usuario,
   administrador,
   fornecedor,

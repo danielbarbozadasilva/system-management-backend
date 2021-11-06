@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 module.exports = {
-  nome: {
+  name: {
     type: String,
     required: true,
   },
 
-  descricao: {
+  description: {
     type: String,
     required: true,
   },
@@ -17,24 +17,24 @@ module.exports = {
     required: true,
   },
 
-  imagem: {
-    nomeOriginal: {
+  image: {
+    originalName: {
       type: String,
       required: false,
     },
-    nome: {
+    name: {
       type: String,
       required: true,
     },
-    tipo: {
+    type: {
       type: String,
       required: true,
     },
   },
 
-  categoria: {
+  category: {
     type: Schema.Types.ObjectId,
-    ref: "categoria",
+    ref: "category",
   },
 
   fornecedor: {

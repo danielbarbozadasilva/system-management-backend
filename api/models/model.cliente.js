@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const clienteSchema = {
-  nome: {
+  name: {
     type: String,
     required: true,
   },

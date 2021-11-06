@@ -1,5 +1,5 @@
 const administradorSchema = {
-  nome: {
+  name: {
     type: String,
     required: true,
   },

@@ -10,30 +10,30 @@ const autorizar = (rota = "*") => {
       setTimeout(function () {
         const teste = rota;
         const { token } = req.headers;
-        if (!token) {
-          return reject(
-            new ErroUsuarioNaoAutenticado("Usuário não autenticado!")
-          );
-        }
-
-        if (!criptografiaUitls.validaToken(token)) {
-          return reject(
-            new ErroUsuarioNaoAutenticado("Usuário não autenticado!")
-          );
-        }
-
-        const { id, email, tipoUsuario } =
-          criptografiaUitls.decodificaToken(token);
-
-        if (!usuarioService.validaSeEmailJaExiste(email)) {
-          return reject(
-            new ErroUsuarioNaoAutorizado("Usuário não autorizado!")
-          );
-        }
-
         if (teste != "*") {
+          if (!token) {
+            return reject(
+              new ErroUsuarioNaoAutenticado("Usuário não autenticado!")
+            );
+          }
+
+          if (!criptografiaUitls.validaToken(token)) {
+            return reject(
+              new ErroUsuarioNaoAutenticado("Usuário não autenticado!")
+            );
+          }
+
+          const { id, email, typeUsuario } =
+            criptografiaUitls.decodificaToken(token);
+
+          if (!usuarioService.validaSeEmailJaExiste(email)) {
+            return reject(
+              new ErroUsuarioNaoAutorizado("Usuário não autorizado!")
+            );
+          }
+
           if (
-            usuarioService.validaFuncionalidadeNoPerfil(tipoUsuario, teste) ===
+            usuarioService.validaFuncionalidadeNoPerfil(typeUsuario, teste) ===
             false
           ) {
             return reject(

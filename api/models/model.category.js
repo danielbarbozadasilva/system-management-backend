@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 module.exports = {
-  nome: {
+  name: {
     type: String,
     required: true,
   },
-  descricao: {
+  description: {
     type: String,
     required: false,
   },
@@ -14,16 +14,16 @@ module.exports = {
     type: Boolean,
     required: true,
   },
-  imagem: {
-    nomeOriginal: {
+  image: {
+    originalName: {
       type: String,
       required: false,
     },
-    nome: {
+    name: {
       type: String,
       required: false,
     },
-    tipo: {
+    type: {
       type: String,
       required: false,
     },

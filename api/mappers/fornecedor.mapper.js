@@ -2,22 +2,22 @@ const fileUtils = require("../utils/file.util");
 const { cliente } = require("../models/index");
 
 const toListItemDTO = (model) => {
-  const { _id, email, cnpj, nomeFantasia, status } = model;
+  const { _id, email, cnpj, nameFantasia, status } = model;
 
   return {
     id: _id,
     email,
     cnpj,
-    nomeFantasia,
+    nameFantasia,
     status,
   };
 };
 
 const toDTOLikeCase = (model) => {
-  const { nome, ...resto } = model;
+  const { name, ...resto } = model;
 
   return {
-    nome: nome,
+    name: name,
     ...resto,
   };
 };
@@ -46,8 +46,8 @@ const toDTO = (model) => {
     produtos: produtos.map((item) => {
       return {
         id: item.id,
-        nome: item.nome,
-        descricao: item.descricao,
+        name: item.name,
+        description: item.description,
         preco: parseFloat(item.preco).toLocaleString("pt-br", {
           style: "currency",
           currency: "BRL",

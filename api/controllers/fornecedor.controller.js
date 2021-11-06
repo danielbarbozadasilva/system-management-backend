@@ -1,7 +1,7 @@
 const providerServices = require("../services/fornecedor.service");
 const curtidaService = require("../services/curtida.service");
 const produtoMapper = require("../mappers/produto.mapper");
-const { produto, categoria, fornecedor } = require("../models/index");
+const { produto, category, fornecedor } = require("../models/index");
 
 const activeProvider = async (req, res, next) => {
   const { fornecedorid } = req.params;

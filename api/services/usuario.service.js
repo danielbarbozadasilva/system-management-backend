@@ -5,7 +5,7 @@ const usuarioMapper = require("../mappers/usuario.mapper");
 const perfis = [
   {
     id: 1,
-    descricao: "administrador",
+    description: "administrador",
     funcionalidades: [
       "ADICIONA_FORNECEDOR",
       "ATUALIZAR_FORNECEDOR",
@@ -14,16 +14,16 @@ const perfis = [
       "ATIVAR_FORNECEDOR",
       "INATIVAR_FORNECEDOR",
       "PESQUISA_FORNECEDOR_PRODUTO",
-      "CRIAR_CATEGORIA",
-      "ALTERAR_CATEGORIA",
-      "PESQUISA_CATEGORIA",
-      "REMOVE_CATEGORIA",
+      "CRIAR_category",
+      "ALTERAR_category",
+      "PESQUISA_category",
+      "REMOVE_category",
       "PESQUISA_CLIENTE",
     ],
   },
   {
     id: 2,
-    descricao: "fornecedor",
+    description: "fornecedor",
     funcionalidades: [
       "PESQUISA_FORNECEDOR_ID",
       "PESQUISA_PRODUTO",
@@ -37,7 +37,7 @@ const perfis = [
   },
   {
     id: 3,
-    descricao: "cliente",
+    description: "cliente",
     funcionalidades: [
       "CURTIDA_CRIA",
       "CURTIDA_REMOVE",
@@ -45,19 +45,19 @@ const perfis = [
       "PESQUISA_FORNECEDOR_PRODUTO",
       "PESQUISA_CLIENTE",
       "PESQUISA_CLIENTE_ID",
-    ]
-  }
+    ],
+  },
 ];
 
-const buscaTipoUsuarioPorId = (tipoUsuarioId) => {
+const buscatypeUsuarioPorId = (typeUsuarioId) => {
   return perfis.find((item) => {
-    return item.id === tipoUsuarioId;
+    return item.id === typeUsuarioId;
   });
 };
 
 const validaFuncionalidadeNoPerfil = (perfilId, funcionalidade) => {
-  const perfil = buscaTipoUsuarioPorId(perfilId);
-  return perfil.funcionalidades.includes(funcionalidade)? true : false;
+  const perfil = buscatypeUsuarioPorId(perfilId);
+  return perfil.funcionalidades.includes(funcionalidade) ? true : false;
 };
 
 const validaSeEmailJaExiste = async (email) => {
@@ -112,10 +112,9 @@ const usuarioEValido = async (email, senha) => {
     : false;
 };
 
-
 module.exports = {
   autenticar,
-  buscaTipoUsuarioPorId,
+  buscatypeUsuarioPorId,
   cria,
   criaCredencial,
   validaSeCnpjJaExiste,

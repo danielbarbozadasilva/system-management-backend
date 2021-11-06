@@ -1,24 +1,23 @@
 const path = require("path");
 const enderecoRaiz = process.env.FILE_BASE_PATH;
-const moment = require("moment");
 const fs = require("fs");
 const uuid = require("uuid").v4;
 
-const criaEndereco = (destino, arquivoNome = "") => {
-  return path.join(enderecoRaiz, destino, arquivoNome);
+const criaEndereco = (destino, arquivoname = "") => {
+  return path.join(enderecoRaiz, destino, arquivoname);
 };
 
-const criaEnderecoDownload = (origem, arquivoNome) => {
-  return path.join("/static", origem, arquivoNome);
+const criaEnderecoDownload = (origem, arquivoname) => {
+  return path.join("/static", origem, arquivoname);
 };
 
-const criaNome = (tipo) => {
-  const tipoTratado = tipo.split("/")[1];
-  return `${uuid()}.${tipoTratado}`;
+const crianame = (type) => {
+  const typeTratado = type.split("/")[1];
+  return `${uuid()}.${typeTratado}`;
 };
 
-const move = (temporario, definitivo) => {
-  return fs.renameSync(temporario, definitivo);
+const move = (oldPath, newPath) => {
+  return fs.renameSync(oldPath, newPath);
 };
 
 const remove = (origem, arquivo) => {
@@ -32,7 +31,7 @@ const remove = (origem, arquivo) => {
 module.exports = {
   criaEndereco,
   criaEnderecoDownload,
-  criaNome,
+  crianame,
   move,
   remove,
 };

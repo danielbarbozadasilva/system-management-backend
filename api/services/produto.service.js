@@ -1,10 +1,10 @@
-const { produto, categoria, fornecedor } = require("../models/index");
+const { produto, category, fornecedor } = require("../models/index");
 const fileUtils = require("../utils/file.util");
 const produtoMapper = require("../mappers/produto.mapper");
 
 const cria = async (model) => {
-  const [categoriaDB, fornecedorDB] = await Promise.all([
-    categoria.findById(model.categoria),
+  const [categoryDB, fornecedorDB] = await Promise.all([
+    category.findById(model.category),
     fornecedor.findById(model.fornecedorlogadoid),
   ]);
 
@@ -18,60 +18,58 @@ const cria = async (model) => {
     };
   }
 
-  if (!categoriaDB) {
+  if (!categoryDB) {
     return {
       sucesso: false,
       mensagem: "operação não pode ser realizada",
-      detalhes: [
-        "Não existe categoria cadastrada para o categoria id informado",
-      ],
+      detalhes: ["Não existe category cadastrada para o category id informado"],
     };
   }
 
   const novoProduto = await produto.create({
-    nome: model.nome,
-    descricao: model.descricao,
+    name: model.name,
+    description: model.description,
     preco: model.preco,
-    categoria: model.categoria,
+    category: model.category,
     fornecedor: model.fornecedorlogadoid,
-    imagem: {
-      nomeOriginal: model.imagem.nomeOriginal,
-      nome: model.imagem.novoNome,
-      tipo: model.imagem.tipo,
+    image: {
+      originalName: model.image.originalName,
+      name: model.image.novoname,
+      type: model.image.type,
     },
   });
 
-  fileUtils.move(model.imagem.caminhoOriginal, model.imagem.novoCaminho);
+  fileUtils.move(model.image.caminhoOriginal, model.image.novoCaminho);
 
   return {
     sucesso: true,
     mensagem: "Cadastro realizado com sucesso",
     data: {
       id: novoProduto._id,
-      nome: novoProduto.nome,
+      name: novoProduto.name,
     },
   };
 };
 
 const pesquisaPorFiltros = async (filtros) => {
   const filtroMongo = {};
-  if (filtros.categoria) {
-    filtroMongo.categoria = filtros.categoria;
+  if (filtros.category) {
+    filtroMongo.category = filtros.category;
   }
 
   if (filtros.fornecedor) {
     filtroMongo.fornecedor = filtros.fornecedor;
   }
 
-  if (filtros.nomelike) {
-    filtroMongo.nome = { $regex: ".*" + filtros.nomelike + ".*" };
+  if (filtros.namelike) {
+    filtroMongo.name = { $regex: ".*" + filtros.namelike + ".*" };
   }
 
   const resultadoDB = await produto
     .find(filtroMongo)
     .populate("produto")
     .populate("fornecedor")
-    .populate("categoria");
+    .populate("category");
 
   return resultadoDB.map((item) => {
     return produtoMapper.toItemListaDTO(item);
@@ -116,8 +114,8 @@ const deleta = async ({ fornecedorId, produtoId, usuarioId }) => {
     };
   }
 
-  const categoriaDB = await categoria.findById(produtoDB.categoria);
-  categoriaDB.produtos = categoriaDB.produtos.filter((item) => {
+  const categoryDB = await category.findById(produtoDB.category);
+  categoryDB.produtos = categoryDB.produtos.filter((item) => {
     return item.toString() !== produtoId;
   });
 
@@ -126,23 +124,23 @@ const deleta = async ({ fornecedorId, produtoId, usuarioId }) => {
   });
 
   await Promise.all([
-    categoriaDB.save(),
+    categoryDB.save(),
     fornecedorDB.save(),
     produto.deleteOne({ _id: produtoId }),
   ]);
 
-  const { imagem } = produtoDB;
-  fileUtils.remove("produtos", imagem.nome);
+  const { image } = produtoDB;
+  fileUtils.remove("produtos", image.name);
 
-  let categoriaArray = await categoria.find({ produtos: produtoId });
+  let categoryArray = await category.find({ produtos: produtoId });
   await Promise.all(
-    categoriaArray.map(async (item) => {
-      let categoriaProduto = item.produtos;
-      var index = categoriaProduto.findIndex((item) => item == produtoId);
-      categoriaProduto.splice(index, 1);
-      await categoria.updateOne(
+    categoryArray.map(async (item) => {
+      let categoryProduto = item.produtos;
+      var index = categoryProduto.findIndex((item) => item == produtoId);
+      categoryProduto.splice(index, 1);
+      await category.updateOne(
         { _id: item._id },
-        { produtos: categoriaProduto }
+        { produtos: categoryProduto }
       );
     })
   );
@@ -152,7 +150,7 @@ const deleta = async ({ fornecedorId, produtoId, usuarioId }) => {
     mensagem: "Operação realizada com sucesso",
     data: {
       id: produtoId,
-      nome: produtoDB.nome,
+      name: produtoDB.name,
     },
   };
 };
@@ -186,20 +184,20 @@ const alteraProduto = async (produtoId, model) => {
     };
   }
 
-  produtoDB.nome = model.nome;
-  produtoDB.descricao = model.descricao;
+  produtoDB.name = model.name;
+  produtoDB.description = model.description;
   produtoDB.status = model.status;
   produtoDB.preco = model.preco;
-  produtoDB.categoria = model.categoria;
+  produtoDB.category = model.category;
   produtoDB.fornecedor = model.fornecedor;
 
-  if (typeof model.imagem === "object") {
-    fileUtils.remove("produtos", produtoDB.imagem.nome);
-    fileUtils.move(model.imagem.caminhoOriginal, model.imagem.novoCaminho);
-    produtoDB.imagem = {
-      nomeOriginal: model.imagem.nomeOriginal,
-      nome: model.imagem.novoNome,
-      tipo: model.imagem.tipo,
+  if (typeof model.image === "object") {
+    fileUtils.remove("produtos", produtoDB.image.name);
+    fileUtils.move(model.image.caminhoOriginal, model.image.novoCaminho);
+    produtoDB.image = {
+      originalName: model.image.originalName,
+      name: model.image.novoname,
+      type: model.image.type,
     };
   }
 

@@ -6,7 +6,7 @@ const fileUtils = require("../file.util");
 const ErrorRegraDeNegocio = require("../errors/erro-regra-negocio");
 
 const postIsValid = (files) => {
-  if (!files.imagem || files.imagem.name === "") {
+  if (!files.image || files.image.name === "") {
     return false;
   }
 
@@ -14,7 +14,7 @@ const postIsValid = (files) => {
 };
 
 const putIsValid = (files) => {
-  if (!files.imagem || files.imagem.name === "") {
+  if (!files.image || files.image.name === "") {
     return false;
   }
 
@@ -48,19 +48,19 @@ const fileUpload = (destino, isUpdate = false) => {
     if (req.method === "POST") {
       if (!postIsValid(files))
         throw new ErrorRegraDeNegocio(
-          '"imagem" é de preenchimento obrigatório.'
+          '"image" é de preenchimento obrigatório.'
         );
     }
 
-    if (files.imagem && files.imagem.name !== "") {
-      const novoNome = fileUtils.criaNome(files.imagem.type);
-      const novoCaminho = fileUtils.criaEndereco(destino, novoNome);
+    if (files.image && files.image.name !== "") {
+      const novoname = fileUtils.crianame(files.image.type);
+      const novoCaminho = fileUtils.criaEndereco(destino, novoname);
 
-      req.body.imagem = {
-        tipo: files.imagem.type,
-        nomeOriginal: files.imagem.name,
-        caminhoOriginal: files.imagem.path,
-        novoNome,
+      req.body.image = {
+        type: files.image.type,
+        originalName: files.image.name,
+        caminhoOriginal: files.image.path,
+        novoname,
         novoCaminho,
       };
     }

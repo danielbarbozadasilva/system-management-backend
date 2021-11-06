@@ -1,5 +1,5 @@
-const trataTipoUsuario = (tipo) => {
-  switch (tipo) {
+const tratatypeUsuario = (type) => {
+  switch (type) {
     case "administrador":
       return 1;
 
@@ -15,17 +15,17 @@ const trataTipoUsuario = (tipo) => {
 };
 
 const toUserDTO = (model) => {
-  const { _id, email, kind, nome, nomeFantasia } = model;
+  const { _id, email, kind, name, nameFantasia } = model;
 
   return {
     id: _id,
     email,
-    nome: nome ? nome : nomeFantasia,
-    tipoUsuario: trataTipoUsuario(kind),
+    name: name ? name : nameFantasia,
+    typeUsuario: tratatypeUsuario(kind),
   };
 };
 
 module.exports = {
   toUserDTO,
-  trataTipoUsuario,
+  tratatypeUsuario,
 };

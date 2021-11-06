@@ -11,7 +11,7 @@ const listaTodos = async () => {
   const resultadoDB = await cliente
     .find({})
     .collation({ locale: "en" })
-    .sort({ nome: 1 });
+    .sort({ name: 1 });
 
   return resultadoDB.map((item) => {
     return toListItemDTO(item.toJSON());

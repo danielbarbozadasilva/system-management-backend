@@ -6,7 +6,7 @@ const fornecedorSchema = {
     type: String,
     required: true,
   },
-  nomeFantasia: {
+  nameFantasia: {
     type: String,
     required: true,
   },

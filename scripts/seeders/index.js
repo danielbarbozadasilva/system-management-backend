@@ -1,6 +1,6 @@
 const db = require("../../db/config");
 
-const categoria = require("./add-category");
+const category = require("./add-category");
 const likeCli = require("./add-clientLikeProvider");
 const produto = require("./add-product");
 const likeForn = require("./add-providerLikeProduct");

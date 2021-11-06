@@ -1,16 +1,16 @@
 const fileUtils = require("../utils/file.util");
 
 const toItemListaDTO = (model) => {
-  const { _id, nome, descricao, preco, fornecedor, categoria, imagem, status } =
+  const { _id, name, description, preco, fornecedor, category, image, status } =
     model;
 
   return {
     id: _id,
-    nome: nome,
-    descricao: descricao,
+    name: name,
+    description: description,
     preco: String(preco),
-    imagem: fileUtils.criaEnderecoDownload("produtos", imagem.nome),
-    categoriaId: categoria,
+    image: fileUtils.criaEnderecoDownload("produtos", image.name),
+    categoryId: category,
     fornecedorId: fornecedor,
   };
 };

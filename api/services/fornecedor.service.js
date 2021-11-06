@@ -7,7 +7,7 @@ const {
 const {
   validaSeEmailJaExiste,
   validaSeCnpjJaExiste,
-  buscaTipoUsuarioPorId,
+  buscatypeUsuarioPorId,
 } = require("../services/usuario.service");
 const { criaHash } = require("../utils/criptografia.util");
 const emailUtils = require("../utils/email.utils");
@@ -17,7 +17,7 @@ const { EmailDesativar } = require("../utils/email.mensagem.desativar");
 const createProvider = async (model) => {
   const {
     cnpj,
-    nomeFantasia,
+    nameFantasia,
     endereco,
     uf,
     cidade,
@@ -44,7 +44,7 @@ const createProvider = async (model) => {
 
   const newProvider = await fornecedor.create({
     cnpj,
-    nomeFantasia,
+    nameFantasia,
     endereco,
     uf,
     cidade,
@@ -66,7 +66,7 @@ const createProvider = async (model) => {
 const updateProvider = async (fornecedorid, body) => {
   const {
     cnpj,
-    nomeFantasia,
+    nameFantasia,
     endereco,
     uf,
     cidade,
@@ -98,7 +98,7 @@ const updateProvider = async (fornecedorid, body) => {
     {
       $set: {
         cnpj: cnpj,
-        nomeFantasia: nomeFantasia,
+        nameFantasia: nameFantasia,
         endereco: endereco,
         uf: uf,
         cidade: cidade,
@@ -121,7 +121,7 @@ const updateProvider = async (fornecedorid, body) => {
 };
 
 const listAll = async () => {
-  const resultadoDB = await fornecedor.find({}).sort({ nomeFantasia: 1 });
+  const resultadoDB = await fornecedor.find({}).sort({ nameFantasia: 1 });
   return resultadoDB;
 };
 
@@ -146,7 +146,7 @@ const alteraStatus = async (id, status) => {
     emailUtils.enviar({
       destinatario: fornecedorDB.email,
       remetente: process.env.SENDGRID_REMETENTE,
-      assunto: `Confirmação de Ativação ${fornecedorDB.nomeFantasia}`,
+      assunto: `Confirmação de Ativação ${fornecedorDB.nameFantasia}`,
       corpo: EmailHabilitar("titulo", "menssagem", `${process.env.URL}/signin`),
     });
   }
@@ -155,7 +155,7 @@ const alteraStatus = async (id, status) => {
     emailUtils.enviar({
       destinatario: fornecedorDB.email,
       remetente: process.env.SENDGRID_REMETENTE,
-      assunto: `Confirmação de Inativação ${fornecedorDB.nomeFantasia}`,
+      assunto: `Confirmação de Inativação ${fornecedorDB.nameFantasia}`,
       corpo: EmailDesativar("titulo", "menssagem", `${process.env.URL}/signin`),
     });
   }

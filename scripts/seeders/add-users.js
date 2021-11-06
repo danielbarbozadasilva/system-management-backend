@@ -8,12 +8,12 @@ const md5 = require("md5");
 const createUsers = async () => {
   await administrador.create({
     email: "danielbarboza56@hotmail.com",
-    nome: "administrador",
+    name: "administrador",
     senha: md5(`daniel${process.env.MD5_SECRET}`),
   }),
     await fornecedor.create({
       cnpj: "03.470.727/0023-36",
-      nomeFantasia: "Parme",
+      nameFantasia: "Parme",
       kind: "fornecedor",
       endereco: "Rua abc,10",
       uf: "RJ",
@@ -26,7 +26,7 @@ const createUsers = async () => {
     }),
     await cliente.create({
       kind: "cliente",
-      nome: "Daniel",
+      name: "Daniel",
       data_nascimento: "05/03/1997",
       uf: "RJ",
       cidade: "Rio de janeiro",

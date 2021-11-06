@@ -1,9 +1,9 @@
 const joi = require("joi");
+const produtoController = require("../../controllers/produto.controller");
+
 const validaDTO = require("../../utils/middlewares/validate-dto.middleware");
 const fileUploadMiddleware = require("../../utils/middlewares/fileUploadMiddleware");
 const autorizacaoMiddlewate = require("../../utils/middlewares/authorization.middleware");
-
-const produtoController = require("../../controllers/produto.controller");
 
 module.exports = (router) => {
   router.route("/produto").get(produtoController.listarProdutos);
@@ -13,13 +13,13 @@ module.exports = (router) => {
   router.route("/produto/:produtoid").put(
     fileUploadMiddleware("produtos", true),
     validaDTO("query", {
-      categoria: joi
+      category: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .messages({
-          "any.required": `"categoria id" é um campo obrigatório`,
-          "string.empty": `"categoria id" não deve ser vazio`,
-          "string.pattern.base": `"categoria id" fora do formato esperado`,
+          "any.required": `"category id" é um campo obrigatório`,
+          "string.empty": `"category id" não deve ser vazio`,
+          "string.pattern.base": `"category id" fora do formato esperado`,
         }),
       fornecedor: joi
         .string()
@@ -30,7 +30,7 @@ module.exports = (router) => {
           "string.pattern.base": `"fornecedor id" fora do formato esperado`,
         }),
 
-      nomelike: joi.string(),
+      namelike: joi.string(),
       allowUnknown: true,
     }),
     produtoController.alterarProduto

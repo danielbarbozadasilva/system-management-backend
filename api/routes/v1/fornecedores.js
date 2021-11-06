@@ -2,7 +2,7 @@ const joi = require("joi");
 const validaDTO = require("../../utils/middlewares/validate-dto.middleware");
 const fornecedorController = require("../../controllers/fornecedor.controller");
 const produtoController = require("../../controllers/produto.controller");
-const autorizacaoMiddlewate = require("../../utils/middlewares/authorization.middleware");
+const autorizacaoMiddleware = require("../../utils/middlewares/authorization.middleware");
 const fileUploadMiddleware = require("../../utils/middlewares/fileUploadMiddleware");
 
 module.exports = (router) => {
@@ -28,15 +28,15 @@ module.exports = (router) => {
   );
 
   router.route("/fornecedor").post(
-    autorizacaoMiddlewate("ADICIONA_FORNECEDOR"),
+    autorizacaoMiddleware("ADICIONA_FORNECEDOR"),
     validaDTO("body", {
       cnpj: joi.string().required().messages({
         "any.required": `"cnpj" é um campo obrigatório`,
         "string.empty": `"cnpj" não deve ser vazio`,
       }),
-      nomeFantasia: joi.string().required().messages({
-        "any.required": `"nomeFantasia" é um campo obrigatório`,
-        "string.empty": `"nomeFantasia" não deve ser vazio`,
+      nameFantasia: joi.string().required().messages({
+        "any.required": `"nameFantasia" é um campo obrigatório`,
+        "string.empty": `"nameFantasia" não deve ser vazio`,
       }),
       endereco: joi.string().required().messages({
         "any.required": `"endereco" é um campo obrigatório`,
@@ -71,7 +71,7 @@ module.exports = (router) => {
   );
 
   router.route("/fornecedor/:id").put(
-    autorizacaoMiddlewate("ATUALIZAR_FORNECEDOR"),
+    autorizacaoMiddleware("ATUALIZAR_FORNECEDOR"),
     validaDTO("params", {
       id: joi
         .string()
@@ -88,9 +88,9 @@ module.exports = (router) => {
         "any.required": `"cnpj" é um campo obrigatório`,
         "string.empty": `"cnpj" não deve ser vazio`,
       }),
-      nomeFantasia: joi.string().required().messages({
-        "any.required": `"nomeFantasia" é um campo obrigatório`,
-        "string.empty": `"nomeFantasia" não deve ser vazio`,
+      nameFantasia: joi.string().required().messages({
+        "any.required": `"nameFantasia" é um campo obrigatório`,
+        "string.empty": `"nameFantasia" não deve ser vazio`,
       }),
       endereco: joi.string().required().messages({
         "any.required": `"endereco" é um campo obrigatório`,
@@ -125,7 +125,7 @@ module.exports = (router) => {
   );
 
   router.route("/fornecedor/:fornecedorid/ativa").put(
-    autorizacaoMiddlewate("ATIVAR_FORNECEDOR"),
+    autorizacaoMiddleware("ATIVAR_FORNECEDOR"),
     validaDTO("params", {
       fornecedorid: joi
         .string()
@@ -141,7 +141,7 @@ module.exports = (router) => {
   );
 
   router.route("/fornecedor/:fornecedorid/inativa").put(
-    autorizacaoMiddlewate("INATIVAR_FORNECEDOR"),
+    autorizacaoMiddleware("INATIVAR_FORNECEDOR"),
     validaDTO("params", {
       fornecedorid: joi
         .string()
@@ -187,7 +187,7 @@ module.exports = (router) => {
   );
 
   router.route("/fornecedor/:fornecedor/produto").post(
-    autorizacaoMiddlewate("CRIAR_PRODUTO"),
+    autorizacaoMiddleware("CRIAR_PRODUTO"),
     fileUploadMiddleware("produtos"),
     validaDTO("params", {
       fornecedor: joi
@@ -203,22 +203,22 @@ module.exports = (router) => {
     validaDTO(
       "body",
       {
-        nome: joi.string().required().messages({
-          "any.required": `"nome" é um campo obrigatório`,
-          "string.empty": `"nome" não deve ser vazio`,
+        name: joi.string().required().messages({
+          "any.required": `"name" é um campo obrigatório`,
+          "string.empty": `"name" não deve ser vazio`,
         }),
-        descricao: joi.string().required().messages({
-          "any.required": `"descricao" é um campo obrigatório`,
-          "string.empty": `"descricao" não deve ser vazio`,
+        description: joi.string().required().messages({
+          "any.required": `"description" é um campo obrigatório`,
+          "string.empty": `"description" não deve ser vazio`,
         }),
-        categoria: joi
+        category: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
           .messages({
-            "any.required": `"categoria id" é um campo obrigatório`,
-            "string.empty": `"categoria id" não deve ser vazio`,
-            "string.pattern.base": `"categoria id" fora do formato esperado`,
+            "any.required": `"category id" é um campo obrigatório`,
+            "string.empty": `"category id" não deve ser vazio`,
+            "string.pattern.base": `"category id" fora do formato esperado`,
           }),
         preco: joi.number().required().messages({
           "any.required": `"preco" é um campo obrigatório`,
@@ -232,7 +232,7 @@ module.exports = (router) => {
   );
 
   router.route("/fornecedor/:fornecedorid/produto/:produtoid").delete(
-    autorizacaoMiddlewate("REMOVE_PRODUTO"),
+    autorizacaoMiddleware("REMOVE_PRODUTO"),
     validaDTO("params", {
       fornecedorid: joi
         .string()
@@ -257,7 +257,7 @@ module.exports = (router) => {
   );
 
   router.route("/fornecedor/:fornecedorid/produto/:produtoid/curtidas").post(
-    autorizacaoMiddlewate("CURTIR_PRODUTO"),
+    autorizacaoMiddleware("CURTIR_PRODUTO"),
     validaDTO("params", {
       fornecedorid: joi
         .string()
@@ -282,7 +282,7 @@ module.exports = (router) => {
   );
 
   router.route("/fornecedor/:fornecedorid/produto/:produtoid/curtidas").delete(
-    autorizacaoMiddlewate("REMOVE_CURTIDA_PRODUTO"),
+    autorizacaoMiddleware("REMOVE_CURTIDA_PRODUTO"),
     validaDTO("params", {
       fornecedorid: joi
         .string()

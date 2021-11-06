@@ -1,15 +1,15 @@
-const { categoria } = require("../../api/models/index");
+const { category } = require("../../api/models/index");
 const fileUtils = require("../../api/utils/file.util");
 
 const createCategory = async () => {
-  await categoria.create({
-    nome: "teste-category02",
-    descricao: "teste-category02-descricao",
+  await category.create({
+    name: "teste-category02",
+    description: "teste-category02-description",
     status: true,
-    imagem: {
-      nomeOriginal: "boloLimao.jpg",
-      nome: fileUtils.criaNome("image/jpeg"),
-      tipo: "image/jpeg",
+    image: {
+      originalName: "boloLimao.jpg",
+      name: fileUtils.crianame("image/jpeg"),
+      type: "image/jpeg",
     },
   });
 };

@@ -1,13 +1,16 @@
 const joi = require("joi").extend(require("@joi/date"));
-const validaDTO = require("../../utils/middlewares/validate-dto.middleware");
 const clienteController = require("../../controllers/cliente.controller");
+
+const validaDTO = require("../../utils/middlewares/validate-dto.middleware");
 const asyncMiddleware = require("../../utils/middlewares/async-middleware");
 const autorizacaoMiddlewate = require("../../utils/middlewares/authorization.middleware");
 
 module.exports = (router) => {
   router
     .route("/cliente")
-    .post(clienteController.cria)
+    .post(
+      autorizacaoMiddlewate("*"),
+      clienteController.cria)
 
     .get(asyncMiddleware(clienteController.listarTodosClientes));
 

@@ -6,10 +6,10 @@
   },
   "item": [
     {
-      "name": "Categoria",
+      "name": "category",
       "item": [
         {
-          "name": "categoria.listarTodas",
+          "name": "category.listarTodas",
           "event": [
             {
               "listen": "prerequest",
@@ -52,17 +52,17 @@
               "formdata": []
             },
             "url": {
-              "raw": "http://localhost:3011/v1/categoria",
+              "raw": "http://localhost:3011/v1/category",
               "protocol": "http",
               "host": ["localhost"],
               "port": "3011",
-              "path": ["v1", "categoria"]
+              "path": ["v1", "category"]
             }
           },
           "response": []
         },
         {
-          "name": "categoria.pesquisarId",
+          "name": "category.pesquisarId",
           "event": [
             {
               "listen": "prerequest",
@@ -104,17 +104,17 @@
               "formdata": []
             },
             "url": {
-              "raw": "http://localhost:3011/v1/categoria/60d7cc5fa110fd3313ccb953",
+              "raw": "http://localhost:3011/v1/category/60d7cc5fa110fd3313ccb953",
               "protocol": "http",
               "host": ["localhost"],
               "port": "3011",
-              "path": ["v1", "categoria", "60d7cc5fa110fd3313ccb953"]
+              "path": ["v1", "category", "60d7cc5fa110fd3313ccb953"]
             }
           },
           "response": []
         },
         {
-          "name": "categoria.inserir",
+          "name": "category.inserir",
           "event": [
             {
               "listen": "prerequest",
@@ -152,17 +152,17 @@
               "mode": "formdata",
               "formdata": [
                 {
-                  "key": "nome",
+                  "key": "name",
                   "value": "ddsdasdaas",
                   "type": "text"
                 },
                 {
-                  "key": "descricao",
+                  "key": "description",
                   "value": "sdssf",
                   "type": "text"
                 },
                 {
-                  "key": "imagem",
+                  "key": "image",
                   "type": "file",
                   "src": "/home/pc/Área de Trabalho/projeto04meu/frontend/web/src/assets/img/cookies.jpg"
                 },
@@ -174,17 +174,17 @@
               ]
             },
             "url": {
-              "raw": "http://localhost:3011/v1/categoria",
+              "raw": "http://localhost:3011/v1/category",
               "protocol": "http",
               "host": ["localhost"],
               "port": "3011",
-              "path": ["v1", "categoria"]
+              "path": ["v1", "category"]
             }
           },
           "response": []
         },
         {
-          "name": "categoria.alterar",
+          "name": "category.alterar",
           "event": [
             {
               "listen": "prerequest",
@@ -222,17 +222,17 @@
               "mode": "formdata",
               "formdata": [
                 {
-                  "key": "nome",
+                  "key": "name",
                   "value": "dddddddddddddd",
                   "type": "text"
                 },
                 {
-                  "key": "descricao",
+                  "key": "description",
                   "value": "Cupcap de diversos sabores",
                   "type": "text"
                 },
                 {
-                  "key": "imagem",
+                  "key": "image",
                   "type": "file",
                   "src": "/home/pc/Área de Trabalho/projeto04meu/frontend/web/src/assets/img/cookies.jpg"
                 },
@@ -244,17 +244,17 @@
               ]
             },
             "url": {
-              "raw": "http://localhost:3011/v1/categoria/60d7b6c514123b1fcc055d6c",
+              "raw": "http://localhost:3011/v1/category/60d7b6c514123b1fcc055d6c",
               "protocol": "http",
               "host": ["localhost"],
               "port": "3011",
-              "path": ["v1", "categoria", "60d7b6c514123b1fcc055d6c"]
+              "path": ["v1", "category", "60d7b6c514123b1fcc055d6c"]
             }
           },
           "response": []
         },
         {
-          "name": "categoria.excluir",
+          "name": "category.excluir",
           "event": [
             {
               "listen": "prerequest",
@@ -293,17 +293,17 @@
               "formdata": []
             },
             "url": {
-              "raw": "http://localhost:3011/v1/categoria/60d7de738101dd4b65272e33",
+              "raw": "http://localhost:3011/v1/category/60d7de738101dd4b65272e33",
               "protocol": "http",
               "host": ["localhost"],
               "port": "3011",
-              "path": ["v1", "categoria", "60d7de738101dd4b65272e33"]
+              "path": ["v1", "category", "60d7de738101dd4b65272e33"]
             }
           },
           "response": []
         },
         {
-          "name": "categoria.listaProdutosPorCategoria",
+          "name": "category.listaProdutosPorcategory",
           "event": [
             {
               "listen": "prerequest",
@@ -338,14 +338,14 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:3011/v1/produto?categoria=60c3876f7e4a776d915a8b21",
+              "raw": "http://localhost:3011/v1/produto?category=60c3876f7e4a776d915a8b21",
               "protocol": "http",
               "host": ["localhost"],
               "port": "3011",
               "path": ["v1", "produto"],
               "query": [
                 {
-                  "key": "categoria",
+                  "key": "category",
                   "value": "60c3876f7e4a776d915a8b21"
                 }
               ]
@@ -457,7 +457,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"cnpj\": \"11111111111111\",\n    \"nomeFantasia\": \"gabriel\",\n    \"endereco\": \"Rua xyz\",\n    \"uf\": \"Rj\",\n    \"cidade\": \"rio de janeiro\",\n    \"responsavel\": \"Daniel\",\n    \"telefone\": \"2122332233\",\n    \"email\": \"gabriel@gmail.com\",\n    \"senha\": \"gabriel\"\n}",
+              "raw": "{\n    \"cnpj\": \"11111111111111\",\n    \"nameFantasia\": \"gabriel\",\n    \"endereco\": \"Rua xyz\",\n    \"uf\": \"Rj\",\n    \"cidade\": \"rio de janeiro\",\n    \"responsavel\": \"Daniel\",\n    \"telefone\": \"2122332233\",\n    \"email\": \"gabriel@gmail.com\",\n    \"senha\": \"gabriel\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1053,7 +1053,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"cnpj\": \"122123232345430312223\",\n    \"nomeFantasia\": \"daniel\",\n    \"responsavel\": \"daniel\",\n    \"telefone\": \"(21)99993-92222\",\n    \"endereco\": \"Rua teste, 12222\",\n    \"uf\": \"RJ\",\n    \"cidade\": \"Rio de Janeiro\",\n    \"email\": \"daniel@gmail.com\",\n    \"senha\": \"daniel\"\n}",
+              "raw": "{\n    \"cnpj\": \"122123232345430312223\",\n    \"nameFantasia\": \"daniel\",\n    \"responsavel\": \"daniel\",\n    \"telefone\": \"(21)99993-92222\",\n    \"endereco\": \"Rua teste, 12222\",\n    \"uf\": \"RJ\",\n    \"cidade\": \"Rio de Janeiro\",\n    \"email\": \"daniel@gmail.com\",\n    \"senha\": \"daniel\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1109,12 +1109,12 @@
               "mode": "formdata",
               "formdata": [
                 {
-                  "key": "nome",
+                  "key": "name",
                   "value": "Bolo de Limão",
                   "type": "text"
                 },
                 {
-                  "key": "descricao",
+                  "key": "description",
                   "value": "Bolo de Limão com cobertura",
                   "type": "text"
                 },
@@ -1124,7 +1124,7 @@
                   "type": "text"
                 },
                 {
-                  "key": "categoriaid",
+                  "key": "categoryid",
                   "value": "60c387cc7e4a776d915a8b22",
                   "type": "text"
                 },
@@ -1134,7 +1134,7 @@
                   "type": "text"
                 },
                 {
-                  "key": "imagem",
+                  "key": "image",
                   "type": "file",
                   "src": "/home/pc/Área de Trabalho/projeto04meu/frontend/web/src/assets/img/boloLimao.jpg"
                 }
@@ -1311,7 +1311,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \n    \"nome\": \"Matheus Barboza\",\n    \"data_nascimento\": \"05/03/1997\",\n    \"uf\": \"RJ\",\n    \"cidade\": \"São Gonçalo\",\n    \"email\": \"danielvbbDaDrboza@gmail.com\",\n    \"senha\": \"daniel\"\n}",
+              "raw": "{\n    \n    \"name\": \"Matheus Barboza\",\n    \"data_nascimento\": \"05/03/1997\",\n    \"uf\": \"RJ\",\n    \"cidade\": \"São Gonçalo\",\n    \"email\": \"danielvbbDaDrboza@gmail.com\",\n    \"senha\": \"daniel\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
