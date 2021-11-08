@@ -8,7 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/static", express.static(__dirname + "/.." + "/arquivos"));
+app.use("/static", express.static(__dirname + "/.." + "/files"));
 
 const router = require("./routes/index");
 router(app);

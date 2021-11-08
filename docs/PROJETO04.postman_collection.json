@@ -303,7 +303,7 @@
           "response": []
         },
         {
-          "name": "category.listaProdutosPorcategory",
+          "name": "category.listaproductPorcategory",
           "event": [
             {
               "listen": "prerequest",
@@ -417,10 +417,10 @@
       ]
     },
     {
-      "name": "fornecedor",
+      "name": "provider",
       "item": [
         {
-          "name": "fornecedor.inserir",
+          "name": "provider.inserir",
           "event": [
             {
               "listen": "prerequest",
@@ -465,17 +465,17 @@
               }
             },
             "url": {
-              "raw": "http://localhost:3011/v1/fornecedor",
+              "raw": "http://localhost:3011/v1/provider",
               "protocol": "http",
               "host": ["localhost"],
               "port": "3011",
-              "path": ["v1", "fornecedor"]
+              "path": ["v1", "provider"]
             }
           },
           "response": []
         },
         {
-          "name": "fornecedor.listar",
+          "name": "provider.listar",
           "event": [
             {
               "listen": "prerequest",
@@ -517,17 +517,17 @@
               "raw": ""
             },
             "url": {
-              "raw": "http://localhost:3011/v1/fornecedor/",
+              "raw": "http://localhost:3011/v1/provider/",
               "protocol": "http",
               "host": ["localhost"],
               "port": "3011",
-              "path": ["v1", "fornecedor", ""]
+              "path": ["v1", "provider", ""]
             }
           },
           "response": []
         },
         {
-          "name": "fornecedor.listarPorId",
+          "name": "provider.listarPorId",
           "event": [
             {
               "listen": "prerequest",
@@ -569,17 +569,17 @@
               "formdata": []
             },
             "url": {
-              "raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b",
+              "raw": "http://localhost:3011/v1/provider/60b7d8abe536e8407017542b",
               "protocol": "http",
               "host": ["localhost"],
               "port": "3011",
-              "path": ["v1", "fornecedor", "60b7d8abe536e8407017542b"]
+              "path": ["v1", "provider", "60b7d8abe536e8407017542b"]
             }
           },
           "response": []
         },
         {
-          "name": "fornecedor.ativar",
+          "name": "provider.ativar",
           "event": [
             {
               "listen": "prerequest",
@@ -618,17 +618,17 @@
               "formdata": []
             },
             "url": {
-              "raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/ativa",
+              "raw": "http://localhost:3011/v1/provider/60b7d8abe536e8407017542b/ativa",
               "protocol": "http",
               "host": ["localhost"],
               "port": "3011",
-              "path": ["v1", "fornecedor", "60b7d8abe536e8407017542b", "ativa"]
+              "path": ["v1", "provider", "60b7d8abe536e8407017542b", "ativa"]
             }
           },
           "response": []
         },
         {
-          "name": "fornecedor.atualizarN",
+          "name": "provider.atualizarN",
           "event": [
             {
               "listen": "prerequest",
@@ -667,17 +667,17 @@
               "formdata": []
             },
             "url": {
-              "raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b",
+              "raw": "http://localhost:3011/v1/provider/60b7d8abe536e8407017542b",
               "protocol": "http",
               "host": ["localhost"],
               "port": "3011",
-              "path": ["v1", "fornecedor", "60b7d8abe536e8407017542b"]
+              "path": ["v1", "provider", "60b7d8abe536e8407017542b"]
             }
           },
           "response": []
         },
         {
-          "name": "fornecedor.inativar",
+          "name": "provider.inativar",
           "event": [
             {
               "listen": "prerequest",
@@ -712,22 +712,17 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/inativa",
+              "raw": "http://localhost:3011/v1/provider/60b7d8abe536e8407017542b/inativa",
               "protocol": "http",
               "host": ["localhost"],
               "port": "3011",
-              "path": [
-                "v1",
-                "fornecedor",
-                "60b7d8abe536e8407017542b",
-                "inativa"
-              ]
+              "path": ["v1", "provider", "60b7d8abe536e8407017542b", "inativa"]
             }
           },
           "response": []
         },
         {
-          "name": "fornecedorProdutos",
+          "name": "providerproduct",
           "event": [
             {
               "listen": "prerequest",
@@ -762,16 +757,11 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/produto?=",
+              "raw": "http://localhost:3011/v1/provider/60b7d8abe536e8407017542b/produto?=",
               "protocol": "http",
               "host": ["localhost"],
               "port": "3011",
-              "path": [
-                "v1",
-                "fornecedor",
-                "60b7d8abe536e8407017542b",
-                "produto"
-              ],
+              "path": ["v1", "provider", "60b7d8abe536e8407017542b", "produto"],
               "query": [
                 {
                   "key": "",
@@ -783,7 +773,7 @@
           "response": []
         },
         {
-          "name": "fornecedorIdCurtir",
+          "name": "providerIdCurtir",
           "event": [
             {
               "listen": "prerequest",
@@ -827,22 +817,17 @@
               }
             },
             "url": {
-              "raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/curtidas",
+              "raw": "http://localhost:3011/v1/provider/60b7d8abe536e8407017542b/likes",
               "protocol": "http",
               "host": ["localhost"],
               "port": "3011",
-              "path": [
-                "v1",
-                "fornecedor",
-                "60b7d8abe536e8407017542b",
-                "curtidas"
-              ]
+              "path": ["v1", "provider", "60b7d8abe536e8407017542b", "likes"]
             }
           },
           "response": []
         },
         {
-          "name": "fornecedorListarCurtida",
+          "name": "providerListarlike",
           "event": [
             {
               "listen": "prerequest",
@@ -889,22 +874,17 @@
               }
             },
             "url": {
-              "raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/curtidas",
+              "raw": "http://localhost:3011/v1/provider/60b7d8abe536e8407017542b/likes",
               "protocol": "http",
               "host": ["localhost"],
               "port": "3011",
-              "path": [
-                "v1",
-                "fornecedor",
-                "60b7d8abe536e8407017542b",
-                "curtidas"
-              ]
+              "path": ["v1", "provider", "60b7d8abe536e8407017542b", "likes"]
             }
           },
           "response": []
         },
         {
-          "name": "fornecedorCurtidas",
+          "name": "providerlikes",
           "event": [
             {
               "listen": "prerequest",
@@ -939,16 +919,11 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/curtidas",
+              "raw": "http://localhost:3011/v1/provider/60b7d8abe536e8407017542b/likes",
               "protocol": "http",
               "host": ["localhost"],
               "port": "3011",
-              "path": [
-                "v1",
-                "fornecedor",
-                "60b7d8abe536e8407017542b",
-                "curtidas"
-              ]
+              "path": ["v1", "provider", "60b7d8abe536e8407017542b", "likes"]
             }
           },
           "response": []
@@ -993,13 +968,13 @@
               "formdata": []
             },
             "url": {
-              "raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/produto/60d7b51d14123b1fcc055d6b",
+              "raw": "http://localhost:3011/v1/provider/60b7d8abe536e8407017542b/produto/60d7b51d14123b1fcc055d6b",
               "protocol": "http",
               "host": ["localhost"],
               "port": "3011",
               "path": [
                 "v1",
-                "fornecedor",
+                "provider",
                 "60b7d8abe536e8407017542b",
                 "produto",
                 "60d7b51d14123b1fcc055d6b"
@@ -1129,7 +1104,7 @@
                   "type": "text"
                 },
                 {
-                  "key": "fornecedorid",
+                  "key": "providerid",
                   "value": "60b7d8abe536e8407017542b",
                   "type": "text"
                 },
@@ -1220,7 +1195,7 @@
           "response": []
         },
         {
-          "name": "ListarProdutosPorfornecedor",
+          "name": "ListarproductPorprovider",
           "event": [
             {
               "listen": "prerequest",
@@ -1255,16 +1230,11 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:3011/v1/fornecedor/60b7d8abe536e8407017542b/produto",
+              "raw": "http://localhost:3011/v1/provider/60b7d8abe536e8407017542b/produto",
               "protocol": "http",
               "host": ["localhost"],
               "port": "3011",
-              "path": [
-                "v1",
-                "fornecedor",
-                "60b7d8abe536e8407017542b",
-                "produto"
-              ]
+              "path": ["v1", "provider", "60b7d8abe536e8407017542b", "produto"]
             }
           },
           "response": []
@@ -1272,10 +1242,10 @@
       ]
     },
     {
-      "name": "Cliente",
+      "name": "client",
       "item": [
         {
-          "name": "cliente.insere",
+          "name": "client.insere",
           "event": [
             {
               "listen": "prerequest",
@@ -1319,11 +1289,11 @@
               }
             },
             "url": {
-              "raw": "http://localhost:3011/v1/cliente",
+              "raw": "http://localhost:3011/v1/client",
               "protocol": "http",
               "host": ["localhost"],
               "port": "3011",
-              "path": ["v1", "cliente"]
+              "path": ["v1", "client"]
             }
           },
           "response": []
