@@ -39,9 +39,8 @@ const ServiceInsertCategory = async (model) => {
   const novacategory = await category.create({
     name: model.name,
     description: model.description,
-    status: model.status,
     image: {
-      originalName: model.image.originalName,
+      original_name: model.image.originalName,
       name: model.image.newName,
       type: model.image.type,
     },
@@ -51,7 +50,7 @@ const ServiceInsertCategory = async (model) => {
 
   return {
     sucesso: true,
-    mensagem: "Cadastro realizado com sucesso!",
+      message: "Operation performed successfully",
     data: categoryMapper.toDTO(novacategory),
   };
 };

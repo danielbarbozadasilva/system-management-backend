@@ -1,16 +1,20 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const providerchema = {
+const provider_schema = {
   cnpj: {
     type: String,
     required: true,
   },
   fantasy_name: {
     type: String,
+    required: false,
+  },
+  social_name: {
+    type: String,
     required: true,
   },
-  endereco: {
+  address: {
     type: String,
     required: true,
   },
@@ -18,22 +22,22 @@ const providerchema = {
     type: String,
     required: true,
   },
-  cidade: {
+  city: {
     type: String,
     required: true,
   },
-  responsavel: {
+  responsible: {
     type: String,
     required: true,
   },
-  telefone: {
+  phone: {
     type: String,
     required: true,
   },
   status: {
     type: String,
     required: true,
-  },
+  },  
 };
 
-module.exports = providerchema;
+module.exports = provider_schema;

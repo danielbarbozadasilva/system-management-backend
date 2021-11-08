@@ -74,7 +74,7 @@ const pesquisaPorFiltros = async (filtros) => {
   });
 };
 
-const deleta = async ({ providerId, productId, usuarioId }) => {
+const deleta = async ({ providerId, productId, userId }) => {
   const [providerDB, productDB] = await Promise.all([
     provider.findById(providerId),
     product.findById(productId),
@@ -88,7 +88,7 @@ const deleta = async ({ providerId, productId, usuarioId }) => {
     };
   }
 
-  if (providerId !== usuarioId) {
+  if (providerId !== userId) {
     return {
       sucesso: false,
       mensagem: 'Operação não pode ser realizada',

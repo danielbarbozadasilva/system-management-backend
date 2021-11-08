@@ -2,23 +2,30 @@ const fileUtils = require('../utils/file.util');
 const { client } = require('../models/models.index');
 
 const toListItemDTO = (model) => {
-  const { _id, email, cnpj, fantasy_name, status } = model;
+  const {
+    id: _id,
+    cnpj,
+    fantasy_name,
+    social_name,
+    address,
+    uf,
+    city,
+    responsible,
+    phone,
+    status,
+  } = model;
 
   return {
     id: _id,
-    email,
     cnpj,
     fantasy_name,
+    social_name,
+    address,
+    uf,
+    city,
+    responsible,
+    phone,
     status,
-  };
-};
-
-const toDTOLikeCase = (model) => {
-  const { name, ...rest } = model;
-
-  return {
-    name: name,
-    ...rest,
   };
 };
 
@@ -27,12 +34,8 @@ const toDTO = (model) => {
     _id,
     likes,
     senha,
-    createdAt,
-    updatedAt,
-    __v,
     kind,
     products,
-    ...rest
   } = model;
 
   return {
@@ -54,7 +57,7 @@ const toDTO = (model) => {
         }),
       };
     }),
-    ...rest,
+    ...resto,
   };
 };
 

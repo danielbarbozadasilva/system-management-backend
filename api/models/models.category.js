@@ -10,12 +10,8 @@ module.exports = {
     type: String,
     required: false,
   },
-  status: {
-    type: Boolean,
-    required: true,
-  },
   image: {
-    originalName: {
+    original_name: {
       type: String,
       required: false,
     },

@@ -13,7 +13,7 @@ const listaId = async (req, res, next) => {
   return res.status(200).send({ data: result });
 };
 
-const alterarproduct = async (req, res, next) => {
+const UPDATEproduct = async (req, res, next) => {
   const { params, body } = req;
   const resultadoServico = await productService.alteraproduct(
     params.productid,
@@ -28,14 +28,12 @@ const alterarproduct = async (req, res, next) => {
 };
 
 const inserirproduct = async (req, res, next) => {
-  const { body, params, usuario } = req;
-
+  const { body, params, user } = req;
   const resultadoServico = await productService.cria({
     ...params,
     ...body,
     providerlogadoid: req.params.provider,
   });
-
   return res.status(200).send({
     mensagem: 'Operacao realizada com sucesso.',
     data: resultadoServico.data,
@@ -50,14 +48,12 @@ const listaproductPorId = async (req, res, next) => {
 
 const removeproduct = async (req, res, next) => {
   const { providerid, productid } = req.params;
-  const { usuario } = req;
-
+  const { user } = req;
   const resultadoServico = await productService.deleta({
     providerId: providerid,
     productId: productid,
-    usuarioId: req.usuario.id,
+    userId: req.user.id,
   });
-
   const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
   const dadoRetorno = resultadoServico.sucesso
     ? { mensagem: resultadoServico.mensagem, data: resultadoServico.data }
@@ -66,24 +62,21 @@ const removeproduct = async (req, res, next) => {
 };
 
 const curtirproduct = async (req, res, next) => {
-  const { params, usuario } = req;
+  const { params, user } = req;
   const { providerid, productid } = req.params;
-
   const result = await likeService.crialikeproviderproduct(
     providerid,
     productid
   );
-
   const codigoRetorno = result.sucesso ? 200 : 400;
   const dadoRetorno = result.sucesso
     ? { data: result.data }
     : { detalhes: result.detalhes };
-
   return res.status(codigoRetorno).send(dadoRetorno);
 };
 
 const removerproductlikes = async (req, res, next) => {
-  const { usuario, params } = req;
+  const { user, params } = req;
   const result = await likeService.removelikeproviderproduct(
     params.providerid,
     params.productid
@@ -100,7 +93,7 @@ module.exports = {
   removeproduct,
   listarproducts,
   listaproductPorId,
-  alterarproduct,
+  UPDATEproduct,
   listaId,
   curtirproduct,
   removerproductlikes,

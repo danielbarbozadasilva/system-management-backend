@@ -10,7 +10,7 @@ const dataProduct = [
     preco: 13.55,
     image: {
       originalName: 'boloLimao.jpg',
-      name: fileUtils.crianame('image/jpeg'),
+      name: fileUtils.createName('image/jpeg'),
       type: 'image/jpeg',
     },
   },
@@ -22,7 +22,7 @@ const dataProduct = [
     preco: 20.95,
     image: {
       originalName: 'principal2.jpg',
-      name: fileUtils.crianame('image/jpeg'),
+      name: fileUtils.createName('image/jpeg'),
       type: 'image/jpeg',
     },
   },

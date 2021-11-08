@@ -1,6 +1,6 @@
-const { usuario, provider } = require('../models/models.index');
+const { user, provider } = require('../models/models.index');
 const criptografia = require('../utils/utils.cryptography');
-const usuarioMapper = require('../mappers/mappers.user');
+const userMapper = require('../mappers/mappers.user');
 
 const perfis = [
   {
@@ -14,10 +14,10 @@ const perfis = [
       'ATIVAR_provider',
       'INATIVAR_provider',
       'PESQUISA_provider_product',
-      'CRIAR_category',
-      'ALTERAR_category',
-      'PESQUISA_category',
-      'REMOVE_category',
+      'CREATE_CATEGORY',
+      'UPDATE_CATEGORY',
+      'PESQUISA_CATEGORY',
+      'REMOVE_CATEGORY',
       'PESQUISA_client',
     ],
   },
@@ -27,7 +27,7 @@ const perfis = [
     funcionalidades: [
       'PESQUISA_provider_ID',
       'PESQUISA_product',
-      'CRIAR_product',
+      'CREATE_product',
       'REMOVE_product',
       'PESQUISA_provider_product',
       'PESQUISA_client_ID',
@@ -49,20 +49,20 @@ const perfis = [
   },
 ];
 
-const buscatypeUsuarioPorId = (typeUsuarioId) => {
+const buscatypeuserPorId = (typeuserId) => {
   return perfis.find((item) => {
-    return item.id === typeUsuarioId;
+    return item.id === typeuserId;
   });
 };
 
 const validaFuncionalidadeNoPerfil = (perfilId, funcionalidade) => {
-  const perfil = buscatypeUsuarioPorId(perfilId);
+  const perfil = buscatypeuserPorId(perfilId);
   return perfil.funcionalidades.includes(funcionalidade) ? true : false;
 };
 
 const validaSeEmailJaExiste = async (email) => {
-  const usuarios = await usuario.find({ email });
-  return usuarios.length > 0 ? true : false;
+  const users = await user.find({ email });
+  return users.length > 0 ? true : false;
 };
 
 const validaSeCnpjJaExiste = async (cnpj) => {
@@ -70,24 +70,24 @@ const validaSeCnpjJaExiste = async (cnpj) => {
   return result.length > 0 ? true : false;
 };
 
-const criaCredencial = async (usuarioEmail) => {
-  const usuarioDB = await usuario.findOne({
-    email: usuarioEmail,
+const criaCredencial = async (userEmail) => {
+  const userDB = await user.findOne({
+    email: userEmail,
   });
-  const usuarioDTO = usuarioMapper.toUserDTO(usuarioDB);
+  const userDTO = userMapper.toUserDTO(userDB);
   return {
-    token: criptografia.criaToken(usuarioDTO),
-    usuarioDTO,
+    token: criptografia.criaToken(userDTO),
+    userDTO,
   };
 };
 
 const autenticar = async (email, senha) => {
-  const resultadoDB = await usuarioEValido(email, senha);
+  const resultadoDB = await userEValido(email, senha);
   console.log(email, senha);
   if (!resultadoDB) {
     return {
       sucesso: false,
-      mensagem: 'não foi possivel autenticar o usuario',
+      mensagem: 'não foi possivel autenticar o user',
       detalhes: ['usuário ou senha inválido'],
     };
   }
@@ -100,21 +100,21 @@ const autenticar = async (email, senha) => {
 };
 
 const cria = async () => {
-  return usuario.create({
+  return user.create({
     email: 'daniel80barboza@gmail.com',
     senha: md5(`daniel${process.env.MD5_SECRET}`),
   });
 };
 
-const usuarioEValido = async (email, senha) => {
-  return (await usuario.findOne({ email, senha: criptografia.criaHash(senha) }))
+const userEValido = async (email, senha) => {
+  return (await user.findOne({ email, senha: criptografia.criaHash(senha) }))
     ? true
     : false;
 };
 
 module.exports = {
   autenticar,
-  buscatypeUsuarioPorId,
+  buscatypeuserPorId,
   cria,
   criaCredencial,
   validaSeCnpjJaExiste,

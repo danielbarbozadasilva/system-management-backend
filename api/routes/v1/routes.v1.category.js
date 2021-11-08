@@ -9,12 +9,12 @@ module.exports = (router) => {
   router
     .route("/category")
     .get(
-      autorizacaoMiddlewate("*"),
+      autorizacaoMiddlewate('*'),
       controllerCategory.ControllerListAllCategories
     )
 
     .post(
-      autorizacaoMiddlewate("CRIAR_category"),
+      autorizacaoMiddlewate("CREATE_CATEGORY"),
       fileUploadMiddleware("category"),
       validaDTO(
         "body",
@@ -27,10 +27,6 @@ module.exports = (router) => {
             "any.required": `"description" é um campo obrigatório`,
             "string.empty": `"description" não deve ser vazio`,
           }),
-          status: joi.boolean().required().messages({
-            "any.required": `"status" é um campo obrigatório`,
-            "booleam.empty": `"status" não deve ser vazio`,
-          }),
         },
         {
           allowUnknown: true,
@@ -42,7 +38,7 @@ module.exports = (router) => {
   router
     .route("/category/:categoryid")
     .get(
-      autorizacaoMiddlewate("*"),
+      autorizacaoMiddlewate('*'),
       validaDTO("params", {
         categoryid: joi
           .string()
@@ -57,7 +53,7 @@ module.exports = (router) => {
     )
 
     .put(
-      autorizacaoMiddlewate("ALTERAR_category"),
+      autorizacaoMiddlewate("UPDATE_CATEGORY"),
       fileUploadMiddleware("category", true),
       validaDTO("params", {
         categoryid: joi
@@ -81,10 +77,6 @@ module.exports = (router) => {
             "any.required": `"description" é um campo obrigatório`,
             "string.empty": `"description" não deve ser vazio`,
           }),
-          status: joi.boolean().required().messages({
-            "any.required": `"status" é um campo obrigatório`,
-            "booleam.empty": `"status" não deve ser vazio`,
-          }),
         },
         {
           allowUnknown: true,
@@ -94,7 +86,7 @@ module.exports = (router) => {
     )
 
     .delete(
-      autorizacaoMiddlewate("REMOVE_category"),
+      autorizacaoMiddlewate("REMOVE_CATEGORY"),
       validaDTO("params", {
         categoryid: joi
           .string()

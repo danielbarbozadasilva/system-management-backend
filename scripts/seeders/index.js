@@ -1,10 +1,9 @@
 const db = require('../../db/config');
-
-const category = require('./add-category');
-const likeCli = require('./add-clientLikeProvider');
-const product = require('./add-product');
-const likeForn = require('./add-providerLikeProduct');
-const usuarios = require('./add-users');
+require('./add-category');
+require('./add-clientLikeProvider');
+require('./add-product');
+require('./add-providerLikeProduct');
+require('./add-users');
 
 const mongoose = require('mongoose');
 mongoose.connect(db.uri, { useUnifiedTopology: true, useNewUrlParser: true });

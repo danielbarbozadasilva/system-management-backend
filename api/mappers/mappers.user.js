@@ -15,12 +15,11 @@ const VerifyTypeUser = (type) => {
 };
 
 const toUserDTO = (model) => {
-  const { _id, email, kind, name, fantasy_name } = model;
-
+  const { _id, email, kind, name, social_name } = model;
   return {
     id: _id,
     email,
-    name: name ? name : fantasy_name,
+    name: name ? name : social_name,
     typeUser: VerifyTypeUser(kind),
   };
 };

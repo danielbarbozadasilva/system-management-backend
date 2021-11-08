@@ -1,6 +1,6 @@
 const joi = require("joi");
 
-const usuarioController = require("../../controllers/controllers.user");
+const userController = require("../../controllers/controllers.user");
 const validaDTO = require("../../utils/middlewares/validate-dto.middleware");
 
 module.exports = (router) => {
@@ -15,6 +15,6 @@ module.exports = (router) => {
         "string.empty": `"senha" não deve ser vazio`,
       }),
     }),
-    usuarioController.auth
+    userController.auth
   );
 };

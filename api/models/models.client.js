@@ -2,26 +2,26 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const clientSchema = {
-  name: {
+  first_name: {
+    type: String,
+    required: true,
+  }, 
+  last_name: {
     type: String,
     required: true,
   },
-
-  date: {
-    type: String,
+  birth_date: {
+    type: Date,
     required: true,
   },
-
   uf: {
     type: String,
     required: true,
   },
-
   city: {
     type: String,
     required: true,
   },
-
   status: {
     type: String,
     required: true,

@@ -1,9 +1,8 @@
 const fileUtils = require('../utils/utils.file');
 
 const toItemListaDTO = (model) => {
-  const { _id, name, description, preco, provider, category, image, status } =
+  const { _id, name, description, preco, provider, category, image } =
     model;
-
   return {
     id: _id,
     name: name,

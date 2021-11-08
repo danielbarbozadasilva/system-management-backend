@@ -33,6 +33,6 @@ module.exports = (router) => {
       namelike: joi.string(),
       allowUnknown: true,
     }),
-    productController.alterarproduct
+    productController.UPDATEproduct
   );
 };

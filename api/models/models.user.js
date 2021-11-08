@@ -1,12 +1,12 @@
-const usuarioSchema = {
+const user_schema = {
   email: {
     type: String,
     required: true,
   },
-  senha: {
+  password: {
     type: String,
     required: true,
   },
 };
 
-module.exports = usuarioSchema;
+module.exports = user_schema;

@@ -1,38 +1,26 @@
-const providerervices = require('../services/provider.service');
-const likeService = require('../services/services.like');
+const providerService = require('../services/provider.service');
 const productMapper = require('../mappers/mappers.product');
-const { product, category, provider } = require('../models/models.index');
+const { provider } = require('../models/models.index');
 
 const activeProvider = async (req, res, next) => {
-  const { providerid } = req.params;
-
-  const resultadoServico = await providerervices.alteraStatus(
-    providerid,
-    'Ativo'
-  );
+  const { id } = req.params;
+  const resultadoServico = await providerService.alteraStatus(id, 'Enabled');
   const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
   const dadoRetorno = resultadoServico.sucesso
     ? { data: resultadoServico.data }
     : { detalhes: resultadoServico.detalhes };
-
   return res.status(codigoRetorno).send({
     ...dadoRetorno,
   });
 };
 
 const disableProvider = async (req, res, next) => {
-  const { providerid } = req.params;
-
-  const resultadoServico = await providerervices.alteraStatus(
-    providerid,
-    'Inativo'
-  );
-
+  const { id } = req.params;
+  const resultadoServico = await providerService.alteraStatus(id, 'Disabled');
   const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
   const dadoRetorno = resultadoServico.sucesso
     ? { data: resultadoServico.data }
     : { detalhes: resultadoServico.detalhes };
-
   return res.status(codigoRetorno).send({
     mensagem: 'operaçao realizada com sucesso',
     ...dadoRetorno,
@@ -41,63 +29,54 @@ const disableProvider = async (req, res, next) => {
 
 const insertProvider = async (req, res, next) => {
   const { body } = req;
-  const result = await providerervices.createProvider(body);
-
+  const result = await providerService.createProvider(body);
   const codigoRetorno = result.sucesso ? 200 : 400;
   const dadoRetorno = result.sucesso
     ? { data: result.data }
     : { detalhes: result.detalhes };
-
   return res.status(codigoRetorno).send(dadoRetorno);
 };
 
 const updateProvider = async (req, res, next) => {
   const { body } = req;
-  const providerid = req.params.id;
-  const result = await providerervices.updateProvider(providerid, body);
-
+  const id = req.params.id;
+  const result = await providerService.updateProvider(id, body);
   const codigoRetorno = result.sucesso ? 200 : 400;
   const dadoRetorno = result.sucesso
     ? { data: result.data }
     : { detalhes: result.detalhes };
-
   return res.status(codigoRetorno).send(dadoRetorno);
 };
 
 const listAllprovider = async (req, res, next) => {
-  const resultadoDB = await providerervices.listAll();
+  const resultadoDB = await providerService.listAll();
   return res.status(200).send(resultadoDB);
 };
 
 const listAllproviderLocation = async (req, res, next) => {
-  const { uf, cidade } = req.query;
-  let filtro = {};
-  if (cidade == undefined || cidade == 'x') {
-    filtro = { uf };
+  const { uf, city } = req.query;
+  let filter = {};
+  if (city == undefined || city == 'x') {
+    filter = { uf };
   } else {
-    filtro = { uf, cidade };
+    filter = { uf, city };
   }
-  const resultadoDB = await provider.find(filtro);
+  const resultadoDB = await provider.find(filter);
   return res.send(resultadoDB);
 };
 
 const listById = async (req, res, next) => {
-  const { providerid } = req.params;
-
-  const result = await providerervices.listProviderById(providerid);
-
+  const { id } = req.params;
+  const result = await providerService.listProviderById(id);
   const codigoRetorno = result.sucesso ? 200 : 400;
   const dadoRetorno = result.sucesso
     ? { data: result.data }
     : { detalhes: result.detalhes };
-
   return res.status(codigoRetorno).send(dadoRetorno);
 };
 
-const listaproductsByprovider = async (providerid, providerlogadoid) => {
-  const providerFromDB = await provider
-    .findById(providerid)
-    .populate('products');
+const listaproductsByprovider = async (id, providerlogadoid) => {
+  const providerFromDB = await provider.findById(id).populate('products');
   const providerAsJSON = providerFromDB.toJSON();
   return providerAsJSON.products.map((item) => {
     return productMapper.toItemListaDTO(item);
@@ -105,16 +84,14 @@ const listaproductsByprovider = async (providerid, providerlogadoid) => {
 };
 
 const searchLikesReceived = async (req, res, next) => {
-  const { providerid } = req.params;
-
-  const result = await providerervices.providerlikeproduct(providerid);
+  const { id } = req.params;
+  const result = await providerService.providerlikeproduct(id);
   return res.status(200).send(result);
 };
 
 const searchProductsProvider = async (req, res, next) => {
-  const id = req.params.providerid;
-  const data = await providerervices.listProductsProvider(id);
-
+  const id = req.params.id;
+  const data = await providerService.listProductsProvider(id);
   return res.status(200).send({ data });
 };
 

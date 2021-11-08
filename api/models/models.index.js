@@ -1,74 +1,73 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const createSchema = (modelPai, model, options = {}) => {
+const createSchema = (father, model, options = {}) => {
   return new Schema(
     {
-      ...modelPai,
+      ...father,
       ...model,
     },
     {
       timestamps: true,
-      collection: 'UsuariosCollection',
+      collection: 'users_collection',
       ...options,
     }
   );
 };
 
-const usuarioSchema = require('./models.user');
-
-const usuario = mongoose.model(
-  'usuario',
-  createSchema(undefined, usuarioSchema, {
+const user_schema = require('./models.user');
+const user = mongoose.model(
+  'user',
+  createSchema(undefined, user_schema, {
     discriminatorKey: 'kind',
   })
 );
 
-const adminSchema = require('./models.admin');
-const admin = usuario.discriminator(
+const admin_schema = require('./models.admin');
+const admin = user.discriminator(
   'admin',
-  createSchema(usuarioSchema, adminSchema, {})
+  createSchema(userSchema, admin_schema, {})
 );
 
-const providerchema = require('./models.provider');
-const provider = usuario.discriminator(
+const provider_schema = require('./models.provider');
+const provider = user.discriminator(
   'provider',
-  createSchema(usuarioSchema, providerchema, {})
+  createSchema(userSchema, provider_schema, {})
 );
 
-const clientSchema = require('./models.client');
-const client = usuario.discriminator(
+const client_schema = require('./models.client');
+const client = user.discriminator(
   'client',
-  createSchema(usuarioSchema, clientSchema, {})
+  createSchema(userSchema, client_schema, {})
 );
 
-const categorySchema = require('./models.category');
+const category_schema = require('./models.category');
 const category = mongoose.model(
   'category',
-  createSchema(undefined, categorySchema, {
-    collection: 'categoryCollection',
+  createSchema(undefined, category_schema, {
+    collection: 'category_collection',
     toJSON: {
       virtuals: true,
     },
   })
 );
 
-const productSchema = require('./models.product');
+const product_schema = require('./models.product');
 const product = mongoose.model(
   'product',
-  createSchema(undefined, productSchema, {
-    collection: 'productCollection',
+  createSchema(undefined, product_schema, {
+    collection: 'product_collection',
     toJSON: {
       virtuals: true,
     },
   })
 );
 
-const likeSchema = require('./models.like');
+const like_schema = require('./models.like');
 const like = mongoose.model(
   'like',
-  createSchema(undefined, likeSchema, {
-    collection: 'likeCollection',
+  createSchema(undefined, like_schema, {
+    collection: 'like_collection',
     toJSON: {
       virtuals: true,
     },
@@ -77,7 +76,7 @@ const like = mongoose.model(
 
 module.exports = {
   category,
-  usuario,
+  user,
   admin,
   provider,
   product,

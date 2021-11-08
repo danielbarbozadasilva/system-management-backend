@@ -4,8 +4,8 @@ const { toListItemDTO, toDTOLikeCase } = require('../mappers/mappers.provider');
 const {
   validaSeEmailJaExiste,
   validaSeCnpjJaExiste,
-  buscatypeUsuarioPorId,
-} = require('../services/usuario.service');
+  buscatypeuserPorId,
+} = require('../services/user.service');
 const { criaHash } = require('../utils/criptografia.util');
 const emailUtils = require('../utils/email.utils');
 const { EmailHabilitar } = require('../utils/email.mensagem.habilitar');

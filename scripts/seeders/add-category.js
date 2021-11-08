@@ -8,7 +8,7 @@ const createCategory = async () => {
     status: true,
     image: {
       originalName: "boloLimao.jpg",
-      name: fileUtils.crianame("image/jpeg"),
+      name: fileUtils.createName("image/jpeg"),
       type: "image/jpeg",
     },
   });

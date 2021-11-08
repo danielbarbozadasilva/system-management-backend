@@ -1,43 +1,43 @@
 const criptografiaUitls = require("../cryptography.util");
-const usuarioService = require("../../services/usuario.service");
+const userService = require("../../services/user.service");
 
-const ErroUsuarioNaoAutorizado = require("../errors/errors.user_not_allowed");
-const ErroUsuarioNaoAutenticado = require("../errors/errors.user_not_authenticated");
+const ErrouserNaoAutorizado = require("../errors/errors.user_not_allowed");
+const ErrouserNaoAutenticado = require("../errors/errors.user_not_authenticated");
 
-const autorizar = (rota = "*") => {
+const autorizar = (rota = '*') => {
   return async (req, res, next) => {
     new Promise(function (resolve, reject) {
       setTimeout(function () {
         const teste = rota;
         const { token } = req.headers;
-        if (teste != "*") {
+        if (teste != '*') {
           if (!token) {
             return reject(
-              new ErroUsuarioNaoAutenticado("Usuário não autenticado!")
+              new ErrouserNaoAutenticado("Usuário não autenticado!")
             );
           }
 
           if (!criptografiaUitls.validaToken(token)) {
             return reject(
-              new ErroUsuarioNaoAutenticado("Usuário não autenticado!")
+              new ErrouserNaoAutenticado("Usuário não autenticado!")
             );
           }
 
-          const { id, email, typeUsuario } =
+          const { id, email, typeuser } =
             criptografiaUitls.decodificaToken(token);
 
-          if (!usuarioService.validaSeEmailJaExiste(email)) {
+          if (!userService.validaSeEmailJaExiste(email)) {
             return reject(
-              new ErroUsuarioNaoAutorizado("Usuário não autorizado!")
+              new ErrouserNaoAutorizado("Usuário não autorizado!")
             );
           }
 
           if (
-            usuarioService.validaFuncionalidadeNoPerfil(typeUsuario, teste) ===
+            userService.validaFuncionalidadeNoPerfil(typeuser, teste) ===
             false
           ) {
             return reject(
-              new ErroUsuarioNaoAutorizado("Usuário não autorizado!")
+              new ErrouserNaoAutorizado("Usuário não autorizado!")
             );
           }
         }

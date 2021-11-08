@@ -1,11 +1,11 @@
-const { validaSeEmailJaExiste } = require('./usuario.service');
+const { validaSeEmailJaExiste } = require('./user.service');
 const { client } = require('../models/models.index');
 const { toListItemDTO } = require('../mappers/mappers.client');
 const { criaHash } = require('../utils/criptografia.util');
 
 const ErrorRegraDeNegocio = require('../utils/errors/erro-regra-negocio');
 
-const ErroUsuarioNaoAutorizado = require('../utils/errors/erro-usuario-nao-autorizado');
+const ErrouserNaoAutorizado = require('../utils/errors/erro-user-nao-autorizado');
 
 const listaTodos = async () => {
   const resultadoDB = await client

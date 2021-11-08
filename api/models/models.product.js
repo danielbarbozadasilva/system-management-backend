@@ -6,19 +6,16 @@ module.exports = {
     type: String,
     required: true,
   },
-
   description: {
     type: String,
     required: true,
   },
-
-  preco: {
+  price: {
     type: Number,
     required: true,
   },
-
   image: {
-    originalName: {
+    original_name: {
       type: String,
       required: false,
     },
@@ -31,12 +28,10 @@ module.exports = {
       required: true,
     },
   },
-
   category: {
     type: Schema.Types.ObjectId,
     ref: 'category',
   },
-
   provider: {
     type: Schema.Types.ObjectId,
     ref: 'provider',
