@@ -7,8 +7,8 @@ const createCategory = async () => {
     description: "teste-category02-description",
     status: true,
     image: {
-      originalName: "boloLimao.jpg",
-      name: fileUtils.createName("image/jpeg"),
+      sourcealName: "boloLimao.jpg",
+      name: fileUtils.UtilCreatename("image/jpeg"),
       type: "image/jpeg",
     },
   });

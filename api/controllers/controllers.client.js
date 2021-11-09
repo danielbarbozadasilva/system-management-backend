@@ -1,62 +1,65 @@
-const clientService = require('../services/services.client');
-const likeService = require('../services/services.like');
+const serviceClientService = require('../services/services.client');
+const serviceLikeService = require('../services/services.like');
 
-const listarTodosclients = async (req, res, next) => {
-  const result = await clientService.listaTodos();
+const ControllerListAllClients = async (req, res, next) => {
+  const result = await serviceClientService.listaTodos();
   return res.status(200).send(result);
 };
 
-const pesquisaPorId = async (req, res, next) => {
+const ControllerListClientById = async (req, res, next) => {
   const { params } = req;
-  const result = await clientService.pesquisaPorId(params.clientid);
+  const result = await serviceClientService.SEARCHPorId(params.clientid);
   return res.status(200).send(result);
 };
 
-const listarlikesprovider = async (req, res, next) => {
+const ControllerListLikesClient = async (req, res, next) => {
   const { clientid } = req.params;
-  const result = await clientService.listalike(clientid);
+  const result = await serviceClientService.listalike(clientid);
   return res.status(200).send(result);
 };
 
-const cria = async (req, res, next) => {
+const ControllerCreateClient = async (req, res, next) => {
   const { body } = req;
-  const result = await clientService.cria(body);
-  const codigoRetorno = result.sucesso ? 200 : 400;
-  const dadoRetorno = result.sucesso
+  const result = await serviceClientService.create(body);
+  const codigoRetorno = result.success ? 200 : 400;
+  const dadoRetorno = result.success
     ? { data: result.data }
-    : { detalhes: result.detalhes };
+    : { details: result.details };
   return res.status(codigoRetorno).send(dadoRetorno);
 };
 
-const curteprovider = async (req, res, next) => {
+const ControllerLikeProvider = async (req, res, next) => {
   const { params, user } = req;
   const { providerid } = req.params;
-  const result = await likeService.crialikeclientprovider(providerid, user.id);
-  const codigoRetorno = result.sucesso ? 200 : 400;
-  const dadoRetorno = result.sucesso
+  const result = await serviceLikeService.ServiceCreateLikeClientProvider(
+    providerid,
+    user.id
+  );
+  const codigoRetorno = result.success ? 200 : 400;
+  const dadoRetorno = result.success
     ? { data: result.data }
-    : { detalhes: result.detalhes };
+    : { details: result.details };
   return res.status(codigoRetorno).send(dadoRetorno);
 };
 
-const removelikeprovider = async (req, res, next) => {
+const ControllerRemoveLikeProvider = async (req, res, next) => {
   const { params } = req;
-  const result = await likeService.removelikeclientprovider(
+  const result = await serviceLikeService.removelikeclientprovider(
     params.providerid,
     params.clientid
   );
-  const codigoRetorno = result.sucesso ? 200 : 400;
-  const dadoRetorno = result.sucesso
+  const codigoRetorno = result.success ? 200 : 400;
+  const dadoRetorno = result.success
     ? { data: result.data }
-    : { detalhes: result.detalhes };
+    : { details: result.details };
   return res.status(codigoRetorno).send(dadoRetorno);
 };
 
 module.exports = {
-  cria,
-  pesquisaPorId,
-  listarTodosclients,
-  curteprovider,
-  removelikeprovider,
-  listarlikesprovider,
+  ControllerListAllClients,
+  ControllerListClientById,
+  ControllerListLikesClient,
+  ControllerCreateClient,
+  ControllerLikeProvider,
+  ControllerRemoveLikeProvider,
 };

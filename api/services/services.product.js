@@ -2,7 +2,7 @@ const { product, category, provider } = require('../models/models.index');
 const fileUtils = require('../utils/utils.file');
 const productMapper = require('../mappers/mappers.product');
 
-const cria = async (model) => {
+const create = async (model) => {
   const [categoryDB, providerDB] = await Promise.all([
     category.findById(model.category),
     provider.findById(model.providerlogadoid),
@@ -10,17 +10,17 @@ const cria = async (model) => {
 
   if (!providerDB) {
     return {
-      sucesso: false,
-      mensagem: 'operação não pode ser realizada',
-      detalhes: ['Não existe provider cadastrado para o provider id informado'],
+      success: false,
+      message: 'operação não pode ser realizada',
+      details: ['Não existe provider cadastrado para o provider id informado'],
     };
   }
 
   if (!categoryDB) {
     return {
-      sucesso: false,
-      mensagem: 'operação não pode ser realizada',
-      detalhes: ['Não existe category cadastrada para o category id informado'],
+      success: false,
+      message: 'operação não pode ser realizada',
+      details: ['Não existe category cadastrada para o category id informado'],
     };
   }
 
@@ -31,17 +31,17 @@ const cria = async (model) => {
     category: model.category,
     provider: model.providerlogadoid,
     image: {
-      originalName: model.image.originalName,
+      sourcealName: model.image.sourcealName,
       name: model.image.newame,
       type: model.image.type,
     },
   });
 
-  fileUtils.move(model.image.caminhoOriginal, model.image.newCaminho);
+  fileUtils.move(model.image.caminhosourceal, model.image.newCaminho);
 
   return {
-    sucesso: true,
-    mensagem: 'Cadastro realizado com sucesso',
+    success: true,
+    message: 'Cadastro realizado com success',
     data: {
       id: newproduct._id,
       name: newproduct.name,
@@ -49,7 +49,7 @@ const cria = async (model) => {
   };
 };
 
-const pesquisaPorFiltros = async (filtros) => {
+const SEARCHPorFiltros = async (filtros) => {
   const filtroMongo = {};
   if (filtros.category) {
     filtroMongo.category = filtros.category;
@@ -82,33 +82,33 @@ const deleta = async ({ providerId, productId, userId }) => {
 
   if (!providerDB) {
     return {
-      sucesso: false,
-      mensagem: 'Operação não pode ser realizada',
-      detalhes: ['O provider informado não existe.'],
+      success: false,
+      message: 'Operação não pode ser realizada',
+      details: ['O provider informado não existe.'],
     };
   }
 
   if (providerId !== userId) {
     return {
-      sucesso: false,
-      mensagem: 'Operação não pode ser realizada',
-      detalhes: ['O product a ser excluido não pertence ao provider.'],
+      success: false,
+      message: 'Operação não pode ser realizada',
+      details: ['O product a ser excluido não pertence ao provider.'],
     };
   }
 
   if (!productDB) {
     return {
-      sucesso: false,
-      mensagem: 'Operação não pode ser realizada',
-      detalhes: ['O product informado não existe.'],
+      success: false,
+      message: 'Operação não pode ser realizada',
+      details: ['O product informado não existe.'],
     };
   }
 
   if (productDB.provider.toString() !== providerId) {
     return {
-      sucesso: false,
-      mensagem: 'operação não pode ser realizada',
-      detalhes: ['O provider informado e inválido.'],
+      success: false,
+      message: 'operação não pode ser realizada',
+      details: ['O provider informado e inválido.'],
     };
   }
 
@@ -144,8 +144,8 @@ const deleta = async ({ providerId, productId, userId }) => {
   );
 
   return {
-    sucesso: true,
-    mensagem: 'Operação realizada com sucesso',
+    success: true,
+    message: 'Operação realizada com success',
     data: {
       id: productId,
       name: productDB.name,
@@ -153,20 +153,20 @@ const deleta = async ({ providerId, productId, userId }) => {
   };
 };
 
-const pesquisa = async (id) => {
+const SEARCH = async (id) => {
   const productDB = await product.findOne({ _id: id });
 
   if (productDB) {
     return {
-      sucesso: true,
-      mensagem: 'operação realizada com sucesso',
+      success: true,
+      message: 'operação realizada com success',
       data: productMapper.toItemListaDTO(productDB),
     };
   } else {
     return {
-      sucesso: false,
-      mensagem: 'não foi possível realizar a operação',
-      detalhes: ['"productid" não existe.'],
+      success: false,
+      message: 'não foi possível realizar a operação',
+      details: ['"productid" não existe.'],
     };
   }
 };
@@ -176,9 +176,9 @@ const alteraproduct = async (productId, model) => {
 
   if (!productDB) {
     return {
-      sucesso: false,
-      mensagem: 'não foi possível realizar a operação',
-      detalhes: ['"productid" não existe.'],
+      success: false,
+      message: 'não foi possível realizar a operação',
+      details: ['"productid" não existe.'],
     };
   }
 
@@ -191,9 +191,9 @@ const alteraproduct = async (productId, model) => {
 
   if (typeof model.image === 'object') {
     fileUtils.remove('products', productDB.image.name);
-    fileUtils.move(model.image.caminhoOriginal, model.image.newCaminho);
+    fileUtils.move(model.image.caminhosourceal, model.image.newCaminho);
     productDB.image = {
-      originalName: model.image.originalName,
+      sourcealName: model.image.sourcealName,
       name: model.image.newame,
       type: model.image.type,
     };
@@ -202,16 +202,16 @@ const alteraproduct = async (productId, model) => {
   await productDB.save();
 
   return {
-    sucesso: true,
-    mensagem: 'Operação realizada com sucesso!',
+    success: true,
+    message: 'Operação realizada com success!',
     data: productMapper.toItemListaDTO(productDB),
   };
 };
 
 module.exports = {
-  cria,
-  pesquisaPorFiltros,
+  create,
+  SEARCHPorFiltros,
   deleta,
   alteraproduct,
-  pesquisa,
+  SEARCH,
 };

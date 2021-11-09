@@ -1,14 +1,14 @@
-const ErrorGeneric = require('../errors/erro-generico');
+const ErrorGeneric = require('../errors/erros.generic_error');
 
 const asyncMiddleware = (fn, options) => (req, res, next) => {
   fn(req, res, next).catch((err) => {
     if (err instanceof ErrorGeneric) {
       return res.status(err.statusCode).send({
-        detalhes: [err.message],
+        details: [err.message],
       });
     } else {
       return res.status(500).send({
-        mensagem: 'Ocoreu um erro interno, solicitar admin da solução',
+        message: 'Ocoreu um erro interno, solicitar admin da solução',
       });
     }
   });

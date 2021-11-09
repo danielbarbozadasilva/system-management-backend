@@ -24,7 +24,7 @@ const putIsValid = (files) => {
 const fileUpload = (destino, isUpdate = false) => {
   return async (req, res, next) => {
     const form = formidable.IncomingForm();
-    form.uploadDir = fileUtils.criaEndereco("temp");
+    form.uploadDir = fileUtils.UtilCreateAddress("temp");
 
     var formfields = await new Promise(function (resolve, reject) {
       form.parse(req, (err, fields, files) => {
@@ -53,13 +53,13 @@ const fileUpload = (destino, isUpdate = false) => {
     }
 
     if (files.image && files.image.name !== "") {
-      const newame = fileUtils.crianame(files.image.type);
-      const newCaminho = fileUtils.criaEndereco(destino, newame);
+      const newame = fileUtils.UtilCreatename(files.image.type);
+      const newCaminho = fileUtils.UtilCreateAddress(destino, newame);
 
       req.body.image = {
         type: files.image.type,
-        originalName: files.image.name,
-        caminhoOriginal: files.image.path,
+        sourcealName: files.image.name,
+        caminhosourceal: files.image.path,
         newame,
         newCaminho,
       };

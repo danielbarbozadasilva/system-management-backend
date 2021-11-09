@@ -1,9 +1,9 @@
 const joi = require('joi');
 const productController = require('../../controllers/controllers.product');
 
-const validaDTO = require('../../utils/middlewares/validate-dto.middleware');
+const validateDTO = require('../../utils/middlewares/validate-dto.middleware');
 const fileUploadMiddleware = require('../../utils/middlewares/fileUploadMiddleware');
-const autorizacaoMiddlewate = require('../../utils/middlewares/authorization.middleware');
+const autorizationMiddleware = require('../../utils/middlewares/authorization.middleware');
 
 module.exports = (router) => {
   router.route('/product').get(productController.listarproducts);
@@ -12,7 +12,7 @@ module.exports = (router) => {
 
   router.route('/product/:productid').put(
     fileUploadMiddleware('products', true),
-    validaDTO('query', {
+    validateDTO('query', {
       category: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)

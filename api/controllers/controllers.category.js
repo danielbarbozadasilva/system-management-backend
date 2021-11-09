@@ -36,28 +36,28 @@ const ControllerCreateCategory = async (req, res, next) => {
 
 const ControllerChangeCategory = async (req, res, next) => {
   const { params, body } = req;
-  const resultadoServico = await categoryService.ServiceChangeCategory(
+  const resultService = await categoryService.ServiceChangeCategory(
     params.categoryid,
     body
   );
-  const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
-  const dadoRetorno = resultadoServico.sucesso
-    ? { data: resultadoServico.data }
-    : { detalhes: resultadoServico.detalhes };
+  const codigoRetorno = resultService.success ? 200 : 400;
+  const dadoRetorno = resultService.success
+    ? { data: resultService.data }
+    : { details: resultService.details };
   return res.status(codigoRetorno).send(dadoRetorno);
 };
 
 const ControllerRemoveCategory = async (req, res, next) => {
   const { params } = req;
-  const resultadoServico = await categoryService.ServiceRemoveCategoryProducts(
+  const resultService = await categoryService.ServiceRemoveCategoryProducts(
     params.categoryid
   );
-  const code = resultadoServico.success ? 200 : 400;
-  const message = resultadoServico.success
+  const code = resultService.success ? 200 : 400;
+  const message = resultService.success
     ? {
-        message: resultadoServico.message,
+        message: resultService.message,
       }
-    : { details: resultadoServico.details };
+    : { details: resultService.details };
   return res.status(code).send(message);
 };
 

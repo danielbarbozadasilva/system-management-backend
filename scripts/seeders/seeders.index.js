@@ -1,9 +1,9 @@
 const db = require('../../db/config');
 require('./add-category');
-require('./add-clientLikeProvider');
-require('./add-product');
-require('./add-providerLikeProduct');
-require('./add-users');
+require('./seeders.add_client_like_provider');
+require('./seeders.add_product');
+require('./seeders.add_provider_Like_product');
+require('./seeders.add_users');
 
 const mongoose = require('mongoose');
 mongoose.connect(db.uri, { useUnifiedTopology: true, useNewUrlParser: true });

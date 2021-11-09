@@ -1,5 +1,5 @@
 const joi = require('joi');
-const validaDTO = require('../../utils/middlewares/validate-dto.middleware');
+const validateDTO = require('../../utils/middlewares/validate-dto.middleware');
 const providerController = require('../../controllers/controllers.provider');
 const productController = require('../../controllers/controllers.product');
 const autorizacaoMiddleware = require('../../utils/middlewares/authorization.middleware');
@@ -13,7 +13,7 @@ module.exports = (router) => {
     .get(providerController.listAllproviderLocation);
 
   router.route('/provider/:providerid').get(
-    validaDTO('params', {
+    validateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -28,8 +28,8 @@ module.exports = (router) => {
   );
 
   router.route('/provider').post(
-    autorizacaoMiddleware('ADICIONA_provider'),
-    validaDTO('body', {
+    autorizacaoMiddleware('ADD_provider'),
+    validateDTO('body', {
       cnpj: joi.string().required().messages({
         'any.required': `"cnpj" é um campo obrigatório`,
         'string.empty': `"cnpj" não deve ser vazio`,
@@ -38,9 +38,9 @@ module.exports = (router) => {
         'any.required': `"fantasy_name" é um campo obrigatório`,
         'string.empty': `"fantasy_name" não deve ser vazio`,
       }),
-      endereco: joi.string().required().messages({
-        'any.required': `"endereco" é um campo obrigatório`,
-        'string.empty': `"endereco" não deve ser vazio`,
+      Address: joi.string().required().messages({
+        'any.required': `"Address" é um campo obrigatório`,
+        'string.empty': `"Address" não deve ser vazio`,
       }),
       uf: joi.string().required().messages({
         'any.required': `"uf" é um campo obrigatório`,
@@ -62,17 +62,17 @@ module.exports = (router) => {
         'any.required': `"email" é um campo obrigatório`,
         'string.empty': `"email" não deve ser vazio`,
       }),
-      senha: joi.string().required().messages({
-        'any.required': `"senha" é um campo obrigatório`,
-        'string.empty': `"senha" não deve ser vazio`,
+      password: joi.string().required().messages({
+        'any.required': `"password" é um campo obrigatório`,
+        'string.empty': `"password" não deve ser vazio`,
       }),
     }),
     providerController.insertProvider
   );
 
   router.route('/provider/:id').put(
-    autorizacaoMiddleware('ATUALIZAR_provider'),
-    validaDTO('params', {
+    autorizacaoMiddleware('UPDATE_provider'),
+    validateDTO('params', {
       id: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -83,7 +83,7 @@ module.exports = (router) => {
           'string.pattern.base': `"provider id" fora do formato esperado`,
         }),
     }),
-    validaDTO('body', {
+    validateDTO('body', {
       cnpj: joi.string().required().messages({
         'any.required': `"cnpj" é um campo obrigatório`,
         'string.empty': `"cnpj" não deve ser vazio`,
@@ -92,9 +92,9 @@ module.exports = (router) => {
         'any.required': `"fantasy_name" é um campo obrigatório`,
         'string.empty': `"fantasy_name" não deve ser vazio`,
       }),
-      endereco: joi.string().required().messages({
-        'any.required': `"endereco" é um campo obrigatório`,
-        'string.empty': `"endereco" não deve ser vazio`,
+      Address: joi.string().required().messages({
+        'any.required': `"Address" é um campo obrigatório`,
+        'string.empty': `"Address" não deve ser vazio`,
       }),
       uf: joi.string().required().messages({
         'any.required': `"uf" é um campo obrigatório`,
@@ -116,17 +116,17 @@ module.exports = (router) => {
         'any.required': `"email" é um campo obrigatório`,
         'string.empty': `"email" não deve ser vazio`,
       }),
-      senha: joi.string().required().messages({
-        'any.required': `"senha" é um campo obrigatório`,
-        'string.empty': `"senha" não deve ser vazio`,
+      password: joi.string().required().messages({
+        'any.required': `"password" é um campo obrigatório`,
+        'string.empty': `"password" não deve ser vazio`,
       }),
     }),
     providerController.updateProvider
   );
 
   router.route('/provider/:providerid/ativa').put(
-    autorizacaoMiddleware('ATIVAR_provider'),
-    validaDTO('params', {
+    autorizacaoMiddleware('ACTIVE_provider'),
+    validateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -141,8 +141,8 @@ module.exports = (router) => {
   );
 
   router.route('/provider/:providerid/inativa').put(
-    autorizacaoMiddleware('INATIVAR_provider'),
-    validaDTO('params', {
+    autorizacaoMiddleware('INACTIVATE_provider'),
+    validateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -157,7 +157,7 @@ module.exports = (router) => {
   );
 
   router.route('/provider/:providerid/likes').get(
-    validaDTO('params', {
+    validateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -172,7 +172,7 @@ module.exports = (router) => {
   );
 
   router.route('/provider/:providerid/product').get(
-    validaDTO('params', {
+    validateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -189,7 +189,7 @@ module.exports = (router) => {
   router.route('/provider/:provider/product').post(
     autorizacaoMiddleware('CREATE_product'),
     fileUploadMiddleware('products'),
-    validaDTO('params', {
+    validateDTO('params', {
       provider: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -200,7 +200,7 @@ module.exports = (router) => {
           'string.pattern.base': `"provider id" fora do formato esperado`,
         }),
     }),
-    validaDTO(
+    validateDTO(
       'body',
       {
         name: joi.string().required().messages({
@@ -233,7 +233,7 @@ module.exports = (router) => {
 
   router.route('/provider/:providerid/product/:productid').delete(
     autorizacaoMiddleware('REMOVE_product'),
-    validaDTO('params', {
+    validateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -258,7 +258,7 @@ module.exports = (router) => {
 
   router.route('/provider/:providerid/product/:productid/likes').post(
     autorizacaoMiddleware('CURTIR_product'),
-    validaDTO('params', {
+    validateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -283,7 +283,7 @@ module.exports = (router) => {
 
   router.route('/provider/:providerid/product/:productid/likes').delete(
     autorizacaoMiddleware('REMOVE_like_product'),
-    validaDTO('params', {
+    validateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)

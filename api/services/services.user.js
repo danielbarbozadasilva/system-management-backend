@@ -1,123 +1,127 @@
 const { user, provider } = require('../models/models.index');
-const criptografia = require('../utils/utils.cryptography');
+const cryptography = require('../utils/utils.cryptography');
 const userMapper = require('../mappers/mappers.user');
 
-const perfis = [
+const profile = [
   {
     id: 1,
-    description: 'admin',
-    funcionalidades: [
-      'ADICIONA_provider',
-      'ATUALIZAR_provider',
-      'PESQUISA_provider',
-      'PESQUISA_provider_ID',
-      'ATIVAR_provider',
-      'INATIVAR_provider',
-      'PESQUISA_provider_product',
+    description: 'ADMIN',
+    functionality: [
+      'ADD_PROVIDER',
+      'UPDATE_PROVIDER',
+      'SEARCH_PROVIDER',
+      'SEARCH_PROVIDER_ID',
+      'ACTIVE_PROVIDER',
+      'INACTIVATE_PROVIDER',
+      'SEARCH_PROVIDER_PRODUCT',
       'CREATE_CATEGORY',
       'UPDATE_CATEGORY',
-      'PESQUISA_CATEGORY',
+      'SEARCH_CATEGORY',
       'REMOVE_CATEGORY',
-      'PESQUISA_client',
+      'SEARCH_CLIENT',
     ],
   },
   {
     id: 2,
-    description: 'provider',
-    funcionalidades: [
-      'PESQUISA_provider_ID',
-      'PESQUISA_product',
-      'CREATE_product',
-      'REMOVE_product',
-      'PESQUISA_provider_product',
-      'PESQUISA_client_ID',
-      'CURTIR_product',
-      'REMOVE_like_product',
+    description: 'PROVIDER',
+    functionality: [
+      'SEARCH_PROVIDER_ID',
+      'SEARCH_PRODUCT',
+      'CREATE_PRODUCT',
+      'REMOVE_PRODUCT',
+      'SEARCH_PROVIDER_PRODUCT',
+      'SEARCH_CLIENT_ID',
+      'CURTIR_PRODUCT',
+      'REMOVE_LIKE_PRODUCT',
     ],
   },
   {
     id: 3,
-    description: 'client',
-    funcionalidades: [
-      'like_CRIA',
-      'like_REMOVE',
-      'PESQUISA_provider_ID',
-      'PESQUISA_provider_product',
-      'PESQUISA_client',
-      'PESQUISA_client_ID',
+    description: 'CLIENT',
+    functionality: [
+      'LIKE_CREATE',
+      'LIKE_REMOVE',
+      'SEARCH_PROVIDER_ID',
+      'SEARCH_PROVIDER_PRODUCT',
+      'SEARCH_CLIENT',
+      'SEARCH_CLIENT_ID',
     ],
   },
 ];
 
-const buscatypeuserPorId = (typeuserId) => {
-  return perfis.find((item) => {
-    return item.id === typeuserId;
+const ServiceSearchTypeUserById = (user_id) => {
+  return ServiceAuthenticate.find((item) => {
+    return item.id === user_id;
   });
 };
 
-const validaFuncionalidadeNoPerfil = (perfilId, funcionalidade) => {
-  const perfil = buscatypeuserPorId(perfilId);
-  return perfil.funcionalidades.includes(funcionalidade) ? true : false;
+const ServiceValidateFunctionalityProfile = (profile_id, functionality) => {
+  const profile = buscatypeuserPorId(profile_id);
+  return profile.functionality.includes(functionality) ? true : false;
 };
 
-const validaSeEmailJaExiste = async (email) => {
+const ServiceValidateEmailExists = async (email) => {
   const users = await user.find({ email });
   return users.length > 0 ? true : false;
 };
 
-const validaSeCnpjJaExiste = async (cnpj) => {
+const ServiceValidateFunctionalityCnpj = async (cnpj) => {
   const result = await provider.find({ cnpj });
   return result.length > 0 ? true : false;
 };
 
-const criaCredencial = async (userEmail) => {
+const ServiceCreateCredential = async (userEmail) => {
   const userDB = await user.findOne({
     email: userEmail,
   });
   const userDTO = userMapper.toUserDTO(userDB);
   return {
-    token: criptografia.criaToken(userDTO),
+    token: cryptography.UtilCreateToken(userDTO),
     userDTO,
   };
 };
 
-const autenticar = async (email, senha) => {
-  const resultadoDB = await userEValido(email, senha);
-  console.log(email, senha);
+const ServiceAuthenticate = async (email, password) => {
+  const resultadoDB = await ServiceUserIsValid(email, password);
+  console.log(email, password);
   if (!resultadoDB) {
     return {
-      sucesso: false,
-      mensagem: 'não foi possivel autenticar o user',
-      detalhes: ['usuário ou senha inválido'],
+      success: false,
+      message: 'Unable to authenticate user',
+      details: ['Invalid username or password'],
     };
   }
 
   return {
-    sucesso: true,
-    mensagem: 'usuário autenticado com sucesso',
-    data: await criaCredencial(email),
+    success: true,
+    message: 'Successfully authenticated user',
+    data: await ServiceCreateCredential(email),
   };
 };
 
-const cria = async () => {
+const ServiceCreateUser = async () => {
   return user.create({
     email: 'daniel80barboza@gmail.com',
-    senha: md5(`daniel${process.env.MD5_SECRET}`),
+    password: md5(`daniel${process.env.MD5_SECRET}`),
   });
 };
 
-const userEValido = async (email, senha) => {
-  return (await user.findOne({ email, senha: criptografia.criaHash(senha) }))
+const ServiceUserIsValid = async (email, password) => {
+  return (await user.findOne({
+    email,
+    password: cryptography.createHash(password),
+  }))
     ? true
     : false;
 };
 
 module.exports = {
-  autenticar,
-  buscatypeuserPorId,
-  cria,
-  criaCredencial,
-  validaSeCnpjJaExiste,
-  validaSeEmailJaExiste,
-  validaFuncionalidadeNoPerfil,
+  ServiceAuthenticate,
+  ServiceSearchTypeUserById,
+  ServiceCreateUser,
+  ServiceCreateCredential,
+  ServiceValidateFunctionalityCnpj,
+  ServiceValidateEmailExists,
+  ServiceValidateFunctionalityProfile,
+  ServiceUserIsValid,
 };

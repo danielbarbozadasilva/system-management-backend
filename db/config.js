@@ -1,6 +1,6 @@
-const nodeenvironment = process.env.NODE_ENV || "development";
+const node_environment = process.env.NODE_ENV || "development";
 
-if (nodeenvironment === "development") {
+if (node_environment === "development") {
   require("dotenv").config();
 }
 

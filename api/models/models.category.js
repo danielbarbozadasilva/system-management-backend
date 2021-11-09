@@ -11,7 +11,7 @@ module.exports = {
     required: false,
   },
   image: {
-    original_name: {
+    sourceal_name: {
       type: String,
       required: false,
     },

@@ -4,11 +4,11 @@ const { provider } = require('../models/models.index');
 
 const activeProvider = async (req, res, next) => {
   const { id } = req.params;
-  const resultadoServico = await providerService.alteraStatus(id, 'Enabled');
-  const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
-  const dadoRetorno = resultadoServico.sucesso
-    ? { data: resultadoServico.data }
-    : { detalhes: resultadoServico.detalhes };
+  const resultService = await providerService.alteraStatus(id, 'Enabled');
+  const codigoRetorno = resultService.success ? 200 : 400;
+  const dadoRetorno = resultService.success
+    ? { data: resultService.data }
+    : { details: resultService.details };
   return res.status(codigoRetorno).send({
     ...dadoRetorno,
   });
@@ -16,13 +16,13 @@ const activeProvider = async (req, res, next) => {
 
 const disableProvider = async (req, res, next) => {
   const { id } = req.params;
-  const resultadoServico = await providerService.alteraStatus(id, 'Disabled');
-  const codigoRetorno = resultadoServico.sucesso ? 200 : 400;
-  const dadoRetorno = resultadoServico.sucesso
-    ? { data: resultadoServico.data }
-    : { detalhes: resultadoServico.detalhes };
+  const resultService = await providerService.alteraStatus(id, 'Disabled');
+  const codigoRetorno = resultService.success ? 200 : 400;
+  const dadoRetorno = resultService.success
+    ? { data: resultService.data }
+    : { details: resultService.details };
   return res.status(codigoRetorno).send({
-    mensagem: 'operaçao realizada com sucesso',
+    message: 'operaçao realizada com success',
     ...dadoRetorno,
   });
 };
@@ -30,10 +30,10 @@ const disableProvider = async (req, res, next) => {
 const insertProvider = async (req, res, next) => {
   const { body } = req;
   const result = await providerService.createProvider(body);
-  const codigoRetorno = result.sucesso ? 200 : 400;
-  const dadoRetorno = result.sucesso
+  const codigoRetorno = result.success ? 200 : 400;
+  const dadoRetorno = result.success
     ? { data: result.data }
-    : { detalhes: result.detalhes };
+    : { details: result.details };
   return res.status(codigoRetorno).send(dadoRetorno);
 };
 
@@ -41,10 +41,10 @@ const updateProvider = async (req, res, next) => {
   const { body } = req;
   const id = req.params.id;
   const result = await providerService.updateProvider(id, body);
-  const codigoRetorno = result.sucesso ? 200 : 400;
-  const dadoRetorno = result.sucesso
+  const codigoRetorno = result.success ? 200 : 400;
+  const dadoRetorno = result.success
     ? { data: result.data }
-    : { detalhes: result.detalhes };
+    : { details: result.details };
   return res.status(codigoRetorno).send(dadoRetorno);
 };
 
@@ -68,10 +68,10 @@ const listAllproviderLocation = async (req, res, next) => {
 const listById = async (req, res, next) => {
   const { id } = req.params;
   const result = await providerService.listProviderById(id);
-  const codigoRetorno = result.sucesso ? 200 : 400;
-  const dadoRetorno = result.sucesso
+  const codigoRetorno = result.success ? 200 : 400;
+  const dadoRetorno = result.success
     ? { data: result.data }
-    : { detalhes: result.detalhes };
+    : { details: result.details };
   return res.status(codigoRetorno).send(dadoRetorno);
 };
 

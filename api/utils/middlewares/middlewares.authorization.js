@@ -26,14 +26,14 @@ const autorizar = (rota = '*') => {
           const { id, email, typeuser } =
             criptografiaUitls.decodificaToken(token);
 
-          if (!userService.validaSeEmailJaExiste(email)) {
+          if (!userService.ServiceValidateEmailExists(email)) {
             return reject(
               new ErrouserNaoAutorizado("Usuário não autorizado!")
             );
           }
 
           if (
-            userService.validaFuncionalidadeNoPerfil(typeuser, teste) ===
+            userService.ServiceValidateFunctionalityProfile(typeuser, teste) ===
             false
           ) {
             return reject(

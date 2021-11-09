@@ -1,7 +1,8 @@
 const { category, product } = require("../models/models.index");
 const categoryMapper = require("../mappers/mappers.category");
 const fileUtils = require("../utils/file.util");
-const ErrorRegraDeNegocio = require("../utils/errors/erro-regra-negocio");
+
+const ErrorBusinessRule = require("../utils/errors/errors.business_rule");
 
 const ServiceSearchAllCategory = async () => {
   const categoryDB = await category.find({}).sort({ description: 1 });
@@ -40,7 +41,7 @@ const ServiceInsertCategory = async (model) => {
     name: model.name,
     description: model.description,
     image: {
-      original_name: model.image.originalName,
+      sourceal_name: model.image.sourcealName,
       name: model.image.newName,
       type: model.image.type,
     },
@@ -49,7 +50,7 @@ const ServiceInsertCategory = async (model) => {
   fileUtils.move(model.image.oldPath, model.image.newPath);
 
   return {
-    sucesso: true,
+    success: true,
       message: "Operation performed successfully",
     data: categoryMapper.toDTO(novacategory),
   };
@@ -90,9 +91,9 @@ const ServiceChangeCategory = async (categoryId, model) => {
 
   if (typeof model.image === "object") {
     fileUtils.remove("category", categoryDB.image.name);
-    fileUtils.move(model.image.caminhoOriginal, model.image.newCaminho);
+    fileUtils.move(model.image.caminhosourceal, model.image.newCaminho);
     categoryDB.image = {
-      originalName: model.image.originalName,
+      sourcealName: model.image.sourcealName,
       name: model.image.newame,
       type: model.image.type,
     };

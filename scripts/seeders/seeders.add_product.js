@@ -9,8 +9,8 @@ const dataProduct = [
     description: 'teste-product01-description',
     preco: 13.55,
     image: {
-      originalName: 'boloLimao.jpg',
-      name: fileUtils.createName('image/jpeg'),
+      sourcealName: 'boloLimao.jpg',
+      name: fileUtils.UtilCreatename('image/jpeg'),
       type: 'image/jpeg',
     },
   },
@@ -21,8 +21,8 @@ const dataProduct = [
     description: 'teste-product02-description',
     preco: 20.95,
     image: {
-      originalName: 'principal2.jpg',
-      name: fileUtils.createName('image/jpeg'),
+      sourcealName: 'principal2.jpg',
+      name: fileUtils.UtilCreatename('image/jpeg'),
       type: 'image/jpeg',
     },
   },

@@ -1,59 +1,59 @@
-const { provider, like, client } = require('../models/models.index');
+const { provider } = require('../models/models.index');
 
 const { toListItemDTO, toDTOLikeCase } = require('../mappers/mappers.provider');
 const {
-  validaSeEmailJaExiste,
-  validaSeCnpjJaExiste,
+  ServiceValidateEmailExists,
+  ServiceValidateCnpjExists,
   buscatypeuserPorId,
 } = require('../services/user.service');
-const { criaHash } = require('../utils/criptografia.util');
+const { createHash } = require('../utils/criptografia.util');
 const emailUtils = require('../utils/email.utils');
-const { EmailHabilitar } = require('../utils/email.mensagem.habilitar');
-const { EmailDesativar } = require('../utils/email.mensagem.desativar');
+const { EmailHabilitar } = require('../utils/email.message.habilitar');
+const { EmailDesACTIVE } = require('../utils/email.message.desACTIVE');
 
 const createProvider = async (model) => {
   const {
     cnpj,
     fantasy_name,
-    endereco,
+    Address,
     uf,
     cidade,
     responsavel,
     telefone,
     email,
-    senha,
+    password,
     status,
   } = model;
 
-  if (await validaSeCnpjJaExiste(cnpj))
+  if (await ServiceValidateCnpjExists(cnpj))
     return {
-      sucesso: false,
-      mensagem: 'operação não pode ser realizada',
-      detalhes: ['Já existe provider cadastrado para o cnpj informado'],
+      success: false,
+      message: 'operação não pode ser realizada',
+      details: ['Já existe provider cadastrado para o cnpj informado'],
     };
 
-  if (await validaSeEmailJaExiste(email))
+  if (await ServiceValidateEmailExists(email))
     return {
-      sucesso: false,
-      mensagem: 'operação não pode ser realizada',
-      detalhes: ['Já existe usuário cadastrado para o email informado'],
+      success: false,
+      message: 'operação não pode ser realizada',
+      details: ['Já existe usuário cadastrado para o email informado'],
     };
 
   const newProvider = await provider.create({
     cnpj,
     fantasy_name,
-    endereco,
+    Address,
     uf,
     cidade,
     responsavel,
     telefone,
     email,
-    senha: criaHash(senha),
+    password: createHash(password),
     status: 'Analise',
   });
   return {
-    sucesso: true,
-    mensagem: 'Operação realizada com sucesso',
+    success: true,
+    message: 'Operação realizada com success',
     data: {
       ...toDTOLikeCase(newProvider),
     },
@@ -64,29 +64,29 @@ const updateProvider = async (providerid, body) => {
   const {
     cnpj,
     fantasy_name,
-    endereco,
+    Address,
     uf,
     cidade,
     responsavel,
     telefone,
     email,
-    senha,
+    password,
     status,
   } = body;
 
-  if (await validaSeCnpjJaExiste(cnpj)) {
+  if (await ServiceValidateCnpjExists(cnpj)) {
     return {
-      sucesso: false,
-      mensagem: 'operação não pode ser realizada',
-      detalhes: ['Já existe provider cadastrado para o cnpj informado'],
+      success: false,
+      message: 'operação não pode ser realizada',
+      details: ['Já existe provider cadastrado para o cnpj informado'],
     };
   }
 
-  if (await validaSeEmailJaExiste(email)) {
+  if (await ServiceValidateEmailExists(email)) {
     return {
-      sucesso: false,
-      mensagem: 'operação não pode ser realizada',
-      detalhes: ['Já existe usuário cadastrado para o email informado'],
+      success: false,
+      message: 'operação não pode ser realizada',
+      details: ['Já existe usuário cadastrado para o email informado'],
     };
   }
 
@@ -96,21 +96,21 @@ const updateProvider = async (providerid, body) => {
       $set: {
         cnpj: cnpj,
         fantasy_name: fantasy_name,
-        endereco: endereco,
+        Address: Address,
         uf: uf,
         cidade: cidade,
         responsavel: responsavel,
         telefone: telefone,
         email: email,
-        senha: criaHash(senha),
+        password: createHash(password),
         status: 'Analise',
       },
     }
   );
 
   return {
-    sucesso: true,
-    mensagem: 'Operação realizada com sucesso',
+    success: true,
+    message: 'Operação realizada com success',
     data: {
       ...toDTOLikeCase(newProvider),
     },
@@ -127,9 +127,9 @@ const alteraStatus = async (id, status) => {
 
   if (!providerDB) {
     return {
-      sucesso: false,
-      mensagem: 'operação não pode ser realizada',
-      detalhes: ['Não existe provider cadastrado para o provider id informado'],
+      success: false,
+      message: 'operação não pode ser realizada',
+      details: ['Não existe provider cadastrado para o provider id informado'],
     };
   }
 
@@ -137,7 +137,7 @@ const alteraStatus = async (id, status) => {
 
   await providerDB.save();
 
-  if (status === 'Ativo') {
+  if (status === 'Active') {
     emailUtils.enviar({
       destinatario: providerDB.email,
       remetente: process.env.SENDGRID_REMETENTE,
@@ -146,18 +146,18 @@ const alteraStatus = async (id, status) => {
     });
   }
 
-  if (status === 'Inativo') {
+  if (status === 'INACTIVATE') {
     emailUtils.enviar({
       destinatario: providerDB.email,
       remetente: process.env.SENDGRID_REMETENTE,
       assunto: `Confirmação de Inativação ${providerDB.fantasy_name}`,
-      corpo: EmailDesativar('titulo', 'menssagem', `${process.env.URL}/signin`),
+      corpo: EmailDesACTIVE('titulo', 'menssagem', `${process.env.URL}/signin`),
     });
   }
 
   return {
-    sucesso: true,
-    mensagem: 'Operação realizada com sucesso',
+    success: true,
+    message: 'Operação realizada com success',
     data: {
       ...toListItemDTO(providerDB.toJSON()),
     },
@@ -189,14 +189,14 @@ const listProviderById = async (providerid) => {
 
   if (!providerDB) {
     return {
-      sucesso: false,
-      mensagem: 'operação não pode ser realizada',
-      detalhes: ['o provider pesquisado não existe'],
+      success: false,
+      message: 'operação não pode ser realizada',
+      details: ['o provider SEARCHdo não existe'],
     };
   }
 
   return {
-    sucesso: true,
+    success: true,
     data: providerDB.toJSON(),
   };
 };

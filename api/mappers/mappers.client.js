@@ -1,20 +1,14 @@
-const toListItemDTO = (model) => {
-  const { _id, email, name, status, data_nascimento, cidade, uf } = model;
-  return {
-    id: _id,
-    name,
-    email,
-    status,
-    data_nascimento,
-    cidade,
-    uf,
-  };
-};
-
 const toDTO = (model) => {
+  const { _id, first_name, last_name, birth_date, uf, city, status } = model;
   return {
-    ...model,
+    id: id,
+    first_name,
+    last_name,
+    birth_date,
+    uf,
+    city,
+    status,
   };
 };
 
-module.exports = { toListItemDTO, toDTO };
+module.exports = { toDTO };

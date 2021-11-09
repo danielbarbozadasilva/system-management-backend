@@ -1,37 +1,36 @@
 const path = require('path');
-const enderecoRaiz = process.env.FILE_BASE_PATH;
+const root_address = process.env.FILE_BASE_PATH;
 const fs = require('fs');
 const uuid = require('uuid').v4;
 
-const criaEndereco = (destino, filesname = '') => {
-  return path.join(enderecoRaiz, destino, filesname);
+const UtilCreateAddress = (destiny, file_name = '') => {
+  return path.join(root_address, destiny, file_name);
 };
 
-const criaEnderecoDownload = (origem, filesname) => {
-  return path.join('/static', origem, filesname);
+const UtilCreateAddressDownload = (source, file_name) => {
+  return path.join('/static', source, file_name);
 };
 
-const crianame = (type) => {
+const UtilCreateName = (type) => {
   const typeTratado = type.split('/')[1];
   return `${uuid()}.${typeTratado}`;
 };
 
-const move = (oldPath, newPath) => {
+const UtilMove = (oldPath, newPath) => {
   return fs.renameSync(oldPath, newPath);
 };
 
-const remove = (origem, files) => {
-  const enderecofiles = criaEndereco(origem, files);
-
-  if (fs.existsSync(enderecofiles)) fs.unlinkSync(enderecofiles);
-
+const UtilRemove = (source, file) => {
+  const address_file = UtilCreateAddress(source, file);
+  if (fs.existsSync(address_file))
+    fs.unlinkSync(address_file);
   return;
 };
 
 module.exports = {
-  criaEndereco,
-  criaEnderecoDownload,
-  crianame,
-  move,
-  remove,
+  UtilCreateAddress,
+  UtilCreateAddressDownload,
+  UtilCreateName,
+  UtilMove,
+  UtilRemove,
 };

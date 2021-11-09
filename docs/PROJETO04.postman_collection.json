@@ -23,7 +23,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -62,7 +62,7 @@
           "response": []
         },
         {
-          "name": "category.pesquisarId",
+          "name": "category.SEARCHrId",
           "event": [
             {
               "listen": "prerequest",
@@ -76,7 +76,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -128,7 +128,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -198,7 +198,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -268,7 +268,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -317,7 +317,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -397,7 +397,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"email\": \"daniel95barboza@gmail.com\",\n    \"senha\": \"daniel\"\n}",
+              "raw": "{\n    \"email\": \"daniel95barboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -434,7 +434,7 @@
                   "// },",
                   "// body: {",
                   "// mode: 'raw',",
-                  "// raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "// raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "// }",
                   "// };",
                   "// pm.sendRequest(options, function (err, res) {",
@@ -457,7 +457,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"cnpj\": \"11111111111111\",\n    \"nameFantasia\": \"gabriel\",\n    \"endereco\": \"Rua xyz\",\n    \"uf\": \"Rj\",\n    \"cidade\": \"rio de janeiro\",\n    \"responsavel\": \"Daniel\",\n    \"telefone\": \"2122332233\",\n    \"email\": \"gabriel@gmail.com\",\n    \"senha\": \"gabriel\"\n}",
+              "raw": "{\n    \"cnpj\": \"11111111111111\",\n    \"nameFantasia\": \"gabriel\",\n    \"Address\": \"Rua xyz\",\n    \"uf\": \"Rj\",\n    \"cidade\": \"rio de janeiro\",\n    \"responsavel\": \"Daniel\",\n    \"telefone\": \"2122332233\",\n    \"email\": \"gabriel@gmail.com\",\n    \"password\": \"gabriel\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -489,7 +489,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -541,7 +541,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -579,7 +579,7 @@
           "response": []
         },
         {
-          "name": "provider.ativar",
+          "name": "provider.ACTIVE",
           "event": [
             {
               "listen": "prerequest",
@@ -593,7 +593,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -628,7 +628,7 @@
           "response": []
         },
         {
-          "name": "provider.atualizarN",
+          "name": "provider.UPDATEN",
           "event": [
             {
               "listen": "prerequest",
@@ -642,7 +642,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -677,7 +677,7 @@
           "response": []
         },
         {
-          "name": "provider.inativar",
+          "name": "provider.INACTIVATE",
           "event": [
             {
               "listen": "prerequest",
@@ -691,7 +691,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -736,7 +736,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -787,7 +787,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -841,7 +841,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -898,7 +898,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -943,7 +943,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -1003,7 +1003,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -1028,7 +1028,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"cnpj\": \"122123232345430312223\",\n    \"nameFantasia\": \"daniel\",\n    \"responsavel\": \"daniel\",\n    \"telefone\": \"(21)99993-92222\",\n    \"endereco\": \"Rua teste, 12222\",\n    \"uf\": \"RJ\",\n    \"cidade\": \"Rio de Janeiro\",\n    \"email\": \"daniel@gmail.com\",\n    \"senha\": \"daniel\"\n}",
+              "raw": "{\n    \"cnpj\": \"122123232345430312223\",\n    \"nameFantasia\": \"daniel\",\n    \"responsavel\": \"daniel\",\n    \"telefone\": \"(21)99993-92222\",\n    \"Address\": \"Rua teste, 12222\",\n    \"uf\": \"RJ\",\n    \"cidade\": \"Rio de Janeiro\",\n    \"email\": \"daniel@gmail.com\",\n    \"password\": \"daniel\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1060,7 +1060,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -1157,7 +1157,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -1209,7 +1209,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -1259,7 +1259,7 @@
                   "},",
                   "body: {",
                   "mode: 'raw',",
-                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
+                  "raw : JSON.stringify({\"email\":pm.environment.get('email'),\"password\":pm.environment.get('password')})",
                   "}",
                   "};",
                   "pm.sendRequest(options, function (err, res) {",
@@ -1281,7 +1281,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \n    \"name\": \"Matheus Barboza\",\n    \"data_nascimento\": \"05/03/1997\",\n    \"uf\": \"RJ\",\n    \"cidade\": \"São Gonçalo\",\n    \"email\": \"danielvbbDaDrboza@gmail.com\",\n    \"senha\": \"daniel\"\n}",
+              "raw": "{\n    \n    \"name\": \"Matheus Barboza\",\n    \"data_nascimento\": \"05/03/1997\",\n    \"uf\": \"RJ\",\n    \"cidade\": \"São Gonçalo\",\n    \"email\": \"danielvbbDaDrboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
               "options": {
                 "raw": {
                   "language": "json"

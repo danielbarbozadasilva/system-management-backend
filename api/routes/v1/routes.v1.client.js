@@ -1,93 +1,97 @@
 const joi = require('joi').extend(require('@joi/date'));
 const clientController = require('../../controllers/controllers.client');
 
-const validaDTO = require('../../utils/middlewares/validate-dto.middleware');
-const asyncMiddleware = require('../../utils/middlewares/async-middleware');
-const autorizacaoMiddlewate = require('../../utils/middlewares/authorization.middleware');
+const validateDTO = require('../../utils/middlewares/validate-dto.middleware');
+const asyncMiddleware = require('../../utils/middlewares/middlewares.async');
+const autorizationMiddleware = require('../../utils/middlewares/authorization.middleware');
 
 module.exports = (router) => {
   router
     .route('/client')
-    .post(autorizacaoMiddlewate('*'), clientController.cria)
+    .post(autorizationMiddleware('*'), clientController.ControllerCreateClient)
 
-    .get(asyncMiddleware(clientController.listarTodosclients));
+    .get(
+      asyncMiddleware(
+        MiddlewareAsync(clientController.ControllerListAllClients)
+      )
+    );
 
   router.route('/client/:clientid').get(
-    validaDTO('params', {
+    validateDTO('params', {
       clientid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"client id" é um campo obrigatório`,
-          'string.empty': `"client id" não deve ser vazio`,
-          'string.pattern.base': `"client id" fora do formato esperado`,
+          'any.required': `"client id" is a required field`,
+          'string.empty': `"client id" must not be empty`,
+          'string.pattern.base': `"client id" out of the expected format`,
         }),
     }),
-    clientController.pesquisaPorId
+    clientController.ControllerListClientById
   );
 
   router.route('/client/:clientid/likes').get(
-    validaDTO('params', {
+    validateDTO('params', {
       clientid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"client id" é um campo obrigatório`,
-          'string.empty': `"client id" não deve ser vazio`,
-          'string.pattern.base': `"client id" fora do formato esperado`,
+          'any.required': `"client id" is a required field`,
+          'string.empty': `"client id" must not be empty`,
+          'string.pattern.base': `"client id" out of the expected format`,
         }),
     }),
-    clientController.listarlikesprovider
+    clientController.ControllerListLikesClient
   );
   router.route('/client/:clientid/provider/:providerid/likes').post(
-    autorizacaoMiddlewate('like_CRIA'),
-    validaDTO('params', {
+    autorizationMiddleware('like_create'),
+    validateDTO('params', {
       clientid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"client id" é um campo obrigatório`,
-          'string.empty': `"client id" não deve ser vazio`,
-          'string.pattern.base': `"client id" fora do formato esperado`,
+          'any.required': `"client id" is a required field`,
+          'string.empty': `"client id" must not be empty`,
+          'string.pattern.base': `"client id" out of the expected format`,
         }),
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"provider id" é um campo obrigatório`,
-          'string.empty': `"provider id" não deve ser vazio`,
-          'string.pattern.base': `"provider id" fora do formato esperado`,
+          'any.required': `"provider id" is a required field`,
+          'string.empty': `"client id" must not be empty`,
+          'string.pattern.base': `"client id" out of the expected format`,
         }),
     }),
-    clientController.curteprovider
+    clientController.ControllerLikeProvider
   );
 
   router.route('/client/:clientid/provider/:providerid/likes').delete(
-    autorizacaoMiddlewate('like_REMOVE'),
-    validaDTO('params', {
+    autorizationMiddleware('like_REMOVE'),
+    validateDTO('params', {
       clientid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"client id" é um campo obrigatório`,
-          'string.empty': `"client id" não deve ser vazio`,
-          'string.pattern.base': `"client id" fora do formato esperado`,
+          'any.required': `"client id" is a required field`,
+          'string.empty': `"client id" must not be empty`,
+          'string.pattern.base': `"client id" out of the expected format`,
         }),
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"provider id" é um campo obrigatório`,
-          'string.empty': `"provider id" não deve ser vazio`,
-          'string.pattern.base': `"provider id" fora do formato esperado`,
+          'any.required': `"provider id" is a required field`,
+          'string.empty': `"client id" must not be empty`,
+          'string.pattern.base': `"client id" out of the expected format`,
         }),
     }),
-    clientController.removelikeprovider
+    clientController.ControllerRemoveLikeProvider
   );
 };

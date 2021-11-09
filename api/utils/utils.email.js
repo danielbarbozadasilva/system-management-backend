@@ -10,7 +10,7 @@ const enviar = async ({ destinatario, remetente, assunto, corpo }) => {
   };
 
   await sendgrid.send(msg);
-  console.log("O e-mail foi enviado com sucesso!");
+  console.log("O e-mail foi enviado com success!");
 };
 
 module.exports = {

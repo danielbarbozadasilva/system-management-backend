@@ -1,14 +1,14 @@
 const userService = require("../services/services.user");
 
 const auth = async (req, res, next) => {
-  const { email, senha } = req.body;
-  const resultadoServico = await userService.autenticar(email, senha);
-  const codigoRetorno = resultadoServico.sucesso ? 200 : 401;
-  const dadoRetorno = resultadoServico.sucesso
-    ? { data: resultadoServico.data }
-    : { detalhes: resultadoServico.detalhes };
+  const { email, password } = req.body;
+  const resultService = await userService.ServiceAuthenticate(email, password);
+  const codigoRetorno = resultService.success ? 200 : 401;
+  const dadoRetorno = resultService.success
+    ? { data: resultService.data }
+    : { details: resultService.details };
   return res.status(codigoRetorno).send({
-    mensagem: resultadoServico.mensagem,
+    message: resultService.message,
     ...dadoRetorno,
   });
 };

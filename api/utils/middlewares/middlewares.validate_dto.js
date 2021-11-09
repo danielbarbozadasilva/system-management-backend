@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const validaDTO = (type, parametro, opcoes = {}) => {
+const validateDTO = (type, parametro, opcoes = {}) => {
   return (req, res, next) => {
     const schema = Joi.object().keys(parametro);
     const result = schema.validate(req[type], {
@@ -14,12 +14,12 @@ const validaDTO = (type, parametro, opcoes = {}) => {
       }, []);
 
       return res.status(400).send({
-        sucesso: false,
-        detalhes: [...mensagens],
+        success: false,
+        details: [...mensagens],
       });
     }
 
     return next();
   };
 };
-module.exports = validaDTO;
+module.exports = validateDTO;

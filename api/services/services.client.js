@@ -1,49 +1,45 @@
-const { validaSeEmailJaExiste } = require('./user.service');
+const { ServiceValidateEmailExists } = require('./user.service');
 const { client } = require('../models/models.index');
-const { toListItemDTO } = require('../mappers/mappers.client');
-const { criaHash } = require('../utils/criptografia.util');
+const { toDTO } = require('../mappers/mappers.client');
+const { createHash } = require('../utils/criptografia.util');
 
-const ErrorRegraDeNegocio = require('../utils/errors/erro-regra-negocio');
-
-const ErrouserNaoAutorizado = require('../utils/errors/erro-user-nao-autorizado');
+const ErrorBusinessRule = require('../utils/errors/errors.business_rule');
+const ErrorUnauthorizedUser = require('../utils/errors/errors.user_not_allowed');
 
 const listaTodos = async () => {
-  const resultadoDB = await client
-    .find({})
-    .collation({ locale: 'en' })
-    .sort({ name: 1 });
+  const resultadoDB = await client.find({}).sort({ name: 1 });
 
   return resultadoDB.map((item) => {
-    return toListItemDTO(item.toJSON());
+    return toDTO(item.toJSON());
   });
 };
 
-const cria = async (model) => {
-  const { email, senha, ...rest } = model;
-  if (await validaSeEmailJaExiste(email))
+const create = async (model) => {
+  const { email, password, ...rest } = model;
+  if (await ServiceValidateEmailExists(email))
     return {
-      sucesso: false,
-      mensagem: 'operação não pode ser realizada',
-      detalhes: ['Já existe usuário cadastrado para o email informado'],
+      success: false,
+      message: 'operação não pode ser realizada',
+      details: ['Já existe usuário cadastrado para o email informado'],
     };
 
   const newclient = await client.create({
     email,
     ...rest,
-    senha: criaHash(senha),
-    status: 'Ativo',
+    password: createHash(password),
+    status: 'Active',
   });
 
   return {
-    sucesso: true,
-    mensagem: 'Operação realizada com sucesso',
+    success: true,
+    message: 'Operação realizada com success',
     data: {
-      ...toListItemDTO(newclient),
+      ...toDTO(newclient),
     },
   };
 };
 
-const pesquisaPorId = async (clientid) => {
+const SEARCHPorId = async (clientid) => {
   const resultadoDB = await client.find({ _id: clientid });
   return resultadoDB;
 };
@@ -56,6 +52,6 @@ const listalike = async (clientid) => {
 module.exports = {
   listaTodos,
   listalike,
-  cria,
-  pesquisaPorId,
+  create,
+  SEARCHPorId,
 };

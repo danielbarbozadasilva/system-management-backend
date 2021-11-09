@@ -5,7 +5,7 @@ const createUsers = async () => {
   await admin.create({
     email: 'danielbarboza56@hotmail.com',
     name: 'admin',
-    senha: md5(`daniel${process.env.MD5_SECRET}`),
+    password: md5(`daniel${process.env.MD5_SECRET}`),
   }),
     await provider.create({
       cnpj: '03.470.727/0023-36',
@@ -18,7 +18,7 @@ const createUsers = async () => {
       phone: '(21) 3352-1018',
       email: 'daniel80barboza@gmail.com',
       password: md5(`daniel${process.env.MD5_SECRET}`),
-      status: 'Inativo',
+      status: 'INACTIVATE',
     }),
     await client.create({
       kind: 'client',
@@ -27,7 +27,7 @@ const createUsers = async () => {
       uf: 'RJ',
       cidade: 'Rio de janeiro',
       email: 'daniel95barboza@gmail.com',
-      senha: md5(`daniel${process.env.MD5_SECRET}`),
+      password: md5(`daniel${process.env.MD5_SECRET}`),
       status: 'Active',
     });
 };

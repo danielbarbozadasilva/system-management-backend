@@ -10,7 +10,7 @@ O Sistema tem como objetivo listar as confeitarias e efetuar o gerenciamento des
 
 # Descrição geral
 
-O REGALE é um Sistema web que vem com o intuito de estabelecer um relacionamento entre o cliente e um nicho de mercado específico que no caso seriam as confeitarias. Todas as suas funcionalidades foram pensadas e elaboradas para proporcionar uma maior comodidade ao cliente e ao dono da confeitaria.
+O REGALE é um Sistema web que vem com o intuito de estabelecer um relacionamento entre o cliente e um nicho de mercado específico que no caso seriam as confeitarias. Todas as suas functionalitys foram pensadas e elaboradas para proporcionar uma maior comodidade ao cliente e ao dono da confeitaria.
 
 O Sistema tem como proposta resolver o problema de divulgação que vem a ser recorrente principalmente nas confeitarias que estão iniciando a pouco tempo no mercado, já que estas ainda não possuem um meio de divulgar o seu negócio.
 
@@ -40,4 +40,4 @@ RF10: O usuário fornecedor pode visualizar os product numa listagem e terão a 
 
 RF11: O usuário admin deve conseguir visualizar os product por fornecedor. Explicação: O Sistema permite que o usuário admin visualize os product por seus respectivos fornecedores.
 
-RF12 Após a aprovação/cancelamento de acesso, o sistema envia uma mensagem por e-mail para o fornecedor. Explicação: O Sistema deverá enviar um e-mail de confirmação de ativação ou inativação para o fornecedor, caso o admin do Sistema revogue ou permita o acesso por parte do fornecedor.
+RF12 Após a aprovação/cancelamento de acesso, o sistema envia uma message por e-mail para o fornecedor. Explicação: O Sistema deverá enviar um e-mail de confirmação de ativação ou inativação para o fornecedor, caso o admin do Sistema revogue ou permita o acesso por parte do fornecedor.

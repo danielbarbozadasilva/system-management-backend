@@ -4,11 +4,11 @@ const md5HashSecret = process.env.MD5_SECRET;
 const jwtHashSecret = process.env.JWT_SECRET;
 const jwtTimeLimit = process.env.JWT_VALID_TIME;
 
-const criaHash = (senha) => {
-  return md5(senha + md5HashSecret);
+const createHash = (password) => {
+  return md5(password + md5HashSecret);
 };
 
-const criaToken = (model) => {
+const createToken = (model) => {
   return jwt.sign({ ...model }, jwtHashSecret, {
     expiresIn: `${jwtTimeLimit}m`,
   });
@@ -28,8 +28,8 @@ const validaToken = (token) => {
 };
 
 module.exports = {
-  criaHash,
-  criaToken,
+  createHash,
+  createToken,
   validaToken,
   decodificaToken,
 };
