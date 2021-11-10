@@ -1,15 +1,16 @@
 const { provider } = require('../models/models.index');
 
-const { toListItemDTO, toDTOLikeCase } = require('../mappers/mappers.provider');
+const { toListItemDTO } = require('../mappers/mappers.provider');
 const {
   ServiceValidateEmailExists,
-  ServiceValidateCnpjExists,
-  buscatypeuserPorId,
-} = require('../services/user.service');
+  ServiceValidateCnpjnpj,
+  ServiceSearchTypeUserById,
+} = require('../services/services.user');
 const { createHash } = require('../utils/criptografia.util');
 const emailUtils = require('../utils/email.utils');
-const { EmailHabilitar } = require('../utils/email.message.habilitar');
-const { EmailDesACTIVE } = require('../utils/email.message.desACTIVE');
+
+const { EmailEnable } = require('../utils/email.message.habilitar');
+const { EmailDesable } = require('../utils/email.message.desACTIVE');
 
 const createProvider = async (model) => {
   const {
@@ -25,7 +26,7 @@ const createProvider = async (model) => {
     status,
   } = model;
 
-  if (await ServiceValidateCnpjExists(cnpj))
+  if (await ServiceValidateCnpjnpj(cnpj))
     return {
       success: false,
       message: 'operação não pode ser realizada',
@@ -74,7 +75,7 @@ const updateProvider = async (providerid, body) => {
     status,
   } = body;
 
-  if (await ServiceValidateCnpjExists(cnpj)) {
+  if (await ServiceValidateCnpjnpjExists(cnpj)) {
     return {
       success: false,
       message: 'operação não pode ser realizada',
@@ -95,15 +96,7 @@ const updateProvider = async (providerid, body) => {
     {
       $set: {
         cnpj: cnpj,
-        fantasy_name: fantasy_name,
-        Address: Address,
-        uf: uf,
-        cidade: cidade,
-        responsavel: responsavel,
-        telefone: telefone,
-        email: email,
-        password: createHash(password),
-        status: 'Analise',
+        fantasy_name: fantasy_namHabilitar,
       },
     }
   );
@@ -146,12 +139,12 @@ const alteraStatus = async (id, status) => {
     });
   }
 
-  if (status === 'INACTIVATE') {
+  if (status === 'Inactive') {
     emailUtils.enviar({
       destinatario: providerDB.email,
       remetente: process.env.SENDGRID_REMETENTE,
       assunto: `Confirmação de Inativação ${providerDB.fantasy_name}`,
-      corpo: EmailDesACTIVE('titulo', 'menssagem', `${process.env.URL}/signin`),
+      corpo: EmailEnable('title', 'menssage', `${process.env.URL}/signin`),
     });
   }
 

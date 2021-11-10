@@ -26,19 +26,19 @@ const user = mongoose.model(
 const admin_schema = require('./models.admin');
 const admin = user.discriminator(
   'admin',
-  createSchema(userSchema, admin_schema, {})
+  createSchema(user_schema, admin_schema, {})
 );
 
 const provider_schema = require('./models.provider');
 const provider = user.discriminator(
   'provider',
-  createSchema(userSchema, provider_schema, {})
+  createSchema(user_schema, provider_schema, {})
 );
 
 const client_schema = require('./models.client');
 const client = user.discriminator(
   'client',
-  createSchema(userSchema, client_schema, {})
+  createSchema(user_schema, client_schema, {})
 );
 
 const category_schema = require('./models.category');

@@ -1,5 +1,5 @@
-const { product } = require('../../api/models/index');
-const fileUtils = require('../../api/utils/file.util');
+const { product } = require('../../api/models/models.index');
+const fileUtils = require('../../api/utils/utils.file');
 
 const dataProduct = [
   {
@@ -9,8 +9,8 @@ const dataProduct = [
     description: 'teste-product01-description',
     preco: 13.55,
     image: {
-      sourcealName: 'boloLimao.jpg',
-      name: fileUtils.UtilCreatename('image/jpeg'),
+      origin_name: 'boloLimao.jpg',
+      name: fileUtils.UtilCreateName('image/jpeg'),
       type: 'image/jpeg',
     },
   },
@@ -21,8 +21,8 @@ const dataProduct = [
     description: 'teste-product02-description',
     preco: 20.95,
     image: {
-      sourcealName: 'principal2.jpg',
-      name: fileUtils.UtilCreatename('image/jpeg'),
+      origin_name: 'principal2.jpg',
+      name: fileUtils.UtilCreateName('image/jpeg'),
       type: 'image/jpeg',
     },
   },

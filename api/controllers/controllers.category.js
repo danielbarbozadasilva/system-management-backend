@@ -1,6 +1,6 @@
 const categoryService = require('../services/services.category');
 
-const ControllerListAllCategories = async (req, res, next) => {
+const ControllerListAllCategory = async (req, res, next) => {
   const resultService = await categoryService.ServiceSearchAllCategory();
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
@@ -62,7 +62,7 @@ const ControllerRemoveCategory = async (req, res, next) => {
 };
 
 module.exports = {
-  ControllerListAllCategories,
+  ControllerListAllCategory,
   ControllerListCategoryById,
   ControllerCreateCategory,
   ControllerChangeCategory,

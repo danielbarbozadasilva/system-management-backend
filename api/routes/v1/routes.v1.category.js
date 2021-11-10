@@ -1,16 +1,16 @@
 const joi = require("joi");
 const controllerCategory = require("../../controllers/controllers.category");
 
-const validateDTO = require("../../utils/middlewares/validate-dto.middleware");
-const fileUploadMiddleware = require("../../utils/middlewares/fileUploadMiddleware");
-const autorizationMiddleware = require("../../utils/middlewares/authorization.middleware");
+const validateDTO = require("../../utils/middlewares/middlewares.validate_dto");
+const fileUploadMiddleware = require("../../utils/middlewares/middlewares.file_upload");
+const autorizationMiddleware = require("../../utils/middlewares/middlewares.authorization");
 
 module.exports = (router) => {
   router
     .route("/category")
     .get(
       autorizationMiddleware('*'),
-      controllerCategory.ControllerListAllCategories
+      controllerCategory.ControllerListAllCategory
     )
 
     .post(

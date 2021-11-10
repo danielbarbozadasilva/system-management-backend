@@ -1,4 +1,4 @@
-const fileUtils = require('../utils/utils.file');
+const fileUtils = require('../utils/utils.email');
 
 const toItemListaDTO = (model) => {
   const { _id, name, description, preco, provider, category, image } = model;

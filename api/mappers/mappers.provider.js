@@ -1,6 +1,3 @@
-const fileUtils = require('../utils/file.util');
-const { client } = require('../models/models.index');
-
 const toListItemDTO = (model) => {
   const {
     id: _id,
@@ -57,6 +54,5 @@ const toDTO = (model) => {
 
 module.exports = {
   toListItemDTO,
-  toDTOLikeCase,
   toDTO,
 };

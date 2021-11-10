@@ -1,7 +1,7 @@
 const toDTO = (model) => {
   const { _id, first_name, last_name, birth_date, uf, city, status } = model;
   return {
-    id: id,
+    id: _id,
     first_name,
     last_name,
     birth_date,

@@ -1,9 +1,9 @@
 const joi = require('joi').extend(require('@joi/date'));
 const clientController = require('../../controllers/controllers.client');
 
-const validateDTO = require('../../utils/middlewares/validate-dto.middleware');
 const asyncMiddleware = require('../../utils/middlewares/middlewares.async');
-const autorizationMiddleware = require('../../utils/middlewares/authorization.middleware');
+const validateDTO = require('../../utils/middlewares/middlewares.validate_dto');
+const autorizationMiddleware = require('../../utils/middlewares/middlewares.authorization');
 
 module.exports = (router) => {
   router

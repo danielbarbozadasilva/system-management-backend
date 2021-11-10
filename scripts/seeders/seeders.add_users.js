@@ -18,7 +18,7 @@ const createUsers = async () => {
       phone: '(21) 3352-1018',
       email: 'daniel80barboza@gmail.com',
       password: md5(`daniel${process.env.MD5_SECRET}`),
-      status: 'INACTIVATE',
+      status: 'Inactivate',
     }),
     await client.create({
       kind: 'client',

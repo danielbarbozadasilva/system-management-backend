@@ -1,4 +1,4 @@
-const fileUtils = require("../utils/file.util");
+const fileUtils = require("../utils/utils.file");
 
 const toDTO = (model) => {
   const { image, _id, name, description, status } = model;

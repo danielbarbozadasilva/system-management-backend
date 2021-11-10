@@ -1,15 +1,13 @@
 const path = require("path");
 const fs = require("fs");
 const formidable = require("formidable");
-const fileUtils = require("../file.util");
 
-const ErrorRegraDeNegocio = require("../errors/erro-regra-negocio");
+const fileUtils = require("../utils.file");
 
 const postIsValid = (files) => {
   if (!files.image || files.image.name === "") {
     return false;
   }
-
   return true;
 };
 
@@ -17,7 +15,6 @@ const putIsValid = (files) => {
   if (!files.image || files.image.name === "") {
     return false;
   }
-
   return true;
 };
 

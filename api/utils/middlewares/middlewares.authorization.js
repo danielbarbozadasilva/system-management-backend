@@ -1,8 +1,8 @@
-const criptografiaUitls = require("../cryptography.util");
-const userService = require("../../services/user.service");
+const criptografiaUitls = require("../utils.cryptography");
+const userService = require("../../services/services.user");
 
-const ErrouserNaoAutorizado = require("../errors/errors.user_not_allowed");
-const ErrouserNaoAutenticado = require("../errors/errors.user_not_authenticated");
+const ErrorUserNotAllowed = require("../errors/errors.user_not_allowed");
+const ErrorUnauthenticatedUser = require('../errors/errors.user_not_authenticated');
 
 const autorizar = (rota = '*') => {
   return async (req, res, next) => {
@@ -13,13 +13,13 @@ const autorizar = (rota = '*') => {
         if (teste != '*') {
           if (!token) {
             return reject(
-              new ErrouserNaoAutenticado("Usuário não autenticado!")
+              new ErrorUnauthenticatedUser("Unauthenticated User Error")
             );
           }
 
           if (!criptografiaUitls.validaToken(token)) {
             return reject(
-              new ErrouserNaoAutenticado("Usuário não autenticado!")
+              new ErrorUnauthenticatedUser("Unauthenticated User Error")
             );
           }
 
@@ -27,18 +27,14 @@ const autorizar = (rota = '*') => {
             criptografiaUitls.decodificaToken(token);
 
           if (!userService.ServiceValidateEmailExists(email)) {
-            return reject(
-              new ErrouserNaoAutorizado("Usuário não autorizado!")
-            );
+            return reject(new ErrorUserNotAllowed('Unauthorized User!'));
           }
 
           if (
             userService.ServiceValidateFunctionalityProfile(typeuser, teste) ===
             false
           ) {
-            return reject(
-              new ErrouserNaoAutorizado("Usuário não autorizado!")
-            );
+            return reject(new ErrorUserNotAllowed('Unauthorized User!'));
           }
         }
         return resolve(next());

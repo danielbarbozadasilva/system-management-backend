@@ -1,4 +1,4 @@
-const providerService = require('../services/provider.service');
+const providerService = require('../services/services.provider');
 const productMapper = require('../mappers/mappers.product');
 const { provider } = require('../models/models.index');
 

@@ -1,9 +1,11 @@
 const joi = require('joi');
-const validateDTO = require('../../utils/middlewares/validate-dto.middleware');
+
+const validateDTO = require('../../utils/middlewares/middlewares.validate_dto');
+const fileUploadMiddleware = require('../../utils/middlewares/middlewares.file_upload');
+const autorizationMiddleware = require('../../utils/middlewares/middlewares.authorization');
+
 const providerController = require('../../controllers/controllers.provider');
 const productController = require('../../controllers/controllers.product');
-const autorizacaoMiddleware = require('../../utils/middlewares/authorization.middleware');
-const fileUploadMiddleware = require('../../utils/middlewares/fileUploadMiddleware');
 
 module.exports = (router) => {
   router.route('/provider').get(providerController.listAllprovider);

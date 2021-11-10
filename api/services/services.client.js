@@ -1,12 +1,9 @@
-const { ServiceValidateEmailExists } = require('./user.service');
+const { ServiceValidateEmailExists } = require('./services.user');
 const { client } = require('../models/models.index');
 const { toDTO } = require('../mappers/mappers.client');
-const { createHash } = require('../utils/criptografia.util');
+const { createHash } = require('../utils/utils.cryptography');
 
-const ErrorBusinessRule = require('../utils/errors/errors.business_rule');
-const ErrorUnauthorizedUser = require('../utils/errors/errors.user_not_allowed');
-
-const listaTodos = async () => {
+const ServiceListAll = async () => {
   const resultadoDB = await client.find({}).sort({ name: 1 });
 
   return resultadoDB.map((item) => {
@@ -14,7 +11,7 @@ const listaTodos = async () => {
   });
 };
 
-const create = async (model) => {
+const ServiceCreate = async (model) => {
   const { email, password, ...rest } = model;
   if (await ServiceValidateEmailExists(email))
     return {
@@ -39,19 +36,19 @@ const create = async (model) => {
   };
 };
 
-const SEARCHPorId = async (clientid) => {
+const ServiceSearchById = async (clientid) => {
   const resultadoDB = await client.find({ _id: clientid });
   return resultadoDB;
 };
 
-const listalike = async (clientid) => {
+const ServiceListLike = async (clientid) => {
   const resultadoDB = await client.find({ _id: clientid });
   return resultadoDB;
 };
 
 module.exports = {
-  listaTodos,
-  listalike,
-  create,
-  SEARCHPorId,
+  ServiceListAll,
+  ServiceSearchById,
+  ServiceListLike,
+  ServiceCreate,
 };

@@ -65,7 +65,7 @@ const ServiceValidateEmailExists = async (email) => {
   return users.length > 0 ? true : false;
 };
 
-const ServiceValidateFunctionalityCnpj = async (cnpj) => {
+const ServiceValidateCnpjnpj = async (cnpj) => {
   const result = await provider.find({ cnpj });
   return result.length > 0 ? true : false;
 };
@@ -120,7 +120,7 @@ module.exports = {
   ServiceSearchTypeUserById,
   ServiceCreateUser,
   ServiceCreateCredential,
-  ServiceValidateFunctionalityCnpj,
+  ServiceValidateCnpjnpj,
   ServiceValidateEmailExists,
   ServiceValidateFunctionalityProfile,
   ServiceUserIsValid,

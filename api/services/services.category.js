@@ -1,6 +1,6 @@
 const { category, product } = require("../models/models.index");
 const categoryMapper = require("../mappers/mappers.category");
-const fileUtils = require("../utils/file.util");
+const fileUtils = require("../utils/utils.file");
 
 const ErrorBusinessRule = require("../utils/errors/errors.business_rule");
 
