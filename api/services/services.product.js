@@ -13,12 +13,12 @@ const ServiceCreateProduct = async (model) => {
       category: model.category,
       provider: model.providerlogadoid,
       image: {
-        sourceName: model.image.sourceName,
-        newName: model.image.newName,
+        source: model.image.source,
+        name: model.image.newName,
         type: model.image.type,
       },
     }),
-    fileUtils.move(model.image.sourceName, model.image.newName),
+    fileUtils.move(model.image.source, model.image.newName),
   ]);
 
   if (!providerDB) {
@@ -57,8 +57,8 @@ const ServiceCreateProduct = async (model) => {
     success: true,
     message: 'operation performed successfully',
     data: {
-      id: newproduct._id,
-      name: newproduct.name,
+      id: productDB._id,
+      name: productDB.name,
     },
   };
 };
@@ -77,15 +77,27 @@ const ServiceSearchProductByFilter = async (filters) => {
     filter.name = { $regex: '.*' + filters.namelike + '.*' };
   }
 
-  const resultadoDB = await product
+  const resultDB = await product
     .find(filter)
     .populate('product')
     .populate('provider')
     .populate('category');
-
-  return resultadoDB.map((item) => {
-    return productMapper.toItemListaDTO(item);
-  });
+  if (resultDB) {
+    return {
+      success: true,
+      message: 'operation performed successfully',
+      data: {
+        ...productMapper.toItemListaDTO(resultDB)
+      },
+    }
+  } else {
+     return {
+       success: false,
+       message: 'no results',
+       details: ['no results'],
+     };
+  }
+  
 };
 
 const ServiceDeleteProduct = async ({ providerId, productId, userId }) => {
@@ -173,14 +185,14 @@ const ServiceListProductById = async (id) => {
   if (productDB) {
     return {
       success: true,
-      message: 'operação realizada com success',
+      message: 'Operation performed successfully',
       data: productMapper.toItemListaDTO(productDB),
     };
   } else {
     return {
       success: false,
       message: 'could not perform the operation',
-      details: ['"productid" não existe.'],
+      details: ['The product id does not exist.'],
     };
   }
 };
@@ -192,7 +204,7 @@ const ServiceUpdateProduct = async (productId, model) => {
     return {
       success: false,
       message: 'could not perform the operation',
-      details: ['"productid" não existe.'],
+      details: ['The product id does not exist.'],
     };
   }
 
@@ -205,10 +217,10 @@ const ServiceUpdateProduct = async (productId, model) => {
 
   if (typeof model.image === 'object') {
     fileUtils.remove('products', productDB.image.name);
-    fileUtils.move(model.image.caminhosourceal, model.image.newCaminho);
+    fileUtils.move(model.image.old_source, model.image.new_source);
     productDB.image = {
-      sourceName: model.image.sourceName,
-      name: model.image.newame,
+      source: model.image.source,
+      name: model.image.newName,
       type: model.image.type,
     };
   }

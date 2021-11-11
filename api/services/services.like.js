@@ -28,17 +28,24 @@ const ServiceCreateLikeClientProvider = async (providerid, clientid) => {
       client: clientid,
     });
 
-    await Promise.all([resp.save()]);
+    const result_like = await Promise.all([resp.save()]);
 
-    return {
-      success: true,
-      data: {
-        message: 'Successfully liked!',
-        id: resp._id,
-        provider: resp.provider,
-        client: resp.client,
-      },
-    };
+    if (!result_like) {
+      return {
+        success: true,
+        data: {
+          message: 'Successfully liked!',
+          id: resp._id,
+          provider: resp.provider,
+          client: resp.client,
+        },
+      };
+    } else {
+      return {
+        success: false,
+        details: 'Error performing like!',
+      };
+    }
   }
 };
 
@@ -60,19 +67,21 @@ const ServiceRemoveLikeClientProvider = async (providerid, clientid) => {
       details: 'The client informed does not exist!',
     };
   } else if (likeDB) {
-    await Promise.all([like.deleteOne()]);
+    const result_like = await Promise.all([like.deleteOne()]);
 
-    return {
-      success: true,
-      data: {
-        message: 'Like removed successfully!',
-      },
-    };
-  } else if (!likeDB) {
-    return {
-      success: false,
-      details: 'There is no like!',
-    };
+    if (result_like) {
+      return {
+        success: true,
+        data: {
+          message: 'like removed successfully!',
+        },
+      };
+    } else {
+      return {
+        success: false,
+        details: 'There is no like!',
+      };
+    }
   }
 };
 
@@ -104,17 +113,23 @@ const ServiceCreateLikeProviderProduct = async (providerid, productid) => {
       product: productid,
     });
 
-    await Promise.all([resp.save()]);
-
-    return {
-      success: true,
-      data: {
-        message: 'Successfully liked!',
-        id: resp._id,
-        provider: resp.provider,
-        product: resp.product,
-      },
-    };
+    const result_like = await Promise.all([resp.save()]);
+    if (result_like) {
+      return {
+        success: true,
+        data: {
+          message: 'Successfully liked!',
+          id: resp._id,
+          provider: resp.provider,
+          product: resp.product,
+        },
+      };
+    } else {
+      return {
+        success: false,
+        details: 'There is no like!',
+      };
+    }
   }
 };
 
@@ -136,18 +151,20 @@ const ServiceRemoveLikeProviderProduct = async (providerid, productid) => {
       details: 'The product informed does not exist!',
     };
   } else if (likeDB) {
-    await Promise.all([like.deleteOne()]);
-    return {
-      success: true,
-      data: {
-        message: 'like removed successfully!',
-      },
-    };
-  } else if (!likeDB) {
-    return {
-      success: false,
-      details: 'There is no like!',
-    };
+    const result_like = await Promise.all([like.deleteOne()]);
+    if (result_like) {
+      return {
+        success: true,
+        data: {
+          message: 'like removed successfully!',
+        },
+      };
+    } else {
+      return {
+        success: false,
+        details: 'There is no like!',
+      };
+    }
   }
 };
 

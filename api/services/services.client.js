@@ -5,10 +5,20 @@ const { createHash } = require('../utils/utils.cryptography');
 
 const ServiceListAll = async () => {
   const resultadoDB = await client.find({}).sort({ name: 1 });
-
-  return resultadoDB.map((item) => {
-    return toDTO(item.toJSON());
-  });
+  if (resultadoDB) {
+    return {
+      success: true,
+      message: 'Operation performed successfully',
+      data: {
+        ...toDTO(resultadoDB.toJSON())
+      },
+    };
+  } else {
+    return {
+      success: false,
+      details: 'No categories found',
+    };
+  }
 };
 
 const ServiceCreate = async (model) => {
@@ -17,33 +27,64 @@ const ServiceCreate = async (model) => {
     return {
       success: false,
       message: 'Operation cannot be performed',
-      details: ['Já existe usuário cadastrado para o email informado'],
+      details: ['There is already a registered user for the network email'],
     };
 
-  const newclient = await client.create({
+  const new_client = await client.create({
     email,
     ...rest,
     password: createHash(password),
     status: 'Enable',
   });
-
-  return {
-    success: true,
-    message: 'Operação realizada com success',
-    data: {
-      ...toDTO(newclient),
-    },
-  };
+  if (new_client) {
+    return {
+      success: true,
+      message: 'Operation performed successfully',
+      data: {
+        ...toDTO(new_client),
+      },
+    };
+  } else {
+    return {
+      success: false,
+      details: 'No categories found',
+    };
+  }
 };
 
-const ServiceSearchById = async (clientid) => {
+const ServiceSearchById = async () => {
   const resultadoDB = await client.find({ _id: clientid });
-  return resultadoDB;
+  if (resultadoDB) {
+    return {
+      success: true,
+      message: 'Operation performed successfully',
+      data: {
+        ...toDTO(resultadoDB.toJSON()),
+      },
+    };
+  } else {
+    return {
+      success: false,
+      details: 'No categories found',
+    };
+  }
 };
-
-const ServiceListLike = async (clientid) => {
+const ServiceListLike = async () => {
   const resultadoDB = await client.find({ _id: clientid });
-  return resultadoDB;
+  if (resultadoDB) {
+    return {
+      success: true,
+      message: 'Operation performed successfully',
+      data: {
+        ...toDTO(resultadoDB.toJSON()),
+      },
+    };
+  } else {
+    return {
+      success: false,
+      details: 'No categories found',
+    };
+  }
 };
 
 module.exports = {

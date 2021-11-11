@@ -1,8 +1,6 @@
-const { category, product } = require('../models/models.index');
+const { category } = require('../models/models.index');
 const categoryMapper = require('../mappers/mappers.category');
 const fileUtils = require('../utils/utils.file');
-
-const ErrorBusinessRule = require('../utils/errors/errors.business_rule');
 
 const ServiceSearchAllCategory = async () => {
   const categoryDB = await category.find({}).sort({ description: 1 });
@@ -20,8 +18,8 @@ const ServiceSearchAllCategory = async () => {
   }
 };
 
-const ServiceSearchCategoryById = async (categoryid) => {
-  const categoryDB = await category.findById(categoryid);
+const ServiceSearchCategoryById = async (category_id) => {
+  const categoryDB = await category.findById(category_id);
   if (categoryDB) {
     return {
       success: true,
@@ -41,7 +39,7 @@ const ServiceInsertCategory = async (model) => {
     name: model.name,
     description: model.description,
     image: {
-      sourceal_name: model.image.sourceName,
+      source: model.image.source,
       name: model.image.newName,
       type: model.image.type,
     },
@@ -56,8 +54,8 @@ const ServiceInsertCategory = async (model) => {
   };
 };
 
-const ServiceRemoveCategoryProducts = async (categoryId) => {
-  const categoryDB = await category.findOne({ _id: categoryId });
+const ServiceRemoveCategoryProducts = async (category_Id) => {
+  const categoryDB = await category.findOne({ _id: category_Id });
 
   if (!categoryDB) {
     new ErrorRegraDeNegocio('category não encontrada!');
@@ -74,14 +72,14 @@ const ServiceRemoveCategoryProducts = async (categoryId) => {
   };
 };
 
-const ServiceChangeCategory = async (categoryId, model) => {
-  const categoryDB = await category.findOne({ _id: categoryId });
+const ServiceChangeCategory = async (category_Id, model) => {
+  const categoryDB = await category.findOne({ _id: category_Id });
 
   if (!categoryDB) {
     return {
       success: false,
       message: 'could not perform the operation',
-      details: ["categoryid doesn't exist."],
+      details: ["category_id doesn't exist."],
     };
   }
 
@@ -91,10 +89,10 @@ const ServiceChangeCategory = async (categoryId, model) => {
 
   if (typeof model.image === 'object') {
     fileUtils.remove('category', categoryDB.image.name);
-    fileUtils.move(model.image.caminhosourceal, model.image.newCaminho);
+    fileUtils.move(model.image.old_source, model.image.new_source);
     categoryDB.image = {
-      sourceName: model.image.sourceName,
-      name: model.image.newame,
+      source: model.image.source,
+      name: model.image.newName,
       type: model.image.type,
     };
   }

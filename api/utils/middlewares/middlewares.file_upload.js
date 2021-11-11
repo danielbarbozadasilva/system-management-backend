@@ -50,15 +50,15 @@ const fileUpload = (destino, isUpdate = false) => {
     }
 
     if (files.image && files.image.name !== '') {
-      const newame = fileUtils.UtilCreatename(files.image.type);
-      const newCaminho = fileUtils.UtilCreateAddress(destino, newame);
+      const newName = fileUtils.UtilCreatename(files.image.type);
+      const new_source = fileUtils.UtilCreateAddress(destino, newName);
 
       req.body.image = {
         type: files.image.type,
-        sourceName: files.image.name,
-        caminhosourceal: files.image.path,
-        newame,
-        newCaminho,
+        source files.image.name,
+        old_source: files.image.path,
+        newName,
+        new_source,
       };
     }
 

@@ -12,16 +12,15 @@ const { EmailEnable } = require('../utils/utils.email.message.enable');
 const { EmailDisable } = require('../utils/utils.email.message.disable');
 
 const ServiceListAllProvider = async () => {
-  const resultadoDB = await provider.find({}).sort({ fantasy_name: 1 });
+  const resultDB = await provider.find({}).sort({ fantasy_name: 1 });
   return {
     success: true,
     message: 'Operation performed successfully',
     data: {
-      ...toListItemDTO(resultadoDB),
+      ...toListItemDTO(resultDB),
     },
   };
 };
-
 
 const ServiceListProviderById = async (providerid) => {
   const providerDB = await provider.findById(providerid);
@@ -36,10 +35,10 @@ const ServiceListProviderById = async (providerid) => {
 
   return {
     success: true,
+    message: 'operation performed successfully',
     data: providerDB.toJSON(),
   };
 };
-
 
 const ServiceListProvidersByLocation = async (uf, city) => {
   let filter = {};
@@ -48,8 +47,20 @@ const ServiceListProvidersByLocation = async (uf, city) => {
   } else {
     filter = { uf, city };
   }
-  const resultadoDB = await provider.find(filter);
-  return res.send(resultadoDB);
+  const resultDB = await provider.find(filter);
+  if (!resultDB) {
+    return {
+      success: false,
+      message: 'operation cannot be performed',
+      details: ['The value does not exist'],
+    };
+  } else {
+    return {
+      success: true,
+      message: 'operation performed successfully',
+      data: resultDB.toJSON(),
+    };
+  }
 };
 
 const ServiceCreateProvider = async (model) => {
@@ -69,14 +80,14 @@ const ServiceCreateProvider = async (model) => {
   if (await ServiceValidateCnpjExists(cnpj))
     return {
       success: false,
-    message: 'Operation performed successfully',
+      message: 'operation cannot be performed',
       details: ['There is already a registered provider for the entered cnpj'],
     };
 
   if (await ServiceValidateEmailExists(email))
     return {
       success: false,
-    message: 'Operation performed successfully',
+      message: 'operation cannot be performed',
       details: ['There is already a registered user for the email entered'],
     };
 
@@ -92,6 +103,7 @@ const ServiceCreateProvider = async (model) => {
     password: createHash(password),
     status: 'Analysis',
   });
+
   return {
     success: true,
     message: 'Operation performed successfully',
@@ -102,7 +114,6 @@ const ServiceCreateProvider = async (model) => {
 };
 
 const ServiceUpdateProvider = async (provider_id, body) => {
-
   if (await ServiceValidateCnpjExists(cnpj)) {
     return {
       success: false,
@@ -119,7 +130,7 @@ const ServiceUpdateProvider = async (provider_id, body) => {
     };
   }
 
-  const newProvider = await provider.updateOne(
+  const new_provider = await provider.updateOne(
     { _id: provider_id },
     {
       $set: {
@@ -136,16 +147,22 @@ const ServiceUpdateProvider = async (provider_id, body) => {
       },
     }
   );
-
-  return {
-    success: true,
-    message: 'Operation performed successfully',
-    data: {
-      ...toListItemDTO(newProvider),
-    },
-  };
+  if (!new_provider) {
+    return {
+      success: false,
+      message: 'operation cannot be performed',
+      details: ['The value does not exist'],
+    };
+  } else {
+    return {
+      success: true,
+      message: 'Operation performed successfully',
+      data: {
+        ...toListItemDTO(new_provider),
+      },
+    };
+  }
 };
-
 
 const ServiceChangeStatus = async (id, status) => {
   const providerDB = await provider.findById(id);
@@ -160,24 +177,23 @@ const ServiceChangeStatus = async (id, status) => {
 
   providerDB.status = status;
 
-  await providerDB.save();
-
-  if (status === 'Enable') {
-    emailUtils.enviar({
-      recipient: providerDB.email,
-      sender: process.env.SENDGRID_SENDER,
-      subject: `Confirmação de Ativação ${providerDB.fantasy_name}`,
-      body: EmailEnable('title', 'message', `${process.env.URL}/signin`),
-    });
-  }
-
-  if (status === 'Disable') {
-    emailUtils.enviar({
-      recipient: providerDB.email,
-      sender: process.env.SENDGRID_SENDER,
-      subject: `Confirmação de Inativação ${providerDB.fantasy_name}`,
-      body: EmailDisable('title', 'message', `${process.env.URL}/signin`),
-    });
+  const resultDB = await providerDB.save();
+  if (resultDB) {
+    if (status === 'Enable') {
+      emailUtils.enviar({
+        recipient: providerDB.email,
+        sender: process.env.SENDGRID_SENDER,
+        subject: `Activation Confirmation ${providerDB.fantasy_name}`,
+        body: EmailEnable('title', 'message', `${process.env.URL}/signin`),
+      });
+    } else if (status === 'Disable') {
+      emailUtils.enviar({
+        recipient: providerDB.email,
+        sender: process.env.SENDGRID_SENDER,
+        subject: `Inactivation Confirmation ${providerDB.fantasy_name}`,
+        body: EmailDisable('title', 'message', `${process.env.URL}/signin`),
+      });
+    }
   }
 
   return {
@@ -190,7 +206,7 @@ const ServiceChangeStatus = async (id, status) => {
 };
 
 const ServiceListLikesClient = async (filtro) => {
-  const resultadoDB = await provider.find({ _id: filtro }).populate({
+  const resultDB = await provider.find({ _id: filtro }).populate({
     path: 'likes',
     model: 'like',
     populate: {
@@ -199,39 +215,80 @@ const ServiceListLikesClient = async (filtro) => {
     },
   });
 
-  return resultadoDB;
+  if (!resultDB) {
+    return {
+      success: false,
+      message: 'operation cannot be performed',
+      details: ['The value does not exist'],
+    };
+  } else {
+    return {
+      success: true,
+      message: 'Operation performed successfully',
+      data: {
+        ...toListItemDTO(resultDB.toJSON()),
+      },
+    };
+  }
 };
 
-
 const ServiceListProductsProvider = async (providerid) => {
-  const providerFromDB = await provider
+  const resultDB = await provider
     .findById({ _id: providerid })
     .populate('products');
-  return providerFromDB;
+  if (!resultDB) {
+    return {
+      success: false,
+      message: 'operation cannot be performed',
+      details: ['The value does not exist'],
+    };
+  } else {
+    return {
+      success: true,
+      message: 'Operation performed successfully',
+      data: {
+        ...toListItemDTO(resultDB.toJSON()),
+      },
+    };
+  }
 };
 
 const ServiceEnableProvider = async (id) => {
-  const resultService = await providerService.alteraStatus(id, 'ENABLE');
-  const codigoRetorno = resultService.success ? 200 : 400;
-  const dadoRetorno = resultService.success
-    ? { data: resultService.data }
-    : { details: resultService.details };
-  return res.status(codigoRetorno).send({
-        message: 'Operation performed successfully',
-    ...dadoRetorno,
-  });
+  const result = await ServiceChangeStatus(id, 'ENABLE');
+  if (!result) {
+    return {
+      success: false,
+      message: 'operation cannot be performed',
+      details: ['The value does not exist'],
+    };
+  } else {
+    return {
+      success: true,
+      message: 'supplier successfully activated',
+      data: {
+        ...toListItemDTO(result.toJSON()),
+      },
+    };
+  }
 };
 
 const ServiceDisableProvider = async (id) => {
-  const resultService = await providerService.alteraStatus(id, 'Disable');
-  const codigoRetorno = resultService.success ? 200 : 400;
-  const dadoRetorno = resultService.success
-    ? { data: resultService.data }
-    : { details: resultService.details };
-  return res.status(codigoRetorno).send({
-    message: 'Operation performed successfully',
-    ...dadoRetorno,
-  });
+  const result = await ServiceChangeStatus(id, 'Disable');
+  if (!result) {
+    return {
+      success: false,
+      message: 'operation cannot be performed',
+      details: ['The value does not exist'],
+    };
+  } else {
+    return {
+      success: true,
+      message: 'supplier successfully deactivated',
+      data: {
+        ...toListItemDTO(result.toJSON()),
+      },
+    };
+  }
 };
 
 module.exports = {
