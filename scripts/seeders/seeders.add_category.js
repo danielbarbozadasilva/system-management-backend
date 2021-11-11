@@ -6,7 +6,7 @@ const createCategory = async () => {
     name: 'teste-category02',
     description: 'teste-category02-description',
     image: {
-      source: 'boloLimao.jpg',
+      sourceFile: 'boloLimao.jpg',
       name: fileUtils.UtilCreateName('image/jpeg'),
       type: 'image/jpeg',
     },

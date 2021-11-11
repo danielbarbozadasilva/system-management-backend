@@ -39,7 +39,7 @@ const ServiceInsertCategory = async (model) => {
     name: model.name,
     description: model.description,
     image: {
-      source: model.image.source,
+      sourceFile: model.image.sourceFile,
       name: model.image.name,
       type: model.image.type,
     },
@@ -91,7 +91,7 @@ const ServiceChangeCategory = async (category_Id, model) => {
     fileUtils.remove('category', categoryDB.image.name);
     fileUtils.move(model.image.old_source, model.image.new_source);
     categoryDB.image = {
-      source: model.image.source,
+      sourceFile: model.image.sourceFile,
       name: model.image.newName,
       type: model.image.type,
     };

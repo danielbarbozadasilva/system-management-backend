@@ -9,7 +9,7 @@ const dataProduct = [
     description: 'teste-product01-description',
     price: 13.55,
     image: {
-      origin_name: 'boloLimao.jpg',
+      sourceFile: 'boloLimao.jpg',
       name: fileUtils.UtilCreateName('image/jpeg'),
       type: 'image/jpeg',
     },
@@ -21,7 +21,7 @@ const dataProduct = [
     description: 'teste-product02-description',
     price: 20.95,
     image: {
-      source: 'principal2.jpg',
+      sourceFile: 'principal2.jpg',
       name: fileUtils.UtilCreateName('image/jpeg'),
       type: 'image/jpeg',
     },

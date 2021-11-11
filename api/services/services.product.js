@@ -13,12 +13,12 @@ const ServiceCreateProduct = async (model) => {
       category: model.category,
       provider: model.providerlogadoid,
       image: {
-        source: model.image.source,
+        sourceFile: model.image.sourceFile,
         name: model.image.newName,
         type: model.image.type,
       },
     }),
-    fileUtils.move(model.image.source, model.image.newName),
+    fileUtils.move(model.image.sourceFile, model.image.newName),
   ]);
 
   if (!providerDB) {
@@ -219,7 +219,7 @@ const ServiceUpdateProduct = async (productId, model) => {
     fileUtils.remove('products', productDB.image.name);
     fileUtils.move(model.image.old_source, model.image.new_source);
     productDB.image = {
-      source: model.image.source,
+      sourceFile: model.image.sourceFile,
       name: model.image.newName,
       type: model.image.type,
     };

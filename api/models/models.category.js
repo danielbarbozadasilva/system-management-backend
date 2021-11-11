@@ -11,7 +11,7 @@ module.exports = {
     required: false,
   },
   image: {
-    source_file: {
+    sourceFile: {
       type: String,
       required: false,
     },

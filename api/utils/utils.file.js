@@ -12,8 +12,8 @@ const UtilCreateAddressDownload = (source, file_name) => {
 };
 
 const UtilCreateName = (type) => {
-  const typeTratado = type.split('/')[1];
-  return `${uuid()}.${typeTratado}`;
+  const resp = type.split('/')[1];
+  return `${uuid()}.${resp}`;
 };
 
 const UtilMove = (oldPath, newPath) => {
