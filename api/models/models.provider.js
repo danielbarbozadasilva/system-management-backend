@@ -37,7 +37,7 @@ const provider_schema = {
   status: {
     type: String,
     required: true,
-  },  
+  },
 };
 
 module.exports = provider_schema;

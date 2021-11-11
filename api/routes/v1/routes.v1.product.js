@@ -3,24 +3,24 @@ const productController = require('../../controllers/controllers.product');
 
 const validateDTO = require('../../utils/middlewares/middlewares.validate_dto');
 const fileUploadMiddleware = require('../../utils/middlewares/middlewares.file_upload');
-const autorizationMiddleware = require('../../utils/middlewares/middlewares.authorization');
+const authorizationMiddleware = require('../../utils/middlewares/middlewares.authorization');
 module.exports = (router) => {
   router
     .route('/product')
     .get(
-      autorizationMiddleware('*'),
+      authorizationMiddleware('*'),
       productController.ControllerListAllProducts
     );
 
   router
     .route('/product/:id')
     .get(
-      autorizationMiddleware('*'),
+      authorizationMiddleware('*'),
       productController.ControllerListProductById
     );
 
   router.route('/product/:productid').put(
-    autorizationMiddleware(''),
+    authorizationMiddleware(''),
     fileUploadMiddleware('products', true),
     validateDTO('query', {
       category: joi

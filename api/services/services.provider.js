@@ -56,7 +56,7 @@ const ServiceCreateProvider = async (model) => {
   const {
     cnpj,
     fantasy_name,
-    Address,
+    address,
     uf,
     city,
     responsible,
@@ -83,7 +83,7 @@ const ServiceCreateProvider = async (model) => {
   const newProvider = await provider.create({
     cnpj,
     fantasy_name,
-    Address,
+    address,
     uf,
     city,
     responsible,
@@ -102,18 +102,6 @@ const ServiceCreateProvider = async (model) => {
 };
 
 const ServiceUpdateProvider = async (provider_id, body) => {
-  const {
-    cnpj,
-    fantasy_name,
-    Address,
-    uf,
-    city,
-    responsible,
-    phone,
-    email,
-    password,
-    status,
-  } = body;
 
   if (await ServiceValidateCnpjExists(cnpj)) {
     return {
@@ -135,16 +123,16 @@ const ServiceUpdateProvider = async (provider_id, body) => {
     { _id: provider_id },
     {
       $set: {
-        cnpj = cnpj,
-        fantasy_name = fantasy_name,
-        Address = Address,
-        uf = uf,
-        city = city,
-        responsible = responsible,
-        phone = phone,
-        email = email,
-        password = password,
-        status = status,
+        cnpj: body.cnpj,
+        fantasy_name: body.fantasy_name,
+        address: body.address,
+        uf: body.uf,
+        city: body.city,
+        responsible: body.responsible,
+        phone: body.phone,
+        email: body.email,
+        password: body.password,
+        status: body.status,
       },
     }
   );

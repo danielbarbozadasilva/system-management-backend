@@ -2,7 +2,7 @@ const joi = require('joi');
 
 const validateDTO = require('../../utils/middlewares/middlewares.validate_dto');
 const fileUploadMiddleware = require('../../utils/middlewares/middlewares.file_upload');
-const autorizationMiddleware = require('../../utils/middlewares/middlewares.authorization');
+const authorizationMiddleware = require('../../utils/middlewares/middlewares.authorization');
 
 const providerController = require('../../controllers/controllers.provider');
 const productController = require('../../controllers/controllers.product');
@@ -11,11 +11,11 @@ module.exports = (router) => {
   router
     .route('/provider')
     .get(
-      autorizacaoMiddleware('*'),
+      authorizationMiddleware('*'),
       providerController.ControllerListAllProviders
     )
     .post(
-      autorizacaoMiddleware('ADD_PROVIDER'),
+      authorizationMiddleware('ADD_PROVIDER'),
       validateDTO('body', {
         cnpj: joi.string().required().messages({
           'any.required': `"cnpj" is a required field`,
@@ -25,9 +25,9 @@ module.exports = (router) => {
           'any.required': `"fantasy_name" is a required field`,
           'string.empty': `"fantasy_name" can not be empty`,
         }),
-        Address: joi.string().required().messages({
-          'any.required': `"Address" is a required field`,
-          'string.empty': `"Address" can not be empty`,
+        address: joi.string().required().messages({
+          'any.required': `"address" is a required field`,
+          'string.empty': `"address" can not be empty`,
         }),
         uf: joi.string().required().messages({
           'any.required': `"uf" is a required field`,
@@ -60,12 +60,12 @@ module.exports = (router) => {
   router
     .route('/provider/filtro')
     .get(
-      autorizacaoMiddleware('*'),
+      authorizationMiddleware('*'),
       providerController.ControllerListProvidersByLocation
     );
 
   router.route('/provider/:providerid').get(
-    autorizationMiddleware('*'),
+    authorizationMiddleware('*'),
     validateDTO('params', {
       providerid: joi
         .string()
@@ -81,7 +81,7 @@ module.exports = (router) => {
   );
 
   router.route('/provider/:id').put(
-    autorizacaoMiddleware('UPDATE_PROVIDER'),
+    authorizationMiddleware('UPDATE_PROVIDER'),
     validateDTO('params', {
       id: joi
         .string()
@@ -102,9 +102,9 @@ module.exports = (router) => {
         'any.required': `"fantasy_name" is a required field`,
         'string.empty': `"fantasy_name" can not be empty`,
       }),
-      Address: joi.string().required().messages({
-        'any.required': `"Address" is a required field`,
-        'string.empty': `"Address" can not be empty`,
+      address: joi.string().required().messages({
+        'any.required': `"address" is a required field`,
+        'string.empty': `"address" can not be empty`,
       }),
       uf: joi.string().required().messages({
         'any.required': `"uf" is a required field`,
@@ -135,7 +135,7 @@ module.exports = (router) => {
   );
 
   router.route('/provider/:providerid/enable').put(
-    autorizacaoMiddleware('ENABLE_PROVIDER'),
+    authorizationMiddleware('ENABLE_PROVIDER'),
     validateDTO('params', {
       providerid: joi
         .string()
@@ -151,7 +151,7 @@ module.exports = (router) => {
   );
 
   router.route('/provider/:providerid/disable').put(
-    autorizacaoMiddleware('DISABLE_PROVIDER'),
+    authorizationMiddleware('DISABLE_PROVIDER'),
     validateDTO('params', {
       providerid: joi
         .string()
@@ -167,7 +167,7 @@ module.exports = (router) => {
   );
 
   router.route('/provider/:providerid/likes').get(
-    autorizacaoMiddleware('*'),
+    authorizationMiddleware('*'),
     validateDTO('params', {
       providerid: joi
         .string()
@@ -183,7 +183,7 @@ module.exports = (router) => {
   );
 
   router.route('/provider/:providerid/product').get(
-    autorizacaoMiddleware('*'),
+    authorizationMiddleware('*'),
     validateDTO('params', {
       providerid: joi
         .string()
@@ -199,7 +199,7 @@ module.exports = (router) => {
   );
 
   router.route('/provider/:provider/product').post(
-    autorizacaoMiddleware('CREATE_PRODUCT'),
+    authorizationMiddleware('CREATE_PRODUCT'),
     fileUploadMiddleware('products'),
     validateDTO('params', {
       provider: joi
@@ -244,7 +244,7 @@ module.exports = (router) => {
   );
 
   router.route('/provider/:providerid/product/:productid').delete(
-    autorizacaoMiddleware('REMOVE_PRODUCT'),
+    authorizationMiddleware('REMOVE_PRODUCT'),
     validateDTO('params', {
       providerid: joi
         .string()
@@ -269,7 +269,7 @@ module.exports = (router) => {
   );
 
   router.route('/provider/:providerid/product/:productid/likes').post(
-    autorizacaoMiddleware('CREATE_LIKE_PRODUCT'),
+    authorizationMiddleware('CREATE_LIKE_PRODUCT'),
     validateDTO('params', {
       providerid: joi
         .string()
@@ -294,7 +294,7 @@ module.exports = (router) => {
   );
 
   router.route('/provider/:providerid/product/:productid/likes').delete(
-    autorizacaoMiddleware('REMOVE_LIKE_PRODUCT'),
+    authorizationMiddleware('REMOVE_LIKE_PRODUCT'),
     validateDTO('params', {
       providerid: joi
         .string()

@@ -3,13 +3,13 @@ const clientController = require('../../controllers/controllers.client');
 
 const asyncMiddleware = require('../../utils/middlewares/middlewares.async');
 const validateDTO = require('../../utils/middlewares/middlewares.validate_dto');
-const autorizationMiddleware = require('../../utils/middlewares/middlewares.authorization');
+const authorizationMiddleware = require('../../utils/middlewares/middlewares.authorization');
 
 module.exports = (router) => {
   router
     .route('/client')
     .post(
-      autorizationMiddleware('*'),
+      authorizationMiddleware('*'),
       validateDTO('body', {
         first_name: joi.string().required().messages({
           'any.required': `"first_name" is a required field`,
@@ -40,14 +40,12 @@ module.exports = (router) => {
     )
 
     .get(
-      autorizationMiddleware('*'),
-      asyncMiddleware(
-        MiddlewareAsync(clientController.ControllerListAllClients)
-      )
+      authorizationMiddleware('*'),
+      asyncMiddleware(clientController.ControllerListAllClients)
     );
 
   router.route('/client/:clientid').get(
-    autorizationMiddleware('*'),
+    authorizationMiddleware('*'),
     validateDTO('params', {
       clientid: joi
         .string()
@@ -63,7 +61,7 @@ module.exports = (router) => {
   );
 
   router.route('/client/:clientid/likes').get(
-    autorizationMiddleware('*'),
+    authorizationMiddleware('*'),
     validateDTO('params', {
       clientid: joi
         .string()
@@ -78,7 +76,7 @@ module.exports = (router) => {
     clientController.ControllerListLikesClient
   );
   router.route('/client/:clientid/provider/:providerid/likes').post(
-    autorizationMiddleware('LIKE_CREATE'),
+    authorizationMiddleware('LIKE_CREATE'),
     validateDTO('params', {
       clientid: joi
         .string()
@@ -103,7 +101,7 @@ module.exports = (router) => {
   );
 
   router.route('/client/:clientid/provider/:providerid/likes').delete(
-    autorizationMiddleware('LIKE_REMOVE'),
+    authorizationMiddleware('LIKE_REMOVE'),
     validateDTO('params', {
       clientid: joi
         .string()
