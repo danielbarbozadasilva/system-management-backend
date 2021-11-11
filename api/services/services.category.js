@@ -1,21 +1,21 @@
-const { category, product } = require("../models/models.index");
-const categoryMapper = require("../mappers/mappers.category");
-const fileUtils = require("../utils/utils.file");
+const { category, product } = require('../models/models.index');
+const categoryMapper = require('../mappers/mappers.category');
+const fileUtils = require('../utils/utils.file');
 
-const ErrorBusinessRule = require("../utils/errors/errors.business_rule");
+const ErrorBusinessRule = require('../utils/errors/errors.business_rule');
 
 const ServiceSearchAllCategory = async () => {
   const categoryDB = await category.find({}).sort({ description: 1 });
   if (categoryDB) {
     return {
       success: true,
-      message: "Operation performed successfully",
+      message: 'Operation performed successfully',
       data: categoryDB,
     };
   } else {
     return {
       success: false,
-      details: "No categories found",
+      details: 'No categories found',
     };
   }
 };
@@ -25,13 +25,13 @@ const ServiceSearchCategoryById = async (categoryid) => {
   if (categoryDB) {
     return {
       success: true,
-      message: "Operation performed successfully",
+      message: 'Operation performed successfully',
       data: categoryDB,
     };
   } else {
     return {
       success: false,
-      details: "No categories found",
+      details: 'No categories found',
     };
   }
 };
@@ -41,7 +41,7 @@ const ServiceInsertCategory = async (model) => {
     name: model.name,
     description: model.description,
     image: {
-      sourceal_name: model.image.sourcealName,
+      sourceal_name: model.image.sourceName,
       name: model.image.newName,
       type: model.image.type,
     },
@@ -51,7 +51,7 @@ const ServiceInsertCategory = async (model) => {
 
   return {
     success: true,
-      message: "Operation performed successfully",
+    message: 'Operation performed successfully',
     data: categoryMapper.toDTO(novacategory),
   };
 };
@@ -60,17 +60,17 @@ const ServiceRemoveCategoryProducts = async (categoryId) => {
   const categoryDB = await category.findOne({ _id: categoryId });
 
   if (!categoryDB) {
-    new ErrorRegraDeNegocio("category não encontrada!");
+    new ErrorRegraDeNegocio('category não encontrada!');
   }
 
   const { image } = categoryDB;
-  fileUtils.remove("category", image.name);
+  fileUtils.remove('category', image.name);
 
   await category.deleteOne(categoryDB);
 
   return {
     success: true,
-    message: "Operation performed successfully!",
+    message: 'Operation performed successfully!',
   };
 };
 
@@ -80,7 +80,7 @@ const ServiceChangeCategory = async (categoryId, model) => {
   if (!categoryDB) {
     return {
       success: false,
-      message: "could not perform the operation",
+      message: 'could not perform the operation',
       details: ["categoryid doesn't exist."],
     };
   }
@@ -89,11 +89,11 @@ const ServiceChangeCategory = async (categoryId, model) => {
   categoryDB.description = model.description;
   categoryDB.status = model.status;
 
-  if (typeof model.image === "object") {
-    fileUtils.remove("category", categoryDB.image.name);
+  if (typeof model.image === 'object') {
+    fileUtils.remove('category', categoryDB.image.name);
     fileUtils.move(model.image.caminhosourceal, model.image.newCaminho);
     categoryDB.image = {
-      sourcealName: model.image.sourcealName,
+      sourceName: model.image.sourceName,
       name: model.image.newame,
       type: model.image.type,
     };
@@ -103,7 +103,7 @@ const ServiceChangeCategory = async (categoryId, model) => {
 
   return {
     success: true,
-    message: "success",
+    message: 'success',
     data: categoryMapper.toDTO(categoryDB),
   };
 };

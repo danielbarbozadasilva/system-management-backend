@@ -232,7 +232,7 @@ module.exports = (router) => {
             'string.empty': `"category id" can not be empty`,
             'string.pattern.base': `"category id" out of the expected format`,
           }),
-        preco: joi.number().required().messages({
+        price: joi.number().required().messages({
           'any.required': `"preco" is a required field`,
         }),
       },

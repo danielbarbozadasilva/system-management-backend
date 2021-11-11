@@ -2,46 +2,60 @@ const { product, category, provider } = require('../models/models.index');
 const fileUtils = require('../utils/utils.file');
 const productMapper = require('../mappers/mappers.product');
 
-const create = async (model) => {
-  const [categoryDB, providerDB] = await Promise.all([
+const ServiceCreateProduct = async (model) => {
+  const [categoryDB, providerDB, productDB, moveFile] = await Promise.all([
     category.findById(model.category),
     provider.findById(model.providerlogadoid),
+    product.create({
+      name: model.name,
+      description: model.description,
+      price: model.price,
+      category: model.category,
+      provider: model.providerlogadoid,
+      image: {
+        sourceName: model.image.sourceName,
+        newName: model.image.newName,
+        type: model.image.type,
+      },
+    }),
+    fileUtils.move(model.image.sourceName, model.image.newName),
   ]);
 
   if (!providerDB) {
     return {
       success: false,
-      message: 'operação não pode ser realizada',
-      details: ['Não existe provider cadastrado para o provider id informado'],
+      message: 'Operation cannot be performed',
+      details: ['There is no provider registered for the provided id provider'],
     };
   }
 
   if (!categoryDB) {
     return {
       success: false,
-      message: 'operação não pode ser realizada',
-      details: ['Não existe category cadastrada para o category id informado'],
+      message: 'Operation cannot be performed',
+      details: ['There is no category registered for the category_id entered'],
     };
   }
 
-  const newproduct = await product.create({
-    name: model.name,
-    description: model.description,
-    preco: model.preco,
-    category: model.category,
-    provider: model.providerlogadoid,
-    image: {
-      sourcealName: model.image.sourcealName,
-      name: model.image.newame,
-      type: model.image.type,
-    },
-  });
+  if (!productDB) {
+    return {
+      success: false,
+      message: 'Operation cannot be performed',
+      details: ['It is not possible to insert the product'],
+    };
+  }
 
-  fileUtils.move(model.image.caminhosourceal, model.image.newCaminho);
+  if (!moveFile) {
+    return {
+      success: false,
+      message: 'Operation cannot be performed',
+      details: ['It is not possible to move the product'],
+    };
+  }
 
   return {
     success: true,
-    message: 'Cadastro realizado com success',
+    message: 'operation performed successfully',
     data: {
       id: newproduct._id,
       name: newproduct.name,
@@ -49,22 +63,22 @@ const create = async (model) => {
   };
 };
 
-const SEARCHPorFiltros = async (filtros) => {
-  const filtroMongo = {};
-  if (filtros.category) {
-    filtroMongo.category = filtros.category;
+const ServiceSearchProductByFilter = async (filters) => {
+  const filter = {};
+  if (filters.category) {
+    filter.category = filters.category;
   }
 
-  if (filtros.provider) {
-    filtroMongo.provider = filtros.provider;
+  if (filters.provider) {
+    filter.provider = filters.provider;
   }
 
-  if (filtros.namelike) {
-    filtroMongo.name = { $regex: '.*' + filtros.namelike + '.*' };
+  if (filters.namelike) {
+    filter.name = { $regex: '.*' + filters.namelike + '.*' };
   }
 
   const resultadoDB = await product
-    .find(filtroMongo)
+    .find(filter)
     .populate('product')
     .populate('provider')
     .populate('category');
@@ -74,7 +88,7 @@ const SEARCHPorFiltros = async (filtros) => {
   });
 };
 
-const deleta = async ({ providerId, productId, userId }) => {
+const ServiceDeleteProduct = async ({ providerId, productId, userId }) => {
   const [providerDB, productDB] = await Promise.all([
     provider.findById(providerId),
     product.findById(productId),
@@ -83,32 +97,32 @@ const deleta = async ({ providerId, productId, userId }) => {
   if (!providerDB) {
     return {
       success: false,
-      message: 'Operação não pode ser realizada',
-      details: ['O provider informado não existe.'],
+      message: 'Operation cannot be performed',
+      details: ['The provided provider does not exist.'],
     };
   }
 
   if (providerId !== userId) {
     return {
       success: false,
-      message: 'Operação não pode ser realizada',
-      details: ['O product a ser excluido não pertence ao provider.'],
+      message: 'Operation cannot be performed',
+      details: ['The product to be excluded does not belong to the provider.'],
     };
   }
 
   if (!productDB) {
     return {
       success: false,
-      message: 'Operação não pode ser realizada',
-      details: ['O product informado não existe.'],
+      message: 'Operation cannot be performed',
+      details: ['O product informed does not exist.'],
     };
   }
 
   if (productDB.provider.toString() !== providerId) {
     return {
       success: false,
-      message: 'operação não pode ser realizada',
-      details: ['O provider informado e inválido.'],
+      message: 'Operation cannot be performed',
+      details: ['The supplier entered is invalid.'],
     };
   }
 
@@ -145,7 +159,7 @@ const deleta = async ({ providerId, productId, userId }) => {
 
   return {
     success: true,
-    message: 'Operação realizada com success',
+    message: 'Operation performed successfully',
     data: {
       id: productId,
       name: productDB.name,
@@ -153,7 +167,7 @@ const deleta = async ({ providerId, productId, userId }) => {
   };
 };
 
-const SEARCH = async (id) => {
+const ServiceListProductById = async (id) => {
   const productDB = await product.findOne({ _id: id });
 
   if (productDB) {
@@ -165,19 +179,19 @@ const SEARCH = async (id) => {
   } else {
     return {
       success: false,
-      message: 'não foi possível realizar a operação',
+      message: 'could not perform the operation',
       details: ['"productid" não existe.'],
     };
   }
 };
 
-const alteraproduct = async (productId, model) => {
+const ServiceUpdateProduct = async (productId, model) => {
   const productDB = await product.findOne({ _id: productId });
 
   if (!productDB) {
     return {
       success: false,
-      message: 'não foi possível realizar a operação',
+      message: 'could not perform the operation',
       details: ['"productid" não existe.'],
     };
   }
@@ -185,7 +199,7 @@ const alteraproduct = async (productId, model) => {
   productDB.name = model.name;
   productDB.description = model.description;
   productDB.status = model.status;
-  productDB.preco = model.preco;
+  productDB.price = model.price;
   productDB.category = model.category;
   productDB.provider = model.provider;
 
@@ -193,7 +207,7 @@ const alteraproduct = async (productId, model) => {
     fileUtils.remove('products', productDB.image.name);
     fileUtils.move(model.image.caminhosourceal, model.image.newCaminho);
     productDB.image = {
-      sourcealName: model.image.sourcealName,
+      sourceName: model.image.sourceName,
       name: model.image.newame,
       type: model.image.type,
     };
@@ -203,15 +217,15 @@ const alteraproduct = async (productId, model) => {
 
   return {
     success: true,
-    message: 'Operação realizada com success!',
+    message: 'Operation performed successfully!',
     data: productMapper.toItemListaDTO(productDB),
   };
 };
 
 module.exports = {
-  create,
-  SEARCHPorFiltros,
-  deleta,
-  alteraproduct,
-  SEARCH,
+  ServiceCreateProduct,
+  ServiceSearchProductByFilter,
+  ServiceDeleteProduct,
+  ServiceUpdateProduct,
+  ServiceListProductById,
 };

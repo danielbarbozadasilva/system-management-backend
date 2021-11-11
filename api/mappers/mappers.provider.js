@@ -42,7 +42,7 @@ const toDTO = (model) => {
         id: item.id,
         name: item.name,
         description: item.description,
-        preco: parseFloat(item.preco).toLocaleString('pt-br', {
+        price: parseFloat(item.price).toLocaleString('pt-br', {
           style: 'currency',
           currency: 'BRL',
         }),

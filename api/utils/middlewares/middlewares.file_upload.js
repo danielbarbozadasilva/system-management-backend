@@ -1,18 +1,18 @@
-const path = require("path");
-const fs = require("fs");
-const formidable = require("formidable");
+const path = require('path');
+const fs = require('fs');
+const formidable = require('formidable');
 
-const fileUtils = require("../utils.file");
+const fileUtils = require('../utils.file');
 
 const postIsValid = (files) => {
-  if (!files.image || files.image.name === "") {
+  if (!files.image || files.image.name === '') {
     return false;
   }
   return true;
 };
 
 const putIsValid = (files) => {
-  if (!files.image || files.image.name === "") {
+  if (!files.image || files.image.name === '') {
     return false;
   }
   return true;
@@ -21,7 +21,7 @@ const putIsValid = (files) => {
 const fileUpload = (destino, isUpdate = false) => {
   return async (req, res, next) => {
     const form = formidable.IncomingForm();
-    form.uploadDir = fileUtils.UtilCreateAddress("temp");
+    form.uploadDir = fileUtils.UtilCreateAddress('temp');
 
     var formfields = await new Promise(function (resolve, reject) {
       form.parse(req, (err, fields, files) => {
@@ -42,20 +42,20 @@ const fileUpload = (destino, isUpdate = false) => {
       ...fields,
     };
 
-    if (req.method === "POST") {
+    if (req.method === 'POST') {
       if (!postIsValid(files))
         throw new ErrorRegraDeNegocio(
           '"image" é de preenchimento obrigatório.'
         );
     }
 
-    if (files.image && files.image.name !== "") {
+    if (files.image && files.image.name !== '') {
       const newame = fileUtils.UtilCreatename(files.image.type);
       const newCaminho = fileUtils.UtilCreateAddress(destino, newame);
 
       req.body.image = {
         type: files.image.type,
-        sourcealName: files.image.name,
+        sourceName: files.image.name,
         caminhosourceal: files.image.path,
         newame,
         newCaminho,

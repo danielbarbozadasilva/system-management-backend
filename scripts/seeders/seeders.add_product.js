@@ -7,7 +7,7 @@ const dataProduct = [
     provider: '615a584a79b274425a6fa7db',
     name: 'teste-product01',
     description: 'teste-product01-description',
-    preco: 13.55,
+    price: 13.55,
     image: {
       origin_name: 'boloLimao.jpg',
       name: fileUtils.UtilCreateName('image/jpeg'),
@@ -19,7 +19,7 @@ const dataProduct = [
     provider: '615a584a79b274425a6fa7db',
     name: 'teste-product02',
     description: 'teste-product02-description',
-    preco: 20.95,
+    price: 20.95,
     image: {
       origin_name: 'principal2.jpg',
       name: fileUtils.UtilCreateName('image/jpeg'),

@@ -1,4 +1,5 @@
 const db = require('../../db/config');
+
 require('./seeders.add_category');
 require('./seeders.add_client_like_provider');
 require('./seeders.add_product');

@@ -16,7 +16,7 @@ const ServiceCreate = async (model) => {
   if (await ServiceValidateEmailExists(email))
     return {
       success: false,
-      message: 'operação não pode ser realizada',
+      message: 'Operation cannot be performed',
       details: ['Já existe usuário cadastrado para o email informado'],
     };
 

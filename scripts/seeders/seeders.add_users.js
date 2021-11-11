@@ -2,11 +2,12 @@ const { admin, provider, client } = require('../../api/models/index');
 const md5 = require('md5');
 
 const createUsers = async () => {
-  await admin.create({
-    email: 'danielbarboza56@hotmail.com',
-    name: 'admin',
-    password: md5(`daniel${process.env.MD5_SECRET}`),
-  }),
+  const [adminDB, providerDB, clientDB] = await Promise.all([
+    await admin.create({
+      email: 'danielbarboza56@hotmail.com',
+      name: 'admin',
+      password: md5(`daniel${process.env.MD5_SECRET}`),
+    }),
     await provider.create({
       cnpj: '03.470.727/0023-36',
       fantasy_name: 'Parme',
@@ -29,7 +30,38 @@ const createUsers = async () => {
       email: 'daniel95barboza@gmail.com',
       password: md5(`daniel${process.env.MD5_SECRET}`),
       status: 'Enable',
-    });
+    }),
+  ]);
+
+  if (!adminDB) {
+    return {
+      success: false,
+      message: 'Operation cannot be performed',
+      details: ['Error performing the operation'],
+    };
+  }
+
+  if (!providerDB) {
+    return {
+      success: false,
+      message: 'Operation cannot be performed',
+      details: ['Error performing the operation'],
+    };
+  }
+
+  if (!clientDB) {
+    return {
+      success: false,
+      message: 'Operation cannot be performed',
+      details: ['Error performing the operation'],
+    };
+  }
+
+  return {
+    success: true,
+    message: 'Operation performed successfully!',
+    data: productMapper.toItemListaDTO(productDB),
+  };
 };
 
 createUsers();
