@@ -1,6 +1,6 @@
 const ErrorGeneric = require('../errors/erros.generic_error');
 
-const asyncMiddleware = (fn, options) => (req, res, next) => {
+const MiddlewareAsync = (fn, options) => (req, res, next) => {
   fn(req, res, next).catch((err) => {
     if (err instanceof ErrorGeneric) {
       return res.status(err.statusCode).send({
@@ -14,4 +14,4 @@ const asyncMiddleware = (fn, options) => (req, res, next) => {
   });
 };
 
-module.exports = asyncMiddleware;
+module.exports = MiddlewareAsync;

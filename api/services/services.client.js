@@ -1,7 +1,7 @@
 const { ServiceValidateEmailExists } = require('./services.user');
 const { client } = require('../models/models.index');
 const { toDTO } = require('../mappers/mappers.client');
-const { createHash } = require('../utils/utils.cryptography');
+const { UtilCreateHash } = require('../utils/utils.cryptography');
 
 const ServiceListAll = async () => {
   const resultadoDB = await client.find({}).sort({ name: 1 });
@@ -10,7 +10,7 @@ const ServiceListAll = async () => {
       success: true,
       message: 'Operation performed successfully',
       data: {
-        ...toDTO(resultadoDB.toJSON())
+        ...toDTO(resultadoDB.toJSON()),
       },
     };
   } else {
@@ -33,7 +33,7 @@ const ServiceCreate = async (model) => {
   const new_client = await client.create({
     email,
     ...rest,
-    password: createHash(password),
+    password: UtilCreateHash(password),
     status: 'Enable',
   });
   if (new_client) {

@@ -1,10 +1,10 @@
-const criptografiaUitls = require("../utils.cryptography");
-const userService = require("../../services/services.user");
+const criptografiaUitls = require('../utils.cryptography');
+const userService = require('../../services/services.user');
 
-const ErrorUserNotAllowed = require("../errors/errors.user_not_allowed");
+const ErrorUserNotAllowed = require('../errors/errors.user_not_allowed');
 const ErrorUnauthenticatedUser = require('../errors/errors.user_not_authenticated');
 
-const autorizar = (rota = '*') => {
+const MiddlewareAuthorization = (rota = '*') => {
   return async (req, res, next) => {
     new Promise(function (resolve, reject) {
       setTimeout(function () {
@@ -13,18 +13,18 @@ const autorizar = (rota = '*') => {
         if (teste != '*') {
           if (!token) {
             return reject(
-              new ErrorUnauthenticatedUser("Unauthenticated User Error")
+              new ErrorUnauthenticatedUser('Unauthenticated User Error')
             );
           }
 
-          if (!criptografiaUitls.validaToken(token)) {
+          if (!criptografiaUitls.UtilValidateToken(token)) {
             return reject(
-              new ErrorUnauthenticatedUser("Unauthenticated User Error")
+              new ErrorUnauthenticatedUser('Unauthenticated User Error')
             );
           }
 
           const { id, email, typeuser } =
-            criptografiaUitls.decodificaToken(token);
+            criptografiaUitls.UtilDecodeToken(token);
 
           if (!userService.ServiceValidateEmailExists(email)) {
             return reject(new ErrorUserNotAllowed('Unauthorized User!'));
@@ -47,4 +47,4 @@ const autorizar = (rota = '*') => {
   };
 };
 
-module.exports = autorizar;
+module.exports = MiddlewareAuthorization;

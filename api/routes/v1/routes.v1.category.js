@@ -1,8 +1,8 @@
 const joi = require('joi');
 const controllerCategory = require('../../controllers/controllers.category');
 
-const validateDTO = require('../../utils/middlewares/middlewares.validate_dto');
-const fileUploadMiddleware = require('../../utils/middlewares/middlewares.file_upload');
+const middlewareValidateDTO = require('../../utils/middlewares/middlewares.validate_dto');
+const middlewareFileUploadMiddleware = require('../../utils/middlewares/middlewares.file_upload');
 const authorizationMiddleware = require('../../utils/middlewares/middlewares.authorization');
 
 module.exports = (router) => {
@@ -15,8 +15,8 @@ module.exports = (router) => {
 
     .post(
       authorizationMiddleware('CREATE_CATEGORY'),
-      fileUploadMiddleware('category'),
-      validateDTO(
+      middlewareFileUploadMiddleware('category'),
+      middlewareValidateDTO(
         'body',
         {
           name: joi.string().required().messages({
@@ -39,7 +39,7 @@ module.exports = (router) => {
     .route('/category/:categoryid')
     .get(
       authorizationMiddleware('*'),
-      validateDTO('params', {
+      middlewareValidateDTO('params', {
         categoryid: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)
@@ -54,8 +54,8 @@ module.exports = (router) => {
 
     .put(
       authorizationMiddleware('UPDATE_CATEGORY'),
-      fileUploadMiddleware('category', true),
-      validateDTO('params', {
+      middlewareFileUploadMiddleware('category', true),
+      middlewareValidateDTO('params', {
         categoryid: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)
@@ -66,7 +66,7 @@ module.exports = (router) => {
             'string.regex': `"category id" out of the expected format`,
           }),
       }),
-      validateDTO(
+      middlewareValidateDTO(
         'body',
         {
           name: joi.string().required().messages({
@@ -87,7 +87,7 @@ module.exports = (router) => {
 
     .delete(
       authorizationMiddleware('REMOVE_CATEGORY'),
-      validateDTO('params', {
+      middlewareValidateDTO('params', {
         categoryid: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)

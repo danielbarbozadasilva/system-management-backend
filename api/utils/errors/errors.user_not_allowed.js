@@ -1,5 +1,5 @@
 const status = require("http-status");
-const defaultMessage = "O Usuário não esta autorizado";
+const defaultMessage = 'User is not authorized';
 const ErrorGeneric = require("./erros.generic_error");
 
 module.exports = class ErrorUnauthorizedUser extends ErrorGeneric {

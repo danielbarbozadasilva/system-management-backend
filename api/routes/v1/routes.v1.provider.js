@@ -1,7 +1,7 @@
 const joi = require('joi');
 
-const validateDTO = require('../../utils/middlewares/middlewares.validate_dto');
-const fileUploadMiddleware = require('../../utils/middlewares/middlewares.file_upload');
+const middlewareValidateDTO = require('../../utils/middlewares/middlewares.validate_dto');
+const middlewareFileUploadMiddleware = require('../../utils/middlewares/middlewares.file_upload');
 const authorizationMiddleware = require('../../utils/middlewares/middlewares.authorization');
 
 const providerController = require('../../controllers/controllers.provider');
@@ -16,7 +16,7 @@ module.exports = (router) => {
     )
     .post(
       authorizationMiddleware('ADD_PROVIDER'),
-      validateDTO('body', {
+      middlewareValidateDTO('body', {
         cnpj: joi.string().required().messages({
           'any.required': `"cnpj" is a required field`,
           'string.empty': `"cnpj" can not be empty`,
@@ -66,7 +66,7 @@ module.exports = (router) => {
 
   router.route('/provider/:providerid').get(
     authorizationMiddleware('*'),
-    validateDTO('params', {
+    middlewareValidateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -82,7 +82,7 @@ module.exports = (router) => {
 
   router.route('/provider/:id').put(
     authorizationMiddleware('UPDATE_PROVIDER'),
-    validateDTO('params', {
+    middlewareValidateDTO('params', {
       id: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -93,7 +93,7 @@ module.exports = (router) => {
           'string.pattern.base': `"provider id" out of the expected format`,
         }),
     }),
-    validateDTO('body', {
+    middlewareValidateDTO('body', {
       cnpj: joi.string().required().messages({
         'any.required': `"cnpj" is a required field`,
         'string.empty': `"cnpj" can not be empty`,
@@ -136,7 +136,7 @@ module.exports = (router) => {
 
   router.route('/provider/:providerid/enable').put(
     authorizationMiddleware('ENABLE_PROVIDER'),
-    validateDTO('params', {
+    middlewareValidateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -152,7 +152,7 @@ module.exports = (router) => {
 
   router.route('/provider/:providerid/disable').put(
     authorizationMiddleware('DISABLE_PROVIDER'),
-    validateDTO('params', {
+    middlewareValidateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -168,7 +168,7 @@ module.exports = (router) => {
 
   router.route('/provider/:providerid/likes').get(
     authorizationMiddleware('*'),
-    validateDTO('params', {
+    middlewareValidateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -184,7 +184,7 @@ module.exports = (router) => {
 
   router.route('/provider/:providerid/product').get(
     authorizationMiddleware('*'),
-    validateDTO('params', {
+    middlewareValidateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -200,8 +200,8 @@ module.exports = (router) => {
 
   router.route('/provider/:provider/product').post(
     authorizationMiddleware('CREATE_PRODUCT'),
-    fileUploadMiddleware('products'),
-    validateDTO('params', {
+    middlewareFileUploadMiddleware('products'),
+    middlewareValidateDTO('params', {
       provider: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -212,7 +212,7 @@ module.exports = (router) => {
           'string.pattern.base': `"provider id" out of the expected format`,
         }),
     }),
-    validateDTO(
+    middlewareValidateDTO(
       'body',
       {
         name: joi.string().required().messages({
@@ -245,7 +245,7 @@ module.exports = (router) => {
 
   router.route('/provider/:providerid/product/:productid').delete(
     authorizationMiddleware('REMOVE_PRODUCT'),
-    validateDTO('params', {
+    middlewareValidateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -270,7 +270,7 @@ module.exports = (router) => {
 
   router.route('/provider/:providerid/product/:productid/likes').post(
     authorizationMiddleware('CREATE_LIKE_PRODUCT'),
-    validateDTO('params', {
+    middlewareValidateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -295,7 +295,7 @@ module.exports = (router) => {
 
   router.route('/provider/:providerid/product/:productid/likes').delete(
     authorizationMiddleware('REMOVE_LIKE_PRODUCT'),
-    validateDTO('params', {
+    middlewareValidateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)

@@ -1,18 +1,28 @@
 const sendgrid = require('@sendgrid/mail');
 sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
-const enviar = async ({ recipient, sender, assunto, body }) => {
+const UltilSendEmail = async ({ recipient, sender, subject, body }) => {
   const msg = {
     to: recipient,
     from: sender,
-    subject: assunto,
+    subject: subject,
     html: body,
   };
 
-  await sendgrid.send(msg);
-  console.log('O e-mail foi enviado com success!');
+  const resultSend = await sendgrid.send(msg);
+  if (resultSend) {
+    return {
+      success: true,
+      message: 'The email was sent successfully.',
+    };
+  } else {
+    return {
+      success: false,
+      message: 'Error sending the e-mail.',
+    };
+  }
 };
 
 module.exports = {
-  enviar,
+  UltilSendEmail,
 };

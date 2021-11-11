@@ -1,8 +1,8 @@
 const joi = require('joi').extend(require('@joi/date'));
 const clientController = require('../../controllers/controllers.client');
 
-const asyncMiddleware = require('../../utils/middlewares/middlewares.async');
-const validateDTO = require('../../utils/middlewares/middlewares.validate_dto');
+const MiddlewareAsync = require('../../utils/middlewares/middlewares.async');
+const middlewareValidateDTO = require('../../utils/middlewares/middlewares.validate_dto');
 const authorizationMiddleware = require('../../utils/middlewares/middlewares.authorization');
 
 module.exports = (router) => {
@@ -10,7 +10,7 @@ module.exports = (router) => {
     .route('/client')
     .post(
       authorizationMiddleware('*'),
-      validateDTO('body', {
+      middlewareValidateDTO('body', {
         first_name: joi.string().required().messages({
           'any.required': `"first_name" is a required field`,
           'string.empty': `"first_name" can not be empty`,
@@ -41,12 +41,12 @@ module.exports = (router) => {
 
     .get(
       authorizationMiddleware('*'),
-      asyncMiddleware(clientController.ControllerListAllClients)
+      MiddlewareAsync(clientController.ControllerListAllClients)
     );
 
   router.route('/client/:clientid').get(
     authorizationMiddleware('*'),
-    validateDTO('params', {
+    middlewareValidateDTO('params', {
       clientid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -62,7 +62,7 @@ module.exports = (router) => {
 
   router.route('/client/:clientid/likes').get(
     authorizationMiddleware('*'),
-    validateDTO('params', {
+    middlewareValidateDTO('params', {
       clientid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -77,7 +77,7 @@ module.exports = (router) => {
   );
   router.route('/client/:clientid/provider/:providerid/likes').post(
     authorizationMiddleware('LIKE_CREATE'),
-    validateDTO('params', {
+    middlewareValidateDTO('params', {
       clientid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -102,7 +102,7 @@ module.exports = (router) => {
 
   router.route('/client/:clientid/provider/:providerid/likes').delete(
     authorizationMiddleware('LIKE_REMOVE'),
-    validateDTO('params', {
+    middlewareValidateDTO('params', {
       clientid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)

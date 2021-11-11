@@ -1,29 +1,20 @@
-const path = require('path');
-const fs = require('fs');
 const formidable = require('formidable');
-
 const fileUtils = require('../utils.file');
+const ErrorBusinessRule = require('../errors/errors.business_rule');
 
-const postIsValid = (files) => {
+const MiddlewareIsValid = (files) => {
   if (!files.image || files.image.name === '') {
     return false;
   }
   return true;
 };
 
-const putIsValid = (files) => {
-  if (!files.image || files.image.name === '') {
-    return false;
-  }
-  return true;
-};
-
-const fileUpload = (destino, isUpdate = false) => {
+const MiddlewareFileUpload = (destino, isUpdate = false) => {
   return async (req, res, next) => {
     const form = formidable.IncomingForm();
     form.uploadDir = fileUtils.UtilCreateAddress('temp');
 
-    var formfields = await new Promise(function (resolve, reject) {
+    var form_fields = await new Promise(function (resolve, reject) {
       form.parse(req, (err, fields, files) => {
         if (err) {
           return reject(err);
@@ -36,26 +27,24 @@ const fileUpload = (destino, isUpdate = false) => {
       });
     });
 
-    const { files, ...fields } = formfields;
+    const { files, ...fields } = form_fields;
 
     req.body = {
       ...fields,
     };
 
     if (req.method === 'POST') {
-      if (!postIsValid(files))
-        throw new ErrorRegraDeNegocio(
-          '"image" é de preenchimento obrigatório.'
-        );
+      if (!MiddlewareIsValid(files))
+        throw new ErrorBusinessRule('"image" is mandatory.');
     }
 
     if (files.image && files.image.name !== '') {
-      const newName = fileUtils.UtilCreatename(files.image.type);
+      const newName = fileUtils.UtilCreateName(files.image.type);
       const new_source = fileUtils.UtilCreateAddress(destino, newName);
 
       req.body.image = {
         type: files.image.type,
-        source files.image.name,
+        source: files.image.name,
         old_source: files.image.path,
         newName,
         new_source,
@@ -66,4 +55,4 @@ const fileUpload = (destino, isUpdate = false) => {
   };
 };
 
-module.exports = fileUpload;
+module.exports = MiddlewareFileUpload;

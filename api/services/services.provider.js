@@ -5,7 +5,7 @@ const {
   ServiceValidateEmailExists,
   ServiceValidateCnpjExists,
 } = require('../services/services.user');
-const { createHash } = require('../utils/utils.cryptography');
+const { UtilCreateHash } = require('../utils/utils.cryptography');
 const emailUtils = require('../utils/utils.email');
 
 const { EmailEnable } = require('../utils/utils.email.message.enable');
@@ -100,7 +100,7 @@ const ServiceCreateProvider = async (model) => {
     responsible,
     phone,
     email,
-    password: createHash(password),
+    password: UtilCreateHash(password),
     status: 'Analysis',
   });
 
@@ -178,20 +178,21 @@ const ServiceChangeStatus = async (id, status) => {
   providerDB.status = status;
 
   const resultDB = await providerDB.save();
+
   if (resultDB) {
     if (status === 'Enable') {
-      emailUtils.enviar({
+      emailUtils.UltilSendEmail({
         recipient: providerDB.email,
         sender: process.env.SENDGRID_SENDER,
-        subject: `Activation Confirmation ${providerDB.fantasy_name}`,
-        body: EmailEnable('title', 'message', `${process.env.URL}/signin`),
+        subject: `Activation Confirmation ${providerDB.social_name}`,
+        body: EmailEnable('subject', `${process.env.URL}/signin`),
       });
     } else if (status === 'Disable') {
-      emailUtils.enviar({
+      emailUtils.UltilSendEmail({
         recipient: providerDB.email,
         sender: process.env.SENDGRID_SENDER,
-        subject: `Inactivation Confirmation ${providerDB.fantasy_name}`,
-        body: EmailDisable('title', 'message', `${process.env.URL}/signin`),
+        subject: `Inactivation Confirmation ${providerDB.social_name}`,
+        body: EmailDisable('subject'),
       });
     }
   }

@@ -35,7 +35,7 @@ const ServiceSearchCategoryById = async (category_id) => {
 };
 
 const ServiceInsertCategory = async (model) => {
-  const novacategory = await category.create({
+  const newCategory = await category.create({
     name: model.name,
     description: model.description,
     image: {
@@ -50,7 +50,7 @@ const ServiceInsertCategory = async (model) => {
   return {
     success: true,
     message: 'Operation performed successfully',
-    data: categoryMapper.toDTO(novacategory),
+    data: categoryMapper.toDTO(newCategory),
   };
 };
 
@@ -58,7 +58,7 @@ const ServiceRemoveCategoryProducts = async (category_Id) => {
   const categoryDB = await category.findOne({ _id: category_Id });
 
   if (!categoryDB) {
-    new ErrorRegraDeNegocio('category não encontrada!');
+    new ErrorBusinessRule('category não encontrada!');
   }
 
   const { image } = categoryDB;

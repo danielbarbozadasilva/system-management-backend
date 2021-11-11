@@ -22,8 +22,7 @@ const UtilMove = (oldPath, newPath) => {
 
 const UtilRemove = (source, file) => {
   const address_file = UtilCreateAddress(source, file);
-  if (fs.existsSync(address_file))
-    fs.unlinkSync(address_file);
+  if (fs.existsSync(address_file)) fs.unlinkSync(address_file);
   return;
 };
 

@@ -1,6 +1,6 @@
-const Joi = require("joi");
+const Joi = require('joi');
 
-const validateDTO = (type, parametro, opcoes = {}) => {
+const MiddlewareValidateDTO = (type, parametro, opcoes = {}) => {
   return (req, res, next) => {
     const schema = Joi.object().keys(parametro);
     const result = schema.validate(req[type], {
@@ -22,4 +22,4 @@ const validateDTO = (type, parametro, opcoes = {}) => {
     return next();
   };
 };
-module.exports = validateDTO;
+module.exports = MiddlewareValidateDTO;

@@ -53,7 +53,7 @@ const ServiceSearchTypeUserById = (user_id) => {
 };
 
 const ServiceValidateFunctionalityProfile = (profile_id, functionality) => {
-  const profile = buscatypeuserPorId(profile_id);
+  const profile = ServiceSearchTypeUserById(profile_id);
   return profile.functionality.includes(functionality) ? true : false;
 };
 
@@ -73,7 +73,7 @@ const ServiceCreateCredential = async (userEmail) => {
   });
   const userDTO = userMapper.toUserDTO(userDB);
   return {
-    token: cryptography.UtilCreateToken(userDTO),
+    token: cryptography.UtilUtilCreateToken(userDTO),
     userDTO,
   };
 };
@@ -96,17 +96,10 @@ const ServiceAuthenticate = async (email, password) => {
   };
 };
 
-const ServiceCreateUser = async () => {
-  return user.create({
-    email: 'daniel80barboza@gmail.com',
-    password: md5(`daniel${process.env.MD5_SECRET}`),
-  });
-};
-
 const ServiceUserIsValid = async (email, password) => {
   return (await user.findOne({
     email,
-    password: cryptography.createHash(password),
+    password: cryptography.UtilCreateHash(password),
   }))
     ? true
     : false;
@@ -115,7 +108,6 @@ const ServiceUserIsValid = async (email, password) => {
 module.exports = {
   ServiceAuthenticate,
   ServiceSearchTypeUserById,
-  ServiceCreateUser,
   ServiceCreateCredential,
   ServiceValidateCnpjExists,
   ServiceValidateEmailExists,

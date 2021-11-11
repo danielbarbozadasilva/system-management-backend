@@ -1,26 +1,27 @@
-const md5 = require("md5");
-const jwt = require("jsonwebtoken");
-const md5HashSecret = process.env.MD5_SECRET;
-const jwtHashSecret = process.env.JWT_SECRET;
-const jwtTimeLimit = process.env.JWT_VALID_TIME;
+const md5 = require('md5');
+const jwt = require('jsonwebtoken');
 
-const createHash = (password) => {
-  return md5(password + md5HashSecret);
+const md5_hash_secret = process.env.MD5_SECRET;
+const jwt_hash_secret = process.env.JWT_SECRET;
+const jwt_time_limit = process.env.JWT_VALID_TIME;
+
+const UtilCreateHash = (password) => {
+  return md5(password + md5_hash_secret);
 };
 
-const createToken = (model) => {
-  return jwt.sign({ ...model }, jwtHashSecret, {
-    expiresIn: `${jwtTimeLimit}m`,
+const UtilCreateToken = (model) => {
+  return jwt.sign({ ...model }, jwt_hash_secret, {
+    expiresIn: `${jwt_time_limit}m`,
   });
 };
 
-const decodificaToken = (token) => {
+const UtilDecodeToken = (token) => {
   return jwt.decode(token);
 };
 
-const validaToken = (token) => {
+const UtilValidateToken = (token) => {
   try {
-    jwt.verify(token, jwtHashSecret);
+    jwt.verify(token, jwt_hash_secret);
     return true;
   } catch (error) {
     return false;
@@ -28,8 +29,8 @@ const validaToken = (token) => {
 };
 
 module.exports = {
-  createHash,
-  createToken,
-  validaToken,
-  decodificaToken,
+  UtilCreateHash,
+  UtilCreateToken,
+  UtilValidateToken,
+  UtilDecodeToken,
 };
