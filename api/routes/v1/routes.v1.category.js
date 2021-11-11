@@ -20,12 +20,12 @@ module.exports = (router) => {
         "body",
         {
           name: joi.string().required().messages({
-            "any.required": `"name" é um campo obrigatório`,
-            "string.empty": `"name" não deve ser vazio`,
+            "any.required": `"name" is a required field`,
+            "string.empty": `"name" can not be empty`,
           }),
           description: joi.string().required().messages({
-            "any.required": `"description" é um campo obrigatório`,
-            "string.empty": `"description" não deve ser vazio`,
+            "any.required": `"description" is a required field`,
+            "string.empty": `"description" can not be empty`,
           }),
         },
         {
@@ -45,8 +45,8 @@ module.exports = (router) => {
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
           .messages({
-            "any.required": `"category id" é um campo obrigatório`,
-            "string.empty": `"category id" não deve ser vazio`,
+            "any.required": `"category id" is a required field`,
+            "string.empty": `"category id" can not be empty`,
           }),
       }),
       controllerCategory.ControllerListCategoryById
@@ -61,21 +61,21 @@ module.exports = (router) => {
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
           .messages({
-            "any.required": `"category id" é um campo obrigatório`,
-            "string.empty": `"category id" não deve ser vazio`,
-            "string.regex": `"category id" fora do formato esperado`,
+            "any.required": `"category id" is a required field`,
+            "string.empty": `"category id" can not be empty`,
+            "string.regex": `"category id" out of the expected format`,
           }),
       }),
       validateDTO(
         "body",
         {
           name: joi.string().required().messages({
-            "any.required": `"name" é um campo obrigatório`,
-            "string.empty": `"name" não deve ser vazio`,
+            "any.required": `"name" is a required field`,
+            "string.empty": `"name" can not be empty`,
           }),
           description: joi.string().required().messages({
-            "any.required": `"description" é um campo obrigatório`,
-            "string.empty": `"description" não deve ser vazio`,
+            "any.required": `"description" is a required field`,
+            "string.empty": `"description" can not be empty`,
           }),
         },
         {
@@ -93,9 +93,9 @@ module.exports = (router) => {
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
           .messages({
-            "any.required": `"category id" é um campo obrigatório`,
-            "string.empty": `"category id" não deve ser vazio`,
-            "string.regex": `"category id" fora do formato esperado`,
+            "any.required": `"category id" is a required field`,
+            "string.empty": `"category id" can not be empty`,
+            "string.regex": `"category id" out of the expected format`,
           }),
       }),
       controllerCategory.ControllerRemoveCategory

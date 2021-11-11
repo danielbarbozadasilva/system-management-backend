@@ -24,7 +24,7 @@ const ServiceCreate = async (model) => {
     email,
     ...rest,
     password: createHash(password),
-    status: 'Active',
+    status: 'Enable',
   });
 
   return {

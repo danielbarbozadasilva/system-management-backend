@@ -8,7 +8,7 @@ const asyncMiddleware = (fn, options) => (req, res, next) => {
       });
     } else {
       return res.status(500).send({
-        message: 'Ocoreu um erro interno, solicitar admin da solução',
+        message: 'An internal error occurred, request solution admin',
       });
     }
   });

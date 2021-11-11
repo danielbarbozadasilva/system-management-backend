@@ -8,188 +8,198 @@ const providerController = require('../../controllers/controllers.provider');
 const productController = require('../../controllers/controllers.product');
 
 module.exports = (router) => {
-  router.route('/provider').get(providerController.listAllprovider);
+  router
+    .route('/provider')
+    .get(
+      autorizacaoMiddleware('*'),
+      providerController.ControllerListAllProviders
+    )
+    .post(
+      autorizacaoMiddleware('ADD_PROVIDER'),
+      validateDTO('body', {
+        cnpj: joi.string().required().messages({
+          'any.required': `"cnpj" is a required field`,
+          'string.empty': `"cnpj" can not be empty`,
+        }),
+        fantasy_name: joi.string().required().messages({
+          'any.required': `"fantasy_name" is a required field`,
+          'string.empty': `"fantasy_name" can not be empty`,
+        }),
+        Address: joi.string().required().messages({
+          'any.required': `"Address" is a required field`,
+          'string.empty': `"Address" can not be empty`,
+        }),
+        uf: joi.string().required().messages({
+          'any.required': `"uf" is a required field`,
+          'string.empty': `"uf" can not be empty`,
+        }),
+        city: joi.string().required().messages({
+          'any.required': `"city" is a required field`,
+          'string.empty': `"city" can not be empty`,
+        }),
+        responsible: joi.string().required().messages({
+          'any.required': `"responsible" is a required field`,
+          'string.empty': `"responsible" can not be empty`,
+        }),
+        phone: joi.string().required().messages({
+          'any.required': `"phone" is a required field`,
+          'string.empty': `"phone" can not be empty`,
+        }),
+        email: joi.string().email().required().messages({
+          'any.required': `"email" is a required field`,
+          'string.empty': `"email" can not be empty`,
+        }),
+        password: joi.string().required().messages({
+          'any.required': `"password" is a required field`,
+          'string.empty': `"password" can not be empty`,
+        }),
+      }),
+      providerController.ControllerInsertProvider
+    );
 
   router
     .route('/provider/filtro')
-    .get(providerController.listAllproviderLocation);
+    .get(
+      autorizacaoMiddleware('*'),
+      providerController.ControllerListProvidersByLocation
+    );
 
   router.route('/provider/:providerid').get(
+    autorizationMiddleware('*'),
     validateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"provider id" é um campo obrigatório`,
-          'string.empty': `"provider id" não deve ser vazio`,
-          'string.pattern.base': `"provider id" fora do formato esperado`,
+          'any.required': `"provider id" is a required field`,
+          'string.empty': `"provider id" can not be empty`,
+          'string.pattern.base': `"provider id" out of the expected format`,
         }),
     }),
-    providerController.listById
-  );
-
-  router.route('/provider').post(
-    autorizacaoMiddleware('ADD_provider'),
-    validateDTO('body', {
-      cnpj: joi.string().required().messages({
-        'any.required': `"cnpj" é um campo obrigatório`,
-        'string.empty': `"cnpj" não deve ser vazio`,
-      }),
-      fantasy_name: joi.string().required().messages({
-        'any.required': `"fantasy_name" é um campo obrigatório`,
-        'string.empty': `"fantasy_name" não deve ser vazio`,
-      }),
-      Address: joi.string().required().messages({
-        'any.required': `"Address" é um campo obrigatório`,
-        'string.empty': `"Address" não deve ser vazio`,
-      }),
-      uf: joi.string().required().messages({
-        'any.required': `"uf" é um campo obrigatório`,
-        'string.empty': `"uf" não deve ser vazio`,
-      }),
-      cidade: joi.string().required().messages({
-        'any.required': `"cidade" é um campo obrigatório`,
-        'string.empty': `"cidade" não deve ser vazio`,
-      }),
-      responsavel: joi.string().required().messages({
-        'any.required': `"responsavel" é um campo obrigatório`,
-        'string.empty': `"responsavel" não deve ser vazio`,
-      }),
-      telefone: joi.string().required().messages({
-        'any.required': `"telefone" é um campo obrigatório`,
-        'string.empty': `"telefone" não deve ser vazio`,
-      }),
-      email: joi.string().email().required().messages({
-        'any.required': `"email" é um campo obrigatório`,
-        'string.empty': `"email" não deve ser vazio`,
-      }),
-      password: joi.string().required().messages({
-        'any.required': `"password" é um campo obrigatório`,
-        'string.empty': `"password" não deve ser vazio`,
-      }),
-    }),
-    providerController.insertProvider
+    providerController.ControllerListProviderById
   );
 
   router.route('/provider/:id').put(
-    autorizacaoMiddleware('UPDATE_provider'),
+    autorizacaoMiddleware('UPDATE_PROVIDER'),
     validateDTO('params', {
       id: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"provider id" é um campo obrigatório`,
-          'string.empty': `"provider id" não deve ser vazio`,
-          'string.pattern.base': `"provider id" fora do formato esperado`,
+          'any.required': `"provider id" is a required field`,
+          'string.empty': `"provider id" can not be empty`,
+          'string.pattern.base': `"provider id" out of the expected format`,
         }),
     }),
     validateDTO('body', {
       cnpj: joi.string().required().messages({
-        'any.required': `"cnpj" é um campo obrigatório`,
-        'string.empty': `"cnpj" não deve ser vazio`,
+        'any.required': `"cnpj" is a required field`,
+        'string.empty': `"cnpj" can not be empty`,
       }),
       fantasy_name: joi.string().required().messages({
-        'any.required': `"fantasy_name" é um campo obrigatório`,
-        'string.empty': `"fantasy_name" não deve ser vazio`,
+        'any.required': `"fantasy_name" is a required field`,
+        'string.empty': `"fantasy_name" can not be empty`,
       }),
       Address: joi.string().required().messages({
-        'any.required': `"Address" é um campo obrigatório`,
-        'string.empty': `"Address" não deve ser vazio`,
+        'any.required': `"Address" is a required field`,
+        'string.empty': `"Address" can not be empty`,
       }),
       uf: joi.string().required().messages({
-        'any.required': `"uf" é um campo obrigatório`,
-        'string.empty': `"uf" não deve ser vazio`,
+        'any.required': `"uf" is a required field`,
+        'string.empty': `"uf" can not be empty`,
       }),
-      cidade: joi.string().required().messages({
-        'any.required': `"cidade" é um campo obrigatório`,
-        'string.empty': `"cidade" não deve ser vazio`,
+      city: joi.string().required().messages({
+        'any.required': `"city" is a required field`,
+        'string.empty': `"city" can not be empty`,
       }),
-      responsavel: joi.string().required().messages({
-        'any.required': `"responsavel" é um campo obrigatório`,
-        'string.empty': `"responsavel" não deve ser vazio`,
+      responsible: joi.string().required().messages({
+        'any.required': `"responsible" is a required field`,
+        'string.empty': `"responsible" can not be empty`,
       }),
-      telefone: joi.string().required().messages({
-        'any.required': `"telefone" é um campo obrigatório`,
-        'string.empty': `"telefone" não deve ser vazio`,
+      phone: joi.string().required().messages({
+        'any.required': `"phone" is a required field`,
+        'string.empty': `"phone" can not be empty`,
       }),
       email: joi.string().email().required().messages({
-        'any.required': `"email" é um campo obrigatório`,
-        'string.empty': `"email" não deve ser vazio`,
+        'any.required': `"email" is a required field`,
+        'string.empty': `"email" can not be empty`,
       }),
       password: joi.string().required().messages({
-        'any.required': `"password" é um campo obrigatório`,
-        'string.empty': `"password" não deve ser vazio`,
+        'any.required': `"password" is a required field`,
+        'string.empty': `"password" can not be empty`,
       }),
     }),
-    providerController.updateProvider
+    providerController.ControllerUpdateProvider
   );
 
-  router.route('/provider/:providerid/ativa').put(
-    autorizacaoMiddleware('ACTIVE_provider'),
+  router.route('/provider/:providerid/enable').put(
+    autorizacaoMiddleware('ENABLE_PROVIDER'),
     validateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"provider id" é um campo obrigatório`,
-          'string.empty': `"provider id" não deve ser vazio`,
-          'string.pattern.base': `"provider id" fora do formato esperado`,
+          'any.required': `"provider id" is a required field`,
+          'string.empty': `"provider id" can not be empty`,
+          'string.pattern.base': `"provider id" out of the expected format`,
         }),
     }),
-    providerController.activeProvider
+    providerController.ControllerEnableProvider
   );
 
-  router.route('/provider/:providerid/inativa').put(
-    autorizacaoMiddleware('INACTIVATE_provider'),
+  router.route('/provider/:providerid/disable').put(
+    autorizacaoMiddleware('DISABLE_PROVIDER'),
     validateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"provider id" é um campo obrigatório`,
-          'string.empty': `"provider id" não deve ser vazio`,
-          'string.pattern.base': `"provider id" fora do formato esperado`,
+          'any.required': `"provider id" is a required field`,
+          'string.empty': `"provider id" can not be empty`,
+          'string.pattern.base': `"provider id" out of the expected format`,
         }),
     }),
-    providerController.disableProvider
+    providerController.ControllerDisableProvider
   );
 
   router.route('/provider/:providerid/likes').get(
+    autorizacaoMiddleware('*'),
     validateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"provider id" é um campo obrigatório`,
-          'string.empty': `"provider id" não deve ser vazio`,
-          'string.pattern.base': `"provider id" fora do formato esperado`,
+          'any.required': `"provider id" is a required field`,
+          'string.empty': `"provider id" can not be empty`,
+          'string.pattern.base': `"provider id" out of the expected format`,
         }),
     }),
-    providerController.searchLikesReceived
+    providerController.ControllerSearchLikesReceived
   );
 
   router.route('/provider/:providerid/product').get(
+    autorizacaoMiddleware('*'),
     validateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"provider id" é um campo obrigatório`,
-          'string.empty': `"provider id" não deve ser vazio`,
-          'string.pattern.base': `"provider id" fora do formato esperado`,
+          'any.required': `"provider id" is a required field`,
+          'string.empty': `"provider id" can not be empty`,
+          'string.pattern.base': `"provider id" out of the expected format`,
         }),
     }),
-    providerController.searchProductsProvider
+    providerController.ControllerSearchProductsProvider
   );
 
   router.route('/provider/:provider/product').post(
-    autorizacaoMiddleware('CREATE_product'),
+    autorizacaoMiddleware('CREATE_PRODUCT'),
     fileUploadMiddleware('products'),
     validateDTO('params', {
       provider: joi
@@ -197,114 +207,114 @@ module.exports = (router) => {
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"provider id" é um campo obrigatório`,
-          'string.empty': `"provider id" não deve ser vazio`,
-          'string.pattern.base': `"provider id" fora do formato esperado`,
+          'any.required': `"provider id" is a required field`,
+          'string.empty': `"provider id" can not be empty`,
+          'string.pattern.base': `"provider id" out of the expected format`,
         }),
     }),
     validateDTO(
       'body',
       {
         name: joi.string().required().messages({
-          'any.required': `"name" é um campo obrigatório`,
-          'string.empty': `"name" não deve ser vazio`,
+          'any.required': `"name" is a required field`,
+          'string.empty': `"name" can not be empty`,
         }),
         description: joi.string().required().messages({
-          'any.required': `"description" é um campo obrigatório`,
-          'string.empty': `"description" não deve ser vazio`,
+          'any.required': `"description" is a required field`,
+          'string.empty': `"description" can not be empty`,
         }),
         category: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
           .messages({
-            'any.required': `"category id" é um campo obrigatório`,
-            'string.empty': `"category id" não deve ser vazio`,
-            'string.pattern.base': `"category id" fora do formato esperado`,
+            'any.required': `"category id" is a required field`,
+            'string.empty': `"category id" can not be empty`,
+            'string.pattern.base': `"category id" out of the expected format`,
           }),
         preco: joi.number().required().messages({
-          'any.required': `"preco" é um campo obrigatório`,
+          'any.required': `"preco" is a required field`,
         }),
       },
       {
         allowUnknown: true,
       }
     ),
-    productController.inserirproduct
+    productController.ControllerInsertProduct
   );
 
   router.route('/provider/:providerid/product/:productid').delete(
-    autorizacaoMiddleware('REMOVE_product'),
+    autorizacaoMiddleware('REMOVE_PRODUCT'),
     validateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"provider id" é um campo obrigatório`,
-          'string.empty': `"provider id" não deve ser vazio`,
-          'string.pattern.base': `"provider id" fora do formato esperado`,
+          'any.required': `"provider id" is a required field`,
+          'string.empty': `"provider id" can not be empty`,
+          'string.pattern.base': `"provider id" out of the expected format`,
         }),
       productid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"provider id" é um campo obrigatório`,
-          'string.empty': `"provider id" não deve ser vazio`,
-          'string.pattern.base': `"provider id" fora do formato esperado`,
+          'any.required': `"provider id" is a required field`,
+          'string.empty': `"provider id" can not be empty`,
+          'string.pattern.base': `"provider id" out of the expected format`,
         }),
     }),
-    productController.removeproduct
+    productController.ControllerRemoveProduct
   );
 
   router.route('/provider/:providerid/product/:productid/likes').post(
-    autorizacaoMiddleware('CURTIR_product'),
+    autorizacaoMiddleware('CREATE_LIKE_PRODUCT'),
     validateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"provider id" é um campo obrigatório`,
-          'string.empty': `"provider id" não deve ser vazio`,
-          'string.pattern.base': `"provider id" fora do formato esperado`,
+          'any.required': `"provider id" is a required field`,
+          'string.empty': `"provider id" can not be empty`,
+          'string.pattern.base': `"provider id" out of the expected format`,
         }),
       productid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"provider id" é um campo obrigatório`,
-          'string.empty': `"provider id" não deve ser vazio`,
-          'string.pattern.base': `"provider id" fora do formato esperado`,
+          'any.required': `"provider id" is a required field`,
+          'string.empty': `"provider id" can not be empty`,
+          'string.pattern.base': `"provider id" out of the expected format`,
         }),
     }),
-    productController.curtirproduct
+    productController.ControllerCreateLikeProduct
   );
 
   router.route('/provider/:providerid/product/:productid/likes').delete(
-    autorizacaoMiddleware('REMOVE_like_product'),
+    autorizacaoMiddleware('REMOVE_LIKE_PRODUCT'),
     validateDTO('params', {
       providerid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"provider id" é um campo obrigatório`,
-          'string.empty': `"provider id" não deve ser vazio`,
-          'string.pattern.base': `"provider id" fora do formato esperado`,
+          'any.required': `"provider id" is a required field`,
+          'string.empty': `"provider id" can not be empty`,
+          'string.pattern.base': `"provider id" out of the expected format`,
         }),
       productid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"provider id" é um campo obrigatório`,
-          'string.empty': `"provider id" não deve ser vazio`,
-          'string.pattern.base': `"provider id" fora do formato esperado`,
+          'any.required': `"provider id" is a required field`,
+          'string.empty': `"provider id" can not be empty`,
+          'string.pattern.base': `"provider id" out of the expected format`,
         }),
     }),
-    productController.removerproductlikes
+    productController.ControllerRemoveLikeProduct
   );
 };

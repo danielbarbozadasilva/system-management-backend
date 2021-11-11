@@ -8,15 +8,46 @@ const autorizationMiddleware = require('../../utils/middlewares/middlewares.auth
 module.exports = (router) => {
   router
     .route('/client')
-    .post(autorizationMiddleware('*'), clientController.ControllerCreateClient)
+    .post(
+      autorizationMiddleware('*'),
+      validateDTO('body', {
+        first_name: joi.string().required().messages({
+          'any.required': `"first_name" is a required field`,
+          'string.empty': `"first_name" can not be empty`,
+        }),
+        last_name: joi.string().required().messages({
+          'any.required': `"last_name" is a required field`,
+          'string.empty': `"last_name" can not be empty`,
+        }),
+        birth_date: joi.string().required().messages({
+          'any.required': `"birth_date" is a required field`,
+          'string.empty': `"birth_date" can not be empty`,
+        }),
+        uf: joi.string().required().messages({
+          'any.required': `"uf" is a required field`,
+          'string.empty': `"uf" can not be empty`,
+        }),
+        city: joi.string().required().messages({
+          'any.required': `"city" is a required field`,
+          'string.empty': `"city" can not be empty`,
+        }),
+        status: joi.string().required().messages({
+          'any.required': `"status" is a required field`,
+          'string.empty': `"status" can not be empty`,
+        }),
+      }),
+      clientController.ControllerCreateClient
+    )
 
     .get(
+      autorizationMiddleware('*'),
       asyncMiddleware(
         MiddlewareAsync(clientController.ControllerListAllClients)
       )
     );
 
   router.route('/client/:clientid').get(
+    autorizationMiddleware('*'),
     validateDTO('params', {
       clientid: joi
         .string()
@@ -32,6 +63,7 @@ module.exports = (router) => {
   );
 
   router.route('/client/:clientid/likes').get(
+    autorizationMiddleware('*'),
     validateDTO('params', {
       clientid: joi
         .string()
@@ -46,7 +78,7 @@ module.exports = (router) => {
     clientController.ControllerListLikesClient
   );
   router.route('/client/:clientid/provider/:providerid/likes').post(
-    autorizationMiddleware('like_create'),
+    autorizationMiddleware('LIKE_CREATE'),
     validateDTO('params', {
       clientid: joi
         .string()
@@ -71,7 +103,7 @@ module.exports = (router) => {
   );
 
   router.route('/client/:clientid/provider/:providerid/likes').delete(
-    autorizationMiddleware('like_REMOVE'),
+    autorizationMiddleware('LIKE_REMOVE'),
     validateDTO('params', {
       clientid: joi
         .string()

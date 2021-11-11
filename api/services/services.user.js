@@ -11,9 +11,8 @@ const profile = [
       'UPDATE_PROVIDER',
       'SEARCH_PROVIDER',
       'SEARCH_PROVIDER_ID',
-      'ACTIVE_PROVIDER',
-      'INACTIVATE_PROVIDER',
-      'SEARCH_PROVIDER_PRODUCT',
+      'ENABLE_PROVIDER',
+      'DISABLE_PROVIDER',
       'CREATE_CATEGORY',
       'UPDATE_CATEGORY',
       'SEARCH_CATEGORY',
@@ -29,9 +28,8 @@ const profile = [
       'SEARCH_PRODUCT',
       'CREATE_PRODUCT',
       'REMOVE_PRODUCT',
-      'SEARCH_PROVIDER_PRODUCT',
       'SEARCH_CLIENT_ID',
-      'CURTIR_PRODUCT',
+      'CREATE_LIKE_PRODUCT',
       'REMOVE_LIKE_PRODUCT',
     ],
   },
@@ -42,7 +40,6 @@ const profile = [
       'LIKE_CREATE',
       'LIKE_REMOVE',
       'SEARCH_PROVIDER_ID',
-      'SEARCH_PROVIDER_PRODUCT',
       'SEARCH_CLIENT',
       'SEARCH_CLIENT_ID',
     ],
@@ -65,7 +62,7 @@ const ServiceValidateEmailExists = async (email) => {
   return users.length > 0 ? true : false;
 };
 
-const ServiceValidateCnpjnpj = async (cnpj) => {
+const ServiceValidateCnpjExists = async (cnpj) => {
   const result = await provider.find({ cnpj });
   return result.length > 0 ? true : false;
 };
@@ -120,7 +117,7 @@ module.exports = {
   ServiceSearchTypeUserById,
   ServiceCreateUser,
   ServiceCreateCredential,
-  ServiceValidateCnpjnpj,
+  ServiceValidateCnpjExists,
   ServiceValidateEmailExists,
   ServiceValidateFunctionalityProfile,
   ServiceUserIsValid,

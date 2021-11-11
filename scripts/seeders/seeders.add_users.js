@@ -18,17 +18,17 @@ const createUsers = async () => {
       phone: '(21) 3352-1018',
       email: 'daniel80barboza@gmail.com',
       password: md5(`daniel${process.env.MD5_SECRET}`),
-      status: 'Inactivate',
+      status: 'Enable',
     }),
     await client.create({
       kind: 'client',
       name: 'Daniel',
       date: '05/03/1997',
       uf: 'RJ',
-      cidade: 'Rio de janeiro',
+      city: 'Rio de janeiro',
       email: 'daniel95barboza@gmail.com',
       password: md5(`daniel${process.env.MD5_SECRET}`),
-      status: 'Active',
+      status: 'Enable',
     });
 };
 

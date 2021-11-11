@@ -1,100 +1,109 @@
 const productService = require('../services/services.product');
 const likeService = require('../services/services.like');
 
-const listarproducts = async (req, res, next) => {
+const ControllerListAllProducts = async (req, res, next) => {
   const { query } = req;
-  const result = await productService.SEARCHPorFiltros(query);
-  return res.status(200).send({ data: result });
+  const resultService = await productService.ServiceSearchByFilter(query);
+  const code = resultService.success ? 200 : 400;
+  const message = resultService.success
+    ? { message: resultService.message }
+    : { details: resultService.details };
+  const data = resultService.data ? resultService.data : '';
+  return res.status(code).send({ message: message, data });
 };
 
-const listaId = async (req, res, next) => {
+const ControllerListProductById = async (req, res, next) => {
   const { id } = req.params;
-  const result = await productService.SEARCH(id);
-  return res.status(200).send({ data: result });
+  const resultService = await productService.ServiceSearchById(id);
+  const code = resultService.success ? 200 : 400;
+  const message = resultService.success
+    ? { message: resultService.message }
+    : { details: resultService.details };
+  const data = resultService.data ? resultService.data : '';
+  return res.status(code).send({ message: message, data });
 };
 
-const UPDATEproduct = async (req, res, next) => {
+const ControllerUpdateProduct = async (req, res, next) => {
   const { params, body } = req;
-  const resultService = await productService.alteraproduct(
+  const resultService = await productService.ServiceUpdateProduct(
     params.productid,
     body
   );
 
-  const codigoRetorno = resultService.success ? 200 : 400;
-  const dadoRetorno = resultService.success
-    ? { data: resultService.data }
+  const code = resultService.success ? 200 : 400;
+  const message = resultService.success
+    ? { message: resultService.message }
     : { details: resultService.details };
-  return res.status(codigoRetorno).send(dadoRetorno);
+  const data = resultService.data ? resultService.data : '';
+  return res.status(code).send({ message: message, data });
 };
 
-const inserirproduct = async (req, res, next) => {
+const ControllerInsertProduct = async (req, res, next) => {
   const { body, params, user } = req;
-  const resultService = await productService.create({
+  const resultService = await productService.ServiceInsertProduct({
     ...params,
     ...body,
     providerlogadoid: req.params.provider,
   });
-  return res.status(200).send({
-    message: 'Operacao realizada com success.',
-    data: resultService.data,
-  });
+  const code = resultService.success ? 200 : 400;
+  const message = resultService.success
+    ? { message: resultService.message }
+    : { details: resultService.details };
+  const data = resultService.data ? resultService.data : '';
+  return res.status(code).send({ message: message, data });
 };
 
-const listaproductPorId = async (req, res, next) => {
-  const { query } = req;
-  const result = await productService.SEARCHPorFiltros(query);
-  return res.status(200).send({ data: result });
-};
-
-const removeproduct = async (req, res, next) => {
+const ControllerRemoveProduct = async (req, res, next) => {
   const { providerid, productid } = req.params;
   const { user } = req;
-  const resultService = await productService.deleta({
+  const resultService = await productService.ServiceRemoveProduct({
     providerId: providerid,
     productId: productid,
     userId: req.user.id,
   });
-  const codigoRetorno = resultService.success ? 200 : 400;
-  const dadoRetorno = resultService.success
-    ? { message: resultService.message, data: resultService.data }
+  const code = resultService.success ? 200 : 400;
+  const message = resultService.success
+    ? { message: resultService.message }
     : { details: resultService.details };
-  return res.status(codigoRetorno).send(dadoRetorno);
+  const data = resultService.data ? resultService.data : '';
+  return res.status(code).send({ message: message, data });
 };
 
-const curtirproduct = async (req, res, next) => {
+const ControllerCreateLikeProduct = async (req, res, next) => {
   const { params, user } = req;
   const { providerid, productid } = req.params;
-  const result = await likeService.createlikeproviderproduct(
+  const resultService = await likeService.ServiceCreateLikeProviderProduct(
     providerid,
     productid
   );
-  const codigoRetorno = result.success ? 200 : 400;
-  const dadoRetorno = result.success
-    ? { data: result.data }
-    : { details: result.details };
-  return res.status(codigoRetorno).send(dadoRetorno);
+  const code = resultService.success ? 200 : 400;
+  const message = resultService.success
+    ? { message: resultService.message }
+    : { details: resultService.details };
+  const data = resultService.data ? resultService.data : '';
+  return res.status(code).send({ message: message, data });
 };
 
-const removerproductlikes = async (req, res, next) => {
+const ControllerRemoveLikeProduct = async (req, res, next) => {
   const { user, params } = req;
-  const result = await likeService.removeLikeProviderproduct(
+  const resultService = await likeService.ServiceRemoveLikeProviderProduct(
     params.providerid,
     params.productid
   );
-  const codigoRetorno = result.success ? 200 : 400;
-  const dadoRetorno = result.success
-    ? { data: result.data }
-    : { details: result.details };
-  return res.status(codigoRetorno).send(dadoRetorno);
+  const code = resultService.success ? 200 : 400;
+  const message = resultService.success
+    ? { message: resultService.message }
+    : { details: resultService.details };
+  const data = resultService.data ? resultService.data : '';
+  return res.status(code).send({ message: message, data });
 };
 
 module.exports = {
-  inserirproduct,
-  removeproduct,
-  listarproducts,
-  listaproductPorId,
-  UPDATEproduct,
-  listaId,
-  curtirproduct,
-  removerproductlikes,
+  ControllerListAllProducts,
+  ControllerListProductById,
+  ControllerUpdateProduct,
+  ControllerInsertProduct,
+  ControllerRemoveProduct,
+  ControllerCreateLikeProduct,
+  ControllerRemoveLikeProduct,
 };

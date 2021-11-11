@@ -40,11 +40,12 @@ const ControllerChangeCategory = async (req, res, next) => {
     params.categoryid,
     body
   );
-  const codigoRetorno = resultService.success ? 200 : 400;
-  const dadoRetorno = resultService.success
-    ? { data: resultService.data }
+  const code = resultService.success ? 200 : 400;
+  const message = resultService.success
+    ? { message: resultService.message }
     : { details: resultService.details };
-  return res.status(codigoRetorno).send(dadoRetorno);
+  const data = resultService.data ? resultService.data : '';
+  return res.status(code).send({ message: message, data });
 };
 
 const ControllerRemoveCategory = async (req, res, next) => {
@@ -54,11 +55,10 @@ const ControllerRemoveCategory = async (req, res, next) => {
   );
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
-    ? {
-        message: resultService.message,
-      }
+    ? { message: resultService.message }
     : { details: resultService.details };
-  return res.status(code).send(message);
+  const data = resultService.data ? resultService.data : '';
+  return res.status(code).send({ message: message, data });
 };
 
 module.exports = {
