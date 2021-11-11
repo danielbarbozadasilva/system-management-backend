@@ -21,7 +21,7 @@ const dataProduct = [
     description: 'teste-product02-description',
     price: 20.95,
     image: {
-      origin_name: 'principal2.jpg',
+      source: 'principal2.jpg',
       name: fileUtils.UtilCreateName('image/jpeg'),
       type: 'image/jpeg',
     },

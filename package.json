@@ -8,7 +8,7 @@
   "scripts": {
     "start": "node ./index.js",
     "dev": "nodemon ./index.js",
-    "add-seeders": "node ./scripts/seeders/index.js",
+    "add-seeders": "node ./scripts/seeders/seeders.index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

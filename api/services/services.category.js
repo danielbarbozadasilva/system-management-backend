@@ -40,12 +40,12 @@ const ServiceInsertCategory = async (model) => {
     description: model.description,
     image: {
       source: model.image.source,
-      name: model.image.newName,
+      name: model.image.name,
       type: model.image.type,
     },
   });
 
-  fileUtils.move(model.image.oldPath, model.image.newPath);
+  fileUtils.UtilMove(model.image.oldPath, model.image.newPath);
 
   return {
     success: true,
@@ -58,7 +58,7 @@ const ServiceRemoveCategoryProducts = async (category_Id) => {
   const categoryDB = await category.findOne({ _id: category_Id });
 
   if (!categoryDB) {
-    new ErrorBusinessRule('category não encontrada!');
+    new ErrorBusinessRule('category not found!');
   }
 
   const { image } = categoryDB;

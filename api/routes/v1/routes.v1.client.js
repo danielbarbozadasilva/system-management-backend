@@ -23,6 +23,10 @@ module.exports = (router) => {
           'any.required': `"birth_date" is a required field`,
           'string.empty': `"birth_date" can not be empty`,
         }),
+        phone: joi.string().required().messages({
+          'any.required': `"phone" is a required field`,
+          'string.empty': `"phone" can not be empty`,
+        }),
         uf: joi.string().required().messages({
           'any.required': `"uf" is a required field`,
           'string.empty': `"uf" can not be empty`,

@@ -1,4 +1,4 @@
-const { like } = require('../../api/models/models.like');
+const { like } = require('../../api/models/models.index');
 
 const dataLike = [
   {

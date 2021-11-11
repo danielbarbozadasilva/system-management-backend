@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
     required: false,
   },
   image: {
-    sourceal_name: {
+    source_file: {
       type: String,
       required: false,
     },

@@ -7,7 +7,7 @@ const toItemListaDTO = (model) => {
     name: name,
     description: description,
     price: String(price),
-    image: fileUtils.UtilCreateaddressDownload('products', image.name),
+    image: fileUtils.UtilCreateAddressDownload('products', image.name),
     categoryId: category,
     providerId: provider,
   };
