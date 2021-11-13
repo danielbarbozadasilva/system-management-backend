@@ -9,7 +9,7 @@ const ServiceSearchAllCategory = async () => {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: categoryMapper.toDTO(...categoryDB),
+      data: categoryDB,
     };
   } else {
     return {
@@ -25,7 +25,7 @@ const ServiceSearchCategoryById = async (category_id) => {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: categoryMapper.toDTO(categoryDB),
+      data: categoryDB,
     };
   } else {
     return {
@@ -59,10 +59,15 @@ const ServiceRemoveCategoryProducts = async (category_Id) => {
   const categoryDB = await category.findOne({ _id: category_Id });
 
   if (!categoryDB) {
-    new ErrorBusinessRule('category not found!');
+    return {
+      success: false,
+      message: 'could not perform the operation',
+      details: ["category_id doesn't exist."],
+    };
   }
 
   const { image } = categoryDB;
+
   fileUtils.UtilRemove('category', image.name);
 
   const deleteCategory = await category.deleteOne(categoryDB);
@@ -107,8 +112,8 @@ const ServiceUpdateCategory = async (category_Id, model) => {
   if (updateCategory) {
     return {
       success: true,
-      message: 'success',
-      data: categoryMapper.toDTO(...categoryDB),
+      message: 'Operation performed successfully',
+      data: categoryMapper.toDTO(updateCategory),
     };
   } else {
     return {
