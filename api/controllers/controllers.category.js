@@ -34,9 +34,9 @@ const ControllerCreateCategory = async (req, res, next) => {
   return res.status(code).send({ message: message, data });
 };
 
-const ControllerChangeCategory = async (req, res, next) => {
+const ControllerUpdateCategory = async (req, res, next) => {
   const { params, body } = req;
-  const resultService = await categoryService.ServiceChangeCategory(
+  const resultService = await categoryService.ServiceUpdateCategory(
     params.categoryid,
     body
   );
@@ -65,6 +65,6 @@ module.exports = {
   ControllerListAllCategory,
   ControllerListCategoryById,
   ControllerCreateCategory,
-  ControllerChangeCategory,
+  ControllerUpdateCategory,
   ControllerRemoveCategory,
 };

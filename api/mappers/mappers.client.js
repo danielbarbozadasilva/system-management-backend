@@ -3,7 +3,7 @@ const toDTO = (model) => {
   return {
     id: _id,
     first_name,
-    last_name,birth_date
+    last_name,
     birth_date,
     phone,
     uf,

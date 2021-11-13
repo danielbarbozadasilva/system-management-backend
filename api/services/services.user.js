@@ -5,56 +5,67 @@ const userMapper = require('../mappers/mappers.user');
 const profile = [
   {
     id: 1,
-    description: 'ADMIN',
+    description: "ADMIN",
     functionality: [
-      'ADD_PROVIDER',
-      'UPDATE_PROVIDER',
-      'SEARCH_PROVIDER',
-      'SEARCH_PROVIDER_ID',
-      'ENABLE_PROVIDER',
-      'DISABLE_PROVIDER',
-      'CREATE_CATEGORY',
-      'UPDATE_CATEGORY',
-      'SEARCH_CATEGORY',
-      'REMOVE_CATEGORY',
-      'SEARCH_CLIENT',
+      "ADD_PROVIDER",
+      "UPDATE_PROVIDER",
+      "SEARCH_PROVIDER",
+      "SEARCH_PROVIDER_ID",
+      "ENABLE_PROVIDER",
+      "DISABLE_PROVIDER",
+      "CREATE_CATEGORY",
+      "UPDATE_CATEGORY",
+      "SEARCH_CATEGORY",
+      "REMOVE_CATEGORY",
+      "SEARCH_CLIENT",
     ],
   },
   {
     id: 2,
-    description: 'PROVIDER',
+    description: "PROVIDER",
     functionality: [
-      'SEARCH_PROVIDER_ID',
-      'SEARCH_PRODUCT',
-      'CREATE_PRODUCT',
-      'REMOVE_PRODUCT',
-      'SEARCH_CLIENT_ID',
-      'CREATE_LIKE_PRODUCT',
-      'REMOVE_LIKE_PRODUCT',
+      "SEARCH_PROVIDER_ID",
+      "SEARCH_PRODUCT",
+      "CREATE_PRODUCT",
+      "REMOVE_PRODUCT",
+      "SEARCH_CLIENT_ID",
+      "CREATE_LIKE_PRODUCT",
+      "REMOVE_LIKE_PRODUCT",
     ],
   },
   {
     id: 3,
-    description: 'CLIENT',
+    description: "CLIENT",
     functionality: [
-      'LIKE_CREATE',
-      'LIKE_REMOVE',
-      'SEARCH_PROVIDER_ID',
-      'SEARCH_CLIENT',
-      'SEARCH_CLIENT_ID',
+      "LIKE_CREATE",
+      "LIKE_REMOVE",
+      "SEARCH_PROVIDER_ID",
+      "SEARCH_CLIENT",
+      "SEARCH_CLIENT_ID",
     ],
   },
 ];
 
-const ServiceSearchTypeUserById = (user_id) => {
-  return ServiceAuthenticate.find((item) => {
-    return item.id === user_id;
+const ServiceSearchTypeUserById = (type) => {
+  return profile.find((item) => {
+    return item.id === type ? true : false;;
   });
+};
+
+const ServiceCreateCredential = async (email) => {
+  const userDB = await user.findOne({
+    email: email,
+  });
+  const userDTO = userMapper.toUserDTO(userDB);
+  return {
+    token: cryptography.UtilCreateToken(userDTO),
+    userDTO,
+  };
 };
 
 const ServiceValidateFunctionalityProfile = (profile_id, functionality) => {
   const profile = ServiceSearchTypeUserById(profile_id);
-  return profile.functionality.includes(functionality) ? true : false;
+  return profile?.functionality?.includes(functionality);
 };
 
 const ServiceValidateEmailExists = async (email) => {
@@ -65,17 +76,6 @@ const ServiceValidateEmailExists = async (email) => {
 const ServiceValidateCnpjExists = async (cnpj) => {
   const result = await provider.find({ cnpj });
   return result.length > 0 ? true : false;
-};
-
-const ServiceCreateCredential = async (userEmail) => {
-  const userDB = await user.findOne({
-    email: userEmail,
-  });
-  const userDTO = userMapper.toUserDTO(userDB);
-  return {
-    token: cryptography.UtilUtilCreateToken(userDTO),
-    userDTO,
-  };
 };
 
 const ServiceAuthenticate = async (email, password) => {

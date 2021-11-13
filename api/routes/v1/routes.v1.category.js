@@ -82,7 +82,7 @@ module.exports = (router) => {
           allowUnknown: true,
         }
       ),
-      controllerCategory.ControllerChangeCategory
+      controllerCategory.ControllerUpdateCategory
     )
 
     .delete(

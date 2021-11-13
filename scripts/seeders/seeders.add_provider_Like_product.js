@@ -12,7 +12,19 @@ const dataLike = [
 ];
 
 const createLike = async () => {
-  await like.create(dataLike);
+  const resultDB = await like.create(dataLike);
+    if (resultDB) {
+      return {
+        success: true,
+        message: 'Operation performed successfully',
+        data: resultDB,
+      };
+    } else {
+      return {
+        success: false,
+        message: 'could not perform the operation',
+      };
+    }
 };
 
 createLike();

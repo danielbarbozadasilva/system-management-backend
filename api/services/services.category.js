@@ -1,6 +1,7 @@
 const { category } = require('../models/models.index');
 const categoryMapper = require('../mappers/mappers.category');
 const fileUtils = require('../utils/utils.file');
+const ErrorBusinessRule = require('../utils/errors/errors.business_rule');
 
 const ServiceSearchAllCategory = async () => {
   const categoryDB = await category.find({}).sort({ description: 1 });
@@ -8,7 +9,7 @@ const ServiceSearchAllCategory = async () => {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: categoryDB,
+      data: categoryMapper.toDTO(...categoryDB),
     };
   } else {
     return {
@@ -24,7 +25,7 @@ const ServiceSearchCategoryById = async (category_id) => {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: categoryDB,
+      data: categoryMapper.toDTO(categoryDB),
     };
   } else {
     return {
@@ -39,13 +40,13 @@ const ServiceInsertCategory = async (model) => {
     name: model.name,
     description: model.description,
     image: {
-      sourceFile: model.image.sourceFile,
-      name: model.image.name,
+      origin: model.image.origin,
+      name: model.image.newName,
       type: model.image.type,
     },
   });
 
-  fileUtils.UtilMove(model.image.oldPath, model.image.newPath);
+  fileUtils.UtilMove(model.image.old_path, model.image.new_path);
 
   return {
     success: true,
@@ -62,19 +63,24 @@ const ServiceRemoveCategoryProducts = async (category_Id) => {
   }
 
   const { image } = categoryDB;
-  fileUtils.remove('category', image.name);
+  fileUtils.UtilRemove('category', image.name);
 
-  await category.deleteOne(categoryDB);
-
-  return {
-    success: true,
-    message: 'Operation performed successfully!',
-  };
+  const deleteCategory = await category.deleteOne(categoryDB);
+  if (deleteCategory) {
+    return {
+      success: true,
+      message: 'Operation performed successfully',
+    };
+  } else {
+    return {
+      success: false,
+      details: 'Error deleting category',
+    };
+  }
 };
 
-const ServiceChangeCategory = async (category_Id, model) => {
+const ServiceUpdateCategory = async (category_Id, model) => {
   const categoryDB = await category.findOne({ _id: category_Id });
-
   if (!categoryDB) {
     return {
       success: false,
@@ -88,22 +94,28 @@ const ServiceChangeCategory = async (category_Id, model) => {
   categoryDB.status = model.status;
 
   if (typeof model.image === 'object') {
-    fileUtils.remove('category', categoryDB.image.name);
-    fileUtils.move(model.image.old_source, model.image.new_source);
+    fileUtils.UtilRemove('category', categoryDB.image.name);
+    fileUtils.UtilMove(model.image.old_path, model.image.new_path);
     categoryDB.image = {
-      sourceFile: model.image.sourceFile,
+      origin: model.image.origin,
       name: model.image.newName,
       type: model.image.type,
     };
   }
 
-  await categoryDB.save();
-
-  return {
-    success: true,
-    message: 'success',
-    data: categoryMapper.toDTO(categoryDB),
-  };
+  const updateCategory = await categoryDB.save();
+  if (updateCategory) {
+    return {
+      success: true,
+      message: 'success',
+      data: categoryMapper.toDTO(...categoryDB),
+    };
+  } else {
+    return {
+      success: false,
+      details: 'Error updating category',
+    };
+  }
 };
 
 module.exports = {
@@ -111,5 +123,5 @@ module.exports = {
   ServiceSearchCategoryById,
   ServiceInsertCategory,
   ServiceRemoveCategoryProducts,
-  ServiceChangeCategory,
+  ServiceUpdateCategory,
 };

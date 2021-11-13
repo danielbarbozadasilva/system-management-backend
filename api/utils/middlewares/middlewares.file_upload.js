@@ -5,14 +5,21 @@ const fileUtils = require('../utils.file');
 
 const ErrorBusinessRule = require('../errors/errors.business_rule');
 
-const MiddlewareIsValid = (files) => {
+const postIsValid = (files) => {
   if (!files.image || files.image.name === '') {
     return false;
   }
   return true;
 };
 
-const MiddlewareFileUpload = (destiny, isUpdate = false) => {
+const putIsValid = (files) => {
+  if (!files.image || files.image.name === '') {
+    return false;
+  }
+  return true;
+};
+
+const fileUpload = (destiny, isUpdate = false) => {
   return async (req, res, next) => {
     const form = formidable.IncomingForm();
     form.uploadDir = fileUtils.UtilCreateAddress('temp');
@@ -37,20 +44,20 @@ const MiddlewareFileUpload = (destiny, isUpdate = false) => {
     };
 
     if (req.method === 'POST') {
-      if (!MiddlewareIsValid(files))
-        throw new ErrorBusinessRule('"image" is mandatory.');
+      if (!postIsValid(files))
+        throw new ErrorBusinessRule('"image" is mandatory');
     }
 
     if (files.image && files.image.name !== '') {
-      const new_name = fileUtils.UtilCreateName(files.image.type);
-      const new_source = fileUtils.UtilCreateAddress(destiny, new_name);
+      const newName = fileUtils.UtilCreateName(files.image.type);
+      const new_path = fileUtils.UtilCreateAddress(destiny, newName);
 
       req.body.image = {
         type: files.image.type,
-        source: files.image.name,
-        old_source: files.image.path,
-        new_name,
-        new_source,
+        origin: files.image.name,
+        old_path: files.image.path,
+        newName,
+        new_path,
       };
     }
 
@@ -58,4 +65,4 @@ const MiddlewareFileUpload = (destiny, isUpdate = false) => {
   };
 };
 
-module.exports = MiddlewareFileUpload;
+module.exports = fileUpload;

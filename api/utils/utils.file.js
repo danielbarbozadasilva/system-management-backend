@@ -1,5 +1,6 @@
 const path = require('path');
 const root_address = process.env.FILE_BASE_PATH;
+const moment = require('moment');
 const fs = require('fs');
 const uuid = require('uuid').v4;
 
@@ -16,8 +17,8 @@ const UtilCreateName = (type) => {
   return `${uuid()}.${resp}`;
 };
 
-const UtilMove = (oldPath, newPath) => {
-  return fs.renameSync(oldPath, newPath);
+const UtilMove = (old_directory, new_directory) => {
+  return fs.renameSync(old_directory, new_directory);
 };
 
 const UtilRemove = (source, file) => {
