@@ -35,24 +35,39 @@ const ServiceSearchCategoryById = async (category_id) => {
   }
 };
 
-const ServiceInsertCategory = async (model) => {
-  const newCategory = await category.create({
-    name: model.name,
-    description: model.description,
+const ServiceInsertCategory = async (body) => {
+  const categoryDB = await category.create({
+    name: body.name,
+    description: body.description,
     image: {
-      origin: model.image.origin,
-      name: model.image.newName,
-      type: model.image.type,
+      origin: body.image.origin,
+      name: body.image.newName,
+      type: body.image.type,
     },
   });
+  if (body.image) {
+    fileUtils.UtilMove(body.image.old_path, body.image.new_path);
 
-  fileUtils.UtilMove(model.image.old_path, model.image.new_path);
-
-  return {
-    success: true,
-    message: 'Operation performed successfully',
-    data: categoryMapper.toDTO(newCategory),
-  };
+    categoryDB.image = {
+      origin: body.image.origin,
+      name: body.image.newName,
+      type: body.image.type,
+    };
+  } else {
+    Promise.reject(new ErrorBusinessRule('image is mandatory'));
+  }
+  if (categoryDB) {
+    return {
+      success: true,
+      message: 'Operation performed successfully',
+      data: categoryMapper.toDTO(categoryDB),
+    };
+  } else {
+    return {
+      success: false,
+      details: 'Error updating category',
+    };
+  }
 };
 
 const ServiceRemoveCategoryProducts = async (category_Id) => {
@@ -84,7 +99,7 @@ const ServiceRemoveCategoryProducts = async (category_Id) => {
   }
 };
 
-const ServiceUpdateCategory = async (category_Id, model) => {
+const ServiceUpdateCategory = async (category_Id, body) => {
   const categoryDB = await category.findOne({ _id: category_Id });
   if (!categoryDB) {
     return {
@@ -94,18 +109,20 @@ const ServiceUpdateCategory = async (category_Id, model) => {
     };
   }
 
-  categoryDB.name = model.name;
-  categoryDB.description = model.description;
-  categoryDB.status = model.status;
+  categoryDB.name = body.name;
+  categoryDB.description = body.description;
 
-  if (typeof model.image === 'object') {
+  if (body.image) {
     fileUtils.UtilRemove('category', categoryDB.image.name);
-    fileUtils.UtilMove(model.image.old_path, model.image.new_path);
+    fileUtils.UtilMove(body.image.old_path, body.image.new_path);
+
     categoryDB.image = {
-      origin: model.image.origin,
-      name: model.image.newName,
-      type: model.image.type,
+      origin: body.image.origin,
+      name: body.image.newName,
+      type: body.image.type,
     };
+  } else {
+    Promise.reject(new ErrorBusinessRule('image is mandatory'));
   }
 
   const updateCategory = await categoryDB.save();
