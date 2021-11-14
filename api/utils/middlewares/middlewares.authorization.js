@@ -12,13 +12,13 @@ const MiddlewareAuthorization = (rota = '*') => {
         const { token } = req.headers;
         if (teste != '*') {
           if (!token) {
-            return reject(
+            return Promise.reject(
               new ErrorUnauthenticatedUser('Unauthenticated User Error')
             );
           }
 
           if (!criptografiaUitls.UtilValidateToken(token)) {
-            return reject(
+            return Promise.reject(
               new ErrorUnauthenticatedUser('Unauthenticated User Error')
             );
           }
@@ -27,17 +27,21 @@ const MiddlewareAuthorization = (rota = '*') => {
             criptografiaUitls.UtilDecodeToken(token);
 
           if (!userService.ServiceValidateEmailExists(email)) {
-            return reject(new ErrorUserNotAllowed('Unauthorized User!'));
+            return Promise.reject(
+              new ErrorUserNotAllowed('Unauthorized User!')
+            );
           }
 
           if (
             userService.ServiceValidateFunctionalityProfile(typeuser, teste) ===
             false
           ) {
-            return reject(new ErrorUserNotAllowed('Unauthorized User!'));
+            return Promise.reject(
+              new ErrorUserNotAllowed('Unauthorized User!')
+            );
           }
         }
-        return resolve(next());
+        return Promise.resolve(next());
       }, 1000);
     }).catch(function (e) {
       return res

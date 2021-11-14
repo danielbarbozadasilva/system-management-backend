@@ -27,11 +27,13 @@ const fileUpload = (destiny, isUpdate = false) => {
         form.uploadDir = fileUtils.UtilCreateAddress('temp');
         form.parse(req, (err, fields, files) => {
           if (err) {
-            return reject(err);
+            return Promise.reject(err);
           }
           if (req.method === 'POST') {
             if (!postIsValid(files))
-              return reject(new ErrorBusinessRule('"image" is mandatory'));
+              return Promise.reject(
+                new ErrorBusinessRule('"image" is mandatory')
+              );
           }
 
           req.body = {
@@ -50,10 +52,13 @@ const fileUpload = (destiny, isUpdate = false) => {
               new_path,
             };
           }
-          return resolve({
-            ...fields,
-            files,
-          }, next());
+          return Promise.resolve(
+            {
+              ...fields,
+              files,
+            },
+            next()
+          );
         });
       }, 1000);
     }).catch(function (e) {
