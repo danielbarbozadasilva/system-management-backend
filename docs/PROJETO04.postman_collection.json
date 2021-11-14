@@ -15,20 +15,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -43,8 +30,7 @@
 							{
 								"key": "token",
 								"value": "{{token}}",
-								"type": "text",
-								"disabled": true
+								"type": "text"
 							}
 						],
 						"body": {
@@ -73,20 +59,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -109,7 +82,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/category/6186bd350eab1daf3d226dc0",
+							"raw": "http://localhost:3011/v1/category/618f2ce3155c87deec6dd613",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -118,7 +91,7 @@
 							"path": [
 								"v1",
 								"category",
-								"6186bd350eab1daf3d226dc0"
+								"618f2ce3155c87deec6dd613"
 							]
 						}
 					},
@@ -151,18 +124,18 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "categoria1",
+									"value": "fdfdf",
 									"type": "text"
 								},
 								{
 									"key": "description",
-									"value": "categoria1desc",
+									"value": "categoria1desc22",
 									"type": "text"
 								},
 								{
 									"key": "image",
 									"type": "file",
-									"src": "/home/pc01/Imagens/81007f.png"
+									"src": []
 								}
 							]
 						},
@@ -188,20 +161,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -232,12 +192,12 @@
 								{
 									"key": "image",
 									"type": "file",
-									"src": "/home/pc01/Imagens/Captura de tela de 2021-10-18 04-58-20.png"
+									"src": []
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/category/6186bd350eab1daf3d226dc0",
+							"raw": "http://localhost:3011/v1/category/618f2ce3155c87deec6dd613",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -246,7 +206,7 @@
 							"path": [
 								"v1",
 								"category",
-								"6186bd350eab1daf3d226dc0"
+								"618f2ce3155c87deec6dd613"
 							]
 						}
 					},
@@ -259,20 +219,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -292,7 +239,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/category/6186bd350eab1daf3d226dc0",
+							"raw": "http://localhost:3011/v1/category/61908a52661a615cb32420fe",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -301,7 +248,7 @@
 							"path": [
 								"v1",
 								"category",
-								"6186bd350eab1daf3d226dc0"
+								"61908a52661a615cb32420fe"
 							]
 						}
 					},
@@ -328,7 +275,20 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									""
+									"const options = {",
+									"    url: 'http://localhost:3011/v1/auth',",
+									"    method: 'POST',",
+									"    header: {",
+									"        'Content-Type': 'application/json',",
+									"    },",
+									"    body: {",
+									"        mode: 'raw',",
+									"        raw: JSON.stringify({ \"email\": pm.environment.get('email'), \"password\": pm.environment.get('password') })",
+									"    }",
+									"};",
+									"pm.sendRequest(options, function (err, res) {",
+									"    pm.environment.set(\"token\", res.json().data.token);",
+									"}); "
 								],
 								"type": "text/javascript"
 							}
@@ -373,20 +333,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -430,20 +377,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"// const options = {",
-									"// url: 'http://localhost:3011/v1/auth', ",
-									"// method: 'POST',",
-									"// header: {",
-									"// 'Content-Type': 'application/json',",
-									"// },",
-									"// body: {",
-									"// mode: 'raw',",
-									"// raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"// }",
-									"// };",
-									"// pm.sendRequest(options, function (err, res) {",
-									"// pm.environment.set(\"token\", res.json().data.token);",
-									"// }); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -488,20 +422,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"// const options = {",
-									"// url: 'http://localhost:3011/v1/auth', ",
-									"// method: 'POST',",
-									"// header: {",
-									"// 'Content-Type': 'application/json',",
-									"// },",
-									"// body: {",
-									"// mode: 'raw',",
-									"// raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"// }",
-									"// };",
-									"// pm.sendRequest(options, function (err, res) {",
-									"// pm.environment.set(\"token\", res.json().data.token);",
-									"// }); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -547,20 +468,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -607,20 +515,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -663,20 +558,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -715,20 +597,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -781,20 +650,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -838,20 +694,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -901,20 +744,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -988,20 +818,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -1086,7 +903,13 @@
 					"name": "client.listAll",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "http://localhost:3011/v1/client",
 							"protocol": "http",
@@ -1132,7 +955,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"kind\": \"cliente\",\n    \"first_name\":\"Cliente-Daniel\",\n    \"last_name\":\"Cli-Daniel\",\n    \"birth_date\":\"05/03/1997\",\n    \"uf\":\"RJ\",\n    \"city\":\"Rio de janeiro\",\n    \"email\":\"daniel95barboza@gmail.com\",\n    \"password\":\"daniel\",\n    \"status\": \"Ativo\"\n}",
+							"raw": "{\n    \"kind\": \"cliente\",\n    \"first_name\":\"Cliente-Daniel\",\n    \"last_name\":\"Cli-Daniel\",\n    \"birth_date\":\"05/03/1997\",\n    \"uf\":\"RJ\",\n    \"city\":\"Rio de janeiro\",\n    \"email\":\"daniel95barboza@gmail.com\",\n    \"password\":\"daniel\",\n    \"status\": \"enable\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1166,20 +989,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -1198,8 +1008,8 @@
 							}
 						],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n    \n}"
+							"mode": "formdata",
+							"formdata": []
 						},
 						"url": {
 							"raw": "http://localhost:3011/v1/client/616deb13e6274f29839f2ad7/likes",
@@ -1225,20 +1035,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -1255,7 +1052,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "http://localhost:3011/v1/client/616deb13e6274f29839f2ad7/provider/6170da32c7acb61bf031399e/likes",
@@ -1283,20 +1080,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -1313,7 +1097,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "http://localhost:3011/v1/client/616deb13e6274f29839f2ad7/provider/6170da32c7acb61bf031399e/likes",
@@ -1341,20 +1125,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -1405,20 +1176,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -1463,20 +1221,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"url: 'http://localhost:3011/v1/auth', ",
-									"method: 'POST',",
-									"header: {",
-									"'Content-Type': 'application/json',",
-									"},",
-									"body: {",
-									"mode: 'raw',",
-									"raw : JSON.stringify({\"email\":pm.environment.get('email'),\"senha\":pm.environment.get('senha')})",
-									"}",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
