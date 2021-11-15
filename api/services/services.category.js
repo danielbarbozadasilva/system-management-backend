@@ -105,26 +105,26 @@ const ServiceUpdateCategory = async (category_Id, body) => {
       details: ["category_id doesn't exist."],
     };
   }
+  if (typeof body.image === 'object') {
+    categoryDB.name = body.name;
+    categoryDB.description = body.description;
 
-  categoryDB.name = body.name;
-  categoryDB.description = body.description;
-
-  fileUtils.UtilRemove('category', categoryDB.image.name);
-  fileUtils.UtilMove(body.image.old_path, body.image.new_path);
-
-  categoryDB.image = {
-    origin: body.image.origin,
-    name: body.image.newName,
-    type: body.image.type,
-  };
-
-  const updateCategory = await categoryDB.save();
-  if (updateCategory) {
-    return {
-      success: true,
-      message: 'Operation performed successfully',
-      data: categoryMapper.toDTO(updateCategory),
+    fileUtils.UtilRemove('category', categoryDB.image.name);
+    fileUtils.UtilMove(body.image.old_path, body.image.new_path);
+    categoryDB.image = {
+      origin: body.image.origin,
+      name: body.image.newName,
+      type: body.image.type,
     };
+
+    const updateCategory = await categoryDB.save();
+    if (updateCategory) {
+      return {
+        success: true,
+        message: 'Operation performed successfully',
+        data: categoryMapper.toDTO(updateCategory),
+      };
+    }
   } else {
     return {
       success: false,

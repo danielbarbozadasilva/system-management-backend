@@ -21,10 +21,8 @@ const fileUpload = (destiny) => {
         if (err) {
           return reject(err);
         }
-        if (req.method === 'POST') {
-          if (!postIsValid(files))
-            return reject(new ErrorBusinessRule('"image" is mandatory'));
-        }
+        if (!postIsValid(files))
+          return reject(new ErrorBusinessRule('"image" is mandatory'));
 
         req.body = {
           ...fields,

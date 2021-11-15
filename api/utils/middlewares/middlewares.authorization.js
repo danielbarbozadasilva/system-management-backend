@@ -7,18 +7,17 @@ const ErrorUnauthenticatedUser = require('../errors/errors.user_not_authenticate
 const MiddlewareAuthorization = (rota = '*') => {
   return async (req, res, next) => {
     new Promise(function (resolve, reject) {
-      setTimeout(function () {
         const test = rota;
         const { token } = req.headers;
         if (test != '*') {
           if (!token) {
-            return Promise.reject(
+            return reject(
               new ErrorUnauthenticatedUser('Unauthenticated User Error')
             );
           }
 
           if (!cryptographyUtils.UtilValidateToken(token)) {
-            return Promise.reject(
+            return reject(
               new ErrorUnauthenticatedUser('Unauthenticated User Error')
             );
           }
@@ -27,22 +26,17 @@ const MiddlewareAuthorization = (rota = '*') => {
             cryptographyUtils.UtilDecodeToken(token);
 
           if (!userService.ServiceValidateEmailExists(email)) {
-            return Promise.reject(
-              new ErrorUserNotAllowed('Unauthorized User!')
-            );
+            return reject(new ErrorUserNotAllowed('Unauthorized User!'));
           }
 
           if (
             userService.ServiceValidateFunctionalityProfile(typeuser, test) ===
             false
           ) {
-            return Promise.reject(
-              new ErrorUserNotAllowed('Unauthorized User!')
-            );
+            return reject(new ErrorUserNotAllowed('Unauthorized User!'));
           }
         }
-        return Promise.resolve(next());
-      }, 1000);
+        return resolve(next());
     }).catch(function (e) {
       return res
         .status(e.statusCode)

@@ -54,7 +54,7 @@ module.exports = (router) => {
 
     .put(
       authorizationMiddleware('UPDATE_CATEGORY'),
-      middlewareFileUploadMiddleware('category'),
+      middlewareFileUploadMiddleware('category', true),
       middlewareValidateDTO('params', {
         categoryid: joi
           .string()
