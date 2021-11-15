@@ -1,4 +1,4 @@
-const criptografiaUitls = require('../utils.cryptography');
+const cryptographyUtils = require('../utils.cryptography');
 const userService = require('../../services/services.user');
 
 const ErrorUserNotAllowed = require('../errors/errors.user_not_allowed');
@@ -8,23 +8,23 @@ const MiddlewareAuthorization = (rota = '*') => {
   return async (req, res, next) => {
     new Promise(function (resolve, reject) {
       setTimeout(function () {
-        const teste = rota;
+        const test = rota;
         const { token } = req.headers;
-        if (teste != '*') {
+        if (test != '*') {
           if (!token) {
             return Promise.reject(
               new ErrorUnauthenticatedUser('Unauthenticated User Error')
             );
           }
 
-          if (!criptografiaUitls.UtilValidateToken(token)) {
+          if (!cryptographyUtils.UtilValidateToken(token)) {
             return Promise.reject(
               new ErrorUnauthenticatedUser('Unauthenticated User Error')
             );
           }
 
           const { id, email, typeuser } =
-            criptografiaUitls.UtilDecodeToken(token);
+            cryptographyUtils.UtilDecodeToken(token);
 
           if (!userService.ServiceValidateEmailExists(email)) {
             return Promise.reject(
@@ -33,7 +33,7 @@ const MiddlewareAuthorization = (rota = '*') => {
           }
 
           if (
-            userService.ServiceValidateFunctionalityProfile(typeuser, teste) ===
+            userService.ServiceValidateFunctionalityProfile(typeuser, test) ===
             false
           ) {
             return Promise.reject(

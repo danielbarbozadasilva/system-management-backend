@@ -80,7 +80,7 @@ const ServiceValidateCnpjExists = async (cnpj) => {
 
 const ServiceAuthenticate = async (email, password) => {
   const resultadoDB = await ServiceUserIsValid(email, password);
-  console.log(email, password);
+  console.log(!resultadoDB ? resultadoDB : email);
   if (!resultadoDB) {
     return {
       success: false,

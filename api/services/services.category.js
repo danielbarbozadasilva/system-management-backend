@@ -1,7 +1,6 @@
 const { category } = require('../models/models.index');
 const categoryMapper = require('../mappers/mappers.category');
 const fileUtils = require('../utils/utils.file');
-const ErrorBusinessRule = require('../utils/errors/errors.business_rule');
 
 const ServiceSearchAllCategory = async () => {
   const categoryDB = await category.find({}).sort({ description: 1 });
@@ -45,17 +44,15 @@ const ServiceInsertCategory = async (body) => {
       type: body.image.type,
     },
   });
-  if (body.image) {
-    fileUtils.UtilMove(body.image.old_path, body.image.new_path);
 
-    categoryDB.image = {
-      origin: body.image.origin,
-      name: body.image.newName,
-      type: body.image.type,
-    };
-  } else {
-    Promise.reject(new ErrorBusinessRule('image is mandatory'));
-  }
+  fileUtils.UtilMove(body.image.old_path, body.image.new_path);
+
+  categoryDB.image = {
+    origin: body.image.origin,
+    name: body.image.newName,
+    type: body.image.type,
+  };
+
   if (categoryDB) {
     return {
       success: true,
@@ -112,18 +109,14 @@ const ServiceUpdateCategory = async (category_Id, body) => {
   categoryDB.name = body.name;
   categoryDB.description = body.description;
 
-  if (body.image) {
-    fileUtils.UtilRemove('category', categoryDB.image.name);
-    fileUtils.UtilMove(body.image.old_path, body.image.new_path);
+  fileUtils.UtilRemove('category', categoryDB.image.name);
+  fileUtils.UtilMove(body.image.old_path, body.image.new_path);
 
-    categoryDB.image = {
-      origin: body.image.origin,
-      name: body.image.newName,
-      type: body.image.type,
-    };
-  } else {
-    Promise.reject(new ErrorBusinessRule('image is mandatory'));
-  }
+  categoryDB.image = {
+    origin: body.image.origin,
+    name: body.image.newName,
+    type: body.image.type,
+  };
 
   const updateCategory = await categoryDB.save();
   if (updateCategory) {
