@@ -7,7 +7,6 @@ const {
 } = require('../services/services.user');
 const { UtilCreateHash } = require('../utils/utils.cryptography');
 const emailUtils = require('../utils/utils.email');
-
 const { EmailEnable } = require('../utils/utils.email.message.enable');
 const { EmailDisable } = require('../utils/utils.email.message.disable');
 
@@ -17,13 +16,13 @@ const ServiceListAllProvider = async () => {
     success: true,
     message: 'Operation performed successfully',
     data: {
-      ...toListItemDTO(resultDB),
+      ...toListItemDTO(...resultDB),
     },
   };
 };
 
 const ServiceListProviderById = async (providerid) => {
-  const providerDB = await provider.findById(providerid);
+  const providerDB = await provider.findOne(providerid);
 
   if (!providerDB) {
     return {

@@ -26,5 +26,4 @@ const createLike = async () => {
       };
     }
 };
-
-createLike();
+module.exports = { createLike };
