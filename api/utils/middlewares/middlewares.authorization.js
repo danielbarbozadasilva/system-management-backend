@@ -25,12 +25,12 @@ const MiddlewareAuthorization = (rota = '*') => {
           const { id, email, typeuser } =
             cryptographyUtils.UtilDecodeToken(token);
 
-          if (!userService.ServiceValidateEmailExists(email)) {
+          if (!userService.ServiceVerifyEmailExists(email)) {
             return reject(new ErrorUserNotAllowed('Unauthorized User!'));
           }
 
           if (
-            userService.ServiceValidateFunctionalityProfile(typeuser, test) ===
+            userService.ServiceVerifyFunctionalityProfile(typeuser, test) ===
             false
           ) {
             return reject(new ErrorUserNotAllowed('Unauthorized User!'));

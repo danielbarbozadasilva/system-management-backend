@@ -1,13 +1,9 @@
 const { provider } = require('../models/models.index');
 
 const { toListItemDTO } = require('../mappers/mappers.provider');
-const {
-  ServiceValidateEmailExists,
-  ServiceValidateCnpjExists,
-} = require('../services/services.user');
+const serviceUserProvider = require('../services/services.user');
 const { UtilCreateHash } = require('../utils/utils.cryptography');
 const emailUtils = require('../utils/utils.email');
-
 const { EmailEnable } = require('../utils/utils.email.message.enable');
 const { EmailDisable } = require('../utils/utils.email.message.disable');
 
@@ -17,15 +13,15 @@ const ServiceListAllProvider = async () => {
     success: true,
     message: 'Operation performed successfully',
     data: {
-      ...toListItemDTO(resultDB),
+      ...toListItemDTO(...resultDB),
     },
   };
 };
 
-const ServiceListProviderById = async (providerid) => {
-  const providerDB = await provider.findById(providerid);
+const ServiceListProviderById = async (id) => {
+  const resultDB = await provider.find(id).sort({ fantasy_name: 1 });
 
-  if (!providerDB) {
+  if (!resultDB) {
     return {
       success: false,
       message: 'operation cannot be performed',
@@ -36,7 +32,7 @@ const ServiceListProviderById = async (providerid) => {
   return {
     success: true,
     message: 'operation performed successfully',
-    data: providerDB.toJSON(),
+    data: { ...toListItemDTO(...resultDB) },
   };
 };
 
@@ -54,19 +50,19 @@ const ServiceListProvidersByLocation = async (uf, city) => {
       message: 'operation cannot be performed',
       details: ['The value does not exist'],
     };
-  } else {
-    return {
-      success: true,
-      message: 'operation performed successfully',
-      data: resultDB.toJSON(),
-    };
   }
+  return {
+    success: true,
+    message: 'operation performed successfully',
+    data: resultDB.toJSON(),
+  };
 };
 
 const ServiceCreateProvider = async (model) => {
   const {
     cnpj,
     fantasy_name,
+    social_name,
     address,
     uf,
     city,
@@ -77,14 +73,14 @@ const ServiceCreateProvider = async (model) => {
     status,
   } = model;
 
-  if (await ServiceValidateCnpjExists(cnpj))
+  if (await serviceUserProvider.ServiceVerifyCnpjExists(cnpj))
     return {
       success: false,
       message: 'operation cannot be performed',
       details: ['There is already a registered provider for the entered cnpj'],
     };
 
-  if (await ServiceValidateEmailExists(email))
+  if (await serviceUserProvider.ServiceVerifyEmailExists(email))
     return {
       success: false,
       message: 'operation cannot be performed',
@@ -94,6 +90,7 @@ const ServiceCreateProvider = async (model) => {
   const newProvider = await provider.create({
     cnpj,
     fantasy_name,
+    social_name,
     address,
     uf,
     city,
@@ -114,7 +111,19 @@ const ServiceCreateProvider = async (model) => {
 };
 
 const ServiceUpdateProvider = async (provider_id, body) => {
-  if (await ServiceValidateCnpjExists(cnpj)) {
+  const resultFind = await provider
+    .findById(Object({ _id: provider_id }))
+    .sort({ fantasy_name: 1 });
+
+  if (!resultFind) {
+    return {
+      success: false,
+      message: 'could not perform the operation',
+      details: ["category_id doesn't exist."],
+    };
+  }
+
+  if (await serviceUserProvider.ServiceVerifyCnpj(provider_id, body.cnpj)) {
     return {
       success: false,
       message: 'operation cannot be performed',
@@ -122,7 +131,7 @@ const ServiceUpdateProvider = async (provider_id, body) => {
     };
   }
 
-  if (await ServiceValidateEmailExists(email)) {
+  if (await serviceUserProvider.ServiceVerifyEmail(provider_id, body.email)) {
     return {
       success: false,
       message: 'operation cannot be performed',
@@ -136,14 +145,14 @@ const ServiceUpdateProvider = async (provider_id, body) => {
       $set: {
         cnpj: body.cnpj,
         fantasy_name: body.fantasy_name,
+        social_name: body.social_name,
         address: body.address,
         uf: body.uf,
         city: body.city,
         responsible: body.responsible,
         phone: body.phone,
         email: body.email,
-        password: body.password,
-        status: body.status,
+        password: UtilCreateHash(body.password),
       },
     }
   );
@@ -164,8 +173,8 @@ const ServiceUpdateProvider = async (provider_id, body) => {
   }
 };
 
-const ServiceChangeStatus = async (id, status) => {
-  const providerDB = await provider.findById(id);
+const ServiceChangeStatus = async (provider_id, status) => {
+  const providerDB = await provider.find({ _id: provider_id });
 
   if (!providerDB) {
     return {
@@ -175,19 +184,24 @@ const ServiceChangeStatus = async (id, status) => {
     };
   }
 
-  providerDB.status = status;
-
-  const resultDB = await providerDB.save();
+  const resultDB = await provider.updateOne(
+    { _id: provider_id },
+    {
+      $set: {
+        status : status
+      },
+    }
+  );
 
   if (resultDB) {
-    if (status === 'Enable') {
+    if (status === 'enable' || status === 'analysis') {
       emailUtils.UltilSendEmail({
         recipient: providerDB.email,
         sender: process.env.SENDGRID_SENDER,
         subject: `Activation Confirmation ${providerDB.social_name}`,
         body: EmailEnable('subject', `${process.env.URL}/signin`),
       });
-    } else if (status === 'Disable') {
+    } else if (status === 'disable') {
       emailUtils.UltilSendEmail({
         recipient: providerDB.email,
         sender: process.env.SENDGRID_SENDER,
@@ -195,15 +209,21 @@ const ServiceChangeStatus = async (id, status) => {
         body: EmailDisable('subject'),
       });
     }
+    return {
+      success: true,
+      message: 'Operation performed successfully',
+      data: {
+        ...toListItemDTO(providerDB),
+      },
+    };
+  } else {
+    if (!providerDB) {
+      return {
+        success: false,
+        message: 'operation cannot be performed',
+      };
+    }
   }
-
-  return {
-    success: true,
-    message: 'Operation performed successfully',
-    data: {
-      ...toListItemDTO(providerDB.toJSON()),
-    },
-  };
 };
 
 const ServiceListLikesClient = async (filtro) => {

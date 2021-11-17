@@ -14,7 +14,7 @@ const ControllerListAllProducts = async (req, res, next) => {
 
 const ControllerListProductById = async (req, res, next) => {
   const { id } = req.params;
-  const resultService = await productService.ServiceSearchById(id);
+  const resultService = await productService.ServiceListProductById(id);
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }

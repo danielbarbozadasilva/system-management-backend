@@ -25,6 +25,10 @@ module.exports = (router) => {
           'any.required': `"fantasy_name" is a required field`,
           'string.empty': `"fantasy_name" can not be empty`,
         }),
+        social_name: joi.string().required().messages({
+          'any.required': `"social_name" is a required field`,
+          'string.empty': `"social_name" can not be empty`,
+        }),
         address: joi.string().required().messages({
           'any.required': `"address" is a required field`,
           'string.empty': `"address" can not be empty`,
@@ -102,6 +106,10 @@ module.exports = (router) => {
         'any.required': `"fantasy_name" is a required field`,
         'string.empty': `"fantasy_name" can not be empty`,
       }),
+      social_name: joi.string().required().messages({
+        'any.required': `"social_name" is a required field`,
+        'string.empty': `"social_name" can not be empty`,
+      }),
       address: joi.string().required().messages({
         'any.required': `"address" is a required field`,
         'string.empty': `"address" can not be empty`,
@@ -134,8 +142,8 @@ module.exports = (router) => {
     providerController.ControllerUpdateProvider
   );
 
-  router.route('/provider/:providerid/enable').put(
-    authorizationMiddleware('ENABLE_PROVIDER'),
+  router.route('/provider/:providerid/:status').put(
+    authorizationMiddleware('CHANGE_PROVIDER'),
     middlewareValidateDTO('params', {
       providerid: joi
         .string()
@@ -146,24 +154,15 @@ module.exports = (router) => {
           'string.empty': `"provider id" can not be empty`,
           'string.pattern.base': `"provider id" out of the expected format`,
         }),
-    }),
-    providerController.ControllerEnableProvider
-  );
-
-  router.route('/provider/:providerid/disable').put(
-    authorizationMiddleware('DISABLE_PROVIDER'),
-    middlewareValidateDTO('params', {
-      providerid: joi
+      status: joi
         .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"provider id" is a required field`,
-          'string.empty': `"provider id" can not be empty`,
-          'string.pattern.base': `"provider id" out of the expected format`,
+          'any.required': `"status" is a required field`,
+          'string.empty': `"status" can not be empty`,
         }),
     }),
-    providerController.ControllerDisableProvider
+    providerController.ControllerChangeStatusProvider
   );
 
   router.route('/provider/:providerid/likes').get(
@@ -174,9 +173,9 @@ module.exports = (router) => {
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"provider id" is a required field`,
-          'string.empty': `"provider id" can not be empty`,
-          'string.pattern.base': `"provider id" out of the expected format`,
+          'any.required': `"providerid" is a required field`,
+          'string.empty': `"providerid" can not be empty`,
+          'string.pattern.base': `"providerid" out of the expected format`,
         }),
     }),
     providerController.ControllerSearchLikesReceived
