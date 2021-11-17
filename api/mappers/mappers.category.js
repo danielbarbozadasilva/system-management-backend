@@ -7,7 +7,7 @@ const toDTO = (model) => {
     name,
     description,
     status,
-    image: fileUtils.UtilCreateAddressDownload('category', image.name),
+    image: fileUtils.UtilCreateAddressDownload('category', image.name)
   };
 };
 
