@@ -17,9 +17,9 @@ const UtilSendEmail = async ({ to, from, subject, text, html }) => {
     })
     .catch((error) => {
       console.log('Error sending the e-mail', error);
-    })
+    });
 };
 
 module.exports = {
-  UtilSendEmail
+  UtilSendEmail,
 };
