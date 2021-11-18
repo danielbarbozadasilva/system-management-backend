@@ -21,7 +21,7 @@ const createUsers = async () => {
       phone: '(21)3352-1018',
       email: 'daniel80barboza@gmail.com',
       password: md5(`daniel${process.env.MD5_SECRET}`),
-      status: 'Enable',
+      status: 'enable',
     }),
     await client.create({
       kind: 'client',
@@ -33,7 +33,7 @@ const createUsers = async () => {
       city: 'Rio de janeiro',
       email: 'daniel95barboza@gmail.com',
       password: md5(`daniel${process.env.MD5_SECRET}`),
-      status: 'Enable',
+      status: 'enable',
     }),
   ]);
 
@@ -66,5 +66,4 @@ const createUsers = async () => {
     message: 'Operation performed successfully!',
   };
 };
-
-createUsers();
+module.exports = { createUsers };

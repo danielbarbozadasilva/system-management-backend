@@ -19,7 +19,9 @@ const ServiceSearchAllCategory = async () => {
 };
 
 const ServiceSearchCategoryById = async (category_id) => {
-  const categoryDB = await category.findById(category_id);
+  const categoryDB = await category.findById({
+    _id: Object(category_id),
+  });
   if (categoryDB) {
     return {
       success: true,

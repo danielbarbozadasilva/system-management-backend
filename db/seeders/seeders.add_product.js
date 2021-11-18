@@ -30,18 +30,17 @@ const dataProduct = [
 
 const createProduct = async () => {
   const resultDB = await product.create(dataProduct);
-   if (resultDB) {
-     return {
-       success: true,
-       message: 'Operation performed successfully',
-       data: resultDB,
-     };
-   } else {
-     return {
-       success: false,
-       message: 'could not perform the operation',
-     };
-   }
+  if (resultDB) {
+    return {
+      success: true,
+      message: 'Operation performed successfully',
+      data: resultDB,
+    };
+  } else {
+    return {
+      success: false,
+      message: 'could not perform the operation',
+    };
+  }
 };
-
-createProduct();
+module.exports = { createProduct };

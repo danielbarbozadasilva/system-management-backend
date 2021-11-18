@@ -24,5 +24,4 @@ const createCategory = async () => {
      };
    }
 };
-
-createCategory();
+module.exports = { createCategory };

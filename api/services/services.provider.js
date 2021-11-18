@@ -1,9 +1,8 @@
 const { provider } = require('../models/models.index');
-
-const { toListItemDTO } = require('../mappers/mappers.provider');
 const serviceUserProvider = require('../services/services.user');
-const { UtilCreateHash } = require('../utils/utils.cryptography');
 const emailUtils = require('../utils/utils.email');
+const { UtilCreateHash } = require('../utils/utils.cryptography');
+const { toListItemDTO } = require('../mappers/mappers.provider');
 const { EmailEnable } = require('../utils/utils.email.message.enable');
 const { EmailDisable } = require('../utils/utils.email.message.disable');
 
@@ -19,8 +18,9 @@ const ServiceListAllProvider = async () => {
 };
 
 const ServiceListProviderById = async (id) => {
-  const resultDB = await provider.find(id).sort({ fantasy_name: 1 });
-
+  const resultDB = await provider.findById({
+    _id: Object(id),
+  });
   if (!resultDB) {
     return {
       success: false,
@@ -32,7 +32,7 @@ const ServiceListProviderById = async (id) => {
   return {
     success: true,
     message: 'operation performed successfully',
-    data: { ...toListItemDTO(...resultDB) },
+    data: { ...toListItemDTO(resultDB) },
   };
 };
 
@@ -174,7 +174,7 @@ const ServiceUpdateProvider = async (provider_id, body) => {
 };
 
 const ServiceChangeStatus = async (provider_id, status) => {
-  const providerDB = await provider.find({ _id: provider_id });
+  const providerDB = await provider.findOne({ _id: provider_id });
 
   if (!providerDB) {
     return {
@@ -188,25 +188,26 @@ const ServiceChangeStatus = async (provider_id, status) => {
     { _id: provider_id },
     {
       $set: {
-        status : status
+        status: status,
       },
     }
   );
 
   if (resultDB) {
     if (status === 'enable' || status === 'analysis') {
-      emailUtils.UltilSendEmail({
-        recipient: providerDB.email,
-        sender: process.env.SENDGRID_SENDER,
+     
+      emailUtils.UtilSendEmail({
+        to: providerDB.email,
+        from: process.env.SENDGRID_SENDER,
         subject: `Activation Confirmation ${providerDB.social_name}`,
-        body: EmailEnable('subject', `${process.env.URL}/signin`),
+        html: EmailEnable('subject', `${process.env.URL}/signin`),
       });
     } else if (status === 'disable') {
-      emailUtils.UltilSendEmail({
-        recipient: providerDB.email,
-        sender: process.env.SENDGRID_SENDER,
+      emailUtils.UtilSendEmail({
+        to: providerDB.email,
+        from: process.env.SENDGRID_SENDER,
         subject: `Inactivation Confirmation ${providerDB.social_name}`,
-        body: EmailDisable('subject'),
+        html: EmailDisable('subject'),
       });
     }
     return {
@@ -274,44 +275,6 @@ const ServiceListProductsProvider = async (providerid) => {
   }
 };
 
-const ServiceEnableProvider = async (id) => {
-  const result = await ServiceChangeStatus(id, 'ENABLE');
-  if (!result) {
-    return {
-      success: false,
-      message: 'operation cannot be performed',
-      details: ['The value does not exist'],
-    };
-  } else {
-    return {
-      success: true,
-      message: 'supplier successfully activated',
-      data: {
-        ...toListItemDTO(result.toJSON()),
-      },
-    };
-  }
-};
-
-const ServiceDisableProvider = async (id) => {
-  const result = await ServiceChangeStatus(id, 'Disable');
-  if (!result) {
-    return {
-      success: false,
-      message: 'operation cannot be performed',
-      details: ['The value does not exist'],
-    };
-  } else {
-    return {
-      success: true,
-      message: 'supplier successfully deactivated',
-      data: {
-        ...toListItemDTO(result.toJSON()),
-      },
-    };
-  }
-};
-
 module.exports = {
   ServiceListAllProvider,
   ServiceListProviderById,
@@ -321,6 +284,4 @@ module.exports = {
   ServiceListProductsProvider,
   ServiceListLikesClient,
   ServiceListProvidersByLocation,
-  ServiceEnableProvider,
-  ServiceDisableProvider,
 };
