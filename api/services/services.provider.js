@@ -54,7 +54,7 @@ const ServiceListProvidersByLocation = async (uf, city) => {
   return {
     success: true,
     message: 'operation performed successfully',
-    data: resultDB.toJSON(),
+    data: { ...resultDB },
   };
 };
 
@@ -98,7 +98,7 @@ const ServiceCreateProvider = async (model) => {
     phone,
     email,
     password: UtilCreateHash(password),
-    status: 'Analysis',
+    status: 'analysis',
   });
 
   return {
@@ -195,7 +195,6 @@ const ServiceChangeStatus = async (provider_id, status) => {
 
   if (resultDB) {
     if (status === 'enable' || status === 'analysis') {
-     
       emailUtils.UtilSendEmail({
         to: providerDB.email,
         from: process.env.SENDGRID_SENDER,
@@ -213,12 +212,9 @@ const ServiceChangeStatus = async (provider_id, status) => {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: {
-        ...toListItemDTO(providerDB),
-      },
     };
   } else {
-    if (!providerDB) {
+    if (!resultDB) {
       return {
         success: false,
         message: 'operation cannot be performed',
@@ -254,26 +250,6 @@ const ServiceListLikesClient = async (filtro) => {
   }
 };
 
-const ServiceListProductsProvider = async (providerid) => {
-  const resultDB = await provider
-    .findById({ _id: providerid })
-    .populate('products');
-  if (!resultDB) {
-    return {
-      success: false,
-      message: 'operation cannot be performed',
-      details: ['The value does not exist'],
-    };
-  } else {
-    return {
-      success: true,
-      message: 'Operation performed successfully',
-      data: {
-        ...toListItemDTO(resultDB.toJSON()),
-      },
-    };
-  }
-};
 
 module.exports = {
   ServiceListAllProvider,
@@ -281,7 +257,6 @@ module.exports = {
   ServiceCreateProvider,
   ServiceUpdateProvider,
   ServiceChangeStatus,
-  ServiceListProductsProvider,
   ServiceListLikesClient,
   ServiceListProvidersByLocation,
 };

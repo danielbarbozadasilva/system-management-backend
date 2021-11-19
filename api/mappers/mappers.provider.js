@@ -12,6 +12,7 @@ const toListItemDTO = (model) => {
     status,
   } = model;
 
+
   return {
     id: _id,
     cnpj,

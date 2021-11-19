@@ -1,11 +1,7 @@
 const joi = require('joi');
-
 const middlewareValidateDTO = require('../../utils/middlewares/middlewares.validate_dto');
-const middlewareFileUploadMiddleware = require('../../utils/middlewares/middlewares.file_upload');
 const authorizationMiddleware = require('../../utils/middlewares/middlewares.authorization');
-
 const providerController = require('../../controllers/controllers.provider');
-const productController = require('../../controllers/controllers.product');
 
 module.exports = (router) => {
   router
@@ -62,7 +58,7 @@ module.exports = (router) => {
     );
 
   router
-    .route('/provider/filtro')
+    .route('/provider/filter/:uf/:city')
     .get(
       authorizationMiddleware('*'),
       providerController.ControllerListProvidersByLocation
@@ -164,156 +160,4 @@ module.exports = (router) => {
     }),
     providerController.ControllerChangeStatusProvider
   );
-
-  router.route('/provider/:providerid/likes').get(
-    authorizationMiddleware('*'),
-    middlewareValidateDTO('params', {
-      providerid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': `"providerid" is a required field`,
-          'string.empty': `"providerid" can not be empty`,
-          'string.pattern.base': `"providerid" out of the expected format`,
-        }),
-    }),
-    providerController.ControllerSearchLikesReceived
-  );
-
-  router.route('/provider/:providerid/product').get(
-    authorizationMiddleware('*'),
-    middlewareValidateDTO('params', {
-      providerid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': `"provider id" is a required field`,
-          'string.empty': `"provider id" can not be empty`,
-          'string.pattern.base': `"provider id" out of the expected format`,
-        }),
-    }),
-    providerController.ControllerSearchProductsProvider
-  );
-
-  router.route('/provider/:provider/product').post(
-    authorizationMiddleware('CREATE_PRODUCT'),
-    middlewareFileUploadMiddleware('products'),
-    middlewareValidateDTO('params', {
-      provider: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': `"provider id" is a required field`,
-          'string.empty': `"provider id" can not be empty`,
-          'string.pattern.base': `"provider id" out of the expected format`,
-        }),
-    }),
-    middlewareValidateDTO(
-      'body',
-      {
-        name: joi.string().required().messages({
-          'any.required': `"name" is a required field`,
-          'string.empty': `"name" can not be empty`,
-        }),
-        description: joi.string().required().messages({
-          'any.required': `"description" is a required field`,
-          'string.empty': `"description" can not be empty`,
-        }),
-        category: joi
-          .string()
-          .regex(/^[0-9a-fA-F]{24}$/)
-          .required()
-          .messages({
-            'any.required': `"category id" is a required field`,
-            'string.empty': `"category id" can not be empty`,
-            'string.pattern.base': `"category id" out of the expected format`,
-          }),
-        price: joi.number().required().messages({
-          'any.required': `"preco" is a required field`,
-        }),
-      },
-      {
-        allowUnknown: true,
-      }
-    ),
-    productController.ControllerInsertProduct
-  );
-
-  router.route('/provider/:providerid/product/:productid').delete(
-    authorizationMiddleware('REMOVE_PRODUCT'),
-    middlewareValidateDTO('params', {
-      providerid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': `"provider id" is a required field`,
-          'string.empty': `"provider id" can not be empty`,
-          'string.pattern.base': `"provider id" out of the expected format`,
-        }),
-      productid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': `"provider id" is a required field`,
-          'string.empty': `"provider id" can not be empty`,
-          'string.pattern.base': `"provider id" out of the expected format`,
-        }),
-    }),
-    productController.ControllerRemoveProduct
-  );
-
-  router.route('/provider/:providerid/product/:productid/likes').post(
-    authorizationMiddleware('CREATE_LIKE_PRODUCT'),
-    middlewareValidateDTO('params', {
-      providerid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': `"provider id" is a required field`,
-          'string.empty': `"provider id" can not be empty`,
-          'string.pattern.base': `"provider id" out of the expected format`,
-        }),
-      productid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': `"provider id" is a required field`,
-          'string.empty': `"provider id" can not be empty`,
-          'string.pattern.base': `"provider id" out of the expected format`,
-        }),
-    }),
-    productController.ControllerCreateLikeProduct
-  );
-
-  router.route('/provider/:providerid/product/:productid/likes').delete(
-    authorizationMiddleware('REMOVE_LIKE_PRODUCT'),
-    middlewareValidateDTO('params', {
-      providerid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': `"provider id" is a required field`,
-          'string.empty': `"provider id" can not be empty`,
-          'string.pattern.base': `"provider id" out of the expected format`,
-        }),
-      productid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': `"provider id" is a required field`,
-          'string.empty': `"provider id" can not be empty`,
-          'string.pattern.base': `"provider id" out of the expected format`,
-        }),
-    }),
-    productController.ControllerRemoveLikeProduct
-  );
-};
+}
