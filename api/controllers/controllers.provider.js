@@ -64,10 +64,9 @@ const ControllerUpdateProvider = async (req, res, next) => {
   return res.status(code).send({ message: message, data });
 };
 
-const ControllerRemoveProviderProductsRelated = async (req, res, next) => {
+const ControllerRemoveProvider = async (req, res, next) => {
   const { providerid } = req.params;
-  const resultService =
-    await providerService.ServiceRemoveProviderProductsRelated(providerid);
+  const resultService = await providerService.ServiceRemoveProvider(providerid);
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }
@@ -103,7 +102,6 @@ const ControllerChangeStatusProvider = async (req, res, next) => {
   return res.status(code).send({ message: message, data });
 };
 
-
 const ControllerSearchLikeProduct = async (req, res, next) => {
   const { providerid, productid } = req.params;
   const resultService = await likeService.ServiceSearchLikeProviderProduct(
@@ -119,32 +117,32 @@ const ControllerSearchLikeProduct = async (req, res, next) => {
 };
 
 const ControllerInsertLikeProduct = async (req, res, next) => {
-   const { params, user } = req;
-   const { providerid, productid } = req.params;
-   const resultService = await likeService.ServiceCreateLikeProviderProduct(
-     providerid,
-     productid
-   );
-   const code = resultService.success ? 200 : 400;
-   const message = resultService.success
-     ? { message: resultService.message }
-     : { details: resultService.details };
-   const data = resultService.data ? resultService.data : '';
-   return res.status(code).send({ message: message, data });
+  const { params, user } = req;
+  const { providerid, productid } = req.params;
+  const resultService = await likeService.ServiceCreateLikeProviderProduct(
+    providerid,
+    productid
+  );
+  const code = resultService.success ? 200 : 400;
+  const message = resultService.success
+    ? { message: resultService.message }
+    : { details: resultService.details };
+  const data = resultService.data ? resultService.data : '';
+  return res.status(code).send({ message: message, data });
 };
 
 const ControllerDeleteLikeProduct = async (req, res, next) => {
-    const { user, params } = req;
-    const resultService = await likeService.ServiceRemoveLikeProviderProduct(
-      params.providerid,
-      params.productid
-    );
-    const code = resultService.success ? 200 : 400;
-    const message = resultService.success
-      ? { message: resultService.message }
-      : { details: resultService.details };
-    const data = resultService.data ? resultService.data : '';
-    return res.status(code).send({ message: message, data });
+  const { user, params } = req;
+  const resultService = await likeService.ServiceRemoveLikeProviderProduct(
+    params.providerid,
+    params.productid
+  );
+  const code = resultService.success ? 200 : 400;
+  const message = resultService.success
+    ? { message: resultService.message }
+    : { details: resultService.details };
+  const data = resultService.data ? resultService.data : '';
+  return res.status(code).send({ message: message, data });
 };
 
 module.exports = {
@@ -153,7 +151,7 @@ module.exports = {
   ControllerListProvidersByLocation,
   ControllerInsertProvider,
   ControllerUpdateProvider,
-  ControllerRemoveProviderProductsRelated,
+  ControllerRemoveProvider,
   ControllerListProductsByProvider,
   ControllerChangeStatusProvider,
   ControllerSearchLikeProduct,

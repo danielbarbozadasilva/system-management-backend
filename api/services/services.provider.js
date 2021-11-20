@@ -1,4 +1,4 @@
-const { provider, product } = require('../models/models.index');
+const { provider, product, like } = require('../models/models.index');
 const serviceUserProvider = require('../services/services.user');
 const emailUtils = require('../utils/utils.email');
 const { UtilCreateHash } = require('../utils/utils.cryptography');
@@ -193,7 +193,7 @@ const ServiceUpdateProvider = async (provider_id, body) => {
   }
 };
 
-const ServiceRemoveProviderProductsRelated = async (provider_id) => {
+const ServiceRemoveProvider = async (provider_id) => {
   const providerDB = await provider.findOne({ _id: provider_id });
 
   if (!providerDB) {
@@ -204,14 +204,23 @@ const ServiceRemoveProviderProductsRelated = async (provider_id) => {
     };
   }
   const deleteProductDB = await product.deleteMany({ provider: provider_id });
+  const deleteLikeDB = await like.deleteMany({ _id: provider_id });
   const deleteProviderDB = await provider.deleteOne({ _id: provider_id });
 
-  if (deleteProductDB.ok == 1 && deleteProviderDB.ok == 1) {
+  if (
+    deleteProductDB.ok == 1 &&
+    deleteLikeDB.ok == 1 &&
+    deleteProviderDB.ok == 1
+  ) {
     return {
       success: true,
       message: 'Operation performed successfully',
     };
-  } else if (deleteProductDB.ok !== 1 || deleteProviderDB.ok !== 1) {
+  } else if (
+    deleteProductDB.ok !== 1 ||
+    deleteLikeDB.ok !== 1 ||
+    deleteProviderDB.ok !== 1
+  ) {
     return {
       success: false,
       details: 'Error deleting provider and products',
@@ -269,14 +278,13 @@ const ServiceChangeStatus = async (provider_id, status) => {
   }
 };
 
-
 module.exports = {
   ServiceListAllProvider,
   ServiceListProviderById,
   ServiceCreateProvider,
   ServiceUpdateProvider,
   ServiceChangeStatus,
-  ServiceRemoveProviderProductsRelated,
+  ServiceRemoveProvider,
   ServiceListProvidersByLocation,
   ServiceListProductsProvider,
 };

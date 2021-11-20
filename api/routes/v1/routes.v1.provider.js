@@ -94,7 +94,7 @@ module.exports = (router) => {
             'string.pattern.base': `"provider id" out of the expected format`,
           }),
       }),
-      providerController.ControllerRemoveProviderProductsRelated
+      providerController.ControllerRemoveProvider
     )
     .put(
       authorizationMiddleware('UPDATE_PROVIDER'),
@@ -191,7 +191,7 @@ module.exports = (router) => {
   );
 
   router
-    .route('/provider/:providerid/product/:productid/likes')
+    .route('/provider/:providerid/product/:productid/like')
     .get(
       authorizationMiddleware('*'),
       middlewareValidateDTO('params', {

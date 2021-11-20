@@ -67,7 +67,18 @@ const toItemListDTO = (model) => {
   };
 };
 
+const toDTOListLike = (model) => {
+  const { id: _id, provider, product } = model;
+
+  return {
+    id: _id,
+    provider,
+    product,
+  };
+};
+
 module.exports = {
   toItemListDTO,
   toDTO,
+  toDTOListLike,
 };
