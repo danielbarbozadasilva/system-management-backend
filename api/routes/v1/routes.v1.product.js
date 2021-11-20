@@ -16,16 +16,8 @@ module.exports = (router) => {
     .route('/product/:productid')
     .get(
       authorizationMiddleware('*'),
-      productController.ControllerListProductById
-    )
-    
-
-  router
-    .route('/provider/:providerid/product')
-    .get(
-      authorizationMiddleware('*'),
       middlewareValidateDTO('params', {
-        providerid: joi
+        productid: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
@@ -35,20 +27,20 @@ module.exports = (router) => {
             'string.pattern.base': `"provider id" out of the expected format`,
           }),
       }),
-      productController.ControllerListProductByProvider
+      productController.ControllerListProductById
     )
     .post(
       authorizationMiddleware('CREATE_PRODUCT'),
       middlewareFileUploadMiddleware('products'),
       middlewareValidateDTO('params', {
-        provider: joi
+        productid: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
           .messages({
-            'any.required': `"provider id" is a required field`,
-            'string.empty': `"provider id" can not be empty`,
-            'string.pattern.base': `"provider id" out of the expected format`,
+            'any.required': `"product id" is a required field`,
+            'string.empty': `"product id" can not be empty`,
+            'string.pattern.base': `"product id" out of the expected format`,
           }),
       }),
       middlewareValidateDTO(
@@ -82,7 +74,7 @@ module.exports = (router) => {
       productController.ControllerInsertProduct
     )
     .put(
-      authorizationMiddleware(''),
+      authorizationMiddleware('UPDATE_PRODUCT'),
       middlewareFileUploadMiddleware('products'),
       middlewareValidateDTO('query', {
         category: joi
@@ -106,29 +98,4 @@ module.exports = (router) => {
       }),
       productController.ControllerUpdateProduct
     );
-
-  router.route('/provider/:providerid/product/:productid').delete(
-    authorizationMiddleware('REMOVE_PRODUCT'),
-    middlewareValidateDTO('params', {
-      providerid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': `"provider id" is a required field`,
-          'string.empty': `"provider id" can not be empty`,
-          'string.pattern.base': `"provider id" out of the expected format`,
-        }),
-      productid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': `"provider id" is a required field`,
-          'string.empty': `"provider id" can not be empty`,
-          'string.pattern.base': `"provider id" out of the expected format`,
-        }),
-    }),
-    productController.ControllerRemoveProduct
-  );
 };

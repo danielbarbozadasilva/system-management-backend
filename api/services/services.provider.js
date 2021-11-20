@@ -1,19 +1,20 @@
-const { provider } = require('../models/models.index');
+const { provider, product } = require('../models/models.index');
 const serviceUserProvider = require('../services/services.user');
 const emailUtils = require('../utils/utils.email');
 const { UtilCreateHash } = require('../utils/utils.cryptography');
-const { toListItemDTO } = require('../mappers/mappers.provider');
+const { toItemListDTO, toDTO } = require('../mappers/mappers.provider');
 const { EmailEnable } = require('../utils/utils.email.message.enable');
 const { EmailDisable } = require('../utils/utils.email.message.disable');
 
 const ServiceListAllProvider = async () => {
   const resultDB = await provider.find({}).sort({ fantasy_name: 1 });
+
   return {
     success: true,
     message: 'Operation performed successfully',
-    data: {
-      ...toListItemDTO(...resultDB),
-    },
+    data: resultDB.map((item) => {
+      return toDTO(item);
+    }),
   };
 };
 
@@ -32,8 +33,30 @@ const ServiceListProviderById = async (id) => {
   return {
     success: true,
     message: 'operation performed successfully',
-    data: { ...toListItemDTO(resultDB) },
+    data: [toDTO(resultDB)],
   };
+};
+
+const ServiceListProductsProvider = async (providerid) => {
+  const resultDB = await product
+    .find({ provider: providerid })
+    .populate('provider');
+
+  if (!resultDB) {
+    return {
+      success: false,
+      message: 'operation cannot be performed',
+      details: ['The value does not exist'],
+    };
+  } else {
+    return {
+      success: true,
+      message: 'Operation performed successfully',
+      data: resultDB.map((item) => {
+        return toItemListDTO(item);
+      }),
+    };
+  }
 };
 
 const ServiceListProvidersByLocation = async (uf, city) => {
@@ -54,7 +77,7 @@ const ServiceListProvidersByLocation = async (uf, city) => {
   return {
     success: true,
     message: 'operation performed successfully',
-    data: { ...resultDB },
+    data: [toItemListDTO(...resultDB)],
   };
 };
 
@@ -87,7 +110,7 @@ const ServiceCreateProvider = async (model) => {
       details: ['There is already a registered user for the email entered'],
     };
 
-  const newProvider = await provider.create({
+  const resultDB = await provider.create({
     cnpj,
     fantasy_name,
     social_name,
@@ -104,22 +127,20 @@ const ServiceCreateProvider = async (model) => {
   return {
     success: true,
     message: 'Operation performed successfully',
-    data: {
-      ...toListItemDTO(newProvider),
-    },
+    data: [toDTO(resultDB)],
   };
 };
 
 const ServiceUpdateProvider = async (provider_id, body) => {
   const resultFind = await provider
-    .findById(Object({ _id: provider_id }))
+    .findById({ _id: provider_id })
     .sort({ fantasy_name: 1 });
 
   if (!resultFind) {
     return {
       success: false,
       message: 'could not perform the operation',
-      details: ["category_id doesn't exist."],
+      details: ["provider id doesn't exist."],
     };
   }
 
@@ -138,7 +159,6 @@ const ServiceUpdateProvider = async (provider_id, body) => {
       details: ['There is already a registered provider for the entered email'],
     };
   }
-
   const new_provider = await provider.updateOne(
     { _id: provider_id },
     {
@@ -167,8 +187,34 @@ const ServiceUpdateProvider = async (provider_id, body) => {
       success: true,
       message: 'Operation performed successfully',
       data: {
-        ...toListItemDTO(new_provider),
+        ...toDTO(new_provider),
       },
+    };
+  }
+};
+
+const ServiceRemoveProviderProductsRelated = async (provider_id) => {
+  const providerDB = await provider.findOne({ _id: provider_id });
+
+  if (!providerDB) {
+    return {
+      success: false,
+      message: 'could not perform the operation',
+      details: ["provider id doesn't exist."],
+    };
+  }
+  const deleteProductDB = await product.deleteMany({ provider: provider_id });
+  const deleteProviderDB = await provider.deleteOne({ _id: provider_id });
+
+  if (deleteProductDB.ok == 1 && deleteProviderDB.ok == 1) {
+    return {
+      success: true,
+      message: 'Operation performed successfully',
+    };
+  } else if (deleteProductDB.ok !== 1 || deleteProviderDB.ok !== 1) {
+    return {
+      success: false,
+      details: 'Error deleting provider and products',
     };
   }
 };
@@ -223,33 +269,6 @@ const ServiceChangeStatus = async (provider_id, status) => {
   }
 };
 
-const ServiceListLikesClient = async (filtro) => {
-  const resultDB = await provider.find({ _id: filtro }).populate({
-    path: 'likes',
-    model: 'like',
-    populate: {
-      path: 'clients',
-      model: 'client',
-    },
-  });
-
-  if (!resultDB) {
-    return {
-      success: false,
-      message: 'operation cannot be performed',
-      details: ['The value does not exist'],
-    };
-  } else {
-    return {
-      success: true,
-      message: 'Operation performed successfully',
-      data: {
-        ...toListItemDTO(resultDB.toJSON()),
-      },
-    };
-  }
-};
-
 
 module.exports = {
   ServiceListAllProvider,
@@ -257,6 +276,7 @@ module.exports = {
   ServiceCreateProvider,
   ServiceUpdateProvider,
   ServiceChangeStatus,
-  ServiceListLikesClient,
+  ServiceRemoveProviderProductsRelated,
   ServiceListProvidersByLocation,
+  ServiceListProductsProvider,
 };

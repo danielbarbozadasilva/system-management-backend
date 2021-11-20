@@ -1,5 +1,8 @@
 const { provider, product, client, like } = require('../models/models.index');
 
+const ServiceSearchLikeClientProvider = async (providerid, clientid) => {
+  return;
+};
 const ServiceCreateLikeClientProvider = async (providerid, clientid) => {
   const [providerDB, clientDB, likeDB] = await Promise.all([
     provider.findById(providerid),
@@ -83,6 +86,10 @@ const ServiceRemoveLikeClientProvider = async (providerid, clientid) => {
       };
     }
   }
+};
+
+const ServiceSearchLikeProviderProduct = async (providerid, productid) => {
+  return;
 };
 
 const ServiceCreateLikeProviderProduct = async (providerid, productid) => {
@@ -169,8 +176,10 @@ const ServiceRemoveLikeProviderProduct = async (providerid, productid) => {
 };
 
 module.exports = {
+  ServiceSearchLikeClientProvider,
   ServiceCreateLikeClientProvider,
   ServiceRemoveLikeClientProvider,
+  ServiceSearchLikeProviderProduct,
   ServiceCreateLikeProviderProduct,
   ServiceRemoveLikeProviderProduct,
 };

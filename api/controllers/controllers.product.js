@@ -23,7 +23,7 @@ const ControllerListProductById = async (req, res, next) => {
 
 const ControllerListProductByProvider = async (req, res, next) => {
   const { providerid } = req.params;
-  const resultService = await productService.ServiceListProductByProvider(
+  const resultService = await productService.ServiceListProductsProvider(
     providerid
   );
   const code = resultService.success ? 200 : 400;
@@ -35,11 +35,12 @@ const ControllerListProductByProvider = async (req, res, next) => {
 };
 
 const ControllerInsertProduct = async (req, res, next) => {
-  const { body, params, user } = req;
-  const resultService = await productService.ServiceInsertProduct({
-    ...params,
+  const { body, user } = req;
+  const { providerid } = req.params;
+console.log(user)
+  const resultService = await productService.ServiceCreateProduct({
     ...body,
-    providerlogadoid: req.params.provider,
+    providerid,
   });
   const code = resultService.success ? 200 : 400;
   const message = resultService.success

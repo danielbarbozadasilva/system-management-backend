@@ -9,7 +9,9 @@ const ServiceListAllProduct = async () => {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: productMapper.toDTO(...productDB),
+      data: productDB.map((item) => {
+        return productMapper.toDTO(item);
+      }),
     };
   } else {
     return {
@@ -21,13 +23,13 @@ const ServiceListAllProduct = async () => {
 };
 
 const ServiceListProductById = async (product_id) => {
-  const productDB = await product.findById(product_id);
+  const productDB = await product.findById({ _id: product_id });
 
   if (productDB) {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: productMapper.toDTO(productDB),
+      data: productMapper.toItemListDTO(productDB),
     };
   } else {
     return {
@@ -38,44 +40,23 @@ const ServiceListProductById = async (product_id) => {
   }
 };
 
-const ServiceListProductByProvider = async (provider_id) => {
-  const productDB = await product
-    .find({ provider: provider_id })
-    .populate('provider');
-
-  if (productDB) {
-    return {
-      success: true,
-      message: 'Operation performed successfully',
-      data: productDB.map((item) => {
-        return productMapper.toItemListaDTO(item);
-      }),
-    };
-  } else {
-    return {
-      success: false,
-      message: 'could not perform the operation',
-      details: ['The provider id does not exist.'],
-    };
-  }
-};
-const ServiceCreateProduct = async (model) => {
-  const [categoryDB, providerDB, productDB, moveFile] = await Promise.all([
-    category.findById(model.category),
-    provider.findById(model.providerlogadoid),
+const ServiceCreateProduct = async (body) => {
+  const [providerDB, categoryDB, productDB, moveFile] = await Promise.all([
+    provider.findById({ _id: providerid }),
+    category.findById({ _id: body.category }),
     product.create({
-      name: model.name,
-      description: model.description,
-      price: model.price,
-      category: model.category,
-      provider: model.providerlogadoid,
+      name: body.name,
+      description: body.description,
+      price: body.price,
+      category: body.category,
+      provider: body.providerid,
       image: {
-        sourceFile: model.image.sourceFile,
-        name: model.image.newName,
-        type: model.image.type,
+        sourceFile: body.image.sourceFile,
+        name: body.image.newName,
+        type: body.image.type,
       },
     }),
-    fileUtils.move(model.image.sourceFile, model.image.newName),
+    fileUtils.UtilMove(model.image.sourceFile, model.image.newName),
   ]);
 
   if (!providerDB) {
@@ -84,25 +65,19 @@ const ServiceCreateProduct = async (model) => {
       message: 'Operation cannot be performed',
       details: ['There is no provider registered for the provided id provider'],
     };
-  }
-
-  if (!categoryDB) {
+  } else if (!categoryDB) {
     return {
       success: false,
       message: 'Operation cannot be performed',
-      details: ['There is no category registered for the category_id entered'],
+      details: ['There is no category registered for the category id entered'],
     };
-  }
-
-  if (!productDB) {
+  } else if (!productDB) {
     return {
       success: false,
       message: 'Operation cannot be performed',
       details: ['It is not possible to insert the product'],
     };
-  }
-
-  if (!moveFile) {
+  } else if (!moveFile) {
     return {
       success: false,
       message: 'Operation cannot be performed',
@@ -144,7 +119,7 @@ const ServiceSearchProductByFilter = async (filters) => {
       success: true,
       message: 'operation performed successfully',
       data: {
-        ...productMapper.toItemListaDTO(resultDB),
+        ...productMapper.toDTO(resultDB),
       },
     };
   } else {
@@ -213,6 +188,7 @@ const ServiceDeleteProduct = async ({ providerId, productId, userId }) => {
   fileUtils.remove('products', image.name);
 
   let categoryArray = await category.find({ products: productId });
+
   await Promise.all(
     categoryArray.map(async (item) => {
       let categoryproduct = item.products;
@@ -264,7 +240,6 @@ const ServiceUpdateProduct = async (productId, model) => {
   }
 
   await productDB.save();
-
   return {
     success: true,
     message: 'Operation performed successfully!',
@@ -272,31 +247,9 @@ const ServiceUpdateProduct = async (productId, model) => {
   };
 };
 
-const ServiceListProductsProvider = async (providerid) => {
-  const resultDB = await product
-    .find({ provider: providerid })
-    .populate('provider');
-
-  if (!resultDB) {
-    return {
-      success: false,
-      message: 'operation cannot be performed',
-      details: ['The value does not exist'],
-    };
-  } else {
-    return {
-      success: true,
-      message: 'Operation performed successfully',
-      data: resultDB,
-    };
-  }
-};
-
 module.exports = {
   ServiceListAllProduct,
   ServiceListProductById,
-  ServiceListProductByProvider,
-  ServiceListProductsProvider,
   ServiceCreateProduct,
   ServiceSearchProductByFilter,
   ServiceDeleteProduct,

@@ -8,7 +8,9 @@ const ServiceSearchAllCategory = async () => {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: categoryDB,
+      data: categoryDB.map((item) => {
+        return categoryMapper.toDTO(item);
+      }),
     };
   } else {
     return {
@@ -26,7 +28,9 @@ const ServiceSearchCategoryById = async (category_id) => {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: categoryDB,
+      data: [categoryDB].map((item) => {
+        return categoryMapper.toDTO(item);
+      }),
     };
   } else {
     return {
