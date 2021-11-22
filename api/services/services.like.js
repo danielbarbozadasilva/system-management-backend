@@ -1,4 +1,10 @@
-const { provider, product, client, like } = require('../models/models.index');
+const {
+  provider,
+  product,
+  client,
+  like,
+  category,
+} = require('../models/models.index');
 const {
   toDTOListLikeClientProvider,
   toDTOListLikeProviderProduct,
@@ -120,24 +126,23 @@ const ServiceRemoveLikeClientProvider = async (provider_id, client_id) => {
   }
 };
 
-const ServiceSearchLikeProviderProduct = async (provider_id, product_id) => {
-  const [providerDB, productDB, likeDB] = await Promise.all([
-    provider.findById(provider_id),
-    product.findById(product_id),
-    like.find({ provider: provider_id, product: product_id }),
-  ]);
+const ServiceSearchLikeProviderProduct = async (provider_id) => {
+  const likeDB = await like
+    .find({
+      provider: provider_id,
+    })
+    .where('product')
+    .ne(null)
+    .populate('product')
+    .populate('provider');
 
-  if (!providerDB) {
-    return {
-      success: false,
-      details: 'The provider informed does not exist!',
-    };
-  } else if (!productDB) {
-    return {
-      success: false,
-      details: 'The product informed does not exist!',
-    };
-  } else if (!likeDB) {
+  const resultDB = await product
+    .find({ provider: provider_id, product: likeDB.product })
+    .populate('product')
+    .populate('category')
+    .populate('provider');
+
+  if (!likeDB) {
     return {
       success: false,
       details: 'No likes found!',
@@ -145,7 +150,9 @@ const ServiceSearchLikeProviderProduct = async (provider_id, product_id) => {
   } else if (likeDB) {
     return {
       success: true,
-      data: [toDTOListLikeProviderProduct(...likeDB)],
+      data: resultDB.map((item) => {
+        return toDTOListLikeProviderProduct(item);
+      }),
     };
   }
 };

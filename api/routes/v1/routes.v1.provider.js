@@ -190,32 +190,24 @@ module.exports = (router) => {
     providerController.ControllerChangeStatusProvider
   );
 
+  router.route('/provider/:providerid/like').get(
+    authorizationMiddleware('*'),
+    middlewareValidateDTO('params', {
+      providerid: joi
+        .string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .messages({
+          'any.required': `"provider id" is a required field`,
+          'string.empty': `"provider id" can not be empty`,
+          'string.pattern.base': `"provider id" out of the expected format`,
+        }),
+    }),
+    providerController.ControllerSearchLikeProduct
+  );
+
   router
     .route('/provider/:providerid/product/:productid/like')
-    .get(
-      authorizationMiddleware('*'),
-      middlewareValidateDTO('params', {
-        providerid: joi
-          .string()
-          .regex(/^[0-9a-fA-F]{24}$/)
-          .required()
-          .messages({
-            'any.required': `"provider id" is a required field`,
-            'string.empty': `"provider id" can not be empty`,
-            'string.pattern.base': `"provider id" out of the expected format`,
-          }),
-        productid: joi
-          .string()
-          .regex(/^[0-9a-fA-F]{24}$/)
-          .required()
-          .messages({
-            'any.required': `"product id" is a required field`,
-            'string.empty': `"product id" can not be empty`,
-            'string.pattern.base': `"product id" out of the expected format`,
-          }),
-      }),
-      providerController.ControllerSearchLikeProduct
-    )
     .post(
       authorizationMiddleware('*'),
       middlewareValidateDTO('params', {

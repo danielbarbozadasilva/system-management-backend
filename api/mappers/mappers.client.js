@@ -16,43 +16,38 @@ const toDTO = (model) => {
 };
 
 const toDTOListLikeProviderProduct = (model) => {
-  const { _id, provider, product } = model;
-  const { category } = product;
-
   return {
-    id: _id,
-    provider: {
-      id: provider._id,
-      cnpj: provider.cnpj,
-      fantasy_name: provider.fantasy_name,
-      social_name: provider.social_name,
-      address: provider.address,
-      uf: provider.uf,
-      city: provider.city,
-      responsible: provider.responsible,
-      phone: provider.phone,
-      status: provider.status,
-    },
-    category: {
-      id: category._id,
-      name: category.name,
-      description: category.description,
-      status: category.status,
-      image: fileUtils.UtilCreateAddressDownload(
-        'category',
-        category.image.name
-      ),
-    },
     product: {
-      id: product._id,
-      category: product.category,
-      name: product.name,
-      description: product.description,
-      price: parseFloat(product.price).toLocaleString('pt-br', {
+      id: model._id,
+      name: model.name,
+      description: model.description,
+      price: parseFloat(model.price).toLocaleString('pt-br', {
         style: 'currency',
         currency: 'BRL',
       }),
-      image: fileUtils.UtilCreateAddressDownload('product', product.image.name),
+      image: fileUtils.UtilCreateAddressDownload('product', model.image.name),
+      category: {
+        id: model.category._id,
+        name: model.category.name,
+        description: model.category.description,
+        status: model.category.status,
+        image: fileUtils.UtilCreateAddressDownload(
+          'category',
+          model.category.image.name
+        ),
+      },
+      provider: {
+        id: model.provider._id,
+        cnpj: model.provider.cnpj,
+        fantasy_name: model.provider.fantasy_name,
+        social_name: model.provider.social_name,
+        address: model.provider.address,
+        uf: model.provider.uf,
+        city: model.provider.city,
+        responsible: model.provider.responsible,
+        phone: model.provider.phone,
+        status: model.provider.status,
+      },
     },
   };
 };
@@ -87,4 +82,8 @@ const toDTOListLikeClientProvider = (model) => {
   };
 };
 
-module.exports = { toDTO, toDTOListLikeProviderProduct, toDTOListLikeClientProvider };
+module.exports = {
+  toDTO,
+  toDTOListLikeProviderProduct,
+  toDTOListLikeClientProvider,
+};
