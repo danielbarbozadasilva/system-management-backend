@@ -121,7 +121,7 @@ const ServiceCreateProvider = async (model) => {
     phone,
     email,
     password: UtilCreateHash(password),
-    status: 'analysis',
+    status: 'ANALYSIS',
   });
 
   return {
@@ -249,14 +249,14 @@ const ServiceChangeStatus = async (provider_id, status) => {
   );
 
   if (resultDB) {
-    if (status === 'enable' || status === 'analysis') {
+    if (status === 'ENABLE' || status === 'ANALYSIS') {
       emailUtils.UtilSendEmail({
         to: providerDB.email,
         from: process.env.SENDGRID_SENDER,
         subject: `Activation Confirmation ${providerDB.social_name}`,
         html: EmailEnable('subject', `${process.env.URL}/signin`),
       });
-    } else if (status === 'disable') {
+    } else if (status === 'DISABLE') {
       emailUtils.UtilSendEmail({
         to: providerDB.email,
         from: process.env.SENDGRID_SENDER,
