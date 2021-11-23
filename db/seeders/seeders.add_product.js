@@ -51,14 +51,8 @@ const removeProduct = async () => {
     return {
       success: true,
       message: 'the products were successfully removed.',
-      data: resultDB,
-    };
-  } else {
-    return {
-      success: false,
-      message: 'it is not possible to remove the products',
-    };
+    }
   }
-};
+}
 
 module.exports = { createProduct, removeProduct };

@@ -6,6 +6,7 @@ const node_environment = process.env.NODE_ENV || 'development';
 if (node_environment === 'development') {
   require('dotenv').config();
 }
+
 const category = require('./seeders.add_category');
 const likes = require('./seeders.add_likes');
 const product = require('./seeders.add_product');

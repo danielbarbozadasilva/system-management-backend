@@ -8,7 +8,6 @@ const { EmailDisable } = require('../utils/utils.email.message.disable');
 
 const ServiceListAllProvider = async () => {
   const resultDB = await provider.find({}).sort({ fantasy_name: 1 });
-
   return {
     success: true,
     message: 'Operation performed successfully',
