@@ -5,50 +5,51 @@ const userMapper = require('../mappers/mappers.user');
 const profile = [
   {
     id: 1,
-    description: "ADMIN",
+    description: 'ADMIN',
     functionality: [
-      "ADD_PROVIDER",
-      "UPDATE_PROVIDER",
-      "SEARCH_PROVIDER",
-      "SEARCH_PROVIDER_ID",
-      "ENABLE_PROVIDER",
-      "DISABLE_PROVIDER",
-      "CREATE_CATEGORY",
-      "UPDATE_CATEGORY",
-      "SEARCH_CATEGORY",
-      "REMOVE_CATEGORY",
-      "SEARCH_CLIENT",
+      'SEARCH_PROVIDER',
+      'SEARCH_PROVIDER_ID',
+      'ADD_PROVIDER',
+      'UPDATE_PROVIDER',
+      'DELETE_PROVIDER',
+      'CHANGE_STATUS_PROVIDER',
+      'SEARCH_CATEGORY',
+      'CREATE_CATEGORY',
+      'UPDATE_CATEGORY',
+      'REMOVE_CATEGORY',
+      'SEARCH_CLIENT',
     ],
   },
   {
     id: 2,
-    description: "PROVIDER",
+    description: 'PROVIDER',
     functionality: [
-      "SEARCH_PROVIDER_ID",
-      "SEARCH_PRODUCT",
-      "CREATE_PRODUCT",
-      "REMOVE_PRODUCT",
-      "SEARCH_CLIENT_ID",
-      "CREATE_LIKE_PRODUCT",
-      "REMOVE_LIKE_PRODUCT",
+      'SEARCH_PROVIDER_ID',
+      'SEARCH_PRODUCT',
+      'CREATE_PRODUCT',
+      'UPDATE_PRODUCT',
+      'REMOVE_PRODUCT',
+      'SEARCH_CLIENT_ID',
+      'CREATE_LIKE_PRODUCT',
+      'REMOVE_LIKE_PRODUCT',
     ],
   },
   {
     id: 3,
-    description: "CLIENT",
+    description: 'CLIENT',
     functionality: [
-      "LIKE_CREATE",
-      "LIKE_REMOVE",
-      "SEARCH_PROVIDER_ID",
-      "SEARCH_CLIENT",
-      "SEARCH_CLIENT_ID",
+      'LIKE_CREATE',
+      'LIKE_REMOVE',
+      'SEARCH_PROVIDER_ID',
+      'SEARCH_CLIENT',
+      'SEARCH_CLIENT_ID',
     ],
   },
 ];
 
 const ServiceSearchTypeUserById = (type) => {
   return profile.find((item) => {
-    return item.id === type ? true : false;;
+    return item.id === type ? true : false;
   });
 };
 
@@ -63,19 +64,35 @@ const ServiceCreateCredential = async (email) => {
   };
 };
 
-const ServiceValidateFunctionalityProfile = (profile_id, functionality) => {
+const ServiceVerifyFunctionalityProfile = (profile_id, functionality) => {
   const profile = ServiceSearchTypeUserById(profile_id);
   return profile?.functionality?.includes(functionality);
 };
 
-const ServiceValidateEmailExists = async (email) => {
+const ServiceVerifyEmailExists = async (email) => {
   const users = await user.find({ email });
   return users.length > 0 ? true : false;
 };
 
-const ServiceValidateCnpjExists = async (cnpj) => {
+const ServiceVerifyCnpjExists = async (cnpj) => {
   const result = await provider.find({ cnpj });
   return result.length > 0 ? true : false;
+};
+
+const ServiceVerifyEmail = async (id, date) => {
+  const result = await provider
+    .findOne(Object({ email: date }))
+    .where('_id')
+    .ne(id);
+  return result ? true : false;
+};
+
+const ServiceVerifyCnpj = async (id, date) => {
+  const result = await provider
+    .findOne(Object({ cnpj: date }))
+    .where('_id')
+    .ne(id);
+  return result ? true : false;
 };
 
 const ServiceAuthenticate = async (email, password) => {
@@ -109,8 +126,10 @@ module.exports = {
   ServiceAuthenticate,
   ServiceSearchTypeUserById,
   ServiceCreateCredential,
-  ServiceValidateCnpjExists,
-  ServiceValidateEmailExists,
-  ServiceValidateFunctionalityProfile,
+  ServiceVerifyCnpjExists,
+  ServiceVerifyEmailExists,
+  ServiceVerifyFunctionalityProfile,
   ServiceUserIsValid,
+  ServiceVerifyEmail,
+  ServiceVerifyCnpj,
 };

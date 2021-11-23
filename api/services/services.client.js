@@ -1,4 +1,4 @@
-const { ServiceValidateEmailExists } = require('./services.user');
+const { ServiceVerifyEmailExists } = require('./services.user');
 const { client } = require('../models/models.index');
 const { toDTO } = require('../mappers/mappers.client');
 const { UtilCreateHash } = require('../utils/utils.cryptography');
@@ -10,7 +10,7 @@ const ServiceListAll = async () => {
       success: true,
       message: 'Operation performed successfully',
       data: {
-        ...toDTO(resultadoDB.toJSON()),
+        ...toDTO(...resultadoDB),
       },
     };
   } else {
@@ -23,7 +23,7 @@ const ServiceListAll = async () => {
 
 const ServiceCreate = async (model) => {
   const { email, password, ...rest } = model;
-  if (await ServiceValidateEmailExists(email))
+  if (await ServiceVerifyEmailExists(email))
     return {
       success: false,
       message: 'Operation cannot be performed',
@@ -69,27 +69,9 @@ const ServiceSearchById = async () => {
     };
   }
 };
-const ServiceListLike = async () => {
-  const resultadoDB = await client.find({ _id: clientid });
-  if (resultadoDB) {
-    return {
-      success: true,
-      message: 'Operation performed successfully',
-      data: {
-        ...toDTO(resultadoDB.toJSON()),
-      },
-    };
-  } else {
-    return {
-      success: false,
-      details: 'No categories found',
-    };
-  }
-};
 
 module.exports = {
   ServiceListAll,
   ServiceSearchById,
-  ServiceListLike,
   ServiceCreate,
 };

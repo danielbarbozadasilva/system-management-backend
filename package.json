@@ -21,7 +21,7 @@
   "homepage": "https://gitlab.com/daniel.bsilva/projeto-04#readme",
   "dependencies": {
     "@joi/date": "^2.1.0",
-    "@sendgrid/mail": "^7.4.4",
+    "@sendgrid/mail": "^7.6.0",
     "@ssttevee/multipart-parser": "^0.1.8",
     "cors": "^2.8.5",
     "dotenv": "^9.0.2",
