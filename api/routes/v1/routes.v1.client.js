@@ -40,92 +40,90 @@ module.exports = (router) => {
           'string.empty': `"status" can not be empty`,
         }),
       }),
-      clientController.ControllerCreateClient
+      clientController.ControllerInsertClients
     )
-
     .get(
       authorizationMiddleware('*'),
       MiddlewareAsync(clientController.ControllerListAllClients)
-    );
-
-  router.route('/client/:clientid').get(
-    authorizationMiddleware('*'),
-    middlewareValidateDTO('params', {
-      clientid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': `"client id" is a required field`,
-          'string.empty': `"client id" must not be empty`,
-          'string.pattern.base': `"client id" out of the expected format`,
+    )
+    .get(
+      authorizationMiddleware('*'),
+      middlewareValidateDTO('params', {
+        clientid: joi
+          .string()
+          .regex(/^[0-9a-fA-F]{24}$/)
+          .required()
+          .messages({
+            'any.required': `"client id" is a required field`,
+            'string.empty': `"client id" must not be empty`,
+            'string.pattern.base': `"client id" out of the expected format`,
+          }),
+      }),
+      clientController.ControllerListClientById
+    ),
+    router.route('/provider/:providerid/like').get(
+      authorizationMiddleware('*'),
+      middlewareValidateDTO('params', {
+        providerid: joi
+          .string()
+          .regex(/^[0-9a-fA-F]{24}$/)
+          .required()
+          .messages({
+            'any.required': `"provider id" is a required field`,
+            'string.empty': `"provider id" can not be empty`,
+            'string.pattern.base': `"provider id" out of the expected format`,
+          }),
+      }),
+      clientController.ControllerSearchLikeProduct
+    ),
+    router
+      .route('/provider/:providerid/client/:client_id/like')
+      .post(
+        authorizationMiddleware('*'),
+        middlewareValidateDTO('params', {
+          providerid: joi
+            .string()
+            .regex(/^[0-9a-fA-F]{24}$/)
+            .required()
+            .messages({
+              'any.required': `"provider id" is a required field`,
+              'string.empty': `"provider id" can not be empty`,
+              'string.pattern.base': `"provider id" out of the expected format`,
+            }),
+          client_id: joi
+            .string()
+            .regex(/^[0-9a-fA-F]{24}$/)
+            .required()
+            .messages({
+              'any.required': `" client id" is a required field`,
+              'string.empty': `"client id" can not be empty`,
+              'string.pattern.base': `"client id" out of the expected format`,
+            }),
         }),
-    }),
-    clientController.ControllerListClientById
-  );
-
-  router.route('/client/:clientid/likes').get(
-    authorizationMiddleware('*'),
-    middlewareValidateDTO('params', {
-      clientid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': `"client id" is a required field`,
-          'string.empty': `"client id" must not be empty`,
-          'string.pattern.base': `"client id" out of the expected format`,
+        clientController.ControllerInsertLikeProduct
+      )
+      .delete(
+        authorizationMiddleware('*'),
+        middlewareValidateDTO('params', {
+          providerid: joi
+            .string()
+            .regex(/^[0-9a-fA-F]{24}$/)
+            .required()
+            .messages({
+              'any.required': `"provider id" is a required field`,
+              'string.empty': `"provider id" can not be empty`,
+              'string.pattern.base': `"provider id" out of the expected format`,
+            }),
+          client_id: joi
+            .string()
+            .regex(/^[0-9a-fA-F]{24}$/)
+            .required()
+            .messages({
+              'any.required': `"product id" is a required field`,
+              'string.empty': `"product id" can not be empty`,
+              'string.pattern.base': `"product id" out of the expected format`,
+            }),
         }),
-    }),
-    clientController.ControllerListLikesClient
-  );
-  router.route('/client/:clientid/provider/:providerid/likes').post(
-    authorizationMiddleware('LIKE_CREATE'),
-    middlewareValidateDTO('params', {
-      clientid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': `"client id" is a required field`,
-          'string.empty': `"client id" must not be empty`,
-          'string.pattern.base': `"client id" out of the expected format`,
-        }),
-      providerid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': `"provider id" is a required field`,
-          'string.empty': `"client id" must not be empty`,
-          'string.pattern.base': `"client id" out of the expected format`,
-        }),
-    }),
-    clientController.ControllerLikeProvider
-  );
-
-  router.route('/client/:clientid/provider/:providerid/likes').delete(
-    authorizationMiddleware('LIKE_REMOVE'),
-    middlewareValidateDTO('params', {
-      clientid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': `"client id" is a required field`,
-          'string.empty': `"client id" must not be empty`,
-          'string.pattern.base': `"client id" out of the expected format`,
-        }),
-      providerid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': `"provider id" is a required field`,
-          'string.empty': `"client id" must not be empty`,
-          'string.pattern.base': `"client id" out of the expected format`,
-        }),
-    }),
-    clientController.ControllerRemoveLikeProvider
-  );
+        clientController.ControllerRemoveLikeProvider
+      );
 };

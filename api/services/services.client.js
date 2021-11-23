@@ -69,27 +69,9 @@ const ServiceSearchById = async () => {
     };
   }
 };
-const ServiceListLike = async () => {
-  const resultadoDB = await client.find({ _id: clientid });
-  if (resultadoDB) {
-    return {
-      success: true,
-      message: 'Operation performed successfully',
-      data: {
-        ...toDTO(resultadoDB.toJSON()),
-      },
-    };
-  } else {
-    return {
-      success: false,
-      details: 'No categories found',
-    };
-  }
-};
 
 module.exports = {
   ServiceListAll,
   ServiceSearchById,
-  ServiceListLike,
   ServiceCreate,
 };

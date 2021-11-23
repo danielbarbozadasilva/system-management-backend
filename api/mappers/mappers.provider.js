@@ -1,4 +1,6 @@
-const toListItemDTO = (model) => {
+const fileUtils = require('../utils/utils.file');
+
+const toDTO = (model) => {
   const {
     id: _id,
     cnpj,
@@ -26,33 +28,57 @@ const toListItemDTO = (model) => {
   };
 };
 
-const toDTO = (model) => {
-  const { _id, likes, password, kind, products } = model;
+const toItemListDTO = (model) => {
+  const { _id, name, description, price, provider, category, image } = model;
+  const {
+    cnpj,
+    fantasy_name,
+    social_name,
+    address,
+    uf,
+    city,
+    responsible,
+    phone,
+    status,
+  } = provider;
 
   return {
     id: _id,
-    likes: likes.map((item) => {
-      return {
-        id: item._id,
-        clientId: item.client._id,
-      };
+    category,
+    name,
+    description,
+    price: parseFloat(price).toLocaleString('pt-br', {
+      style: 'currency',
+      currency: 'BRL',
     }),
-    products: products.map((item) => {
-      return {
-        id: item.id,
-        name: item.name,
-        description: item.description,
-        price: parseFloat(item.price).toLocaleString('pt-br', {
-          style: 'currency',
-          currency: 'BRL',
-        }),
-      };
-    }),
-    ...resto,
+    image: fileUtils.UtilCreateAddressDownload('product', image.name),
+    provider: {
+      id: provider._id,
+      cnpj: cnpj,
+      fantasy_name: fantasy_name,
+      social_name: social_name,
+      address: address,
+      uf: uf,
+      city: city,
+      responsible: responsible,
+      phone: phone,
+      status: status,
+    },
+  };
+};
+
+const toDTOListLike = (model) => {
+  const { id: _id, provider, product } = model;
+
+  return {
+    id: _id,
+    provider,
+    product,
   };
 };
 
 module.exports = {
-  toListItemDTO,
+  toItemListDTO,
   toDTO,
+  toDTOListLike,
 };
