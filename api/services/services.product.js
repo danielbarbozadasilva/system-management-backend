@@ -2,23 +2,61 @@ const { product, category, provider } = require('../models/models.index');
 const fileUtils = require('../utils/utils.file');
 const productMapper = require('../mappers/mappers.product');
 
-const ServiceCreateProduct = async (model) => {
-  const [categoryDB, providerDB, productDB, moveFile] = await Promise.all([
-    category.findById(model.category),
-    provider.findById(model.providerlogadoid),
+const ServiceListAllProduct = async () => {
+  const productDB = await product.find({});
+
+  if (productDB) {
+    return {
+      success: true,
+      message: 'Operation performed successfully',
+      data: productDB.map((item) => {
+        return productMapper.toDTO(item);
+      }),
+    };
+  } else {
+    return {
+      success: false,
+      message: 'could not perform the operation',
+      details: ['The product id does not exist.'],
+    };
+  }
+};
+
+const ServiceListProductById = async (product_id) => {
+  const productDB = await product.findById({ _id: product_id });
+
+  if (productDB) {
+    return {
+      success: true,
+      message: 'Operation performed successfully',
+      data: productMapper.toItemListDTO(productDB),
+    };
+  } else {
+    return {
+      success: false,
+      message: 'could not perform the operation',
+      details: ['The product id does not exist.'],
+    };
+  }
+};
+
+const ServiceCreateProduct = async (body) => {
+  const [providerDB, categoryDB, productDB, moveFile] = await Promise.all([
+    provider.findById({ _id: providerid }),
+    category.findById({ _id: body.category }),
     product.create({
-      name: model.name,
-      description: model.description,
-      price: model.price,
-      category: model.category,
-      provider: model.providerlogadoid,
+      name: body.name,
+      description: body.description,
+      price: body.price,
+      category: body.category,
+      provider: body.providerid,
       image: {
-        sourceFile: model.image.sourceFile,
-        name: model.image.newName,
-        type: model.image.type,
+        sourceFile: body.image.sourceFile,
+        name: body.image.newName,
+        type: body.image.type,
       },
     }),
-    fileUtils.move(model.image.sourceFile, model.image.newName),
+    fileUtils.UtilMove(model.image.sourceFile, model.image.newName),
   ]);
 
   if (!providerDB) {
@@ -27,25 +65,19 @@ const ServiceCreateProduct = async (model) => {
       message: 'Operation cannot be performed',
       details: ['There is no provider registered for the provided id provider'],
     };
-  }
-
-  if (!categoryDB) {
+  } else if (!categoryDB) {
     return {
       success: false,
       message: 'Operation cannot be performed',
-      details: ['There is no category registered for the category_id entered'],
+      details: ['There is no category registered for the category id entered'],
     };
-  }
-
-  if (!productDB) {
+  } else if (!productDB) {
     return {
       success: false,
       message: 'Operation cannot be performed',
       details: ['It is not possible to insert the product'],
     };
-  }
-
-  if (!moveFile) {
+  } else if (!moveFile) {
     return {
       success: false,
       message: 'Operation cannot be performed',
@@ -87,17 +119,16 @@ const ServiceSearchProductByFilter = async (filters) => {
       success: true,
       message: 'operation performed successfully',
       data: {
-        ...productMapper.toItemListaDTO(resultDB)
+        ...productMapper.toDTO(resultDB),
       },
-    }
+    };
   } else {
-     return {
-       success: false,
-       message: 'no results',
-       details: ['no results'],
-     };
+    return {
+      success: false,
+      message: 'no results',
+      details: ['no results'],
+    };
   }
-  
 };
 
 const ServiceDeleteProduct = async ({ providerId, productId, userId }) => {
@@ -157,6 +188,7 @@ const ServiceDeleteProduct = async ({ providerId, productId, userId }) => {
   fileUtils.remove('products', image.name);
 
   let categoryArray = await category.find({ products: productId });
+
   await Promise.all(
     categoryArray.map(async (item) => {
       let categoryproduct = item.products;
@@ -177,24 +209,6 @@ const ServiceDeleteProduct = async ({ providerId, productId, userId }) => {
       name: productDB.name,
     },
   };
-};
-
-const ServiceListProductById = async (id) => {
-  const productDB = await product.findOne({ _id: id });
-
-  if (productDB) {
-    return {
-      success: true,
-      message: 'Operation performed successfully',
-      data: productMapper.toItemListaDTO(productDB),
-    };
-  } else {
-    return {
-      success: false,
-      message: 'could not perform the operation',
-      details: ['The product id does not exist.'],
-    };
-  }
 };
 
 const ServiceUpdateProduct = async (productId, model) => {
@@ -226,7 +240,6 @@ const ServiceUpdateProduct = async (productId, model) => {
   }
 
   await productDB.save();
-
   return {
     success: true,
     message: 'Operation performed successfully!',
@@ -235,9 +248,10 @@ const ServiceUpdateProduct = async (productId, model) => {
 };
 
 module.exports = {
+  ServiceListAllProduct,
+  ServiceListProductById,
   ServiceCreateProduct,
   ServiceSearchProductByFilter,
   ServiceDeleteProduct,
   ServiceUpdateProduct,
-  ServiceListProductById,
 };

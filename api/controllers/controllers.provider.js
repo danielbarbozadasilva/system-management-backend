@@ -1,4 +1,5 @@
 const providerService = require('../services/services.provider');
+const likeService = require('../services/services.like');
 
 const ControllerListAllProviders = async (req, res, next) => {
   const resultService = await providerService.ServiceListAllProvider();
@@ -11,8 +12,10 @@ const ControllerListAllProviders = async (req, res, next) => {
 };
 
 const ControllerListProviderById = async (req, res, next) => {
-  const { id } = req.params;
-  const resultService = await providerService.ServiceListProviderById(id);
+  const { providerid } = req.params;
+  const resultService = await providerService.ServiceListProviderById(
+    providerid
+  );
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }
@@ -22,8 +25,11 @@ const ControllerListProviderById = async (req, res, next) => {
 };
 
 const ControllerListProvidersByLocation = async (req, res, next) => {
-  const { uf, city } = req.query;
-  const result = await providerService.ServiceListProvidersByLocation(uf, city);
+  const { uf, city } = req.params;
+  const resultService = await providerService.ServiceListProvidersByLocation(
+    uf,
+    city
+  );
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }
@@ -45,19 +51,10 @@ const ControllerInsertProvider = async (req, res, next) => {
 
 const ControllerUpdateProvider = async (req, res, next) => {
   const { body } = req;
-  const id = req.params.id;
-  const resultService = await providerService.ServiceUpdateProvider(id, body);
-  const code = resultService.success ? 200 : 400;
-  const message = resultService.success
-    ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
-const ControllerListProductsByProvider = async (req, res, next) => {
   const { providerid } = req.params;
-  const resultService = await providerService.ServiceListProductsProvider(
-    providerid
+  const resultService = await providerService.ServiceUpdateProvider(
+    providerid,
+    body
   );
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
@@ -67,9 +64,9 @@ const ControllerListProductsByProvider = async (req, res, next) => {
   return res.status(code).send({ message: message, data });
 };
 
-const ControllerSearchLikesReceived = async (req, res, next) => {
-  const { id } = req.params;
-  const resultService = await providerService.ServiceListLikesClient(id);
+const ControllerRemoveProvider = async (req, res, next) => {
+  const { providerid } = req.params;
+  const resultService = await providerService.ServiceRemoveProvider(providerid);
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }
@@ -78,9 +75,11 @@ const ControllerSearchLikesReceived = async (req, res, next) => {
   return res.status(code).send({ message: message, data });
 };
 
-const ControllerSearchProductsProvider = async (req, res, next) => {
-  const id = req.params.id;
-  const resultService = await providerService.ServiceListProductsProvider(id);
+const ControllerListProductsByProvider = async (req, res, next) => {
+  const { providerid } = req.params;
+  const resultService = await providerService.ServiceListProductsProvider(
+    providerid
+  );
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }
@@ -103,14 +102,59 @@ const ControllerChangeStatusProvider = async (req, res, next) => {
   return res.status(code).send({ message: message, data });
 };
 
+const ControllerSearchLikeProduct = async (req, res, next) => {
+  const { providerid, productid } = req.params;
+  const resultService = await likeService.ServiceSearchLikeProviderProduct(
+    providerid,
+    productid
+  );
+  const code = resultService.success ? 200 : 400;
+  const message = resultService.success
+    ? { message: resultService.message }
+    : { details: resultService.details };
+  const data = resultService.data ? resultService.data : '';
+  return res.status(code).send({ message: message, data });
+};
+
+const ControllerInsertLikeProduct = async (req, res, next) => {
+  const { params, user } = req;
+  const { providerid, productid } = req.params;
+  const resultService = await likeService.ServiceCreateLikeProviderProduct(
+    providerid,
+    productid
+  );
+  const code = resultService.success ? 200 : 400;
+  const message = resultService.success
+    ? { message: resultService.message }
+    : { details: resultService.details };
+  const data = resultService.data ? resultService.data : '';
+  return res.status(code).send({ message: message, data });
+};
+
+const ControllerDeleteLikeProduct = async (req, res, next) => {
+  const { user, params } = req;
+  const resultService = await likeService.ServiceRemoveLikeProviderProduct(
+    params.providerid,
+    params.productid
+  );
+  const code = resultService.success ? 200 : 400;
+  const message = resultService.success
+    ? { message: resultService.message }
+    : { details: resultService.details };
+  const data = resultService.data ? resultService.data : '';
+  return res.status(code).send({ message: message, data });
+};
+
 module.exports = {
   ControllerListAllProviders,
   ControllerListProviderById,
   ControllerListProvidersByLocation,
   ControllerInsertProvider,
   ControllerUpdateProvider,
+  ControllerRemoveProvider,
   ControllerListProductsByProvider,
-  ControllerSearchLikesReceived,
-  ControllerSearchProductsProvider,
   ControllerChangeStatusProvider,
+  ControllerSearchLikeProduct,
+  ControllerInsertLikeProduct,
+  ControllerDeleteLikeProduct,
 };

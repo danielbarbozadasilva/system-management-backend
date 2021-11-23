@@ -1,8 +1,8 @@
-version: "3.0"
+version: '3.0'
 services:
   mongodb:
     image: mongo
-    container_name: containermongoproj
+    container_name: containermongo
     volumes:
       - ~/docker
     ports:
