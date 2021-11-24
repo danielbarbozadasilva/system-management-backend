@@ -1,8 +1,9 @@
-const { provider, product, client, like } = require('../models/models.index');
+const { provider, product, like, client } = require('../models/models.index');
 const {
   toDTOListLikeClientProvider,
   toDTOListLikeProviderProduct,
 } = require('../mappers/mappers.client');
+const { stringify } = require('uuid');
 
 const ServiceSearchLikeProviderProduct = async (provider_id) => {
   const likeDB = await like
@@ -118,19 +119,22 @@ const ServiceRemoveLikeProviderProduct = async (provider_id, product_id) => {
   }
 };
 
-const ServiceSearchLikeClientProvider = async (client_id) => {
+const ServiceSearchLikeClientProvider = async (clientid) => {
   const resultLikeDB = await like
-    .find({
-      client: client_id,
-    })
-    .where('client')
-    .ne(null)
-    .populate('provider');
+    .find({ client: clientid })
+    .where('provider')
+    .ne(null);
+
+  var result = resultLikeDB.map((item) => {
+    return item.provider;
+  });
 
   const resultDB = await like
-    .find({ provider: resultLikeDB.provider, client: client_id })
+    .find({ client: clientid, provider: Object(...result) })
+    .populate('like')
     .populate('provider')
     .populate('client');
+
   if (resultDB == 0) {
     return {
       success: false,
@@ -147,11 +151,11 @@ const ServiceSearchLikeClientProvider = async (client_id) => {
   }
 };
 
-const ServiceCreateLikeClientProvider = async (provider_id, product_id) => {
-  const [providerDB, productDB, likeDB] = await Promise.all([
-    provider.findById(provider_id),
-    product.findById(product_id),
-    like.findOne({ provider: provider_id, product: product_id }),
+const ServiceCreateLikeClientProvider = async (providerid, clientid) => {
+  const [providerDB, clientDB, likeDB] = await Promise.all([
+    provider.findById(Object(providerid)),
+    client.findById(clientid),
+    like.findOne({ provider: Object(providerid), client: clientid }),
   ]);
 
   if (!providerDB) {
@@ -159,20 +163,20 @@ const ServiceCreateLikeClientProvider = async (provider_id, product_id) => {
       success: false,
       details: 'The provider informed does not exist!',
     };
-  } else if (!productDB) {
+  } else if (!clientDB) {
     return {
       success: false,
-      details: 'The product informed does not exist!',
+      details: 'The client informed does not exist!',
     };
   } else if (likeDB) {
     return {
       success: false,
-      details: 'The provider has already liked the product!',
+      details: 'The client has already liked the provider!',
     };
   } else if (!likeDB) {
     const resp = await like.create({
-      provider: provider_id,
-      product: product_id,
+      provider: providerid,
+      client: clientid,
     });
 
     const result_like = await Promise.all([resp.save()]);
@@ -182,8 +186,8 @@ const ServiceCreateLikeClientProvider = async (provider_id, product_id) => {
         message: 'Successfully liked!',
         data: {
           id: resp._id,
-          provider: resp.provider,
-          product: resp.product,
+          provider: providerid,
+          client: clientid,
         },
       };
     } else {
@@ -195,11 +199,11 @@ const ServiceCreateLikeClientProvider = async (provider_id, product_id) => {
   }
 };
 
-const ServiceRemoveLikeClientProvider = async (provider_id, product_id) => {
-  const [providerDB, productDB, likeDB] = await Promise.all([
-    provider.findById(provider_id),
-    product.findById(product_id),
-    like.findOne({ provider: provider_id, product: product_id }),
+const ServiceRemoveLikeClientProvider = async (providerid, clientid) => {
+  const [providerDB, clientDB, likeDB] = await Promise.all([
+    provider.findById(providerid),
+    client.findById(clientid),
+    like.findOne({ provider: Object(providerid), client: clientid }),
   ]);
 
   if (!providerDB) {
@@ -207,12 +211,18 @@ const ServiceRemoveLikeClientProvider = async (provider_id, product_id) => {
       success: false,
       details: 'The provider informed does not exist!',
     };
-  } else if (!productDB) {
+  } else if (!clientDB) {
     return {
       success: false,
-      details: 'The product informed does not exist!',
+      details: 'The client informed does not exist!',
     };
-  } else if (likeDB) {
+  } else if (likeDB === null) {
+     return {
+       success: false,
+       details: 'like does not exist!',
+     };
+
+  } else if (likeDB !== null) {
     const result_like = await Promise.all([like.deleteOne(likeDB)]);
     if (result_like) {
       return {
@@ -224,7 +234,7 @@ const ServiceRemoveLikeClientProvider = async (provider_id, product_id) => {
     } else {
       return {
         success: false,
-        details: 'There is no like!',
+        details: 'Error deleting like!',
       };
     }
   }

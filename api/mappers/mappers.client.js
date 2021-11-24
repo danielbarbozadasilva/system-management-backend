@@ -54,8 +54,10 @@ const toDTOListLikeProviderProduct = (model) => {
 };
 
 const toDTOListLikeClientProvider = (model) => {
+  const { _id, client } = model;
+
   return {
-    id: model._id,
+    id: _id,
     provider: {
       id: model.provider._id,
       cnpj: model.provider.cnpj,
@@ -69,14 +71,14 @@ const toDTOListLikeClientProvider = (model) => {
       status: model.provider.status,
     },
     client: {
-      id: model.client._id,
-      first_name: model.client.first_name,
-      last_name: model.client.last_name,
-      birth_date: model.client.birth_date,
-      phone: model.client.phone,
-      uf: model.client.uf,
-      city: model.client.city,
-      status: model.client.status,
+      id: client._id,
+      first_name: client.first_name,
+      last_name: client.last_name,
+      birth_date: client.birth_date,
+      phone: client.phone,
+      uf: client.uf,
+      city: client.city,
+      status: client.status,
     },
   };
 };
