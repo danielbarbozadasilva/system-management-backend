@@ -3,7 +3,6 @@ const {
   toDTOListLikeClientProvider,
   toDTOListLikeProviderProduct,
 } = require('../mappers/mappers.client');
-const { stringify } = require('uuid');
 
 const ServiceSearchLikeProviderProduct = async (provider_id) => {
   const likeDB = await like
