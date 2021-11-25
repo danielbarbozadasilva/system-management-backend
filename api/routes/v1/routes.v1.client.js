@@ -1,17 +1,11 @@
 const joi = require('joi').extend(require('@joi/date'));
 const clientController = require('../../controllers/controllers.client');
-
-const MiddlewareAsync = require('../../utils/middlewares/middlewares.async');
 const middlewareValidateDTO = require('../../utils/middlewares/middlewares.validate_dto');
 const authorizationMiddleware = require('../../utils/middlewares/middlewares.authorization');
 
 module.exports = (router) => {
   router
-    .route('/client')
-    .get(
-      authorizationMiddleware('*'),
-      clientController.ControllerListAllClients
-    )
+    .route('/client/:clientid')
     .get(
       authorizationMiddleware('*'),
       middlewareValidateDTO('params', {
@@ -27,6 +21,44 @@ module.exports = (router) => {
       }),
       clientController.ControllerListClientById
     )
+    .put(
+      authorizationMiddleware('*'),
+      middlewareValidateDTO('params', {
+        clientid: joi
+          .string()
+          .regex(/^[0-9a-fA-F]{24}$/)
+          .required()
+          .messages({
+            'any.required': `"client id" is a required field`,
+            'string.empty': `"client id" must not be empty`,
+            'string.pattern.base': `"client id" out of the expected format`,
+          }),
+      }),
+      clientController.ControllerUpdateClients
+    )
+    .delete(
+      authorizationMiddleware('*'),
+      middlewareValidateDTO('params', {
+        clientid: joi
+          .string()
+          .regex(/^[0-9a-fA-F]{24}$/)
+          .required()
+          .messages({
+            'any.required': `"client id" is a required field`,
+            'string.empty': `"client id" must not be empty`,
+            'string.pattern.base': `"client id" out of the expected format`,
+          }),
+      }),
+      clientController.ControllerDeleteClients
+    ),
+
+  router
+    .route('/client')
+    .get(
+      authorizationMiddleware('*'),
+      clientController.ControllerListAllClients
+    )
+
     .post(
       authorizationMiddleware('*'),
       middlewareValidateDTO('body', {
@@ -42,10 +74,6 @@ module.exports = (router) => {
           'any.required': `"birth_date" is a required field`,
           'string.empty': `"birth_date" can not be empty`,
         }),
-        phone: joi.string().required().messages({
-          'any.required': `"phone" is a required field`,
-          'string.empty': `"phone" can not be empty`,
-        }),
         uf: joi.string().required().messages({
           'any.required': `"uf" is a required field`,
           'string.empty': `"uf" can not be empty`,
@@ -58,25 +86,36 @@ module.exports = (router) => {
           'any.required': `"status" is a required field`,
           'string.empty': `"status" can not be empty`,
         }),
+        phone: joi.string().required().messages({
+          'any.required': `"phone" is a required field`,
+          'string.empty': `"phone" can not be empty`,
+        }),
+        email: joi.string().email().required().messages({
+          'any.required': `"email" is a required field`,
+          'string.empty': `"email" can not be empty`,
+        }),
+        password: joi.string().required().messages({
+          'any.required': `"password" is a required field`,
+          'string.empty': `"password" can not be empty`,
+        }),
       }),
       clientController.ControllerInsertClients
-    );
-
-  router.route('/client/:clientid/like').get(
-    authorizationMiddleware('*'),
-    middlewareValidateDTO('params', {
-      clientid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': `"client id" is a required field`,
-          'string.empty': `"client id" can not be empty`,
-          'string.pattern.base': `"client id" out of the expected format`,
-        }),
-    }),
-    clientController.ControllerSearchLikeProvider
-  ),
+    ),
+    router.route('/client/:clientid/like').get(
+      authorizationMiddleware('*'),
+      middlewareValidateDTO('params', {
+        clientid: joi
+          .string()
+          .regex(/^[0-9a-fA-F]{24}$/)
+          .required()
+          .messages({
+            'any.required': `"client id" is a required field`,
+            'string.empty': `"client id" can not be empty`,
+            'string.pattern.base': `"client id" out of the expected format`,
+          }),
+      }),
+      clientController.ControllerSearchLikeProvider
+    ),
     router
       .route('/client/:clientid/provider/:providerid/like')
       .post(

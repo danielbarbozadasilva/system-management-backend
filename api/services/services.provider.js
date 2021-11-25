@@ -184,7 +184,7 @@ const ServiceUpdateProvider = async (provider_id, body) => {
   } else {
     return {
       success: true,
-      message: 'Operation performed successfully',
+      message: 'Data updated successfully',
       data: {
         ...toDTO(new_provider),
       },
