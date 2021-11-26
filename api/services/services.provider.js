@@ -60,12 +60,15 @@ const ServiceListProductsProvider = async (providerid) => {
 
 const ServiceListProvidersByLocation = async (uf, city) => {
   let filter = {};
+
   if (city == undefined || city == 'x') {
     filter = { uf };
   } else {
     filter = { uf, city };
   }
+
   const resultDB = await provider.find(filter);
+
   if (!resultDB) {
     return {
       success: false,
@@ -76,7 +79,9 @@ const ServiceListProvidersByLocation = async (uf, city) => {
   return {
     success: true,
     message: 'operation performed successfully',
-    data: [toItemListDTO(...resultDB)],
+    data: resultDB.map((item) => {
+      return toDTO(item);
+    }),
   };
 };
 

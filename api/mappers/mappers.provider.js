@@ -29,40 +29,27 @@ const toDTO = (model) => {
 };
 
 const toItemListDTO = (model) => {
-  const { _id, name, description, price, provider, category, image } = model;
-  const {
-    cnpj,
-    fantasy_name,
-    social_name,
-    address,
-    uf,
-    city,
-    responsible,
-    phone,
-    status,
-  } = provider;
-
   return {
-    id: _id,
-    category,
-    name,
-    description,
-    price: parseFloat(price).toLocaleString('pt-br', {
+    id: model._id,
+    category: model.category,
+    name: model.name,
+    description: model.description,
+    price: parseFloat(model.price).toLocaleString('pt-br', {
       style: 'currency',
       currency: 'BRL',
     }),
-    image: fileUtils.UtilCreateAddressDownload('product', image.name),
+    image: fileUtils.UtilCreateAddressDownload('product', model.image.name),
     provider: {
-      id: provider._id,
-      cnpj: cnpj,
-      fantasy_name: fantasy_name,
-      social_name: social_name,
-      address: address,
-      uf: uf,
-      city: city,
-      responsible: responsible,
-      phone: phone,
-      status: status,
+      id: model.provider._id,
+      cnpj: model.provider.cnpj,
+      fantasy_name: model.provider.fantasy_name,
+      social_name: model.provider.social_name,
+      address: model.provider.address,
+      uf: model.provider.uf,
+      city: model.provider.city,
+      responsible: model.provider.responsible,
+      phone: model.provider.phone,
+      status: model.provider.status,
     },
   };
 };
