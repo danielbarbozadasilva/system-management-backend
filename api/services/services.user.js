@@ -31,10 +31,7 @@ const profile = [
   {
     id: 3,
     description: 'CLIENT',
-    functionality: [
-      'LIKE_CREATE',
-      'LIKE_REMOVE',
-    ],
+    functionality: ['LIKE_CREATE', 'LIKE_REMOVE'],
   },
 ];
 
@@ -45,24 +42,31 @@ const ServiceSearchTypeUserById = (type) => {
 };
 
 const ServiceCreateCredential = async (email) => {
-  const userDB = await user.findOne({
-    email: email,
-  });
+  const userDB = await user.findOne({ email: email });
   const userDTO = userMapper.toUserDTO(userDB);
-  return {
-    token: cryptography.UtilCreateToken(userDTO),
-    userDTO,
-  };
+  const userToken = cryptography.UtilCreateToken(userDTO);
+  if (userDTO && userToken) {
+    return {
+      token: userToken,
+      userDTO,
+    };
+  } else {
+    return false;
+  }
 };
 
-const ServiceVerifyFunctionalityProfile = (profile_id, functionality) => {
-  const profile = ServiceSearchTypeUserById(profile_id);
-  return profile?.functionality?.includes(functionality);
+const ServiceVerifyFunctionalityProfile = async (typeUser, test) => {
+  const profile = ServiceSearchTypeUserById(typeUser);
+  if (profile?.functionality?.includes(test) && profile) {
+    return true;
+  } else {
+    return false;
+  }
 };
 
-const ServiceVerifyEmailExists = async (email) => {
+const ServiceVerifyEmailBodyExists = async (email) => {
   const users = await user.find({ email });
-  return users.length > 0 ? true : false;
+  return users.length > 0 ? false : true;
 };
 
 const ServiceVerifyCnpjExists = async (cnpj) => {
@@ -70,17 +74,17 @@ const ServiceVerifyCnpjExists = async (cnpj) => {
   return result.length > 0 ? true : false;
 };
 
-const ServiceVerifyEmail = async (id, date) => {
+const ServiceVerifyEmail = async (id, data) => {
   const result = await provider
-    .findOne(Object({ email: date }))
+    .findOne(Object({ email: data }))
     .where('_id')
     .ne(id);
   return result ? true : false;
 };
 
-const ServiceVerifyCnpj = async (id, date) => {
+const ServiceVerifyCnpj = async (id, data) => {
   const result = await provider
-    .findOne(Object({ cnpj: date }))
+    .findOne(Object({ cnpj: data }))
     .where('_id')
     .ne(id);
   return result ? true : false;
@@ -88,7 +92,8 @@ const ServiceVerifyCnpj = async (id, date) => {
 
 const ServiceAuthenticate = async (email, password) => {
   const resultadoDB = await ServiceUserIsValid(email, password);
-  console.log(!resultadoDB ? resultadoDB : email);
+  const res_create_credential = await ServiceCreateCredential(email);
+
   if (!resultadoDB) {
     return {
       success: false,
@@ -96,17 +101,36 @@ const ServiceAuthenticate = async (email, password) => {
       details: ['Invalid username or password'],
     };
   }
-
+  if (!res_create_credential) {
+    return {
+      success: false,
+      details: ['it was not possible to create the credential'],
+    };
+  }
   return {
     success: true,
     message: 'Successfully authenticated user',
-    data: await ServiceCreateCredential(email),
+    data: res_create_credential,
   };
+};
+
+const ServiceVerifyStatusProvider = async (id) => {
+  const result = await user.find({
+    _id: id,
+    kind: 'provider',
+    status: 'ANALYSIS',
+  });
+
+  if (result.length === 0) {
+    return false;
+  } else {
+    return true;
+  }
 };
 
 const ServiceUserIsValid = async (email, password) => {
   return (await user.findOne({
-    email,
+    email: email,
     password: cryptography.UtilCreateHash(password),
   }))
     ? true
@@ -115,10 +139,11 @@ const ServiceUserIsValid = async (email, password) => {
 
 module.exports = {
   ServiceAuthenticate,
+  ServiceVerifyStatusProvider,
   ServiceSearchTypeUserById,
   ServiceCreateCredential,
   ServiceVerifyCnpjExists,
-  ServiceVerifyEmailExists,
+  ServiceVerifyEmailBodyExists,
   ServiceVerifyFunctionalityProfile,
   ServiceUserIsValid,
   ServiceVerifyEmail,
