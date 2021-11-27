@@ -103,10 +103,12 @@ const ControllerChangeStatusProvider = async (req, res, next) => {
 };
 
 const ControllerSearchLikeProduct = async (req, res, next) => {
-  const { providerid, productid } = req.params;
+  const { providerid, like, alphabetical } = req.params;
+
   const resultService = await likeService.ServiceSearchLikeProviderProduct(
     providerid,
-    productid
+    like,
+    alphabetical
   );
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
@@ -117,7 +119,6 @@ const ControllerSearchLikeProduct = async (req, res, next) => {
 };
 
 const ControllerInsertLikeProduct = async (req, res, next) => {
-  const { params, user } = req;
   const { providerid, productid } = req.params;
   const resultService = await likeService.ServiceCreateLikeProviderProduct(
     providerid,
@@ -132,7 +133,7 @@ const ControllerInsertLikeProduct = async (req, res, next) => {
 };
 
 const ControllerDeleteLikeProduct = async (req, res, next) => {
-  const { user, params } = req;
+  const { params } = req;
   const resultService = await likeService.ServiceRemoveLikeProviderProduct(
     params.providerid,
     params.productid

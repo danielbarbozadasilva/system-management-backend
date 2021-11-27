@@ -4,7 +4,19 @@ const {
   toDTOListLikeProviderProduct,
 } = require('../mappers/mappers.client');
 
-const ServiceSearchLikeProviderProduct = async (provider_id) => {
+const ServiceSearchLikeProviderProduct = async (
+  provider_id,
+  filter_like,
+  filter_alphabetical
+) => {
+  let filter = {};
+
+  if (filter_alphabetical == undefined || filter_alphabetical == 'x') {
+    filter = { filter_like };
+  } else {
+    filter = { filter_like, filter_alphabetical };
+  }
+
   const likeDB = await like
     .find({
       provider: provider_id,
@@ -12,13 +24,16 @@ const ServiceSearchLikeProviderProduct = async (provider_id) => {
     .where('product')
     .ne(null)
     .populate('product')
-    .populate('provider');
+    .populate('provider')
+    .sort({ filter: 1 });
 
   const resultDB = await product
     .find({ provider: provider_id, product: likeDB.product })
     .populate('product')
     .populate('category')
-    .populate('provider');
+    .populate('provider')
+    .sort({ filter: 1 });
+
   if (resultDB == 0) {
     return {
       success: false,
@@ -123,7 +138,6 @@ const ServiceSearchLikeClientProvider = async (clientid) => {
     .find({ client: clientid })
     .where('provider')
     .ne(null);
-
   var result = resultLikeDB.map((item) => {
     return item.provider;
   });
@@ -216,11 +230,10 @@ const ServiceRemoveLikeClientProvider = async (providerid, clientid) => {
       details: 'The client informed does not exist!',
     };
   } else if (likeDB === null) {
-     return {
-       success: false,
-       details: 'like does not exist!',
-     };
-
+    return {
+      success: false,
+      details: 'like does not exist!',
+    };
   } else if (likeDB !== null) {
     const result_like = await Promise.all([like.deleteOne(likeDB)]);
     if (result_like) {

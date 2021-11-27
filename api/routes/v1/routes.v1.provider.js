@@ -190,7 +190,7 @@ module.exports = (router) => {
     providerController.ControllerChangeStatusProvider
   );
 
-  router.route('/provider/:providerid/like').get(
+  router.route('/provider/:providerid/like/filter/:like/:alphabetical').get(
     authorizationMiddleware('*'),
     middlewareValidateDTO('params', {
       providerid: joi
