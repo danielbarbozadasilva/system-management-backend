@@ -16,38 +16,38 @@ const toDTO = (model) => {
 };
 
 const toDTOListLikeProviderProduct = (model) => {
+  var product_number = 0;
+  var like_number = 0;
+
   return {
-    id: model._id,
-    product: {
-      id: model._id,
-      name: model.name,
-      description: model.description,
-      price: parseFloat(model.price).toLocaleString('pt-br', {
-        style: 'currency',
-        currency: 'BRL',
-      }),
-      image: fileUtils.UtilCreateAddressDownload('product', model.image.name),
-      category: {
-        id: model.category._id,
-        name: model.category.name,
-        description: model.category.description,
-        status: model.category.status,
+    provider: {
+      id: model.provider._id,
+      cnpj: model.provider.cnpj,
+      fantasy_name: model.provider.fantasy_name,
+      social_name: model.provider.social_name,
+      address: model.provider.address,
+      uf: model.provider.uf,
+      city: model.provider.city,
+      responsible: model.provider.responsible,
+      phone: model.provider.phone,
+      status: model.provider.status,
+      product: {
+        id: model.product._id,
+        name: model.product.name,
+        description: model.product.description,
+        price: parseFloat(model.product.price).toLocaleString('pt-br', {
+          style: 'currency',
+          currency: 'BRL',
+        }),
         image: fileUtils.UtilCreateAddressDownload(
-          'category',
-          model.category.image.name
+          'product',
+          model.product.image.name
         ),
+        product_number: ++product_number,
       },
-      provider: {
-        id: model.provider._id,
-        cnpj: model.provider.cnpj,
-        fantasy_name: model.provider.fantasy_name,
-        social_name: model.provider.social_name,
-        address: model.provider.address,
-        uf: model.provider.uf,
-        city: model.provider.city,
-        responsible: model.provider.responsible,
-        phone: model.provider.phone,
-        status: model.provider.status,
+      like: {
+        like_id: model._id,
+        like_number: ++like_number,
       },
     },
   };

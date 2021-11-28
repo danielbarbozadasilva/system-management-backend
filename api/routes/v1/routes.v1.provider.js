@@ -202,6 +202,12 @@ module.exports = (router) => {
           'string.empty': `"provider id" can not be empty`,
           'string.pattern.base': `"provider id" out of the expected format`,
         }),
+      like: joi.boolean().messages({
+        'boolean.pattern.base': `"like" out of the expected format`,
+      }),
+      alphabetical: joi.boolean().messages({
+        'boolean.pattern.base': `"alphabetical" out of the expected format`,
+      }),
     }),
     providerController.ControllerSearchLikeProduct
   );

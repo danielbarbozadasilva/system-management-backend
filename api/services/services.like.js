@@ -11,11 +11,21 @@ const ServiceSearchLikeProviderProduct = async (
 ) => {
   let filter = {};
 
-  if (filter_alphabetical == undefined || filter_alphabetical == 'x') {
-    filter = { filter_like };
-  } else {
-    filter = { filter_like, filter_alphabetical };
+  if (Boolean(filter_like) === true && Boolean(filter_alphabetical) === false) {
+    filter = { like: 1 };
+  } else if (
+    Boolean(filter_like) === false &&
+    Boolean(filter_alphabetical) === true
+  ) {
+    filter = { fantasy_name: 1 };
+  } else if (
+    Boolean(filter_like) === true &&
+    Boolean(filter_alphabetical) === true
+  ) {
+    filter = { like: 1, fantasy_name: 1 };
   }
+
+  console.log('filter: ' + JSON.stringify(filter));
 
   const likeDB = await like
     .find({
@@ -24,15 +34,16 @@ const ServiceSearchLikeProviderProduct = async (
     .where('product')
     .ne(null)
     .populate('product')
-    .populate('provider')
-    .sort({ filter: 1 });
+    .populate('provider');
 
-  const resultDB = await product
+  const resultDB = await like
     .find({ provider: provider_id, product: likeDB.product })
+    .where('product')
+    .ne(null)
     .populate('product')
-    .populate('category')
+    .populate('like')
     .populate('provider')
-    .sort({ filter: 1 });
+    .sort(filter);
 
   if (resultDB == 0) {
     return {
@@ -138,6 +149,7 @@ const ServiceSearchLikeClientProvider = async (clientid) => {
     .find({ client: clientid })
     .where('provider')
     .ne(null);
+
   var result = resultLikeDB.map((item) => {
     return item.provider;
   });
