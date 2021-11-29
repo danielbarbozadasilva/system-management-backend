@@ -4,58 +4,65 @@ const middlewareValidateDTO = require('../../utils/middlewares/middlewares.valid
 const authorizationMiddleware = require('../../utils/middlewares/middlewares.authorization');
 
 module.exports = (router) => {
-  router
-    .route('/provider')
-    .get(
-      authorizationMiddleware('*'),
-      providerController.ControllerListAllProviders
-    )
-    .post(
-      authorizationMiddleware('ADD_PROVIDER'),
-      middlewareValidateDTO('body', {
-        cnpj: joi.string().required().messages({
-          'any.required': `"cnpj" is a required field`,
-          'string.empty': `"cnpj" can not be empty`,
-        }),
-        fantasy_name: joi.string().required().messages({
-          'any.required': `"fantasy_name" is a required field`,
-          'string.empty': `"fantasy_name" can not be empty`,
-        }),
-        social_name: joi.string().required().messages({
-          'any.required': `"social_name" is a required field`,
-          'string.empty': `"social_name" can not be empty`,
-        }),
-        address: joi.string().required().messages({
-          'any.required': `"address" is a required field`,
-          'string.empty': `"address" can not be empty`,
-        }),
-        uf: joi.string().required().messages({
-          'any.required': `"uf" is a required field`,
-          'string.empty': `"uf" can not be empty`,
-        }),
-        city: joi.string().required().messages({
-          'any.required': `"city" is a required field`,
-          'string.empty': `"city" can not be empty`,
-        }),
-        responsible: joi.string().required().messages({
-          'any.required': `"responsible" is a required field`,
-          'string.empty': `"responsible" can not be empty`,
-        }),
-        phone: joi.string().required().messages({
-          'any.required': `"phone" is a required field`,
-          'string.empty': `"phone" can not be empty`,
-        }),
-        email: joi.string().email().required().messages({
-          'any.required': `"email" is a required field`,
-          'string.empty': `"email" can not be empty`,
-        }),
-        password: joi.string().required().messages({
-          'any.required': `"password" is a required field`,
-          'string.empty': `"password" can not be empty`,
-        }),
+  router.route('/provider/filter/:like/:alphabetical').get(
+    authorizationMiddleware('*'),
+    middlewareValidateDTO('body', {
+      like: joi.boolean().messages({
+        'boolean.empty': `"like" can not be empty`,
       }),
-      providerController.ControllerInsertProvider
-    );
+      alphabetical: joi.boolean().messages({
+        'boolean.empty': `"alphabetical" can not be empty`,
+      }),
+    }),
+    providerController.ControllerListAllProviders
+  );
+
+  router.route('/provider').post(
+    authorizationMiddleware('ADD_PROVIDER'),
+    middlewareValidateDTO('body', {
+      cnpj: joi.string().required().messages({
+        'any.required': `"cnpj" is a required field`,
+        'string.empty': `"cnpj" can not be empty`,
+      }),
+      fantasy_name: joi.string().required().messages({
+        'any.required': `"fantasy_name" is a required field`,
+        'string.empty': `"fantasy_name" can not be empty`,
+      }),
+      social_name: joi.string().required().messages({
+        'any.required': `"social_name" is a required field`,
+        'string.empty': `"social_name" can not be empty`,
+      }),
+      address: joi.string().required().messages({
+        'any.required': `"address" is a required field`,
+        'string.empty': `"address" can not be empty`,
+      }),
+      uf: joi.string().required().messages({
+        'any.required': `"uf" is a required field`,
+        'string.empty': `"uf" can not be empty`,
+      }),
+      city: joi.string().required().messages({
+        'any.required': `"city" is a required field`,
+        'string.empty': `"city" can not be empty`,
+      }),
+      responsible: joi.string().required().messages({
+        'any.required': `"responsible" is a required field`,
+        'string.empty': `"responsible" can not be empty`,
+      }),
+      phone: joi.string().required().messages({
+        'any.required': `"phone" is a required field`,
+        'string.empty': `"phone" can not be empty`,
+      }),
+      email: joi.string().email().required().messages({
+        'any.required': `"email" is a required field`,
+        'string.empty': `"email" can not be empty`,
+      }),
+      password: joi.string().required().messages({
+        'any.required': `"password" is a required field`,
+        'string.empty': `"password" can not be empty`,
+      }),
+    }),
+    providerController.ControllerInsertProvider
+  );
 
   router
     .route('/provider/filter/:uf/:city')
@@ -190,7 +197,7 @@ module.exports = (router) => {
     providerController.ControllerChangeStatusProvider
   );
 
-  router.route('/provider/:providerid/like/filter/:like/:alphabetical').get(
+  router.route('/provider/:providerid/like').get(
     authorizationMiddleware('*'),
     middlewareValidateDTO('params', {
       providerid: joi
@@ -202,12 +209,6 @@ module.exports = (router) => {
           'string.empty': `"provider id" can not be empty`,
           'string.pattern.base': `"provider id" out of the expected format`,
         }),
-      like: joi.boolean().messages({
-        'boolean.pattern.base': `"like" out of the expected format`,
-      }),
-      alphabetical: joi.boolean().messages({
-        'boolean.pattern.base': `"alphabetical" out of the expected format`,
-      }),
     }),
     providerController.ControllerSearchLikeProduct
   );

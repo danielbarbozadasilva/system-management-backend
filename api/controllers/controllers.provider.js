@@ -2,7 +2,12 @@ const providerService = require('../services/services.provider');
 const likeService = require('../services/services.like');
 
 const ControllerListAllProviders = async (req, res, next) => {
-  const resultService = await providerService.ServiceListAllProvider();
+  const { like, alphabetical } = req.params;
+
+  const resultService = await providerService.ServiceListAllProvider(
+    like,
+    alphabetical
+  );
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }
@@ -103,12 +108,10 @@ const ControllerChangeStatusProvider = async (req, res, next) => {
 };
 
 const ControllerSearchLikeProduct = async (req, res, next) => {
-  const { providerid, like, alphabetical } = req.params;
+  const { providerid } = req.params;
 
   const resultService = await likeService.ServiceSearchLikeProviderProduct(
-    providerid,
-    like,
-    alphabetical
+    providerid
   );
   const code = resultService.success ? 200 : 400;
   const message = resultService.success

@@ -16,9 +16,6 @@ const toDTO = (model) => {
 };
 
 const toDTOListLikeProviderProduct = (model) => {
-  var product_number = 0;
-  var like_number = 0;
-
   return {
     provider: {
       id: model.provider._id,
@@ -43,11 +40,9 @@ const toDTOListLikeProviderProduct = (model) => {
           'product',
           model.product.image.name
         ),
-        product_number: ++product_number,
       },
       like: {
         like_id: model._id,
-        like_number: ++like_number,
       },
     },
   };

@@ -5,16 +5,49 @@ const { UtilCreateHash } = require('../utils/utils.cryptography');
 const { toItemListDTO, toDTO } = require('../mappers/mappers.provider');
 const { EmailEnable } = require('../utils/utils.email.message.enable');
 const { EmailDisable } = require('../utils/utils.email.message.disable');
+const { toDTOListLikeProviderProduct } = require('../mappers/mappers.client');
 
-const ServiceListAllProvider = async () => {
-  const resultDB = await provider.find({}).sort({ fantasy_name: 1 });
-  return {
-    success: true,
-    message: 'Operation performed successfully',
-    data: resultDB.map((item) => {
-      return toDTO(item);
-    }),
-  };
+const ServiceListAllProvider = async (filter_like, filter_alphabetical) => {
+  let filter = {};
+
+  if (Boolean(filter_like) === true && Boolean(filter_alphabetical) === false) {
+    filter = { like: 1 };
+  } else if (
+    Boolean(filter_like) === false &&
+    Boolean(filter_alphabetical) === true
+  ) {
+    filter = { fantasy_name: 1 };
+  } else if (
+    Boolean(filter_like) === true &&
+    Boolean(filter_alphabetical) === true
+  ) {
+    filter = { like: 1, fantasy_name: 1 };
+  }
+
+  console.log('filter: ' + JSON.stringify(filter));
+
+  const resultDB = await like
+    .find({})
+    .where('product')
+    .ne(null)
+    .populate('product')
+    .populate('provider')
+    .sort(filter);
+
+  if (resultDB == 0) {
+    return {
+      success: false,
+      details: 'No likes found!',
+    };
+  } else if (resultDB !== 0) {
+    return {
+      success: true,
+      message: 'Operation performed successfully!',
+      data: resultDB.map((item) => {
+        return toDTOListLikeProviderProduct(item);
+      }),
+    };
+  }
 };
 
 const ServiceListProviderById = async (id) => {

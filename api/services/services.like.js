@@ -38,10 +38,7 @@ const ServiceSearchLikeProviderProduct = async (
 
   const resultDB = await like
     .find({ provider: provider_id, product: likeDB.product })
-    .where('product')
-    .ne(null)
     .populate('product')
-    .populate('like')
     .populate('provider')
     .sort(filter);
 
@@ -54,7 +51,7 @@ const ServiceSearchLikeProviderProduct = async (
     return {
       success: true,
       message: 'Operation performed successfully!',
-      data: resultDB.map((item) => {
+      data: likeDB.map((item) => {
         return toDTOListLikeProviderProduct(item);
       }),
     };

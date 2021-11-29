@@ -12,28 +12,28 @@ module.exports = (router) => {
       productController.ControllerListAllProducts
     );
 
+  router.route('/product/:productid').get(
+    authorizationMiddleware('*'),
+    middlewareValidateDTO('params', {
+      productid: joi
+        .string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .messages({
+          'any.required': `"provider id" is a required field`,
+          'string.empty': `"provider id" can not be empty`,
+          'string.pattern.base': `"provider id" out of the expected format`,
+        }),
+    }),
+    productController.ControllerListProductById
+  );
   router
-    .route('/product/:productid')
-    .get(
-      authorizationMiddleware('*'),
-      middlewareValidateDTO('params', {
-        productid: joi
-          .string()
-          .regex(/^[0-9a-fA-F]{24}$/)
-          .required()
-          .messages({
-            'any.required': `"provider id" is a required field`,
-            'string.empty': `"provider id" can not be empty`,
-            'string.pattern.base': `"provider id" out of the expected format`,
-          }),
-      }),
-      productController.ControllerListProductById
-    )
+    .route('/provider/:providerid/product')
     .post(
       authorizationMiddleware('CREATE_PRODUCT'),
       middlewareFileUploadMiddleware('products'),
       middlewareValidateDTO('params', {
-        productid: joi
+        providerid: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
