@@ -6,7 +6,7 @@ const ControllerListAllProviders = async (req, res, next) => {
 
   const resultService = await providerService.ServiceListAllProvider(
     like,
-    alphabetical
+    alphabetical,
   );
   const code = resultService.success ? 200 : 400;
   const message = resultService.success

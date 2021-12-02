@@ -89,7 +89,7 @@ module.exports = (router) => {
       providerController.ControllerListProviderById
     )
     .delete(
-      authorizationMiddleware('DELETE_PROVIDER'),
+      authorizationMiddleware('REMOVE_PROVIDER'),
       middlewareValidateDTO('params', {
         providerid: joi
           .string()
@@ -178,7 +178,7 @@ module.exports = (router) => {
   );
 
   router.route('/provider/:providerid/:status').put(
-    authorizationMiddleware('CHANGE_PROVIDER'),
+    authorizationMiddleware('CHANGE_STATUS_PROVIDER'),
     middlewareValidateDTO('params', {
       providerid: joi
         .string()
@@ -240,7 +240,7 @@ module.exports = (router) => {
       providerController.ControllerInsertLikeProduct
     )
     .delete(
-      authorizationMiddleware('*'),
+      authorizationMiddleware('REMOVE_PROVIDER'),
       middlewareValidateDTO('params', {
         providerid: joi
           .string()

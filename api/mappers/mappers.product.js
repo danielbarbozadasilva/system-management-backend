@@ -16,7 +16,7 @@ const toDTO = (model) => {
   };
 };
 
-const toItemListaDTO = (model) => {
+const toItemListDTO = (model) => {
   const { _id, name, description, price, provider, category, image } = model;
   const {
     id,
@@ -57,6 +57,6 @@ const toItemListaDTO = (model) => {
 };
 
 module.exports = {
-  toItemListaDTO,
+  toItemListDTO,
   toDTO,
 };

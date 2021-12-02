@@ -8,31 +8,56 @@ const { EmailDisable } = require('../utils/utils.email.message.disable');
 const { toDTOListLikeProviderProduct } = require('../mappers/mappers.client');
 
 const ServiceListAllProvider = async (filter_like, filter_alphabetical) => {
-  let filter = {};
+  // let filter = {};
 
-  if (Boolean(filter_like) === true && Boolean(filter_alphabetical) === false) {
-    filter = { like: 1 };
-  } else if (
-    Boolean(filter_like) === false &&
-    Boolean(filter_alphabetical) === true
-  ) {
-    filter = { fantasy_name: 1 };
-  } else if (
-    Boolean(filter_like) === true &&
-    Boolean(filter_alphabetical) === true
-  ) {
-    filter = { like: 1, fantasy_name: 1 };
-  }
+  // if (Boolean(filter_like) === true && Boolean(filter_alphabetical) === false) {
+  //   filter = { like: 1 };
+  // } else if (
+  //   Boolean(filter_like) === false &&
+  //   Boolean(filter_alphabetical) === true
+  // ) {
+  //   filter = { fantasy_name: 1 };
+  // } else if (
+  //   Boolean(filter_like) === true &&
+  //   Boolean(filter_alphabetical) === true
+  // ) {
+  //   filter = { like: 1, fantasy_name: 1 };
+  // }
 
-  console.log('filter: ' + JSON.stringify(filter));
+  // console.log('filter: ' + JSON.stringify(filter));
 
-  const resultDB = await like
-    .find({})
-    .where('product')
-    .ne(null)
-    .populate('product')
-    .populate('provider')
-    .sort(filter);
+  // const resultDB = await like
+  //   .find({})
+  //   .where('product')
+  //   .ne(null)
+  //   .populate({
+  //     path: 'like',
+  //     model: 'like',
+  //   })
+  //   .populate({
+  //     path: 'product',
+  //     model: 'product',
+  //   })
+  //   .populate({
+  //     path: 'provider',
+  //     model: 'provider',
+  //   })
+  //   .sort({ _id: -1 }); // ordenando por qtd like
+
+  // ESTUDAR AGREGATE - único modo
+
+  const resultDB = await like.aggregate([
+    {
+      $lookup: {
+        from: 'like',
+        localField: '_id',
+        foreignField: 'provider',
+        as: 'provider',
+      },
+    },
+  ]);
+
+  // ESTUDAR AGREGATE - único modo
 
   if (resultDB == 0) {
     return {
@@ -43,9 +68,7 @@ const ServiceListAllProvider = async (filter_like, filter_alphabetical) => {
     return {
       success: true,
       message: 'Operation performed successfully!',
-      data: resultDB.map((item) => {
-        return toDTOListLikeProviderProduct(item);
-      }),
+      data: resultDB,
     };
   }
 };
@@ -74,7 +97,7 @@ const ServiceListProductsProvider = async (providerid) => {
     .find({ provider: providerid })
     .populate('provider');
 
-  if (!resultDB) {
+  if (!resultDB.length > 0) {
     return {
       success: false,
       message: 'operation cannot be performed',
@@ -140,7 +163,7 @@ const ServiceCreateProvider = async (model) => {
       details: ['There is already a registered provider for the entered cnpj'],
     };
 
-  if (await serviceUserProvider.ServiceVerifyEmailExists(email))
+  if (await serviceUserProvider.ServiceVerifyEmailBodyExists(email))
     return {
       success: false,
       message: 'operation cannot be performed',

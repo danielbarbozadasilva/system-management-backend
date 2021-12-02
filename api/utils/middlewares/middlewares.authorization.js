@@ -32,10 +32,12 @@ const MiddlewareAuthorization = (rota = '*') => {
             );
           }
 
-          if (id !== provider_id) {
-            return Promise.reject(
-              new ErrorUserNotAllowed('Unauthorized User!')
-            );
+          if (typeUser == 2 || typeUser == 3) {
+            if (id !== provider_id) {
+              return Promise.reject(
+                new ErrorUserNotAllowed('Unauthorized User!')
+              );
+            }
           }
 
           if (provider_status_kind) {

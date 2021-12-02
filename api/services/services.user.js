@@ -5,11 +5,11 @@ const userMapper = require('../mappers/mappers.user');
 const profile = [
   {
     id: 1,
-    description: 'ADMIN',
+    description: 'admin',
     functionality: [
       'ADD_PROVIDER',
       'UPDATE_PROVIDER',
-      'DELETE_PROVIDER',
+      'REMOVE_PROVIDER',
       'CHANGE_STATUS_PROVIDER',
       'CREATE_CATEGORY',
       'UPDATE_CATEGORY',
@@ -18,7 +18,7 @@ const profile = [
   },
   {
     id: 2,
-    description: 'PROVIDER',
+    description: 'provider',
     functionality: [
       'SEARCH_PRODUCT',
       'CREATE_PRODUCT',
@@ -30,7 +30,7 @@ const profile = [
   },
   {
     id: 3,
-    description: 'CLIENT',
+    description: 'client',
     functionality: ['LIKE_CREATE', 'LIKE_REMOVE'],
   },
 ];
@@ -57,10 +57,12 @@ const ServiceCreateCredential = async (email) => {
 
 const ServiceVerifyFunctionalityProfile = async (typeUser, test) => {
   const profile = ServiceSearchTypeUserById(typeUser);
-  if (profile?.functionality?.includes(test) && profile) {
-    return true;
-  } else {
+  if (
+    profile?.functionality?.includes(test) == true && profile.id ? true : false
+  ) {
     return false;
+  } else {
+    return true;
   }
 };
 
@@ -92,8 +94,6 @@ const ServiceVerifyCnpj = async (id, data) => {
 
 const ServiceAuthenticate = async (email, password) => {
   const resultadoDB = await ServiceUserIsValid(email, password);
-  const res_create_credential = await ServiceCreateCredential(email);
-
   if (!resultadoDB) {
     return {
       success: false,
@@ -101,6 +101,7 @@ const ServiceAuthenticate = async (email, password) => {
       details: ['Invalid username or password'],
     };
   }
+  const res_create_credential = await ServiceCreateCredential(email);
   if (!res_create_credential) {
     return {
       success: false,

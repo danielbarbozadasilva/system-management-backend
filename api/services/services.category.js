@@ -4,13 +4,15 @@ const fileUtils = require('../utils/utils.file');
 
 const ServiceSearchAllCategory = async () => {
   const categoryDB = await category.find({}).sort({ description: 1 });
-  if (categoryDB) {
+  if (categoryDB.length > 0) {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: categoryDB.map((item) => {
-        return categoryMapper.toDTO(item);
-      }),
+      data: [
+        categoryDB.map((item) => {
+          return categoryMapper.toDTO(item);
+        }),
+      ],
     };
   } else {
     return {
@@ -21,10 +23,10 @@ const ServiceSearchAllCategory = async () => {
 };
 
 const ServiceSearchCategoryById = async (category_id) => {
-  const categoryDB = await category.findById({
+  const categoryDB = await category.find({
     _id: Object(category_id),
   });
-  if (categoryDB) {
+  if (categoryDB.length > 0) {
     return {
       success: true,
       message: 'Operation performed successfully',

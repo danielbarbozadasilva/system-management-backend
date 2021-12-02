@@ -40,23 +40,23 @@ const ServiceListProductById = async (product_id) => {
   }
 };
 
-const ServiceCreateProduct = async (body) => {
-  const [providerDB, categoryDB, productDB, moveFile] = await Promise.all([
-    provider.findById({ _id: providerid }),
-    category.findById({ _id: body.category }),
+const ServiceCreateProduct = async (body, providerid) => {
+  const [providerDB, categoryDB, moveFile, productDB] = await Promise.all([
+    provider.findById({ _id: Object(providerid) }),
+    category.findById({ _id: Object(body.category) }),
+    fileUtils.UtilMove(body.image.old_path, body.image.new_path),
     product.create({
       name: body.name,
       description: body.description,
       price: body.price,
       category: body.category,
-      provider: body.providerid,
+      provider: providerid,
       image: {
-        sourceFile: body.image.sourceFile,
+        origin: body.image.origin,
         name: body.image.newName,
         type: body.image.type,
       },
     }),
-    fileUtils.UtilMove(model.image.sourceFile, model.image.newName),
   ]);
 
   if (!providerDB) {
@@ -77,14 +77,13 @@ const ServiceCreateProduct = async (body) => {
       message: 'Operation cannot be performed',
       details: ['It is not possible to insert the product'],
     };
-  } else if (!moveFile) {
+  } else if (moveFile !== undefined) {
     return {
       success: false,
       message: 'Operation cannot be performed',
       details: ['It is not possible to move the product'],
     };
   }
-
   return {
     success: true,
     message: 'operation performed successfully',
@@ -185,18 +184,18 @@ const ServiceDeleteProduct = async ({ providerId, productId, userId }) => {
   ]);
 
   const { image } = productDB;
-  fileUtils.remove('products', image.name);
+  fileUtils.UtilRemove('products', image.name);
 
   let categoryArray = await category.find({ products: productId });
 
   await Promise.all(
     categoryArray.map(async (item) => {
-      let categoryproduct = item.products;
-      var index = categoryproduct.findIndex((item) => item == productId);
-      categoryproduct.splice(index, 1);
+      let category_product = item.products;
+      var index = category_product.findIndex((item) => item == productId);
+      category_product.splice(index, 1);
       await category.updateOne(
         { _id: item._id },
-        { products: categoryproduct }
+        { products: category_product }
       );
     })
   );
@@ -232,19 +231,27 @@ const ServiceUpdateProduct = async (productId, model) => {
   if (typeof model.image === 'object') {
     fileUtils.remove('products', productDB.image.name);
     fileUtils.move(model.image.old_source, model.image.new_source);
-    productDB.image = {
-      sourceFile: model.image.sourceFile,
+
+    (productDB.image = {
+      origin: model.image.origin,
       name: model.image.newName,
       type: model.image.type,
+    })
+    
+    const result = await productDB.save();
+    if (!result) {
+      return {
+        success: false,
+        message: 'could not perform the operation',
+        details: ['The product id does not exist.'],
+      };
+    }
+    return {
+      success: true,
+      message: 'Operation performed successfully!',
+      data: productMapper.toItemListDTO(productDB),
     };
   }
-
-  await productDB.save();
-  return {
-    success: true,
-    message: 'Operation performed successfully!',
-    data: productMapper.toItemListaDTO(productDB),
-  };
 };
 
 module.exports = {

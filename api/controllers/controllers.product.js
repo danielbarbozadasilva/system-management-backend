@@ -37,10 +37,10 @@ const ControllerListProductByProvider = async (req, res, next) => {
 const ControllerInsertProduct = async (req, res, next) => {
   const { body } = req;
   const { providerid } = req.params;
-  const resultService = await productService.ServiceCreateProduct({
-    ...body,
-    providerid,
-  });
+  const resultService = await productService.ServiceCreateProduct(
+    body,
+    providerid
+  );
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }

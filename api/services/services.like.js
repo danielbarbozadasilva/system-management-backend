@@ -4,29 +4,7 @@ const {
   toDTOListLikeProviderProduct,
 } = require('../mappers/mappers.client');
 
-const ServiceSearchLikeProviderProduct = async (
-  provider_id,
-  filter_like,
-  filter_alphabetical
-) => {
-  let filter = {};
-
-  if (Boolean(filter_like) === true && Boolean(filter_alphabetical) === false) {
-    filter = { like: 1 };
-  } else if (
-    Boolean(filter_like) === false &&
-    Boolean(filter_alphabetical) === true
-  ) {
-    filter = { fantasy_name: 1 };
-  } else if (
-    Boolean(filter_like) === true &&
-    Boolean(filter_alphabetical) === true
-  ) {
-    filter = { like: 1, fantasy_name: 1 };
-  }
-
-  console.log('filter: ' + JSON.stringify(filter));
-
+const ServiceSearchLikeProviderProduct = async (provider_id) => {
   const likeDB = await like
     .find({
       provider: provider_id,
@@ -36,18 +14,12 @@ const ServiceSearchLikeProviderProduct = async (
     .populate('product')
     .populate('provider');
 
-  const resultDB = await like
-    .find({ provider: provider_id, product: likeDB.product })
-    .populate('product')
-    .populate('provider')
-    .sort(filter);
-
-  if (resultDB == 0) {
+  if (likeDB == 0) {
     return {
       success: false,
       details: 'No likes found!',
     };
-  } else if (resultDB !== 0) {
+  } else if (likeDB !== 0) {
     return {
       success: true,
       message: 'Operation performed successfully!',
@@ -62,7 +34,7 @@ const ServiceCreateLikeProviderProduct = async (provider_id, product_id) => {
   const [providerDB, productDB, likeDB] = await Promise.all([
     provider.findById(provider_id),
     product.findById(product_id),
-    like.findOne({ provider: provider_id, product: product_id }),
+    like.find({ provider: provider_id, product: product_id }),
   ]);
 
   if (!providerDB) {
@@ -76,6 +48,7 @@ const ServiceCreateLikeProviderProduct = async (provider_id, product_id) => {
       details: 'The product informed does not exist!',
     };
   } else if (likeDB) {
+    console.log(likeDB);
     return {
       success: false,
       details: 'The provider has already liked the product!',
@@ -262,10 +235,10 @@ const ServiceRemoveLikeClientProvider = async (providerid, clientid) => {
 };
 
 module.exports = {
-  ServiceSearchLikeClientProvider,
-  ServiceCreateLikeClientProvider,
-  ServiceRemoveLikeClientProvider,
   ServiceSearchLikeProviderProduct,
   ServiceCreateLikeProviderProduct,
   ServiceRemoveLikeProviderProduct,
+  ServiceSearchLikeClientProvider,
+  ServiceCreateLikeClientProvider,
+  ServiceRemoveLikeClientProvider,
 };
