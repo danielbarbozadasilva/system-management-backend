@@ -7,29 +7,14 @@ const { EmailEnable } = require('../utils/utils.email.message.enable');
 const { EmailDisable } = require('../utils/utils.email.message.disable');
 const { toDTOListLikeProviderProduct } = require('../mappers/mappers.client');
 
-const ServiceListAllProvider = async (filter_like, filter_alphabetical) => {
-  // let filter = {};
+const ServiceListAllProvider = async (filter_order) => {
 
-  // if (Boolean(filter_like) === true && Boolean(filter_alphabetical) === false) {
-  //   filter = { like: 1 };
-  // } else if (
-  //   Boolean(filter_like) === false &&
-  //   Boolean(filter_alphabetical) === true
-  // ) {
-  //   filter = { fantasy_name: 1 };
-  // } else if (
-  //   Boolean(filter_like) === true &&
-  //   Boolean(filter_alphabetical) === true
-  // ) {
-  //   filter = { like: 1, fantasy_name: 1 };
-  // }
-
-  // console.log('filter: ' + JSON.stringify(filter));
+  console.log('filter_order: ' + JSON.stringify(filter_order));
+  console.log('filter: ' + JSON.stringify(filter));
 
   // const resultDB = await like
   //   .find({})
-  //   .where('product')
-  //   .ne(null)
+
   //   .populate({
   //     path: 'like',
   //     model: 'like',
@@ -44,27 +29,36 @@ const ServiceListAllProvider = async (filter_like, filter_alphabetical) => {
   //   })
   //   .sort({ _id: -1 }); // ordenando por qtd like
 
-  // ESTUDAR AGREGATE - único modo
-
-  const resultDB = await like.aggregate([
+  const resultDB = await provider.aggregate([
     {
       $lookup: {
-        from: 'like',
+        from: like.collection.name,
         localField: '_id',
         foreignField: 'provider',
-        as: 'provider',
+        as: 'likes',
       },
     },
+    { $unwind: { path: '$likes', preserveNullAndEmptyArrays: true } },
+
+    { $match: { 'likes.product': { $ne: null } } },
+    {
+      $group: {
+        _id: '$provider',
+        data: { $push: '$$ROOT' },
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { fantasy_name: 1 } },
+    // { $sort: 'provider.fantasy_name' },
   ]);
+  console.log(JSON.stringify(resultDB));
 
-  // ESTUDAR AGREGATE - único modo
-
-  if (resultDB == 0) {
+  if (resultDB.length < 1) {
     return {
       success: false,
       details: 'No likes found!',
     };
-  } else if (resultDB !== 0) {
+  } else if (resultDB.length > 0) {
     return {
       success: true,
       message: 'Operation performed successfully!',

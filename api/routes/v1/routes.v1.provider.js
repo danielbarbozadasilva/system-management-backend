@@ -8,9 +8,11 @@ module.exports = (router) => {
     authorizationMiddleware('*'),
     middlewareValidateDTO('body', {
       like: joi.boolean().messages({
+        'any.required': `"like" is a required field`,
         'boolean.empty': `"like" can not be empty`,
       }),
       alphabetical: joi.boolean().messages({
+        'any.required': `"alphabetical" is a required field`,
         'boolean.empty': `"alphabetical" can not be empty`,
       }),
     }),

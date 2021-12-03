@@ -4,10 +4,10 @@ const likeService = require('../services/services.like');
 const ControllerListAllProviders = async (req, res, next) => {
   const { like, alphabetical } = req.params;
 
-  const resultService = await providerService.ServiceListAllProvider(
+  const resultService = await providerService.ServiceListAllProvider({
     like,
     alphabetical,
-  );
+  });
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }
