@@ -119,27 +119,21 @@ const ServiceRemoveLikeProviderProduct = async (provider_id, product_id) => {
 
 const ServiceSearchLikeClientProvider = async (client_id) => {
   const resultLikeDB = await client.aggregate([
+    // {
+    //   $lookup: {
+    //     from: like.collection.name,
+    //     localField: 'client',
+    //     foreignField: '_id',
+    //     as: 'likes2',
+    //   },
+    // },
     {
       $lookup: {
         from: like.collection.name,
-        localField: 'client',
-        foreignField: '_id',
+        localField: '_id',
+        foreignField: 'client',
         as: 'likes',
       },
-    },
-    {
-      $unwind: '$like.collection.name',
-    },
-    {
-      $lookup: {
-        from: provider.collection.name,
-        localField: '_id',
-        foreignField: 'provider',
-        as: 'likes2',
-      },
-    },
-    {
-      $unwind: '$provider.collection.name',
     },
   ]);
 
@@ -164,7 +158,6 @@ const ServiceCreateLikeClientProvider = async (provider_id, client_id) => {
     like.findOne({ provider: Object(provider_id), client: client_id }),
     like.find({ provider: provider_id }).where('client').ne(null),
   ]);
-  console.log(likeDB);
 
   if (!providerDB) {
     return {
