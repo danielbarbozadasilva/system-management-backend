@@ -49,21 +49,21 @@ const toDTOListLikeProviderProduct = (model) => {
 };
 
 const toDTOListLikeClientProvider = (model) => {
-  const { _id, client } = model;
+  const { client, provider } = model;
 
   return {
     id: _id,
     provider: {
-      id: model.provider._id,
-      cnpj: model.provider.cnpj,
-      fantasy_name: model.provider.fantasy_name,
-      social_name: model.provider.social_name,
-      address: model.provider.address,
-      uf: model.provider.uf,
-      city: model.provider.city,
-      responsible: model.provider.responsible,
-      phone: model.provider.phone,
-      status: model.provider.status,
+      id: provider._id,
+      cnpj: provider.cnpj,
+      fantasy_name: provider.fantasy_name,
+      social_name: provider.social_name,
+      address: provider.address,
+      uf: provider.uf,
+      city: provider.city,
+      responsible: provider.responsible,
+      phone: provider.phone,
+      status: provider.status,
     },
     client: {
       id: client._id,

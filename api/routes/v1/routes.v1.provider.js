@@ -7,13 +7,13 @@ module.exports = (router) => {
   router.route('/provider/filter/:like/:alphabetical').get(
     authorizationMiddleware('*'),
     middlewareValidateDTO('body', {
-      like: joi.boolean().messages({
+      like: joi.number().valid('1', '-1').messages({
         'any.required': `"like" is a required field`,
-        'boolean.empty': `"like" can not be empty`,
+        'number.empty': `"like" can not be empty`,
       }),
-      alphabetical: joi.boolean().messages({
+      alphabetical: joi.number().valid('1', '-1').messages({
         'any.required': `"alphabetical" is a required field`,
-        'boolean.empty': `"alphabetical" can not be empty`,
+        'number.empty': `"alphabetical" can not be empty`,
       }),
     }),
     providerController.ControllerListAllProviders
@@ -22,10 +22,14 @@ module.exports = (router) => {
   router.route('/provider').post(
     authorizationMiddleware('ADD_PROVIDER'),
     middlewareValidateDTO('body', {
-      cnpj: joi.string().required().messages({
-        'any.required': `"cnpj" is a required field`,
-        'string.empty': `"cnpj" can not be empty`,
-      }),
+      cnpj: joi
+        .string()
+        .regex(/^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/)
+        .required()
+        .messages({
+          'any.required': `"cnpj" is a required field`,
+          'string.empty': `"cnpj" can not be empty`,
+        }),
       fantasy_name: joi.string().required().messages({
         'any.required': `"fantasy_name" is a required field`,
         'string.empty': `"fantasy_name" can not be empty`,
@@ -218,7 +222,7 @@ module.exports = (router) => {
   router
     .route('/provider/:providerid/product/:productid/like')
     .post(
-      authorizationMiddleware('*'),
+      authorizationMiddleware('CREATE_LIKE_PRODUCT'),
       middlewareValidateDTO('params', {
         providerid: joi
           .string()
@@ -242,7 +246,7 @@ module.exports = (router) => {
       providerController.ControllerInsertLikeProduct
     )
     .delete(
-      authorizationMiddleware('REMOVE_PROVIDER'),
+      authorizationMiddleware('REMOVE_LIKE_PRODUCT'),
       middlewareValidateDTO('params', {
         providerid: joi
           .string()

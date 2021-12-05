@@ -1,4 +1,4 @@
-const { ServiceVerifyEmailExists } = require('./services.user');
+const { ServiceVerifyEmailBodyExists } = require('./services.user');
 const { client } = require('../models/models.index');
 const { toDTO } = require('../mappers/mappers.client');
 const { UtilCreateHash } = require('../utils/utils.cryptography');
@@ -40,8 +40,18 @@ const ServiceSearchById = async (clientid) => {
 };
 
 const ServiceCreate = async (model) => {
-  const { email, password, ...rest } = model;
-  if (await ServiceVerifyEmailExists(email))
+  const {
+    first_name,
+    last_name,
+    birth_date,
+    phone,
+    uf,
+    city,
+    email,
+    password,
+    status,
+  } = model;
+  if (!(await ServiceVerifyEmailBodyExists(email)))
     return {
       success: false,
       message: 'Operation cannot be performed',
@@ -49,10 +59,15 @@ const ServiceCreate = async (model) => {
     };
 
   const new_client = await client.create({
+    first_name,
+    last_name,
+    birth_date,
+    phone,
+    uf,
+    city,
     email,
-    ...rest,
     password: UtilCreateHash(password),
-    status: 'Enable',
+    status: 'ENABLE',
   });
   if (new_client) {
     return {
@@ -78,6 +93,13 @@ const ServiceUpdateClient = async (client_id, body) => {
       success: false,
       message: 'could not perform the operation',
       details: ["client id doesn't exist."],
+    };
+  }
+  if (!await ServiceVerifyEmailBodyExists(body.email)) {
+    return {
+      success: false,
+      message: 'Operation cannot be performed',
+      details: ['There is already a registered user for the network email'],
     };
   }
 

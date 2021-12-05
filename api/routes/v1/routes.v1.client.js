@@ -51,56 +51,55 @@ module.exports = (router) => {
       }),
       clientController.ControllerDeleteClients
     ),
+    router
+      .route('/client')
+      .get(
+        authorizationMiddleware('*'),
+        clientController.ControllerListAllClients
+      )
 
-  router
-    .route('/client')
-    .get(
-      authorizationMiddleware('*'),
-      clientController.ControllerListAllClients
-    )
-
-    .post(
-      authorizationMiddleware('*'),
-      middlewareValidateDTO('body', {
-        first_name: joi.string().required().messages({
-          'any.required': `"first_name" is a required field`,
-          'string.empty': `"first_name" can not be empty`,
+      .post(
+        authorizationMiddleware('*'),
+        middlewareValidateDTO('body', {
+          first_name: joi.string().required().messages({
+            'any.required': `"first_name" is a required field`,
+            'string.empty': `"first_name" can not be empty`,
+          }),
+          last_name: joi.string().required().messages({
+            'any.required': `"last_name" is a required field`,
+            'string.empty': `"last_name" can not be empty`,
+          }),
+          birth_date: joi.string().required().messages({
+            'any.required': `"birth_date" is a required field`,
+            'string.empty': `"birth_date" can not be empty`,
+          }),
+          uf: joi.string().required().messages({
+            'any.required': `"uf" is a required field`,
+            'string.empty': `"uf" can not be empty`,
+          }),
+          city: joi.string().required().messages({
+            'any.required': `"city" is a required field`,
+            'string.empty': `"city" can not be empty`,
+          }),
+          status: joi.string().required().messages({
+            'any.required': `"status" is a required field`,
+            'string.empty': `"status" can not be empty`,
+          }),
+          phone: joi.string().required().messages({
+            'any.required': `"phone" is a required field`,
+            'string.empty': `"phone" can not be empty`,
+          }),
+          email: joi.string().email().required().messages({
+            'any.required': `"email" is a required field`,
+            'string.empty': `"email" can not be empty`,
+          }),
+          password: joi.string().required().messages({
+            'any.required': `"password" is a required field`,
+            'string.empty': `"password" can not be empty`,
+          }),
         }),
-        last_name: joi.string().required().messages({
-          'any.required': `"last_name" is a required field`,
-          'string.empty': `"last_name" can not be empty`,
-        }),
-        birth_date: joi.string().required().messages({
-          'any.required': `"birth_date" is a required field`,
-          'string.empty': `"birth_date" can not be empty`,
-        }),
-        uf: joi.string().required().messages({
-          'any.required': `"uf" is a required field`,
-          'string.empty': `"uf" can not be empty`,
-        }),
-        city: joi.string().required().messages({
-          'any.required': `"city" is a required field`,
-          'string.empty': `"city" can not be empty`,
-        }),
-        status: joi.string().required().messages({
-          'any.required': `"status" is a required field`,
-          'string.empty': `"status" can not be empty`,
-        }),
-        phone: joi.string().required().messages({
-          'any.required': `"phone" is a required field`,
-          'string.empty': `"phone" can not be empty`,
-        }),
-        email: joi.string().email().required().messages({
-          'any.required': `"email" is a required field`,
-          'string.empty': `"email" can not be empty`,
-        }),
-        password: joi.string().required().messages({
-          'any.required': `"password" is a required field`,
-          'string.empty': `"password" can not be empty`,
-        }),
-      }),
-      clientController.ControllerInsertClients
-    ),
+        clientController.ControllerInsertClients
+      ),
     router.route('/client/:clientid/like').get(
       authorizationMiddleware('*'),
       middlewareValidateDTO('params', {
@@ -119,7 +118,7 @@ module.exports = (router) => {
     router
       .route('/client/:clientid/provider/:providerid/like')
       .post(
-        authorizationMiddleware('*'),
+        authorizationMiddleware('CLIENT_LIKE_CREATE'),
         middlewareValidateDTO('params', {
           clientid: joi
             .string()
@@ -143,7 +142,7 @@ module.exports = (router) => {
         clientController.ControllerInsertLikeProvider
       )
       .delete(
-        authorizationMiddleware('*'),
+        authorizationMiddleware('CLIENT_LIKE_REMOVE'),
         clientController.ControllerRemoveLikeProvider
       );
 };

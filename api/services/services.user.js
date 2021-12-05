@@ -31,7 +31,7 @@ const profile = [
   {
     id: 3,
     description: 'client',
-    functionality: ['LIKE_CREATE', 'LIKE_REMOVE'],
+    functionality: ['CLIENT_LIKE_CREATE', 'CLIENT_LIKE_REMOVE'],
   },
 ];
 

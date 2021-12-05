@@ -210,8 +210,8 @@ const ServiceDeleteProduct = async ({ providerId, productId, userId }) => {
   };
 };
 
-const ServiceUpdateProduct = async (productId, model) => {
-  const productDB = await product.findOne({ _id: productId });
+const ServiceUpdateProduct = async (product_id, model) => {
+  const productDB = await product.findOne({ _id: product_id });
 
   if (!productDB) {
     return {
@@ -229,15 +229,15 @@ const ServiceUpdateProduct = async (productId, model) => {
   productDB.provider = model.provider;
 
   if (typeof model.image === 'object') {
-    fileUtils.remove('products', productDB.image.name);
-    fileUtils.move(model.image.old_source, model.image.new_source);
-
-    (productDB.image = {
+    productDB.image = {
       origin: model.image.origin,
       name: model.image.newName,
       type: model.image.type,
-    })
-    
+    };
+
+    fileUtils.UtilRemove('products', productDB.image.name);
+    fileUtils.UtilMove(model.image.old_path, model.image.new_path);
+
     const result = await productDB.save();
     if (!result) {
       return {

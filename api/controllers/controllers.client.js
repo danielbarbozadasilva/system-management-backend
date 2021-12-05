@@ -23,7 +23,8 @@ const ControllerListClientById = async (req, res, next) => {
 };
 
 const ControllerInsertClients = async (req, res, next) => {
-  const resultService = await serviceClientService.ServiceListAll();
+  const { body } = req;
+  const resultService = await serviceClientService.ServiceCreate(body);
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }

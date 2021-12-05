@@ -8,27 +8,6 @@ const { EmailDisable } = require('../utils/utils.email.message.disable');
 const { toDTOListLikeProviderProduct } = require('../mappers/mappers.client');
 
 const ServiceListAllProvider = async (filter_order) => {
-
-  console.log('filter_order: ' + JSON.stringify(filter_order));
-  console.log('filter: ' + JSON.stringify(filter));
-
-  // const resultDB = await like
-  //   .find({})
-
-  //   .populate({
-  //     path: 'like',
-  //     model: 'like',
-  //   })
-  //   .populate({
-  //     path: 'product',
-  //     model: 'product',
-  //   })
-  //   .populate({
-  //     path: 'provider',
-  //     model: 'provider',
-  //   })
-  //   .sort({ _id: -1 }); // ordenando por qtd like
-
   const resultDB = await provider.aggregate([
     {
       $lookup: {
@@ -48,10 +27,13 @@ const ServiceListAllProvider = async (filter_order) => {
         count: { $sum: 1 },
       },
     },
-    { $sort: { fantasy_name: 1 } },
-    // { $sort: 'provider.fantasy_name' },
+    {
+      $sort: {
+        'provider.fantasy_name': Number(filter_order.alphabetical),
+        count: Number(filter_order.like),
+      },
+    },
   ]);
-  console.log(JSON.stringify(resultDB));
 
   if (resultDB.length < 1) {
     return {
@@ -157,7 +139,7 @@ const ServiceCreateProvider = async (model) => {
       details: ['There is already a registered provider for the entered cnpj'],
     };
 
-  if (await serviceUserProvider.ServiceVerifyEmailBodyExists(email))
+  if (!(await serviceUserProvider.ServiceVerifyEmailBodyExists(email)))
     return {
       success: false,
       message: 'operation cannot be performed',
@@ -206,7 +188,9 @@ const ServiceUpdateProvider = async (provider_id, body) => {
     };
   }
 
-  if (await serviceUserProvider.ServiceVerifyEmail(provider_id, body.email)) {
+  if (
+    !(await serviceUserProvider.ServiceVerifyEmail(provider_id, body.email))
+  ) {
     return {
       success: false,
       message: 'operation cannot be performed',
