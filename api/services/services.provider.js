@@ -27,12 +27,12 @@ const ServiceListAllProvider = async (filter_order) => {
         count: { $sum: 1 },
       },
     },
-    {
-      $sort: {
-        'provider.fantasy_name': Number(filter_order.alphabetical),
-        count: Number(filter_order.like),
-      },
-    },
+    // {
+    //   $sort: {
+    //     'provider.fantasy_name': Number(filter_order.alphabetical),
+    //     count: Number(filter_order.like),
+    //   },
+    // },
   ]);
 
   if (resultDB.length < 1) {
@@ -111,9 +111,7 @@ const ServiceListProvidersByLocation = async (uf, city) => {
   return {
     success: true,
     message: 'operation performed successfully',
-    data: resultDB.map((item) => {
-      return toDTO(item);
-    }),
+    data: resultDB,
   };
 };
 

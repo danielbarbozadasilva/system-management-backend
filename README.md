@@ -1,43 +1,53 @@
-# INFNET-Desenvolvimento Full Stack - MERN - MONGO - EXPRESS - REACTJS - NODEJS
+# Introduction
 
-# Introdução
+We are constantly faced with new commercial establishments, many of which do not have a means of promotion or are not easily located. The REGALE System came to solve this problem, with a focus on bakeries, it allows the user, through a web system, to locate the bakeries close to their residence.
 
-A todo instante nos deparamos com novos estabelecimentos comerciais, muitos destes não possuem um meio de divulgação ou estão em locais onde são pouco visitados. O Sistema REGALE veio solucionar esse problema, com enfoque em confeitarias, permite ao usuário localizar através de um sistema web as confeitarias próximas a sua residência.
+# Product scope
 
-# Escopo do produto
+The System aims to list the bakeries and manage them, enabling consultation by customers. The project aims to promote the bakeries, especially those that are starting on the market, or that are not well known. Allows you to offer more product options and prices.
 
-O Sistema tem como objetivo listar as confeitarias e efetuar o gerenciamento destas possibilitando a consulta por parte dos clientes. O projeto tem o intuito de divulgar as confeitarias, principalmente as que estão iniciando no mercado, ou que não são muito conhecidas. Ajudando também o cliente, permitindo que este tenha mais opções de preços e product ao realizar sua escolha.
+# General description
 
-# Descrição geral
+REGALE is a web system that aims to establish a relationship between the customer and a specific market niche. All of its features were designed and designed to provide comfort and convenience to users.
 
-O REGALE é um Sistema web que vem com o intuito de estabelecer um relacionamento entre o cliente e um nicho de mercado específico que no caso seriam as confeitarias. Todas as suas functionalitys foram pensadas e elaboradas para proporcionar uma maior comodidade ao cliente e ao dono da confeitaria.
+The System's proposal is to publicize the establishment, which is a recurrent problem in bakeries that are just starting on the market, as they still don't have a way to publicize their business.
 
-O Sistema tem como proposta resolver o problema de divulgação que vem a ser recorrente principalmente nas confeitarias que estão iniciando a pouco tempo no mercado, já que estas ainda não possuem um meio de divulgar o seu negócio.
+In addition to publicizing the establishments, the System provides a user-friendly interface for the customer to list the bakeries and manage them and the 'customer' user. The users of the system are the administrator, the owner of the bakery and the customer. Where everyone has access to the system according to their credentials and access permissions. In addition, the System has an initial screen that allows the public to easily navigate between categories, products and suppliers.
 
-Além de divulgar os estabelecimentos, o Sistema proporciona uma interface amigável ao cliente ao listar as confeitarias e efetuar o gerenciamento destas e do usuário Cliente. Os usuários do sistema são o admin, dono da confeitaria e o cliente. Onde todos possuem acesso ao sistema e a seu respectivo espaço. Além disso o Sistema conta com uma tela inicial que permite ao público navegar de modo simples entre categorys, product e fornecedores.
+# Functional requirements
 
-# Requisitos Funcionais
+[FR1] It is necessary to handle admin user authentication. Explanation: The System must allow admin access based on his credentials. Blocking any access attempts by other users.
 
-RF01: É necessário tratar a autenticação do usuário admin. Explicação: O Sistema deve permitir o acesso ao admin com base em suas credenciais. Bloqueando eventuais tentativas de acesso por outros usuários.
+[FR2] Only authorized supplier users can access the system. Explanation: The System must allow access to suppliers based on their credentials. Blocking any access attempts by other users.
 
-RF02: Apenas os usuários fornecedores autorizados podem acessar o sistema. Explicação: O Sistema deve permitir o acesso aos fornecedores com base em suas credenciais. Bloqueando eventuais tentativas de acesso por outros usuários.
+[FR3] It is necessary to handle client authentication. Explanation: The System must allow access to clients based on their credentials. Blocking any access attempts by other users.
 
-RF03: É necessário tratar a autenticação do usuário cliente. Explicação: O Sistema deve permitir o acesso aos clientes com base em suas credenciais. Bloqueando eventuais tentativas de acesso por outros usuários.
+[FR4] The admin user must register categories. Explanation: The System will allow the admin user to register new categories.
 
-RF04: O usuário admin deve realizar o cadastramento de categorys. Explicação: O Sistema possibilitará ao usuário admin o cadastro de novas categorys.
+[FR5] The supplier user must register. Explanation: The System will allow the supplier user to register.
 
-RF05: O usuário fornecedor deve realizar o seu cadastramento. Explicação: O Sistema permitirá que o usuário fornecedor efetue o seu cadastro.
+[FR6] The admin user must authorize vendor access to the system. Explanation: The admin user may or may not authorize the access of suppliers to the system.
 
-RF06: O usuário admin deve autorizar o acesso de fornecedores ao sistema. Explicação: O usuário admin poderá autorizar ou não o acesso dos fornecedores ao sistema.
+[FR7] The supplier user can register the product. Explanation: The System makes available to the supplier user the possibility of registering their products in the system.
 
-RF07: O usuário fornecedor pode realizar o cadastramento de product. Explicação: O Sistema disponibiliza ao usuário fornecedor a possibilidade de cadastrar os seus product no sistema.
+[FR8] The client user must register. Explanation: The System will allow the customer to register in the system.
 
-RF08: O usuário cliente deve realizar o seu cadastramento. Explicação: O Sistema permitirá que o usuário do type cliente efetue o seu cadastro no sistema.
+[FR9] The admin user must be able to view all suppliers listed in alphabetical order. Explanation: The System allows the admin to view the suppliers registered in the system.
 
-RF09: O usuário admin deve conseguir visualizar todos os fornecedores listados em ordem alfabética. Explicação: O Sistema permite ao admin a visualização dos fornecedores cadastrados no sistema.
+[FR10] The supplier user can view the products in a listing and they will have the category information. Explanation: The System should display the supplier user a listing of the products, as well as the category information.
 
-RF10: O usuário fornecedor pode visualizar os product numa listagem e terão a informação da category. Explicação: O Sistema deverá exibir ao usuário fornecedor uma listagem dos product, assim como a informação da category.
+[FR11] The admin user must be able to view products by supplier. Explanation: The System allows the admin user to view the products by their respective suppliers.
 
-RF11: O usuário admin deve conseguir visualizar os product por fornecedor. Explicação: O Sistema permite que o usuário admin visualize os product por seus respectivos fornecedores.
+[FR12] After access approval/cancellation, the system sends an email message to the supplier. Explanation: The System must send an activation or inactivation confirmation email to the supplier, in case the System admin revokes or allows the access by the supplier.
 
-RF12 Após a aprovação/cancelamento de acesso, o sistema envia uma message por e-mail para o fornecedor. Explicação: O Sistema deverá enviar um e-mail de confirmação de ativação ou inativação para o fornecedor, caso o admin do Sistema revogue ou permita o acesso por parte do fornecedor.
+[FR13] The client user can bookmark up to three providers. Explanation: The System should allow only three suppliers to be favored by the customer.
+
+[FR14] The admin user must be able to view customers by supplier. Explanation: The System must allow the administrator user access to the data grouped by customers/supplier
+
+[FR15] The supplier user can mark up to three products as favorites. Explanation: The System should allow only three products to be favored by the supplier.
+
+[FR16] All users have the possibility to list the suppliers sorted by number of favorites and in alphabetical order. Explanation: The System should display the supplier data sorted by number of favorites and in alphabetical order.
+
+[FR17] All users have the ability to list products by category sorted by favorite, by value and by description. Explanation: The System should display products by category sorted by favorite, by value and by description.
+
+[FR18] All users need to define the location (UF and city) to search. Explanation: The System should display filter users by locality (UF and city).
