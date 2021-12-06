@@ -17,14 +17,16 @@ const UtilCreateName = (type) => {
   return `${uuid()}.${resp}`;
 };
 
-const UtilMove = (old_directory, new_directory) => {
-  return fs.renameSync(old_directory, new_directory);
+const UtilMove = (old_path, new_path) => {
+  return fs.renameSync(old_path, new_path);
 };
 
 const UtilRemove = (source, file) => {
   const address_file = UtilCreateAddress(source, file);
-  if (fs.existsSync(address_file)) fs.unlinkSync(address_file);
-  return;
+  if (fs.existsSync(address_file)) {
+    fs.unlinkSync(address_file);
+    return;
+  }
 };
 
 module.exports = {

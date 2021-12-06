@@ -5,16 +5,48 @@ const { UtilCreateHash } = require('../utils/utils.cryptography');
 const { toItemListDTO, toDTO } = require('../mappers/mappers.provider');
 const { EmailEnable } = require('../utils/utils.email.message.enable');
 const { EmailDisable } = require('../utils/utils.email.message.disable');
+const { toDTOListLikeProviderProduct } = require('../mappers/mappers.client');
 
-const ServiceListAllProvider = async () => {
-  const resultDB = await provider.find({}).sort({ fantasy_name: 1 });
-  return {
-    success: true,
-    message: 'Operation performed successfully',
-    data: resultDB.map((item) => {
-      return toDTO(item);
-    }),
-  };
+const ServiceListAllProvider = async (filter_order) => {
+  const resultDB = await provider.aggregate([
+    {
+      $lookup: {
+        from: like.collection.name,
+        localField: '_id',
+        foreignField: 'provider',
+        as: 'likes',
+      },
+    },
+    { $unwind: { path: '$likes', preserveNullAndEmptyArrays: true } },
+
+    { $match: { 'likes.product': { $ne: null } } },
+    {
+      $group: {
+        _id: '$provider',
+        data: { $push: '$$ROOT' },
+        count: { $sum: 1 },
+      },
+    },
+    // {
+    //   $sort: {
+    //     'provider.fantasy_name': Number(filter_order.alphabetical),
+    //     count: Number(filter_order.like),
+    //   },
+    // },
+  ]);
+
+  if (resultDB.length < 1) {
+    return {
+      success: false,
+      details: 'No likes found!',
+    };
+  } else if (resultDB.length > 0) {
+    return {
+      success: true,
+      message: 'Operation performed successfully!',
+      data: resultDB,
+    };
+  }
 };
 
 const ServiceListProviderById = async (id) => {
@@ -41,7 +73,7 @@ const ServiceListProductsProvider = async (providerid) => {
     .find({ provider: providerid })
     .populate('provider');
 
-  if (!resultDB) {
+  if (!resultDB.length > 0) {
     return {
       success: false,
       message: 'operation cannot be performed',
@@ -60,12 +92,15 @@ const ServiceListProductsProvider = async (providerid) => {
 
 const ServiceListProvidersByLocation = async (uf, city) => {
   let filter = {};
+
   if (city == undefined || city == 'x') {
     filter = { uf };
   } else {
     filter = { uf, city };
   }
+
   const resultDB = await provider.find(filter);
+
   if (!resultDB) {
     return {
       success: false,
@@ -76,7 +111,7 @@ const ServiceListProvidersByLocation = async (uf, city) => {
   return {
     success: true,
     message: 'operation performed successfully',
-    data: [toItemListDTO(...resultDB)],
+    data: resultDB,
   };
 };
 
@@ -102,7 +137,7 @@ const ServiceCreateProvider = async (model) => {
       details: ['There is already a registered provider for the entered cnpj'],
     };
 
-  if (await serviceUserProvider.ServiceVerifyEmailExists(email))
+  if (!(await serviceUserProvider.ServiceVerifyEmailBodyExists(email)))
     return {
       success: false,
       message: 'operation cannot be performed',
@@ -151,7 +186,9 @@ const ServiceUpdateProvider = async (provider_id, body) => {
     };
   }
 
-  if (await serviceUserProvider.ServiceVerifyEmail(provider_id, body.email)) {
+  if (
+    !(await serviceUserProvider.ServiceVerifyEmail(provider_id, body.email))
+  ) {
     return {
       success: false,
       message: 'operation cannot be performed',
@@ -184,7 +221,7 @@ const ServiceUpdateProvider = async (provider_id, body) => {
   } else {
     return {
       success: true,
-      message: 'Operation performed successfully',
+      message: 'Data updated successfully',
       data: {
         ...toDTO(new_provider),
       },

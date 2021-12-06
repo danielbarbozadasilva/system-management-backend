@@ -40,7 +40,7 @@ const fileUpload = (destiny) => {
             new_path,
           };
         }
-        return resolve(
+        return Promise.resolve(
           {
             ...fields,
             files,

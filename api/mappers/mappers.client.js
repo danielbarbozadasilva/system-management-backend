@@ -1,61 +1,22 @@
 const fileUtils = require('../utils/utils.file');
 
 const toDTO = (model) => {
-  const { _id, first_name, last_name, birth_date, phone, uf, city, status } =
-    model;
   return {
-    id: _id,
-    first_name,
-    last_name,
-    birth_date,
-    phone,
-    uf,
-    city,
-    status,
+    id: model._id,
+    first_name: model.first_name,
+    last_name: model.last_name,
+    birth_date: model.birth_date,
+    phone: model.phone,
+    uf: model.uf,
+    city: model.city,
+    status: model.status,
+    email: model.email,
+    password: model.password,
   };
 };
 
 const toDTOListLikeProviderProduct = (model) => {
   return {
-    id: model._id,
-    product: {
-      id: model._id,
-      name: model.name,
-      description: model.description,
-      price: parseFloat(model.price).toLocaleString('pt-br', {
-        style: 'currency',
-        currency: 'BRL',
-      }),
-      image: fileUtils.UtilCreateAddressDownload('product', model.image.name),
-      category: {
-        id: model.category._id,
-        name: model.category.name,
-        description: model.category.description,
-        status: model.category.status,
-        image: fileUtils.UtilCreateAddressDownload(
-          'category',
-          model.category.image.name
-        ),
-      },
-      provider: {
-        id: model.provider._id,
-        cnpj: model.provider.cnpj,
-        fantasy_name: model.provider.fantasy_name,
-        social_name: model.provider.social_name,
-        address: model.provider.address,
-        uf: model.provider.uf,
-        city: model.provider.city,
-        responsible: model.provider.responsible,
-        phone: model.provider.phone,
-        status: model.provider.status,
-      },
-    },
-  };
-};
-
-const toDTOListLikeClientProvider = (model) => {
-  return {
-    id: model._id,
     provider: {
       id: model.provider._id,
       cnpj: model.provider.cnpj,
@@ -67,16 +28,52 @@ const toDTOListLikeClientProvider = (model) => {
       responsible: model.provider.responsible,
       phone: model.provider.phone,
       status: model.provider.status,
+      product: {
+        id: model.product._id,
+        name: model.product.name,
+        description: model.product.description,
+        price: parseFloat(model.product.price).toLocaleString('pt-br', {
+          style: 'currency',
+          currency: 'BRL',
+        }),
+        image: fileUtils.UtilCreateAddressDownload(
+          'product',
+          model.product.image.name
+        ),
+      },
+      like: {
+        like_id: model._id,
+      },
+    },
+  };
+};
+
+const toDTOListLikeClientProvider = (model) => {
+  const { client, provider } = model;
+
+  return {
+    id: _id,
+    provider: {
+      id: provider._id,
+      cnpj: provider.cnpj,
+      fantasy_name: provider.fantasy_name,
+      social_name: provider.social_name,
+      address: provider.address,
+      uf: provider.uf,
+      city: provider.city,
+      responsible: provider.responsible,
+      phone: provider.phone,
+      status: provider.status,
     },
     client: {
-      id: model.client._id,
-      first_name: model.client.first_name,
-      last_name: model.client.last_name,
-      birth_date: model.client.birth_date,
-      phone: model.client.phone,
-      uf: model.client.uf,
-      city: model.client.city,
-      status: model.client.status,
+      id: client._id,
+      first_name: client.first_name,
+      last_name: client.last_name,
+      birth_date: client.birth_date,
+      phone: client.phone,
+      uf: client.uf,
+      city: client.city,
+      status: client.status,
     },
   };
 };

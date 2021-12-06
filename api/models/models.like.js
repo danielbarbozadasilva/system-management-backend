@@ -20,4 +20,10 @@ module.exports = {
     trim: true,
     ref: 'product',
   },
+  provider: {
+    type: Schema.Types.ObjectId,
+    required: false,
+    trim: true,
+    ref: 'provider',
+  },
 };

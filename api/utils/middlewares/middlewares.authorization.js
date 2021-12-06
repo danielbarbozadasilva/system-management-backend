@@ -6,42 +6,62 @@ const ErrorUnauthenticatedUser = require('../errors/errors.user_not_authenticate
 
 const MiddlewareAuthorization = (rota = '*') => {
   return async (req, res, next) => {
-    new Promise(function (resolve, reject) {
-        const test = rota;
-        const { token } = req.headers;
+    var test = rota;
+    var { token } = req.headers;
+    var provider_id = req.params.providerid;
+    var { id, email, typeUser } = cryptographyUtils.UtilDecodeToken(token);
+
+    const provider_status_kind = await userService.ServiceVerifyStatusProvider(
+      id
+    );
+    const profile_functionality =
+      await userService.ServiceVerifyFunctionalityProfile(typeUser, test);
+
+    await Promise.all([provider_status_kind, profile_functionality])
+      .then(function (result) {
         if (test != '*') {
           if (!token) {
-            return reject(
+            return Promise.reject(
               new ErrorUnauthenticatedUser('Unauthenticated User Error')
             );
           }
 
           if (!cryptographyUtils.UtilValidateToken(token)) {
-            return reject(
+            return Promise.reject(
               new ErrorUnauthenticatedUser('Unauthenticated User Error')
             );
           }
 
-          const { id, email, typeuser } =
-            cryptographyUtils.UtilDecodeToken(token);
-
-          if (!userService.ServiceVerifyEmailExists(email)) {
-            return reject(new ErrorUserNotAllowed('Unauthorized User!'));
+          if (typeUser == 2 || typeUser == 3) {
+            if (id !== provider_id) {
+              return Promise.reject(
+                new ErrorUserNotAllowed('Unauthorized User!')
+              );
+            }
           }
 
-          if (
-            userService.ServiceVerifyFunctionalityProfile(typeuser, test) ===
-            false
-          ) {
-            return reject(new ErrorUserNotAllowed('Unauthorized User!'));
+          if (provider_status_kind) {
+            return Promise.reject(
+              new ErrorUserNotAllowed(
+                'The supplier has not yet been authorized! Contact the administrator.'
+              )
+            );
+          }
+
+          if (profile_functionality) {
+            return Promise.reject(
+              new ErrorUserNotAllowed('Unauthorized User!')
+            );
           }
         }
-        return resolve(next());
-    }).catch(function (e) {
-      return res
-        .status(e.statusCode)
-        .send({ success: false, error: { message: e.message } });
-    });
+
+        return Promise.resolve(next());
+      })
+      .catch(function (e) {
+        return res
+          .status(e.statusCode)
+          .send({ success: false, error: { message: e.message } });
+      });
   };
 };
 

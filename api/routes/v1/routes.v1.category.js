@@ -48,7 +48,9 @@ module.exports = (router) => {
             'any.required': `"category id" is a required field`,
             'string.empty': `"category id" can not be empty`,
           }),
-      }),controllerCategory.ControllerListCategoryById)
+      }),
+      controllerCategory.ControllerListCategoryById
+    )
 
     .put(
       authorizationMiddleware('UPDATE_CATEGORY'),

@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "Categoria",
+			"name": "category",
 			"item": [
 				{
 					"name": "category.listAll",
@@ -82,7 +82,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/category/618f2ce3155c87deec6dd613",
+							"raw": "http://localhost:3011/v1/category/61a01ebbafcff5472a37c053",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -91,7 +91,7 @@
 							"path": [
 								"v1",
 								"category",
-								"618f2ce3155c87deec6dd613"
+								"61a01ebbafcff5472a37c053"
 							]
 						}
 					},
@@ -124,18 +124,18 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "fdfdf",
+									"value": "fdfdf111gfg",
 									"type": "text"
 								},
 								{
 									"key": "description",
-									"value": "categoria1desc22",
+									"value": "categoria1desc22111fgfg",
 									"type": "text"
 								},
 								{
 									"key": "image",
 									"type": "file",
-									"src": []
+									"src": "/home/pc01/Imagens/Captura de tela de 2021-10-18 04-58-20.png"
 								}
 							]
 						},
@@ -181,23 +181,23 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "categoria",
+									"value": "categoria1",
 									"type": "text"
 								},
 								{
 									"key": "description",
-									"value": "categoriadesc",
+									"value": "categoriadesc1",
 									"type": "text"
 								},
 								{
 									"key": "image",
 									"type": "file",
-									"src": []
+									"src": "/home/pc01/Imagens/81007f.png"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/category/618f2ce3155c87deec6dd613",
+							"raw": "http://localhost:3011/v1/category/61a82c3fd22fbea4747a9d40",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -206,7 +206,7 @@
 							"path": [
 								"v1",
 								"category",
-								"618f2ce3155c87deec6dd613"
+								"61a82c3fd22fbea4747a9d40"
 							]
 						}
 					},
@@ -239,7 +239,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/category/61908a52661a615cb32420fe",
+							"raw": "http://localhost:3011/v1/category/61a82c3fd22fbea4747a9d40",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -248,7 +248,7 @@
 							"path": [
 								"v1",
 								"category",
-								"61908a52661a615cb32420fe"
+								"61a82c3fd22fbea4747a9d40"
 							]
 						}
 					},
@@ -257,7 +257,7 @@
 			]
 		},
 		{
-			"name": "Auth",
+			"name": "auth",
 			"item": [
 				{
 					"name": "auth.signIn",
@@ -275,20 +275,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"const options = {",
-									"    url: 'http://localhost:3011/v1/auth',",
-									"    method: 'POST',",
-									"    header: {",
-									"        'Content-Type': 'application/json',",
-									"    },",
-									"    body: {",
-									"        mode: 'raw',",
-									"        raw: JSON.stringify({ \"email\": pm.environment.get('email'), \"password\": pm.environment.get('password') })",
-									"    }",
-									"};",
-									"pm.sendRequest(options, function (err, res) {",
-									"    pm.environment.set(\"token\", res.json().data.token);",
-									"}); "
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -299,7 +286,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"danielbarboza56@hotmail.com\",\n    \"password\": \"daniel\"\n}",
+							"raw": "{\n    \"email\": \"daniel90barboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -356,7 +343,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider",
+							"raw": "http://localhost:3011/v1/provider/filter/1/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -364,7 +351,10 @@
 							"port": "3011",
 							"path": [
 								"v1",
-								"provider"
+								"provider",
+								"filter",
+								"1",
+								"1"
 							]
 						}
 					},
@@ -400,7 +390,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/616deb13e6274f29839f2ad6",
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -409,7 +399,46 @@
 							"path": [
 								"v1",
 								"provider",
-								"616deb13e6274f29839f2ad6"
+								"615a584a79b274425a6fa7db"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "provider.listProductsByProvider",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3011/v1/provider/619881d9d6f64bd542ced4d9/product",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3011",
+							"path": [
+								"v1",
+								"provider",
+								"619881d9d6f64bd542ced4d9",
+								"product"
 							]
 						}
 					},
@@ -439,7 +468,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"cnpj\": \"12.125.476/0001-65\",\n    \"fantasy_name\": \"Pizzaria Rei das Massas\",\n    \"social_name\": \"Pizzaria e CIA\",\n    \"address\": \"Rua Ministro Gomes, 44\",\n    \"uf\": \"RJ\",\n    \"city\": \"Rio de janeiro\",\n    \"responsible\": \"Carlos Henrique\",\n    \"phone\": \"(21)2435-9098\",\n    \"email\": \"daniel8080barboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
+							"raw": "{\n    \"cnpj\": \"12.111.111/1101-65\",\n    \"fantasy_name\": \"Pizzaria Rei das Massas\",\n    \"social_name\": \"3Pizzaria e CIA\",\n    \"address\": \"3Rua Ministro Gomes, 44\",\n    \"uf\": \"3RJ\",\n    \"city\": \"3Rio de janeiro\",\n    \"responsible\": \"3Carlos Henrique\",\n    \"phone\": \"(31)2435-9098\",\n    \"email\": \"daniel80barboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -475,6 +504,16 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{token}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [
 							{
@@ -485,7 +524,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"cnpj\": \"12.125.476/0001-65\",\n    \"fantasy_name\": \"Pizzaria Rei das Massas\",\n    \"social_name\": \"Pizzaria e CIA\",\n    \"address\": \"Rua Ministro Gomes, 44\",\n    \"uf\": \"RJ\",\n    \"city\": \"Rio de janeiro\",\n    \"responsible\": \"Carlos Henrique\",\n    \"phone\": \"(21)2435-9098\",\n    \"email\": \"daniel8080barboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
+							"raw": "{\n    \"cnpj\": \"19.125.476/0001-61\",\n    \"fantasy_name\": \"29Pizzaria Rei das Massas1\",\n    \"social_name\": \"29Pizzaria e CIA1\",\n    \"address\": \"29Rua Ministro Gomes, 441\",\n    \"uf\": \"29R1J\",\n    \"city\": \"29CARMO1\",\n    \"responsible\": \"29Carlos Henrique1\",\n    \"phone\": \"(29)3435-90911\",\n    \"email\": \"daniel901barboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -493,7 +532,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/6170da32c7acb61bf031399e",
+							"raw": "http://localhost:3011/v1/provider/61a82f094449f7b11772964f",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -502,14 +541,14 @@
 							"path": [
 								"v1",
 								"provider",
-								"6170da32c7acb61bf031399e"
+								"61a82f094449f7b11772964f"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "provider.enable",
+					"name": "provider.enableDisable",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -535,7 +574,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/616deb13e6274f29839f2ad6/enable",
+							"raw": "http://localhost:3011/v1/provider/61a82f094449f7b11772964f/enable",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -544,7 +583,7 @@
 							"path": [
 								"v1",
 								"provider",
-								"616deb13e6274f29839f2ad6",
+								"61a82f094449f7b11772964f",
 								"enable"
 							]
 						}
@@ -552,7 +591,7 @@
 					"response": []
 				},
 				{
-					"name": "provider.disable",
+					"name": "provider.remove",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -565,7 +604,7 @@
 						}
 					],
 					"request": {
-						"method": "PUT",
+						"method": "DELETE",
 						"header": [
 							{
 								"key": "token",
@@ -574,7 +613,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/616deb13e6274f29839f2ad6/disable",
+							"raw": "http://localhost:3011/v1/provider/61a82f094449f7b11772964f",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -583,15 +622,14 @@
 							"path": [
 								"v1",
 								"provider",
-								"616deb13e6274f29839f2ad6",
-								"disable"
+								"61a82f094449f7b11772964f"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "provider.listByLocation",
+					"name": "provider.filterUfCity",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -613,7 +651,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/filter?uf=RJ&city=carmo",
+							"raw": "http://localhost:3011/v1/provider/filter/RJ/CARMO",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -622,17 +660,195 @@
 							"path": [
 								"v1",
 								"provider",
-								"filter"
+								"filter",
+								"RJ",
+								"CARMO"
 							],
 							"query": [
 								{
-									"key": "uf",
-									"value": "RJ"
-								},
-								{
 									"key": "city",
-									"value": "carmo"
+									"value": "CARMO",
+									"disabled": true
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "provider.listProviderProduct",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:3011/v1/provider/61a82f094449f7b11772964f/enable",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3011",
+							"path": [
+								"v1",
+								"provider",
+								"61a82f094449f7b11772964f",
+								"enable"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "like.listAllProviderProduct",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db/like",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3011",
+							"path": [
+								"v1",
+								"provider",
+								"615a584a79b274425a6fa7db",
+								"like"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "like.createProviderProduct",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7dc/product/6164ecf0912afe7ae51bf6a8/like",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3011",
+							"path": [
+								"v1",
+								"provider",
+								"615a584a79b274425a6fa7dc",
+								"product",
+								"6164ecf0912afe7ae51bf6a8",
+								"like"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "like.removeProviderProduct",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7dc/product/6164ecf0912afe7ae51bf6a8/like",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3011",
+							"path": [
+								"v1",
+								"provider",
+								"615a584a79b274425a6fa7dc",
+								"product",
+								"6164ecf0912afe7ae51bf6a8",
+								"like"
 							]
 						}
 					},
@@ -644,7 +860,7 @@
 			"name": "product",
 			"item": [
 				{
-					"name": "product.providerListAll",
+					"name": "product.listAll",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -717,7 +933,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/product?category=616deb13e6274f29839f2ace",
+							"raw": "http://localhost:3011/v1/product/6164ecf0912afe7ae51bf6a7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -725,13 +941,8 @@
 							"port": "3011",
 							"path": [
 								"v1",
-								"product"
-							],
-							"query": [
-								{
-									"key": "category",
-									"value": "616deb13e6274f29839f2ace"
-								}
+								"product",
+								"6164ecf0912afe7ae51bf6a7"
 							]
 						}
 					},
@@ -751,6 +962,16 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{token}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -763,39 +984,39 @@
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "nome",
-									"value": "Mini salgadinhos22",
+									"key": "name",
+									"value": "teste-product0311",
 									"type": "text"
 								},
 								{
-									"key": "descricao",
-									"value": "20 salgadinhos22",
+									"key": "description",
+									"value": "teste-product03-description11",
 									"type": "text"
 								},
 								{
 									"key": "price",
-									"value": "44.00",
+									"value": "11.11",
 									"type": "text"
 								},
 								{
-									"key": "categoria",
-									"value": "616deb13e6274f29839f2ace",
+									"key": "category",
+									"value": "61611e6ff0c5860e72da8757",
 									"type": "text"
 								},
 								{
-									"key": "fornecedor",
-									"value": "6170da32c7acb61bf031399e",
+									"key": "provider",
+									"value": "615a584a79b274425a6fa7db",
 									"type": "text"
 								},
 								{
-									"key": "imagem",
+									"key": "image",
 									"type": "file",
 									"src": "/home/pc01/Imagens/81007f.png"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/6170da32c7acb61bf031399e/product",
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db/product/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -804,8 +1025,9 @@
 							"path": [
 								"v1",
 								"provider",
-								"6170da32c7acb61bf031399e",
-								"product"
+								"615a584a79b274425a6fa7db",
+								"product",
+								""
 							]
 						}
 					},
@@ -837,12 +1059,12 @@
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "nome",
+									"key": "name",
 									"value": "Torta de chocolate3",
 									"type": "text"
 								},
 								{
-									"key": "descricao",
+									"key": "description",
 									"value": "Torta de chocolate com recheio1",
 									"type": "text"
 								},
@@ -852,34 +1074,24 @@
 									"type": "text"
 								},
 								{
-									"key": "categoria",
-									"value": "61611e6ff0c5860e72da8757",
+									"key": "category",
+									"value": "615a19fd4384691888d27098",
 									"type": "text"
 								},
 								{
-									"key": "fornecedor",
-									"value": "616deb13e6274f29839f2ad6",
+									"key": "provider",
+									"value": "615a584a79b274425a6fa7db",
 									"type": "text"
 								},
 								{
-									"key": "imagem",
+									"key": "image",
 									"type": "file",
-									"src": "/home/pc01/Imagens/20190322051919-1254x450.jpg"
-								},
-								{
-									"key": "status",
-									"value": "true",
-									"type": "text"
-								},
-								{
-									"key": "categoriaName",
-									"value": "asdas",
-									"type": "text"
+									"src": "/home/pc01/Imagens/Captura de tela de 2021-09-17 13-11-57.png"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/product/616deb13e6274f29839f2ad2",
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db/product/6164ecf0912afe7ae51bf6a7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -887,8 +1099,54 @@
 							"port": "3011",
 							"path": [
 								"v1",
+								"provider",
+								"615a584a79b274425a6fa7db",
 								"product",
-								"616deb13e6274f29839f2ad2"
+								"6164ecf0912afe7ae51bf6a7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "product.providerListAll",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:3011/v1/product",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3011",
+							"path": [
+								"v1",
+								"product"
 							]
 						}
 					},
@@ -897,7 +1155,7 @@
 			]
 		},
 		{
-			"name": "Cliente",
+			"name": "client",
 			"item": [
 				{
 					"name": "client.listAll",
@@ -926,6 +1184,33 @@
 					"response": []
 				},
 				{
+					"name": "client.listById",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3011/v1/client/615cce324b51ba2b14c1b170",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3011",
+							"path": [
+								"v1",
+								"client",
+								"615cce324b51ba2b14c1b170"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "client.insert",
 					"event": [
 						{
@@ -945,17 +1230,11 @@
 								"key": "token",
 								"value": "{{token}}",
 								"type": "text"
-							},
-							{
-								"key": "",
-								"value": "",
-								"type": "text",
-								"disabled": true
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"kind\": \"cliente\",\n    \"first_name\":\"Cliente-Daniel\",\n    \"last_name\":\"Cli-Daniel\",\n    \"birth_date\":\"05/03/1997\",\n    \"uf\":\"RJ\",\n    \"city\":\"Rio de janeiro\",\n    \"email\":\"daniel95barboza@gmail.com\",\n    \"password\":\"daniel\",\n    \"status\": \"enable\"\n}",
+							"raw": "{\n    \"first_name\":\"Cliente-Daniel\",\n    \"last_name\":\"Cli-Daniel\",\n    \"birth_date\":\"05/03/1997\",\n    \"phone\":\"(21)99892-2989\",\n    \"uf\":\"RJ\",\n    \"city\":\"Rio de janeiro\",\n    \"email\":\"daniel880barboza@gmail.com\",\n    \"password\":\"daniel\",\n    \"status\": \"ENABLE\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -976,12 +1255,101 @@
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "Curtida",
-			"item": [
+				},
+				{
+					"name": "client.update",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\":\"22Cliente-Daniel\",\n    \"last_name\":\"22Cli-Daniel\",\n    \"birth_date\":\"1997/02/17\",\n    \"phone\":\"(22)99892-2989\",\n    \"uf\":\"22RJ\",\n    \"city\":\"22Rio de janeiro\",\n    \"email\":\"daniel80111barboza@gmail.com\",\n    \"password\":\"daniel\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3011/v1/client/615cce324b51ba2b14c1b170",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3011",
+							"path": [
+								"v1",
+								"client",
+								"615cce324b51ba2b14c1b170"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "client.remove",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\":\"11Cliente-Daniel\",\n    \"last_name\":\"11Cli-Daniel\",\n    \"birth_date\":\"11/03/1997\",\n    \"phone\":\"(11)99892-2989\",\n    \"uf\":\"1RJ\",\n    \"city\":\"11Rio de janeiro\",\n    \"email\":\"11daniel95barboza@gmail.com\",\n    \"password\":\"daniel\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3011/v1/client/615cce324b51ba2b14c1b190",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3011",
+							"path": [
+								"v1",
+								"client",
+								"615cce324b51ba2b14c1b190"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "like.listClientProvider",
 					"event": [
@@ -1012,7 +1380,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/client/616deb13e6274f29839f2ad7/likes",
+							"raw": "http://localhost:3011/v1/client/61abffa2884334621c8cdea3/like",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1021,8 +1389,8 @@
 							"path": [
 								"v1",
 								"client",
-								"616deb13e6274f29839f2ad7",
-								"likes"
+								"61abffa2884334621c8cdea3",
+								"like"
 							]
 						}
 					},
@@ -1055,7 +1423,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/client/616deb13e6274f29839f2ad7/provider/6170da32c7acb61bf031399e/likes",
+							"raw": "http://localhost:3011/v1/client/615cce324b51ba2b14c1b170/provider/619df6305118878cc0af441a/like",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1064,151 +1432,10 @@
 							"path": [
 								"v1",
 								"client",
-								"616deb13e6274f29839f2ad7",
+								"615cce324b51ba2b14c1b170",
 								"provider",
-								"6170da32c7acb61bf031399e",
-								"likes"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "like.removeClientProvider",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "token",
-								"value": "{{token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:3011/v1/client/616deb13e6274f29839f2ad7/provider/6170da32c7acb61bf031399e/likes",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3011",
-							"path": [
-								"v1",
-								"client",
-								"616deb13e6274f29839f2ad7",
-								"provider",
-								"6170da32c7acb61bf031399e",
-								"likes"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "like.listProviderProduct",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "token",
-								"value": "{{token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db/product",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3011",
-							"path": [
-								"v1",
-								"provider",
-								"615a584a79b274425a6fa7db",
-								"product"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "like.createProviderProduct",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "token",
-								"value": "{{token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:3011/v1/provider/616deb13e6274f29839f2ad6/product/616deb13e6274f29839f2ad2/likes",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3011",
-							"path": [
-								"v1",
-								"provider",
-								"616deb13e6274f29839f2ad6",
-								"product",
-								"616deb13e6274f29839f2ad2",
-								"likes"
+								"619df6305118878cc0af441a",
+								"like"
 							]
 						}
 					},
@@ -1241,7 +1468,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/616deb13e6274f29839f2ad6/product/616deb13e6274f29839f2ad2/likes",
+							"raw": "http://localhost:3011/v1/client/615cce324b51ba2b14c1b170/provider/619df6305118878cc0af441a/like",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1249,11 +1476,11 @@
 							"port": "3011",
 							"path": [
 								"v1",
+								"client",
+								"615cce324b51ba2b14c1b170",
 								"provider",
-								"616deb13e6274f29839f2ad6",
-								"product",
-								"616deb13e6274f29839f2ad2",
-								"likes"
+								"619df6305118878cc0af441a",
+								"like"
 							]
 						}
 					},
