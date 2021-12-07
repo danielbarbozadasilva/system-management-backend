@@ -7,7 +7,15 @@ const { EmailEnable } = require('../utils/utils.email.message.enable');
 const { EmailDisable } = require('../utils/utils.email.message.disable');
 
 const ServiceListAllProvider = async (filter_order) => {
-  console.log(filter_order);
+  if (filter_order.like == 1)
+    filter = {
+      $group: {
+        _id: '$_id',
+        docsPerAuthor: { $sum: 1 },
+      },
+    };
+  if (filter_order.alphabetical == 1) filter = { $sort: { fantasy_name: 1 } };
+
   const resultDB = await provider.aggregate([
     // {
     //   $match: { _id: 1 },
@@ -68,15 +76,7 @@ const ServiceListAllProvider = async (filter_order) => {
         preserveNullAndEmptyArrays: true,
       },
     },
-    {
-      $addFields: {
-        countA: {
-          $sum: 1,
-        },
-      },
-    },
-    // { $sort: { countA: 1 } },
-    // { $sort: { fantasy_name: 1 } },
+    filter,
   ]);
 
   if (resultDB.length < 1) {
