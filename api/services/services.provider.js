@@ -7,19 +7,17 @@ const { EmailEnable } = require('../utils/utils.email.message.enable');
 const { EmailDisable } = require('../utils/utils.email.message.disable');
 
 const ServiceListAllProvider = async (filter_order) => {
-  if (filter_order.like == 1)
-    filter = {
-      $group: {
-        _id: '$_id',
-        docsPerAuthor: { $sum: 1 },
-      },
-    };
-  if (filter_order.alphabetical == 1) filter = { $sort: { fantasy_name: 1 } };
+  let filter = {};
+
+  if (filter_order.like == 1) {
+    filter = { count: -1 };
+  } else if (filter_order.alphabetical == 1) {
+    filter = { fantasy_name: 1 };
+  } else if (filter_order.like == 0 && filter_order.like == 0) {
+    filter = { fantasy_name: -1 };
+  }
 
   const resultDB = await provider.aggregate([
-    // {
-    //   $match: { _id: 1 },
-    // },
     {
       $lookup: {
         from: like.collection.name,
@@ -31,34 +29,6 @@ const ServiceListAllProvider = async (filter_order) => {
     {
       $unwind: {
         path: '$result_like',
-        preserveNullAndEmptyArrays: true,
-      },
-    },
-    {
-      $lookup: {
-        from: client.collection.name,
-        localField: 'result_like.client',
-        foreignField: '_id',
-        as: 'result_client',
-      },
-    },
-    {
-      $unwind: {
-        path: '$client',
-        preserveNullAndEmptyArrays: true,
-      },
-    },
-    {
-      $lookup: {
-        from: client.collection.name,
-        localField: 'result_like.client',
-        foreignField: '_id',
-        as: 'result_client',
-      },
-    },
-    {
-      $unwind: {
-        path: '$result_client',
         preserveNullAndEmptyArrays: true,
       },
     },
@@ -76,7 +46,24 @@ const ServiceListAllProvider = async (filter_order) => {
         preserveNullAndEmptyArrays: true,
       },
     },
-    filter,
+    {
+      $match: {
+        'result_like.product': {
+          $exists: true,
+          $ne: null,
+        },
+      },
+    },
+    {
+      $group: {
+        _id: '$result_like.product',
+        _id: '$_id',
+
+        data: { $push: '$$ROOT' },
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: filter },
   ]);
 
   if (resultDB.length < 1) {
