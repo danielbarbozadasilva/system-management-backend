@@ -49,7 +49,7 @@ const toDTOListLikeProviderProduct = (model) => {
 };
 
 const toDTOListLikeClientProvider = (model) => {
-  const { client, provider } = model;
+  const { _id, client, provider } = model;
 
   return {
     id: _id,

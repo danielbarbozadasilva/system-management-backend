@@ -81,7 +81,7 @@ const ControllerRemoveProduct = async (req, res, next) => {
 
 const ControllerFilterProduct = async (req, res, next) => {
   const { query } = req;
-  const resultService = await productService.ServiceSearchByFilter(query);
+  const resultService = await productService.ServiceSearchProductByFilter(query);
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }

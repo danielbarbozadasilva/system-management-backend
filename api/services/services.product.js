@@ -113,6 +113,7 @@ const ServiceSearchProductByFilter = async (filters) => {
     .populate('product')
     .populate('provider')
     .populate('category');
+  
   if (resultDB) {
     return {
       success: true,

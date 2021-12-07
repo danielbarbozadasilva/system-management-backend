@@ -1,38 +1,82 @@
-const { provider, product, like } = require('../models/models.index');
+const { provider, product, client, like } = require('../models/models.index');
 const serviceUserProvider = require('../services/services.user');
 const emailUtils = require('../utils/utils.email');
 const { UtilCreateHash } = require('../utils/utils.cryptography');
 const { toItemListDTO, toDTO } = require('../mappers/mappers.provider');
 const { EmailEnable } = require('../utils/utils.email.message.enable');
 const { EmailDisable } = require('../utils/utils.email.message.disable');
-const { toDTOListLikeProviderProduct } = require('../mappers/mappers.client');
 
 const ServiceListAllProvider = async (filter_order) => {
+  console.log(filter_order);
   const resultDB = await provider.aggregate([
+    // {
+    //   $match: { _id: 1 },
+    // },
     {
       $lookup: {
         from: like.collection.name,
         localField: '_id',
         foreignField: 'provider',
-        as: 'likes',
+        as: 'result_like',
       },
     },
-    { $unwind: { path: '$likes', preserveNullAndEmptyArrays: true } },
-
-    { $match: { 'likes.product': { $ne: null } } },
     {
-      $group: {
-        _id: '$provider',
-        data: { $push: '$$ROOT' },
-        count: { $sum: 1 },
+      $unwind: {
+        path: '$result_like',
+        preserveNullAndEmptyArrays: true,
       },
     },
-    // {
-    //   $sort: {
-    //     'provider.fantasy_name': Number(filter_order.alphabetical),
-    //     count: Number(filter_order.like),
-    //   },
-    // },
+    {
+      $lookup: {
+        from: client.collection.name,
+        localField: 'result_like.client',
+        foreignField: '_id',
+        as: 'result_client',
+      },
+    },
+    {
+      $unwind: {
+        path: '$client',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: client.collection.name,
+        localField: 'result_like.client',
+        foreignField: '_id',
+        as: 'result_client',
+      },
+    },
+    {
+      $unwind: {
+        path: '$result_client',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: product.collection.name,
+        localField: 'result_like.product',
+        foreignField: '_id',
+        as: 'result_product',
+      },
+    },
+    {
+      $unwind: {
+        path: '$result_product',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $addFields: {
+        countA: {
+          $sum: 1,
+        },
+      },
+    },
+    // { $sort: { countA: 1 } },
+    // { $sort: { fantasy_name: 1 } },
   ]);
 
   if (resultDB.length < 1) {
