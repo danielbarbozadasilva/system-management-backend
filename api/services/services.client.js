@@ -3,7 +3,7 @@ const { client } = require('../models/models.index');
 const { toDTO } = require('../mappers/mappers.client');
 const { UtilCreateHash } = require('../utils/utils.cryptography');
 
-const ServiceListAll = async () => {
+const ServiceListAllClient = async () => {
   const resultadoDB = await client.find({}).sort({ name: 1 });
   if (resultadoDB) {
     return {
@@ -21,7 +21,7 @@ const ServiceListAll = async () => {
   }
 };
 
-const ServiceSearchById = async (clientid) => {
+const ServiceSearchByIdClient = async (clientid) => {
   const resultadoDB = await client.findById({ _id: clientid });
   if (resultadoDB) {
     return {
@@ -39,7 +39,7 @@ const ServiceSearchById = async (clientid) => {
   }
 };
 
-const ServiceCreate = async (model) => {
+const ServiceCreateClient = async (model) => {
   const {
     first_name,
     last_name,
@@ -95,7 +95,7 @@ const ServiceUpdateClient = async (client_id, body) => {
       details: ["client id doesn't exist."],
     };
   }
-  if (!await ServiceVerifyEmailBodyExists(body.email)) {
+  if (!(await ServiceVerifyEmailBodyExists(body.email))) {
     return {
       success: false,
       message: 'Operation cannot be performed',
@@ -157,9 +157,9 @@ const ServiceDeleteClient = async (client_id) => {
 };
 
 module.exports = {
-  ServiceListAll,
-  ServiceSearchById,
-  ServiceCreate,
+  ServiceListAllClient,
+  ServiceSearchByIdClient,
+  ServiceCreateClient,
   ServiceUpdateClient,
   ServiceDeleteClient,
 };

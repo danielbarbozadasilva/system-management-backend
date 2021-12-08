@@ -68,11 +68,9 @@ const ControllerUpdateProduct = async (req, res, next) => {
 
 const ControllerRemoveProduct = async (req, res, next) => {
   const { providerid, productid } = req.params;
-  const { user } = req;
-  const resultService = await productService.ServiceRemoveProduct({
+  const resultService = await productService.ServiceDeleteProduct({
     providerId: providerid,
     productId: productid,
-    userId: req.user.id,
   });
   const code = resultService.success ? 200 : 400;
   const message = resultService.success

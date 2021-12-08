@@ -2,7 +2,7 @@ const serviceClientService = require('../services/services.client');
 const serviceLikeService = require('../services/services.like');
 
 const ControllerListAllClients = async (req, res, next) => {
-  const resultService = await serviceClientService.ServiceListAll();
+  const resultService = await serviceClientService.ServiceListAllClient();
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }
@@ -13,7 +13,9 @@ const ControllerListAllClients = async (req, res, next) => {
 
 const ControllerListClientById = async (req, res, next) => {
   const { clientid } = req.params;
-  const resultService = await serviceClientService.ServiceSearchById(clientid);
+  const resultService = await serviceClientService.ServiceSearchByIdClient(
+    clientid
+  );
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }
@@ -24,7 +26,7 @@ const ControllerListClientById = async (req, res, next) => {
 
 const ControllerInsertClients = async (req, res, next) => {
   const { body } = req;
-  const resultService = await serviceClientService.ServiceCreate(body);
+  const resultService = await serviceClientService.ServiceCreateClient(body);
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }
