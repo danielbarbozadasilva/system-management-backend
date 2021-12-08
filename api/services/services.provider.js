@@ -80,10 +80,78 @@ const ServiceListAllProvider = async (filter_order) => {
   }
 };
 
-const ServiceListProviderById = async (id) => {
-  const resultDB = await provider.findById({
-    _id: Object(id),
-  });
+const ServiceListProviderById = async (filter_id) => {
+  const resultDB = await provider.aggregate([
+    { $match: { _id: filter_id } },
+
+    {
+      $lookup: {
+        from: like.collection.name,
+        localField: '_id',
+        foreignField: 'provider',
+        as: 'result_like',
+      },
+    },
+    {
+      $unwind: {
+        path: '$result_like',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: client.collection.name,
+        localField: 'result_like.client',
+        foreignField: '_id',
+        as: 'result_client',
+      },
+    },
+    {
+      $unwind: {
+        path: '$client',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: client.collection.name,
+        localField: 'result_like.client',
+        foreignField: '_id',
+        as: 'result_client',
+      },
+    },
+    {
+      $unwind: {
+        path: '$result_client',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: product.collection.name,
+        localField: 'result_like.product',
+        foreignField: '_id',
+        as: 'result_product',
+      },
+    },
+    {
+      $unwind: {
+        path: '$result_product',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $group: {
+        _id: '$result_like.client',
+        _id: '$_id',
+
+        data: { $push: '$$ROOT' },
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { count: 1 } },
+  ]);
+
   if (!resultDB) {
     return {
       success: false,
@@ -95,7 +163,7 @@ const ServiceListProviderById = async (id) => {
   return {
     success: true,
     message: 'operation performed successfully',
-    data: [toDTO(resultDB)],
+    data: resultDB,
   };
 };
 

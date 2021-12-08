@@ -20,7 +20,7 @@ const ServiceSearchAllCategory = async () => {
       details: 'No categories found',
     };
   }
-};
+}
 
 const ServiceSearchCategoryById = async (category_id) => {
   const categoryDB = await category.find({

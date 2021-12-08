@@ -7,11 +7,11 @@ module.exports = (router) => {
   router.route('/provider/filterorder/:like/:alphabetical').get(
     authorizationMiddleware('*'),
     middlewareValidateDTO('body', {
-      like: joi.number().valid('1', '-1').messages({
+      like: joi.number().valid('1', '0').messages({
         'any.required': `"like" is a required field`,
         'number.empty': `"like" can not be empty`,
       }),
-      alphabetical: joi.number().valid('1', '-1').messages({
+      alphabetical: joi.number().valid('1', '0').messages({
         'any.required': `"alphabetical" is a required field`,
         'number.empty': `"alphabetical" can not be empty`,
       }),

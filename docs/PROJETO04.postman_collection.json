@@ -286,7 +286,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"daniel90barboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
+							"raw": "{\n    \"email\": \"danielbarboza56@hotmail.com\",\n    \"password\": \"daniel\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -343,7 +343,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/filter/1/1",
+							"raw": "http://localhost:3011/v1/provider/filterorder/0/0",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -352,9 +352,9 @@
 							"path": [
 								"v1",
 								"provider",
-								"filter",
-								"1",
-								"1"
+								"filterorder",
+								"0",
+								"0"
 							]
 						}
 					},
@@ -889,7 +889,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/product",
+							"raw": "http://localhost:3011/v1/product?category=615a19fd4384691888d27098",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -898,6 +898,22 @@
 							"path": [
 								"v1",
 								"product"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "615a19fd4384691888d27098"
+								},
+								{
+									"key": "provider",
+									"value": "615a584a79b274425a6fa7db",
+									"disabled": true
+								},
+								{
+									"key": "namelike",
+									"value": "TORTA DE CHOCOLATE3",
+									"disabled": true
+								}
 							]
 						}
 					},
