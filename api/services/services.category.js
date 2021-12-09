@@ -26,6 +26,7 @@ const ServiceSearchCategoryById = async (category_id) => {
   const categoryDB = await category.find({
     _id: Object(category_id),
   });
+
   if (categoryDB.length > 0) {
     return {
       success: true,
@@ -70,7 +71,7 @@ const ServiceInsertCategory = async (body) => {
   } else {
     return {
       success: false,
-      details: 'Error updating category',
+      message: 'error when inserting to categories',
     };
   }
 };

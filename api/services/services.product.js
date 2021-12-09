@@ -96,6 +96,7 @@ const ServiceCreateProduct = async (body, providerid) => {
 
 const ServiceSearchProductByFilter = async (filters) => {
   const filter = {};
+
   if (filters.category) {
     filter.category = filters.category;
   }
@@ -113,13 +114,12 @@ const ServiceSearchProductByFilter = async (filters) => {
     .populate('product')
     .populate('provider')
     .populate('category');
+
   if (resultDB) {
     return {
       success: true,
       message: 'operation performed successfully',
-      data: {
-        ...productMapper.toDTO(resultDB),
-      },
+      data: resultDB,
     };
   } else {
     return {
