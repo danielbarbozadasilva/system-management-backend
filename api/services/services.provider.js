@@ -191,15 +191,15 @@ const ServiceListProductsProvider = async (providerid) => {
 
 const ServiceListProvidersByLocation = async (uf, city) => {
   let filter = {};
-
-  if (city == undefined || city == 'x') {
+  if (city == undefined || city == "x") {
     filter = { uf };
   } else {
-    filter = { uf, city };
+    filter = { uf, cidade };
   }
+  console.log(filter);
 
-  const resultDB = await provider.find(filter);
-
+  const resultDB = await provider.find(filter)
+  console.log(resultDB);
   if (!resultDB) {
     return {
       success: false,

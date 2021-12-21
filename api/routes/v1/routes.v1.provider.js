@@ -6,7 +6,7 @@ const authorizationMiddleware = require('../../utils/middlewares/middlewares.aut
 module.exports = (router) => {
   router.route('/provider/filterorder/:like/:alphabetical').get(
     authorizationMiddleware('*'),
-    middlewareValidateDTO('body', {
+    middlewareValidateDTO('params', {
       like: joi.number().valid('1', '0').messages({
         'any.required': `"like" is a required field`,
         'number.empty': `"like" can not be empty`,
@@ -72,8 +72,17 @@ module.exports = (router) => {
 
   router
     .route('/provider/filter/:uf/:city')
-    .get(
-      authorizationMiddleware('*'),
+    .get(authorizationMiddleware('*'),
+      middlewareValidateDTO('params', {
+        uf: joi.string().messages({
+          'any.required': `"uf" is a required field`,
+          'string.empty': `"uf" can not be empty`,
+        }),
+        city: joi.string().messages({
+          'any.required': `"city" is a required field`,
+          'string.empty': `"city" can not be empty`,
+        }),
+      }),
       providerController.ControllerListProvidersByLocation
     );
 

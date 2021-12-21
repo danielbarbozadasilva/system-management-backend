@@ -9,11 +9,10 @@ const ServiceSearchAllCategory = async () => {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: [
+      data: 
         categoryDB.map(item => {
           return categoryMapper.toDTO(item);
         }),
-      ],
     };
   } else {
     throw new ErrorBusinessRule('No categories found');
