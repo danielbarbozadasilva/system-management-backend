@@ -13,11 +13,14 @@ const ServiceListAllProvider = async (filter_order) => {
     filter = { count: -1 };
   } else if (filter_order.alphabetical == 1) {
     filter = { fantasy_name: 1 };
-  } else if (filter_order.like == 0 && filter_order.like == 0) {
+  } else if (filter_order.like == undefined && filter_order.like == undefined) {
     filter = { fantasy_name: -1 };
   }
 
-  const resultDB = await provider.aggregate([
+  console.log(filter_order);
+  console.log(filter);
+
+  const resultDB = await provider.find([
     {
       $lookup: {
         from: like.collection.name,
@@ -191,15 +194,16 @@ const ServiceListProductsProvider = async (providerid) => {
 
 const ServiceListProvidersByLocation = async (uf, city) => {
   let filter = {};
-  if (city == undefined || city == "x") {
+  if (city == 'undefined' || city == "x") {
     filter = { uf };
   } else {
-    filter = { uf, cidade };
+    filter = { uf, city };
   }
+  console.log(city);
   console.log(filter);
 
   const resultDB = await provider.find(filter)
-  console.log(resultDB);
+  // console.log(resultDB);
   if (!resultDB) {
     return {
       success: false,
