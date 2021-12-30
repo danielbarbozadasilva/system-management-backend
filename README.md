@@ -1,21 +1,23 @@
-# Introduction
-
+# **Management Node API**
 We are constantly faced with new commercial establishments, many of which do not have a means of promotion or are not easily located. The REGALE System came to solve this problem, with a focus on bakeries, it allows the user, through a web system, to locate the bakeries close to their residence.
+<br/>
+<br/>
 
-# Product scope
-
+> ## Product scope
 The System aims to list the bakeries and manage them, enabling consultation by customers. The project aims to promote the bakeries, especially those that are starting on the market, or that are not well known. Allows you to offer more product options and prices.
+<br/>
+<br/>
 
-# General description
-
+> ## General description
 REGALE is a web system that aims to establish a relationship between the customer and a specific market niche. All of its features were designed and designed to provide comfort and convenience to users.
 
 The System's proposal is to publicize the establishment, which is a recurrent problem in bakeries that are just starting on the market, as they still don't have a way to publicize their business.
 
 In addition to publicizing the establishments, the System provides a user-friendly interface for the customer to list the bakeries and manage them and the 'customer' user. The users of the system are the administrator, the owner of the bakery and the customer. Where everyone has access to the system according to their credentials and access permissions. In addition, the System has an initial screen that allows the public to easily navigate between categories, products and suppliers.
+<br/>
+<br/>
 
-# Functional requirements
-
+> ## Functional requirements
 [FR1] It is necessary to handle admin user authentication. Explanation: The System must allow admin access based on his credentials. Blocking any access attempts by other users.
 
 [FR2] Only authorized supplier users can access the system. Explanation: The System must allow access to suppliers based on their credentials. Blocking any access attempts by other users.
@@ -51,3 +53,73 @@ In addition to publicizing the establishments, the System provides a user-friend
 [FR17] All users have the ability to list products by category sorted by favorite, by value and by description. Explanation: The System should display products by category sorted by favorite, by value and by description.
 
 [FR18] All users need to define the location (UF and city) to search. Explanation: The System should display filter users by locality (UF and city).
+
+> ## License
+- GPLv3 License
+<br/>
+<br/>
+
+> ## Methodologies and Designs
+* MVC
+* Conventional Commits
+* GitFlow
+* Use Cases
+<br/>
+<br/>
+
+> ## Libraries and Tools
+* NPM
+* Typescript
+* Git
+* Docker
+* MongoDb
+* Bcrypt
+* JsonWebToken
+* Validator
+* Express
+* Husky
+* Lint Staged
+* Eslint
+* Standard Javascript Style
+* Nodemon
+* FileSystem
+<br/>
+<br/>
+
+> ## Node Features
+* API documentation with Swagger
+* Rest API with Express
+* Error Log
+* Security (Hashing, Encryption and Encoding)
+* Middlewares
+* Access Level on Routes (Admin, Provider, Client and Anonymous)
+* Deploy on Heroku
+* Serve Static Files
+<br/>
+<br/>
+
+> ## Features do Git
+* Alias
+* Log Personalizado
+* Branch
+* Reset
+* Amend
+* Tag
+* Stash
+* Rebase
+* Merge
+<br/>
+<br/>
+
+> ## MongoDb Features
+* Connect e Reconnect
+* Collections
+* InsertOne e InsertMany
+* Find, FindOne e FindOneAndUpdate
+* DeleteMany
+* UpdateOne
+* Aggregation (Match, Group, Unwind, Lookup, AddFields, Project, Sort)
+* ObjectId
+* Upsert e ReturnOriginal
+* Push, Divide, Multiply, ArrayElemAt, Cond, Sum
+* Filter, Map, Reduce, MergeObjects, ConcatArrays
