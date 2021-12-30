@@ -38,6 +38,7 @@
     "moment": "^2.29.1",
     "mongoose": "^5.12.9",
     "mongoose-data-seed": "^2.1.6",
+    "node-geocoder": "^3.28.0",
     "nodemon": "^2.0.7",
     "npm": "^7.15.0",
     "nuclide-prebuilt-libs": "^0.6.3",

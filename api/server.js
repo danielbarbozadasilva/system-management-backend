@@ -6,7 +6,12 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 mongoose.connect(
   db.uri,
-  { useUnifiedTopology: true, useNewUrlParser: true },
+  {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  },
   (err) => {
     if (err) {
       console.log('Unable to connect to MongoDB server');

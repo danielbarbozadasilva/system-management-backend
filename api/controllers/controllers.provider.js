@@ -31,10 +31,7 @@ const ControllerListProviderById = async (req, res, next) => {
 
 const ControllerListProvidersByLocation = async (req, res, next) => {
   const { uf, city } = req.params;
-  const resultService = await providerService.ServiceListProvidersByLocation(
-    uf,
-    city
-  );
+  const resultService = await providerService.ServiceListProvidersByLocation(uf, city);
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }
