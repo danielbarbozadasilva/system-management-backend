@@ -1,46 +1,43 @@
 const { category } = require('../models/models.index');
 const categoryMapper = require('../mappers/mappers.category');
 const fileUtils = require('../utils/utils.file');
+const ErrorBusinessRule = require('../utils/errors/errors.business_rule');
 
 const ServiceSearchAllCategory = async () => {
   const categoryDB = await category.find({}).sort({ description: 1 });
-  if (categoryDB) {
+  if (categoryDB.length > 0) {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: categoryDB.map((item) => {
-        return categoryMapper.toDTO(item);
-      }),
+      data: 
+        categoryDB.map(item => {
+          return categoryMapper.toDTO(item);
+        }),
     };
   } else {
-    return {
-      success: false,
-      details: 'No categories found',
-    };
+    throw new ErrorBusinessRule('No categories found');
   }
 };
 
-const ServiceSearchCategoryById = async (category_id) => {
-  const categoryDB = await category.findById({
+const ServiceSearchCategoryById = async category_id => {
+  const categoryDB = await category.find({
     _id: Object(category_id),
   });
-  if (categoryDB) {
+
+  if (categoryDB.length > 0) {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: [categoryDB].map((item) => {
+      data: categoryDB.map(item => {
         return categoryMapper.toDTO(item);
       }),
     };
   } else {
-    return {
-      success: false,
-      details: 'No categories found',
-    };
+    throw new ErrorBusinessRule('No categories found');
   }
 };
 
-const ServiceInsertCategory = async (body) => {
+const ServiceInsertCategory = async body => {
   const categoryDB = await category.create({
     name: body.name,
     description: body.description,
@@ -68,20 +65,16 @@ const ServiceInsertCategory = async (body) => {
   } else {
     return {
       success: false,
-      details: 'Error updating category',
+      message: 'error when inserting to categories',
     };
   }
 };
 
-const ServiceRemoveCategoryProducts = async (category_Id) => {
+const ServiceRemoveCategoryProducts = async category_Id => {
   const categoryDB = await category.findOne({ _id: category_Id });
 
   if (!categoryDB) {
-    return {
-      success: false,
-      message: 'could not perform the operation',
-      details: ["category_id doesn't exist."],
-    };
+    throw new ErrorBusinessRule("category_id doesn't exist.");
   }
 
   const { image } = categoryDB;
@@ -105,11 +98,7 @@ const ServiceRemoveCategoryProducts = async (category_Id) => {
 const ServiceUpdateCategory = async (category_Id, body) => {
   const categoryDB = await category.findOne({ _id: category_Id });
   if (!categoryDB) {
-    return {
-      success: false,
-      message: 'could not perform the operation',
-      details: ["category_id doesn't exist."],
-    };
+    throw new ErrorBusinessRule("category_id doesn't exist.");
   }
   if (typeof body.image === 'object') {
     categoryDB.name = body.name;

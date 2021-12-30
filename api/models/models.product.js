@@ -25,17 +25,17 @@ module.exports = {
     default: 0,
   },
   image: {
-    sourceFile: {
+    origin: {
       type: String,
       required: false,
     },
     name: {
       type: String,
-      required: true,
+      required: false,
     },
     type: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   category: {

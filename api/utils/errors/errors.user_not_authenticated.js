@@ -1,11 +1,11 @@
-const status = require("http-status");
-const defaultMessage = "O Usuário não esta autorizado";
-const ErrorGeneric = require("./erros.generic_error");
+const status = require('http-status');
+const defaultMessage = 'User is not authorized';
+const ErrorGeneric = require('./erros.generic_error');
 
-module.exports = class ErrouserNaoAutenticado extends ErrorGeneric {
+module.exports = class ErrorUnauthorizedUser extends ErrorGeneric {
   constructor(message) {
     super(message);
-    Error.captureStackTrace(this, ErrouserNaoAutenticado);
+    Error.captureStackTrace(this, ErrorUnauthorizedUser);
     this.statusCode = status.UNAUTHORIZED;
     this.message = message || defaultMessage;
   }

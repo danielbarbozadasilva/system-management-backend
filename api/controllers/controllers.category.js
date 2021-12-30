@@ -11,7 +11,7 @@ const ControllerListAllCategory = async (req, res, next) => {
 };
 
 const ControllerListCategoryById = async (req, res, next) => {
-  const { params } = req;
+  const { params } = req;   
   const resultService = await categoryService.ServiceSearchCategoryById(
     params.categoryid
   );

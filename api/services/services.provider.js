@@ -1,4 +1,4 @@
-const { provider, product, like } = require('../models/models.index');
+const { provider, product, client, like } = require('../models/models.index');
 const serviceUserProvider = require('../services/services.user');
 const emailUtils = require('../utils/utils.email');
 const { UtilCreateHash } = require('../utils/utils.cryptography');
@@ -6,21 +6,155 @@ const { toItemListDTO, toDTO } = require('../mappers/mappers.provider');
 const { EmailEnable } = require('../utils/utils.email.message.enable');
 const { EmailDisable } = require('../utils/utils.email.message.disable');
 
-const ServiceListAllProvider = async () => {
-  const resultDB = await provider.find({}).sort({ fantasy_name: 1 });
-  return {
-    success: true,
-    message: 'Operation performed successfully',
-    data: resultDB.map((item) => {
-      return toDTO(item);
-    }),
-  };
+const ServiceListAllProvider = async (filter_order) => {
+  let filter = {};
+
+  if (filter_order.like == 1) {
+    filter = { count: -1 };
+  } else if (filter_order.alphabetical == 1) {
+    filter = { fantasy_name: 1 };
+  } else if (filter_order.like == undefined && filter_order.like == undefined) {
+    filter = { fantasy_name: -1 };
+  }
+
+  console.log(filter_order);
+  console.log(filter);
+
+  const resultDB = await provider.find([
+    {
+      $lookup: {
+        from: like.collection.name,
+        localField: '_id',
+        foreignField: 'provider',
+        as: 'result_like',
+      },
+    },
+    {
+      $unwind: {
+        path: '$result_like',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: product.collection.name,
+        localField: 'result_like.product',
+        foreignField: '_id',
+        as: 'result_product',
+      },
+    },
+    {
+      $unwind: {
+        path: '$result_product',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $match: {
+        'result_like.product': {
+          $exists: true,
+          $ne: null,
+        },
+      },
+    },
+    {
+      $group: {
+        _id: '$result_like.product',
+        _id: '$_id',
+
+        data: { $push: '$$ROOT' },
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: filter },
+  ]);
+
+  if (resultDB.length < 1) {
+    return {
+      success: false,
+      details: 'No likes found!',
+    };
+  } else if (resultDB.length > 0) {
+    return {
+      success: true,
+      message: 'Operation performed successfully!',
+      data: resultDB,
+    };
+  }
 };
 
-const ServiceListProviderById = async (id) => {
-  const resultDB = await provider.findById({
-    _id: Object(id),
-  });
+const ServiceListProviderById = async (filter_id) => {
+  const resultDB = await provider.aggregate([
+    { $match: { _id: filter_id } },
+
+    {
+      $lookup: {
+        from: like.collection.name,
+        localField: '_id',
+        foreignField: 'provider',
+        as: 'result_like',
+      },
+    },
+    {
+      $unwind: {
+        path: '$result_like',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: client.collection.name,
+        localField: 'result_like.client',
+        foreignField: '_id',
+        as: 'result_client',
+      },
+    },
+    {
+      $unwind: {
+        path: '$client',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: client.collection.name,
+        localField: 'result_like.client',
+        foreignField: '_id',
+        as: 'result_client',
+      },
+    },
+    {
+      $unwind: {
+        path: '$result_client',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $lookup: {
+        from: product.collection.name,
+        localField: 'result_like.product',
+        foreignField: '_id',
+        as: 'result_product',
+      },
+    },
+    {
+      $unwind: {
+        path: '$result_product',
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $group: {
+        _id: '$result_like.client',
+        _id: '$_id',
+
+        data: { $push: '$$ROOT' },
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { count: 1 } },
+  ]);
+
   if (!resultDB) {
     return {
       success: false,
@@ -32,7 +166,7 @@ const ServiceListProviderById = async (id) => {
   return {
     success: true,
     message: 'operation performed successfully',
-    data: [toDTO(resultDB)],
+    data: resultDB,
   };
 };
 
@@ -41,7 +175,7 @@ const ServiceListProductsProvider = async (providerid) => {
     .find({ provider: providerid })
     .populate('provider');
 
-  if (!resultDB) {
+  if (!resultDB.length > 0) {
     return {
       success: false,
       message: 'operation cannot be performed',
@@ -60,12 +194,16 @@ const ServiceListProductsProvider = async (providerid) => {
 
 const ServiceListProvidersByLocation = async (uf, city) => {
   let filter = {};
-  if (city == undefined || city == 'x') {
+  if (city == 'undefined' || city == "x") {
     filter = { uf };
   } else {
     filter = { uf, city };
   }
-  const resultDB = await provider.find(filter);
+  console.log(city);
+  console.log(filter);
+
+  const resultDB = await provider.find(filter)
+  // console.log(resultDB);
   if (!resultDB) {
     return {
       success: false,
@@ -76,7 +214,7 @@ const ServiceListProvidersByLocation = async (uf, city) => {
   return {
     success: true,
     message: 'operation performed successfully',
-    data: [toItemListDTO(...resultDB)],
+    data: resultDB,
   };
 };
 
@@ -102,7 +240,7 @@ const ServiceCreateProvider = async (model) => {
       details: ['There is already a registered provider for the entered cnpj'],
     };
 
-  if (await serviceUserProvider.ServiceVerifyEmailExists(email))
+  if (!(await serviceUserProvider.ServiceVerifyEmailBodyExists(email)))
     return {
       success: false,
       message: 'operation cannot be performed',
@@ -151,7 +289,9 @@ const ServiceUpdateProvider = async (provider_id, body) => {
     };
   }
 
-  if (await serviceUserProvider.ServiceVerifyEmail(provider_id, body.email)) {
+  if (
+    !(await serviceUserProvider.ServiceVerifyEmail(provider_id, body.email))
+  ) {
     return {
       success: false,
       message: 'operation cannot be performed',
@@ -184,7 +324,7 @@ const ServiceUpdateProvider = async (provider_id, body) => {
   } else {
     return {
       success: true,
-      message: 'Operation performed successfully',
+      message: 'Data updated successfully',
       data: {
         ...toDTO(new_provider),
       },

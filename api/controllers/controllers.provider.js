@@ -2,7 +2,9 @@ const providerService = require('../services/services.provider');
 const likeService = require('../services/services.like');
 
 const ControllerListAllProviders = async (req, res, next) => {
-  const resultService = await providerService.ServiceListAllProvider();
+  const { like, alphabetical } = req.params;
+
+  const resultService = await providerService.ServiceListAllProvider(like, alphabetical);
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }
@@ -26,10 +28,7 @@ const ControllerListProviderById = async (req, res, next) => {
 
 const ControllerListProvidersByLocation = async (req, res, next) => {
   const { uf, city } = req.params;
-  const resultService = await providerService.ServiceListProvidersByLocation(
-    uf,
-    city
-  );
+  const resultService = await providerService.ServiceListProvidersByLocation(uf, city);
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }
@@ -103,10 +102,10 @@ const ControllerChangeStatusProvider = async (req, res, next) => {
 };
 
 const ControllerSearchLikeProduct = async (req, res, next) => {
-  const { providerid, productid } = req.params;
+  const { providerid } = req.params;
+
   const resultService = await likeService.ServiceSearchLikeProviderProduct(
-    providerid,
-    productid
+    providerid
   );
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
@@ -117,7 +116,6 @@ const ControllerSearchLikeProduct = async (req, res, next) => {
 };
 
 const ControllerInsertLikeProduct = async (req, res, next) => {
-  const { params, user } = req;
   const { providerid, productid } = req.params;
   const resultService = await likeService.ServiceCreateLikeProviderProduct(
     providerid,
@@ -132,7 +130,7 @@ const ControllerInsertLikeProduct = async (req, res, next) => {
 };
 
 const ControllerDeleteLikeProduct = async (req, res, next) => {
-  const { user, params } = req;
+  const { params } = req;
   const resultService = await likeService.ServiceRemoveLikeProviderProduct(
     params.providerid,
     params.productid
