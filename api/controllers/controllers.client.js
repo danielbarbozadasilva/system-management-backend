@@ -1,8 +1,8 @@
-const serviceClientService = require('../services/services.client');
-const serviceLikeService = require('../services/services.like');
+const clientService = require('../services/services.client');
+const likeService = require('../services/services.like');
 
 const ControllerListAllClients = async (req, res, next) => {
-  const resultService = await serviceClientService.ServiceListAllClient();
+  const resultService = await clientService.listAllClientService();
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }
@@ -13,7 +13,7 @@ const ControllerListAllClients = async (req, res, next) => {
 
 const ControllerListClientById = async (req, res, next) => {
   const { clientid } = req.params;
-  const resultService = await serviceClientService.ServiceSearchByIdClient(
+  const resultService = await clientService.listClientByIdService(
     clientid
   );
   const code = resultService.success ? 200 : 400;
@@ -26,7 +26,7 @@ const ControllerListClientById = async (req, res, next) => {
 
 const ControllerInsertClients = async (req, res, next) => {
   const { body } = req;
-  const resultService = await serviceClientService.ServiceCreateClient(body);
+  const resultService = await clientService.createClientService(body);
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }
@@ -39,7 +39,7 @@ const ControllerUpdateClients = async (req, res, next) => {
   const { clientid } = req.params;
   const { body } = req;
 
-  const resultService = await serviceClientService.ServiceUpdateClient(
+  const resultService = await clientService.updateClientService(
     clientid,
     body
   );
@@ -53,7 +53,7 @@ const ControllerUpdateClients = async (req, res, next) => {
 
 const ControllerDeleteClients = async (req, res, next) => {
   const { clientid } = req.params;
-  const resultService = await serviceClientService.ServiceDeleteClient(
+  const resultService = await clientService.deleteClientService(
     clientid
   );
   const code = resultService.success ? 200 : 400;
@@ -67,7 +67,7 @@ const ControllerDeleteClients = async (req, res, next) => {
 const ControllerSearchLikeProvider = async (req, res, next) => {
   const { clientid } = req.params;
   const resultService =
-    await serviceLikeService.ServiceSearchLikeClientProvider(clientid);
+    await likeService.ServiceSearchLikeClientProvider(clientid);
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }
@@ -79,7 +79,7 @@ const ControllerSearchLikeProvider = async (req, res, next) => {
 const ControllerInsertLikeProvider = async (req, res, next) => {
   const { providerid, clientid } = req.params;
   const resultService =
-    await serviceLikeService.ServiceCreateLikeClientProvider(
+    await likeService.ServiceCreateLikeClientProvider(
       providerid,
       clientid
     );
@@ -94,7 +94,7 @@ const ControllerInsertLikeProvider = async (req, res, next) => {
 const ControllerRemoveLikeProvider = async (req, res, next) => {
   const { providerid, clientid } = req.params;
   const resultService =
-    await serviceLikeService.ServiceRemoveLikeClientProvider(
+    await likeService.ServiceRemoveLikeClientProvider(
       providerid,
       clientid
     );

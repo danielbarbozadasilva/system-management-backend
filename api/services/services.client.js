@@ -1,9 +1,9 @@
-const { ServiceVerifyEmailBodyExists } = require('./services.user');
+const { verifyEmailBodyExistService } = require('./services.user');
 const { client } = require('../models/models.index');
 const { toDTO } = require('../mappers/mappers.client');
 const { UtilCreateHash } = require('../utils/utils.cryptography');
 
-const ServiceListAllClient = async () => {
+const listAllClientService = async () => {
   const resultadoDB = await client.find({}).sort({ name: 1 });
   if (resultadoDB) {
     return {
@@ -21,7 +21,7 @@ const ServiceListAllClient = async () => {
   }
 };
 
-const ServiceSearchByIdClient = async (clientid) => {
+const listClientByIdService = async (clientid) => {
   const resultadoDB = await client.findById({ _id: clientid });
   if (resultadoDB) {
     return {
@@ -39,7 +39,7 @@ const ServiceSearchByIdClient = async (clientid) => {
   }
 };
 
-const ServiceCreateClient = async (model) => {
+const createClientService = async (model) => {
   const {
     first_name,
     last_name,
@@ -51,7 +51,7 @@ const ServiceCreateClient = async (model) => {
     password,
     status,
   } = model;
-  if (!(await ServiceVerifyEmailBodyExists(email)))
+  if (!(await verifyEmailBodyExistService(email)))
     return {
       success: false,
       message: 'Operation cannot be performed',
@@ -85,7 +85,7 @@ const ServiceCreateClient = async (model) => {
   }
 };
 
-const ServiceUpdateClient = async (client_id, body) => {
+const updateClientService = async (client_id, body) => {
   const resultFind = await client.findById({ _id: client_id });
 
   if (!resultFind) {
@@ -95,7 +95,7 @@ const ServiceUpdateClient = async (client_id, body) => {
       details: ["client id doesn't exist."],
     };
   }
-  if (!(await ServiceVerifyEmailBodyExists(body.email))) {
+  if (!(await verifyEmailBodyExistService(body.email))) {
     return {
       success: false,
       message: 'Operation cannot be performed',
@@ -131,7 +131,7 @@ const ServiceUpdateClient = async (client_id, body) => {
   }
 };
 
-const ServiceDeleteClient = async (client_id) => {
+const deleteClientService = async (client_id) => {
   const resultFind = await client.findById({ _id: client_id });
 
   if (!resultFind) {
@@ -157,9 +157,9 @@ const ServiceDeleteClient = async (client_id) => {
 };
 
 module.exports = {
-  ServiceListAllClient,
-  ServiceSearchByIdClient,
-  ServiceCreateClient,
-  ServiceUpdateClient,
-  ServiceDeleteClient,
+  listAllClientService,
+  listClientByIdService,
+  createClientService,
+  updateClientService,
+  deleteClientService,
 };
