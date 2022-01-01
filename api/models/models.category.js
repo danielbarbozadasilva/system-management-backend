@@ -4,18 +4,10 @@ const Schema = mongoose.Schema;
 module.exports = {
   name: {
     type: String,
-    uppercase: true,
-    trim: true,
-    maxlength: 50,
-    minlength: 5,
     required: true,
   },
   description: {
     type: String,
-    uppercase: true,
-    trim: true,
-    maxlength: 50,
-    minlength: 5,
     required: false,
   },
   image: {
