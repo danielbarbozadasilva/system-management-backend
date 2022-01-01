@@ -67,7 +67,7 @@ const ControllerDeleteClients = async (req, res, next) => {
 const ControllerSearchLikeProvider = async (req, res, next) => {
   const { clientid } = req.params;
   const resultService =
-    await likeService.ServiceSearchLikeClientProvider(clientid);
+    await likeService.listLikesClientProviderService(clientid);
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }
@@ -79,7 +79,7 @@ const ControllerSearchLikeProvider = async (req, res, next) => {
 const ControllerInsertLikeProvider = async (req, res, next) => {
   const { providerid, clientid } = req.params;
   const resultService =
-    await likeService.ServiceCreateLikeClientProvider(
+    await likeService.createLikeClientProviderService(
       providerid,
       clientid
     );
@@ -94,7 +94,7 @@ const ControllerInsertLikeProvider = async (req, res, next) => {
 const ControllerRemoveLikeProvider = async (req, res, next) => {
   const { providerid, clientid } = req.params;
   const resultService =
-    await likeService.ServiceRemoveLikeClientProvider(
+    await likeService.removeLikeClientProviderService(
       providerid,
       clientid
     );

@@ -1,10 +1,7 @@
 const { provider, product, like, client } = require('../models/models.index');
-const {
-  toDTOListLikeClientProvider,
-  toDTOListLikeProviderProduct,
-} = require('../mappers/mappers.client');
+const { toDTOListLikeProviderProduct } = require('../mappers/mappers.client');
 
-const ServiceSearchLikeProviderProduct = async (provider_id) => {
+const listLikesProviderProductService = async (provider_id) => {
   const likeDB = await like
     .find({
       provider: provider_id,
@@ -30,7 +27,7 @@ const ServiceSearchLikeProviderProduct = async (provider_id) => {
   }
 };
 
-const ServiceCreateLikeProviderProduct = async (provider_id, product_id) => {
+const createLikeProviderProductService = async (provider_id, product_id) => {
   const [providerDB, productDB, likeDB, likeProviderDB] = await Promise.all([
     provider.findById(provider_id),
     product.findById(product_id),
@@ -82,7 +79,7 @@ const ServiceCreateLikeProviderProduct = async (provider_id, product_id) => {
   }
 };
 
-const ServiceRemoveLikeProviderProduct = async (provider_id, product_id) => {
+const removeLikeProviderProductService = async (provider_id, product_id) => {
   const [providerDB, productDB, likeDB] = await Promise.all([
     provider.findById(provider_id),
     product.findById(product_id),
@@ -117,7 +114,7 @@ const ServiceRemoveLikeProviderProduct = async (provider_id, product_id) => {
   }
 };
 
-const ServiceSearchLikeClientProvider = async (client_id) => {
+const listLikesClientProviderService = async (client_id) => {
   const resultLikeDB = await client.aggregate([
     {
       $lookup: {
@@ -143,7 +140,7 @@ const ServiceSearchLikeClientProvider = async (client_id) => {
   }
 };
 
-const ServiceCreateLikeClientProvider = async (provider_id, client_id) => {
+const createLikeClientProviderService = async (provider_id, client_id) => {
   const [providerDB, clientDB, likeDB, likeProviderDB] = await Promise.all([
     provider.findById(Object(provider_id)),
     client.findById(client_id),
@@ -195,7 +192,7 @@ const ServiceCreateLikeClientProvider = async (provider_id, client_id) => {
   }
 };
 
-const ServiceRemoveLikeClientProvider = async (provider_id, client_id) => {
+const removeLikeClientProviderService = async (provider_id, client_id) => {
   const [providerDB, clientDB, likeDB] = await Promise.all([
     provider.findById(provider_id),
     client.findById(client_id),
@@ -236,10 +233,10 @@ const ServiceRemoveLikeClientProvider = async (provider_id, client_id) => {
 };
 
 module.exports = {
-  ServiceSearchLikeProviderProduct,
-  ServiceCreateLikeProviderProduct,
-  ServiceRemoveLikeProviderProduct,
-  ServiceSearchLikeClientProvider,
-  ServiceCreateLikeClientProvider,
-  ServiceRemoveLikeClientProvider,
+  listLikesProviderProductService,
+  createLikeProviderProductService,
+  removeLikeProviderProductService,
+  listLikesClientProviderService,
+  createLikeClientProviderService,
+  removeLikeClientProviderService,
 };
