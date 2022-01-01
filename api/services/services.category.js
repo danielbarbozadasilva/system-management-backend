@@ -3,13 +3,13 @@ const categoryMapper = require('../mappers/mappers.category');
 const fileUtils = require('../utils/utils.file');
 const ErrorBusinessRule = require('../utils/errors/errors.business_rule');
 
-const ServiceSearchAllCategory = async () => {
+const searchAllCategoryService = async () => {
   const categoryDB = await category.find({}).sort({ description: 1 });
   if (categoryDB.length > 0) {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: 
+      data:
         categoryDB.map(item => {
           return categoryMapper.toDTO(item);
         }),
@@ -19,7 +19,7 @@ const ServiceSearchAllCategory = async () => {
   }
 };
 
-const ServiceSearchCategoryById = async category_id => {
+const searchCategoryByIdService = async category_id => {
   const categoryDB = await category.find({
     _id: Object(category_id),
   });
@@ -37,7 +37,7 @@ const ServiceSearchCategoryById = async category_id => {
   }
 };
 
-const ServiceInsertCategory = async body => {
+const addCategoryService = async body => {
   const categoryDB = await category.create({
     name: body.name,
     description: body.description,
@@ -70,7 +70,7 @@ const ServiceInsertCategory = async body => {
   }
 };
 
-const ServiceRemoveCategoryProducts = async category_Id => {
+const removeCategoryProductsService = async category_Id => {
   const categoryDB = await category.findOne({ _id: category_Id });
 
   if (!categoryDB) {
@@ -95,7 +95,7 @@ const ServiceRemoveCategoryProducts = async category_Id => {
   }
 };
 
-const ServiceUpdateCategory = async (category_Id, body) => {
+const updateCategoryService = async (category_Id, body) => {
   const categoryDB = await category.findOne({ _id: category_Id });
   if (!categoryDB) {
     throw new ErrorBusinessRule("category_id doesn't exist.");
@@ -129,9 +129,9 @@ const ServiceUpdateCategory = async (category_Id, body) => {
 };
 
 module.exports = {
-  ServiceSearchAllCategory,
-  ServiceSearchCategoryById,
-  ServiceInsertCategory,
-  ServiceRemoveCategoryProducts,
-  ServiceUpdateCategory,
+  searchAllCategoryService,
+  searchCategoryByIdService,
+  addCategoryService,
+  removeCategoryProductsService,
+  updateCategoryService,
 };
