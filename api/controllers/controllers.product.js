@@ -1,90 +1,75 @@
-const productService = require('../services/services.product');
+const productService = require('../services/services.product')
 
-const ControllerFilterProduct = async (req, res, next) => {
-  const { query } = req;
-  const resultService = await productService.ServiceSearchProductByFilter(
-    query
-  );
-  const code = resultService.success ? 200 : 400;
+const filterProductController = async (req, res) => {
+  const { query } = req
+  const resultService = await productService.listProductWithFilterService(query)
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
-const ControllerListProductById = async (req, res, next) => {
-  const { productid } = req.params;
-  const resultService = await productService.ServiceListProductById(productid);
-  const code = resultService.success ? 200 : 400;
+const listProductByIdController = async (req, res) => {
+  const { productid } = req.params
+  const resultService = await productService.listProductByIdService(productid)
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
-const ControllerListProductByProvider = async (req, res, next) => {
-  const { providerid } = req.params;
-  const resultService = await productService.ServiceListProductsProvider(
-    providerid
-  );
-  const code = resultService.success ? 200 : 400;
-  const message = resultService.success
-    ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
-
-const ControllerInsertProduct = async (req, res, next) => {
-  const { body } = req;
-  const { providerid } = req.params;
-  const resultService = await productService.ServiceCreateProduct(
+const insertProductController = async (req, res) => {
+  const { body } = req
+  const { providerid } = req.params
+  const resultService = await productService.createProductService(
     body,
     providerid
-  );
-  const code = resultService.success ? 200 : 400;
+  )
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
-const ControllerUpdateProduct = async (req, res, next) => {
-  const { params, body } = req;
-  const resultService = await productService.ServiceUpdateProduct(
+const updateProductController = async (req, res) => {
+  const { params, body } = req
+  const resultService = await productService.updateProductService(
     params.productid,
     body
-  );
-  const code = resultService.success ? 200 : 400;
+  )
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
-const ControllerRemoveProduct = async (req, res, next) => {
-  const { providerid, productid } = req.params;
-  const resultService = await productService.ServiceDeleteProduct({
+const removeProductController = async (req, res) => {
+  const { providerid, productid } = req.params
+  const resultService = await productService.deleteProductService({
     providerId: providerid,
-    productId: productid,
-  });
-  const code = resultService.success ? 200 : 400;
+    productId: productid
+  })
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
 module.exports = {
-  ControllerFilterProduct,
-  ControllerListProductById,
-  ControllerListProductByProvider,
-  ControllerUpdateProduct,
-  ControllerInsertProduct,
-  ControllerRemoveProduct,
-};
+  filterProductController,
+  listProductByIdController,
+  listProductByProviderController,
+  updateProductController,
+  insertProductController,
+  removeProductController
+}
