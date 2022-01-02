@@ -14,6 +14,8 @@ module.exports = {
     ecmaVersion: 2018
   },
   rules: {
-    'prettier/prettier': 'error'
+    'prettier/prettier': 'error',
+    'eslint-disable consistent-return': 'false'
+
   }
 }
