@@ -4,14 +4,14 @@ const controllerCategory = require('../../controllers/controllers.category')
 const middlewareValidateDTO = require('../../utils/middlewares/middlewares.validate_dto')
 const middlewareFileUploadMiddleware = require('../../utils/middlewares/middlewares.file_upload')
 const authorizationMiddleware = require('../../utils/middlewares/middlewares.authorization')
-const middlewareAsync = require('../../utils/middlewares/middlewares.async')
+const asyncMiddleware = require('../../utils/middlewares/middlewares.async')
 
 module.exports = (router) => {
   router
     .route('/category')
     .get(
       authorizationMiddleware('*'),
-      middlewareAsync(controllerCategory.listAllCategoryController)
+      asyncMiddleware(controllerCategory.listAllCategoryController)
     )
 
     .post(
@@ -50,7 +50,7 @@ module.exports = (router) => {
             'string.empty': `"category id" can not be empty`
           })
       }),
-      middlewareAsync(controllerCategory.listCategoryByIdController)
+      asyncMiddleware(controllerCategory.listCategoryByIdController)
     )
 
     .put(
@@ -83,7 +83,7 @@ module.exports = (router) => {
           allowUnknown: true
         }
       ),
-      middlewareAsync(controllerCategory.updateCategoryController)
+      asyncMiddleware(controllerCategory.updateCategoryController)
     )
 
     .delete(
@@ -99,6 +99,6 @@ module.exports = (router) => {
             'string.regex': `"category id" out of the expected format`
           })
       }),
-      middlewareAsync(controllerCategory.removeCategoryController)
+      asyncMiddleware(controllerCategory.removeCategoryController)
     )
 }
