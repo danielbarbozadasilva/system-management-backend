@@ -68,8 +68,7 @@ const removeProductController = async (req, res) => {
 module.exports = {
   filterProductController,
   listProductByIdController,
-  listProductByProviderController,
-  updateProductController,
   insertProductController,
+  updateProductController,
   removeProductController
 }
