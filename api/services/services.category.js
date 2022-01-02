@@ -86,8 +86,8 @@ const removeCategoryProductsService = async (categoryId) => {
   }
 }
 
-const updateCategoryService = async (categoryid, body) => {
-  const categoryDB = await category.findOne({ _id: categoryid })
+const updateCategoryService = async (categoryId, body) => {
+  const categoryDB = await category.findOne({ _id: categoryId })
   if (!categoryDB) {
     throw new ErrorBusinessRule("category_id doesn't exist.")
   }
