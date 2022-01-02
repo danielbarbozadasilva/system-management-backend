@@ -1,7 +1,7 @@
 const categoryService = require('../services/services.category');
 
 const ControllerListAllCategory = async (req, res, next) => {
-  const resultService = await categoryService.ServiceSearchAllCategory();
+  const resultService = await categoryService.searchAllCategoryService();
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }
@@ -11,8 +11,8 @@ const ControllerListAllCategory = async (req, res, next) => {
 };
 
 const ControllerListCategoryById = async (req, res, next) => {
-  const { params } = req;   
-  const resultService = await categoryService.ServiceSearchCategoryById(
+  const { params } = req;
+  const resultService = await categoryService.searchCategoryByIdService(
     params.categoryid
   );
   const code = resultService.success ? 200 : 400;
@@ -25,7 +25,7 @@ const ControllerListCategoryById = async (req, res, next) => {
 
 const ControllerCreateCategory = async (req, res, next) => {
   const { body } = req;
-  const resultService = await categoryService.ServiceInsertCategory(body);
+  const resultService = await categoryService.addCategoryService(body);
   const code = resultService.success ? 200 : 400;
   const message = resultService.success
     ? { message: resultService.message }
@@ -36,7 +36,7 @@ const ControllerCreateCategory = async (req, res, next) => {
 
 const ControllerUpdateCategory = async (req, res, next) => {
   const { params, body } = req;
-  const resultService = await categoryService.ServiceUpdateCategory(
+  const resultService = await categoryService.updateCategoryService(
     params.categoryid,
     body
   );
@@ -50,7 +50,7 @@ const ControllerUpdateCategory = async (req, res, next) => {
 
 const ControllerRemoveCategory = async (req, res, next) => {
   const { params } = req;
-  const resultService = await categoryService.ServiceRemoveCategoryProducts(
+  const resultService = await categoryService.removeCategoryProductsService(
     params.categoryid
   );
   const code = resultService.success ? 200 : 400;
