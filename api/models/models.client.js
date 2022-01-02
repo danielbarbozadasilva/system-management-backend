@@ -1,37 +1,38 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+
+const { Schema } = mongoose
 
 const clientSchema = {
-  first_name: {
+  firstName: {
     type: String,
-    required: true,
+    required: true
   },
-  last_name: {
+  lastName: {
     type: String,
-    required: true,
+    required: true
   },
-  birth_date: {
+  birthDate: {
     type: Date,
-    required: true,
+    required: true
   },
   phone: {
     type: String,
-    required: true,
+    required: true
   },
   uf: {
     type: String,
-    required: true,
+    required: true
   },
   city: {
     type: String,
-    required: true,
+    required: true
   },
   status: {
     type: String,
     required: true,
     uppercase: true,
-    trim: true,
-  },
-};
+    trim: true
+  }
+}
 
-module.exports = clientSchema;
+module.exports = clientSchema
