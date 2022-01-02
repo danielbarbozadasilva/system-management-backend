@@ -1,24 +1,21 @@
-const { provider, product, client, like } = require('../models/models.index');
-const serviceUserProvider = require('../services/services.user');
-const emailUtils = require('../utils/utils.email');
-const { UtilCreateHash } = require('../utils/utils.cryptography');
-const { toItemListDTO, toDTO } = require('../mappers/mappers.provider');
-const { EmailEnable } = require('../utils/utils.email.message.enable');
-const { EmailDisable } = require('../utils/utils.email.message.disable');
+const { provider, product, client, like } = require('../models/models.index')
+const serviceUserProvider = require('./services.user')
+const emailUtils = require('../utils/utils.email')
+const { UtilCreateHash } = require('../utils/utils.cryptography')
+const { toItemListDTO, toDTO } = require('../mappers/mappers.provider')
+const { EmailEnable } = require('../utils/utils.email.message.enable')
+const { EmailDisable } = require('../utils/utils.email.message.disable')
 
-const ServiceListAllProvider = async (filter_order) => {
-  let filter = {};
+const listAllProviderService = async (filterOrder) => {
+  let filter = {}
 
-  if (filter_order.like == 1) {
-    filter = { count: -1 };
-  } else if (filter_order.alphabetical == 1) {
-    filter = { fantasy_name: 1 };
-  } else if (filter_order.like == undefined && filter_order.like == undefined) {
-    filter = { fantasy_name: -1 };
+  if (filterOrder.like === 1) {
+    filter = { count: -1 }
+  } else if (filterOrder.alphabetical === 1) {
+    filter = { fantasyName: 1 }
+  } else if (filterOrder.like === undefined && filterOrder.like === undefined) {
+    filter = { fantasyName: -1 }
   }
-
-  console.log(filter_order);
-  console.log(filter);
 
   const resultDB = await provider.find([
     {
@@ -26,36 +23,36 @@ const ServiceListAllProvider = async (filter_order) => {
         from: like.collection.name,
         localField: '_id',
         foreignField: 'provider',
-        as: 'result_like',
-      },
+        as: 'result_like'
+      }
     },
     {
       $unwind: {
         path: '$result_like',
-        preserveNullAndEmptyArrays: true,
-      },
+        preserveNullAndEmptyArrays: true
+      }
     },
     {
       $lookup: {
         from: product.collection.name,
         localField: 'result_like.product',
         foreignField: '_id',
-        as: 'result_product',
-      },
+        as: 'result_product'
+      }
     },
     {
       $unwind: {
         path: '$result_product',
-        preserveNullAndEmptyArrays: true,
-      },
+        preserveNullAndEmptyArrays: true
+      }
     },
     {
       $match: {
         'result_like.product': {
           $exists: true,
-          $ne: null,
-        },
-      },
+          $ne: null
+        }
+      }
     },
     {
       $group: {
@@ -63,85 +60,86 @@ const ServiceListAllProvider = async (filter_order) => {
         _id: '$_id',
 
         data: { $push: '$$ROOT' },
-        count: { $sum: 1 },
-      },
+        count: { $sum: 1 }
+      }
     },
-    { $sort: filter },
-  ]);
+    { $sort: filter }
+  ])
 
   if (resultDB.length < 1) {
     return {
       success: false,
-      details: 'No likes found!',
-    };
-  } else if (resultDB.length > 0) {
+      details: 'No likes found!'
+    }
+  }
+  if (resultDB.length > 0) {
     return {
       success: true,
       message: 'Operation performed successfully!',
-      data: resultDB,
-    };
+      data: resultDB
+    }
   }
-};
+}
 
-const ServiceListProviderById = async (filter_id) => {
+const listProviderByIdService = async (filterId) => {
   const resultDB = await provider.aggregate([
-    { $match: { _id: filter_id } },
+    { $match: { _id: filterId } },
 
     {
       $lookup: {
         from: like.collection.name,
         localField: '_id',
         foreignField: 'provider',
-        as: 'result_like',
-      },
+        as: 'result_like'
+      }
     },
     {
       $unwind: {
         path: '$result_like',
-        preserveNullAndEmptyArrays: true,
-      },
+        preserveNullAndEmptyArrays: true
+      }
     },
     {
       $lookup: {
         from: client.collection.name,
         localField: 'result_like.client',
         foreignField: '_id',
-        as: 'result_client',
-      },
+        as: 'result_client'
+      }
     },
     {
       $unwind: {
         path: '$client',
-        preserveNullAndEmptyArrays: true,
-      },
+        preserveNullAndEmptyArrays: true
+      }
     },
     {
       $lookup: {
         from: client.collection.name,
         localField: 'result_like.client',
         foreignField: '_id',
-        as: 'result_client',
-      },
+        as: 'result_client'
+      }
     },
     {
       $unwind: {
         path: '$result_client',
-        preserveNullAndEmptyArrays: true,
-      },
+        preserveNullAndEmptyArrays: true
+      }
     },
     {
       $lookup: {
         from: product.collection.name,
         localField: 'result_like.product',
         foreignField: '_id',
-        as: 'result_product',
-      },
+        as: 'result_product'
+      }
     },
     {
       $unwind: {
         path: '$result_product',
-        preserveNullAndEmptyArrays: true,
-      },
+        preserveNullAndEmptyArrays: true
+      }
     },
     {
       $group: {
@@ -149,80 +147,74 @@ const ServiceListProviderById = async (filter_id) => {
         _id: '$_id',
 
         data: { $push: '$$ROOT' },
-        count: { $sum: 1 },
-      },
+        count: { $sum: 1 }
+      }
     },
-    { $sort: { count: 1 } },
-  ]);
+    { $sort: { count: 1 } }
+  ])
 
   if (!resultDB) {
     return {
       success: false,
       message: 'operation cannot be performed',
-      details: ['The supplier does not exist'],
-    };
+      details: ['The supplier does not exist']
+    }
   }
 
   return {
     success: true,
     message: 'operation performed successfully',
-    data: resultDB,
-  };
-};
+    data: resultDB
+  }
+}
 
-const ServiceListProductsProvider = async (providerid) => {
+const listProductsProviderService = async (providerId) => {
   const resultDB = await product
-    .find({ provider: providerid })
-    .populate('provider');
+    .find({ provider: providerId })
+    .populate('provider')
 
   if (!resultDB.length > 0) {
     return {
       success: false,
       message: 'operation cannot be performed',
-      details: ['The value does not exist'],
-    };
-  } else {
-    return {
-      success: true,
-      message: 'Operation performed successfully',
-      data: resultDB.map((item) => {
-        return toItemListDTO(item);
-      }),
-    };
+      details: ['The value does not exist']
+    }
   }
-};
+  return {
+    success: true,
+    message: 'Operation performed successfully',
+    data: resultDB.map((item) => toItemListDTO(item))
+  }
+}
 
-const ServiceListProvidersByLocation = async (uf, city) => {
-  let filter = {};
-  if (city == 'undefined' || city == "x") {
-    filter = { uf };
+const listProvidersByLocationService = async (uf, city) => {
+  let filter = {}
+  if (city == 'undefined' || city == 'x') {
+    filter = { uf }
   } else {
-    filter = { uf, city };
+    filter = { uf, city }
   }
-  console.log(city);
-  console.log(filter);
 
   const resultDB = await provider.find(filter)
-  // console.log(resultDB);
   if (!resultDB) {
     return {
       success: false,
       message: 'operation cannot be performed',
-      details: ['The value does not exist'],
-    };
+      details: ['The value does not exist']
+    }
   }
   return {
     success: true,
     message: 'operation performed successfully',
-    data: resultDB,
-  };
-};
+    data: resultDB
+  }
+}
 
-const ServiceCreateProvider = async (model) => {
+const createProviderService = async (model) => {
   const {
     cnpj,
-    fantasy_name,
-    social_name,
+    fantasyName,
+    socialName,
     address,
     uf,
     city,
@@ -230,27 +222,27 @@ const ServiceCreateProvider = async (model) => {
     phone,
     email,
     password,
-    status,
-  } = model;
+    status
+  } = model
 
   if (await serviceUserProvider.ServiceVerifyCnpjExists(cnpj))
     return {
       success: false,
       message: 'operation cannot be performed',
-      details: ['There is already a registered provider for the entered cnpj'],
-    };
+      details: ['There is already a registered provider for the entered cnpj']
+    }
 
-  if (!(await serviceUserProvider.ServiceVerifyEmailBodyExists(email)))
+  if (!(await serviceUserProvider.verifyEmailBodyExistService(email)))
     return {
       success: false,
       message: 'operation cannot be performed',
-      details: ['There is already a registered user for the email entered'],
-    };
+      details: ['There is already a registered user for the email entered']
+    }
 
   const resultDB = await provider.create({
     cnpj,
-    fantasy_name,
-    social_name,
+    fantasyName,
+    socialName,
     address,
     uf,
     city,
@@ -258,172 +250,163 @@ const ServiceCreateProvider = async (model) => {
     phone,
     email,
     password: UtilCreateHash(password),
-    status: 'ANALYSIS',
-  });
+    status: 'ANALYSIS'
+  })
 
   return {
     success: true,
     message: 'Operation performed successfully',
-    data: [toDTO(resultDB)],
-  };
-};
+    data: [toDTO(resultDB)]
+  }
+}
 
-const ServiceUpdateProvider = async (provider_id, body) => {
+const updateProviderService = async (providerId, body) => {
   const resultFind = await provider
-    .findById({ _id: provider_id })
-    .sort({ fantasy_name: 1 });
+    .findById({ _id: providerId })
+    .sort({ fantasyName: 1 })
 
   if (!resultFind) {
     return {
       success: false,
       message: 'could not perform the operation',
-      details: ["provider id doesn't exist."],
-    };
+      details: ["provider id doesn't exist."]
+    }
   }
 
-  if (await serviceUserProvider.ServiceVerifyCnpj(provider_id, body.cnpj)) {
+  if (await serviceUserProvider.ServiceVerifyCnpj(providerId, body.cnpj)) {
     return {
       success: false,
       message: 'operation cannot be performed',
-      details: ['There is already a registered provider for the entered cnpj'],
-    };
+      details: ['There is already a registered provider for the entered cnpj']
+    }
   }
 
-  if (
-    !(await serviceUserProvider.ServiceVerifyEmail(provider_id, body.email))
-  ) {
+  if (!(await serviceUserProvider.ServiceVerifyEmail(providerId, body.email))) {
     return {
       success: false,
       message: 'operation cannot be performed',
-      details: ['There is already a registered provider for the entered email'],
-    };
+      details: ['There is already a registered provider for the entered email']
+    }
   }
-  const new_provider = await provider.updateOne(
-    { _id: provider_id },
+  const newProvider = await provider.updateOne(
+    { _id: providerId },
     {
       $set: {
         cnpj: body.cnpj,
-        fantasy_name: body.fantasy_name,
-        social_name: body.social_name,
+        fantasyName: body.fantasyName,
+        socialName: body.socialName,
         address: body.address,
         uf: body.uf,
         city: body.city,
         responsible: body.responsible,
         phone: body.phone,
         email: body.email,
-        password: UtilCreateHash(body.password),
-      },
+        password: UtilCreateHash(body.password)
+      }
     }
-  );
-  if (!new_provider) {
+  )
+  if (!newProvider) {
     return {
       success: false,
       message: 'operation cannot be performed',
-      details: ['The value does not exist'],
-    };
-  } else {
-    return {
-      success: true,
-      message: 'Data updated successfully',
-      data: {
-        ...toDTO(new_provider),
-      },
-    };
+      details: ['The value does not exist']
+    }
   }
-};
+  return {
+    success: true,
+    message: 'Data updated successfully',
+    data: {
+      ...toDTO(newProvider)
+    }
+  }
+}
 
-const ServiceRemoveProvider = async (provider_id) => {
-  const providerDB = await provider.findOne({ _id: provider_id });
+const removeProviderService = async (providerId) => {
+  const providerDB = await provider.findOne({ _id: providerId })
 
   if (!providerDB) {
     return {
       success: false,
       message: 'could not perform the operation',
-      details: ["provider id doesn't exist."],
-    };
+      details: ["provider id doesn't exist."]
+    }
   }
-  const deleteProductDB = await product.deleteMany({ provider: provider_id });
-  const deleteLikeDB = await like.deleteMany({ _id: provider_id });
-  const deleteProviderDB = await provider.deleteOne({ _id: provider_id });
+  const deleteProductDB = await product.deleteMany({ provider: providerId })
+  const deleteLikeDB = await like.deleteMany({ _id: providerId })
+  const deleteProviderDB = await provider.deleteOne({ _id: providerId })
 
   if (
-    deleteProductDB.ok == 1 &&
-    deleteLikeDB.ok == 1 &&
-    deleteProviderDB.ok == 1
-  ) {
-    return {
-      success: true,
-      message: 'Operation performed successfully',
-    };
-  } else if (
     deleteProductDB.ok !== 1 ||
     deleteLikeDB.ok !== 1 ||
     deleteProviderDB.ok !== 1
   ) {
     return {
       success: false,
-      details: 'Error deleting provider and products',
-    };
+      details: 'Error deleting provider and products'
+    }
   }
-};
+  return {
+    success: true,
+    message: 'Operation performed successfully'
+  }
+}
 
-const ServiceChangeStatus = async (provider_id, status) => {
-  const providerDB = await provider.findOne({ _id: provider_id });
+const changeStatusService = async (providerId, status) => {
+  const providerDB = await provider.findOne({ _id: providerId })
 
   if (!providerDB) {
     return {
       success: false,
       message: 'operation cannot be performed',
-      details: ['There is no provider registered for the provided id provider'],
-    };
+      details: ['There is no provider registered for the provided id provider']
+    }
   }
 
   const resultDB = await provider.updateOne(
-    { _id: provider_id },
+    { _id: providerId },
     {
       $set: {
-        status: status,
-      },
+        status
+      }
     }
-  );
+  )
 
   if (resultDB) {
     if (status === 'ENABLE' || status === 'ANALYSIS') {
       emailUtils.UtilSendEmail({
         to: providerDB.email,
         from: process.env.SENDGRID_SENDER,
-        subject: `Activation Confirmation ${providerDB.social_name}`,
-        html: EmailEnable('subject', `${process.env.URL}/signin`),
-      });
+        subject: `Activation Confirmation ${providerDB.socialName}`,
+        html: EmailEnable('subject', `${process.env.URL}/signin`)
+      })
     } else if (status === 'DISABLE') {
       emailUtils.UtilSendEmail({
         to: providerDB.email,
         from: process.env.SENDGRID_SENDER,
-        subject: `Inactivation Confirmation ${providerDB.social_name}`,
-        html: EmailDisable('subject'),
-      });
+        subject: `Inactivation Confirmation ${providerDB.socialName}`,
+        html: EmailDisable('subject')
+      })
     }
     return {
       success: true,
-      message: 'Operation performed successfully',
-    };
-  } else {
-    if (!resultDB) {
-      return {
-        success: false,
-        message: 'operation cannot be performed',
-      };
+      message: 'Operation performed successfully'
     }
   }
-};
+  if (!resultDB) {
+    return {
+      success: false,
+      message: 'operation cannot be performed'
+    }
+  }
+}
 
 module.exports = {
-  ServiceListAllProvider,
-  ServiceListProviderById,
-  ServiceCreateProvider,
-  ServiceUpdateProvider,
-  ServiceChangeStatus,
-  ServiceRemoveProvider,
-  ServiceListProvidersByLocation,
-  ServiceListProductsProvider,
-};
+  listAllProviderService,
+  listProviderByIdService,
+  listProductsProviderService,
+  listProvidersByLocationService,
+  createProviderService,
+  updateProviderService,
+  removeProviderService,
+  changeStatusService
+}
