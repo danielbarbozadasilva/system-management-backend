@@ -1,20 +1,21 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+
+const { Schema } = mongoose
 
 module.exports = {
   provider: {
     type: Schema.Types.ObjectId,
     required: true,
-    ref: 'provider',
+    ref: 'provider'
   },
   client: {
     type: Schema.Types.ObjectId,
     required: false,
-    ref: 'client',
+    ref: 'client'
   },
   product: {
     type: Schema.Types.ObjectId,
     required: false,
-    ref: 'product',
+    ref: 'product'
   }
-};
+}

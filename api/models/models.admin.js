@@ -1,8 +1,8 @@
 const adminSchema = {
   name: {
     type: String,
-    required: true,
-  },
-};
+    required: true
+  }
+}
 
-module.exports = adminSchema;
+module.exports = adminSchema
