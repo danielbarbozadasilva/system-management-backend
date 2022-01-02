@@ -5,45 +5,43 @@ const { UtilCreateHash } = require('../utils/utils.cryptography');
 
 const listAllClientService = async () => {
   const resultadoDB = await client.find({}).sort({ name: 1 });
-  if (resultadoDB) {
+  if (!resultadoDB) {
     return {
+      success: false,
+      details: 'No categories found',
+    };
+  }
+  return {
       success: true,
       message: 'Operation performed successfully',
       data: resultadoDB.map((item) => {
         return toDTO(item);
       }),
     };
-  } else {
+}
+
+const listClientByIdService = async (clientId) => {
+  const resultadoDB = await client.findById({ _id: clientId });
+  if (!resultadoDB) {
     return {
       success: false,
       details: 'No categories found',
     };
   }
-};
-
-const listClientByIdService = async (clientid) => {
-  const resultadoDB = await client.findById({ _id: clientid });
-  if (resultadoDB) {
-    return {
+   return {
       success: true,
       message: 'Operation performed successfully',
       data: {
         ...toDTO(resultadoDB),
       },
     };
-  } else {
-    return {
-      success: false,
-      details: 'No categories found',
-    };
-  }
 };
 
 const createClientService = async (model) => {
   const {
-    first_name,
-    last_name,
-    birth_date,
+    firstName,
+    lastName,
+    birthDate,
     phone,
     uf,
     city,
@@ -51,17 +49,18 @@ const createClientService = async (model) => {
     password,
     status,
   } = model;
-  if (!(await verifyEmailBodyExistService(email)))
+  if (!(await verifyEmailBodyExistService(email))) {
     return {
       success: false,
       message: 'Operation cannot be performed',
       details: ['There is already a registered user for the network email'],
     };
-
-  const new_client = await client.create({
-    first_name,
-    last_name,
-    birth_date,
+  }
+    
+  const newClient = await client.create({
+    firstName,
+    lastName,
+    birthDate,
     phone,
     uf,
     city,
@@ -69,24 +68,23 @@ const createClientService = async (model) => {
     password: UtilCreateHash(password),
     status: 'ENABLE',
   });
-  if (new_client) {
-    return {
-      success: true,
-      message: 'Operation performed successfully',
-      data: {
-        ...toDTO(new_client),
-      },
-    };
-  } else {
+  if (!newClient) {
     return {
       success: false,
       details: 'No categories found',
     };
   }
+  return {
+    success: true,
+    message: 'Operation performed successfully',
+    data: {
+      ...toDTO(newClient),
+    },
+  }
 };
 
-const updateClientService = async (client_id, body) => {
-  const resultFind = await client.findById({ _id: client_id });
+const updateClientService = async (clientId, body) => {
+  const resultFind = await client.findById({ _id: clientId });
 
   if (!resultFind) {
     return {
@@ -103,13 +101,13 @@ const updateClientService = async (client_id, body) => {
     };
   }
 
-  const new_client = await client.updateOne(
-    { _id: client_id },
+  const newClient = await client.updateOne(
+    { _id: clientId },
     {
       $set: {
-        first_name: body.first_name,
-        last_name: body.last_name,
-        birth_date: body.birth_date,
+        firstName: body.firstName,
+        lastName: body.lastName,
+        birthDate: body.birthDate,
         phone: body.phone,
         uf: body.uf,
         city: body.city,
@@ -118,21 +116,21 @@ const updateClientService = async (client_id, body) => {
       },
     }
   );
-  if (!new_client) {
+  if (!newClient) {
     return {
       success: false,
       message: 'Error updating data',
     };
-  } else {
+  } 
+
     return {
       success: true,
       message: 'Data updated successfully',
     };
-  }
 };
 
-const deleteClientService = async (client_id) => {
-  const resultFind = await client.findById({ _id: client_id });
+const deleteClientService = async (clientId) => {
+  const resultFind = await client.findById({ _id: clientId });
 
   if (!resultFind) {
     return {
@@ -141,19 +139,18 @@ const deleteClientService = async (client_id) => {
       details: ["client id doesn't exist."],
     };
   }
-  const deleteProviderDB = await client.deleteOne({ _id: client_id });
+  const deleteProviderDB = await client.deleteOne({ _id: clientId });
 
   if (!deleteProviderDB) {
     return {
       success: false,
       message: 'Error deleting customer',
     };
-  } else {
+  } 
     return {
       success: true,
       message: 'Client deleted successfully',
     };
-  }
 };
 
 module.exports = {
