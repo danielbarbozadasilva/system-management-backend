@@ -1,158 +1,164 @@
-const providerService = require('../services/services.provider');
-const likeService = require('../services/services.like');
+const providerService = require('../services/services.provider')
+const likeService = require('../services/services.like')
 
-const ControllerListAllProviders = async (req, res, next) => {
-  const { like, alphabetical } = req.params;
+const listAllProvidersController = async (req, res) => {
+  const { like, alphabetical } = req.params
 
-  const resultService = await providerService.ServiceListAllProvider(like, alphabetical);
-  const code = resultService.success ? 200 : 400;
+  const resultService = await providerService.listAllProviderService(
+    like,
+    alphabetical
+  )
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
-const ControllerListProviderById = async (req, res, next) => {
-  const { providerid } = req.params;
-  const resultService = await providerService.ServiceListProviderById(
+const listProviderByIdController = async (req, res) => {
+  const { providerid } = req.params
+  const resultService = await providerService.listProviderByIdService(
     providerid
-  );
-  const code = resultService.success ? 200 : 400;
+  )
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
-const ControllerListProvidersByLocation = async (req, res, next) => {
-  const { uf, city } = req.params;
-  const resultService = await providerService.ServiceListProvidersByLocation(uf, city);
-  const code = resultService.success ? 200 : 400;
+const listProvidersByLocationController = async (req, res) => {
+  const { uf, city } = req.params
+  const resultService = await providerService.listProvidersByLocationService(
+    uf,
+    city
+  )
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
-const ControllerInsertProvider = async (req, res, next) => {
-  const { body } = req;
-  const resultService = await providerService.ServiceCreateProvider(body);
-  const code = resultService.success ? 200 : 400;
+const insertProviderController = async (req, res) => {
+  const { body } = req
+  const resultService = await providerService.createProviderService(body)
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
-const ControllerUpdateProvider = async (req, res, next) => {
-  const { body } = req;
-  const { providerid } = req.params;
-  const resultService = await providerService.ServiceUpdateProvider(
+const updateProviderController = async (req, res) => {
+  const { body } = req
+  const { providerid } = req.params
+  const resultService = await providerService.updateProviderService(
     providerid,
     body
-  );
-  const code = resultService.success ? 200 : 400;
+  )
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
-const ControllerRemoveProvider = async (req, res, next) => {
-  const { providerid } = req.params;
-  const resultService = await providerService.ServiceRemoveProvider(providerid);
-  const code = resultService.success ? 200 : 400;
+const removeProviderController = async (req, res) => {
+  const { providerid } = req.params
+  const resultService = await providerService.updateProviderService(providerid)
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
-const ControllerListProductsByProvider = async (req, res, next) => {
-  const { providerid } = req.params;
-  const resultService = await providerService.ServiceListProductsProvider(
+const listProductsByProviderController = async (req, res) => {
+  const { providerid } = req.params
+  const resultService = await providerService.listProductsProviderService(
     providerid
-  );
-  const code = resultService.success ? 200 : 400;
+  )
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
-const ControllerChangeStatusProvider = async (req, res, next) => {
-  const { providerid, status } = req.params;
-  const resultService = await providerService.ServiceChangeStatus(
+const changeStatusProviderController = async (req, res) => {
+  const { providerid, status } = req.params
+  const resultService = await providerService.changeStatusService(
     providerid,
     status
-  );
-  const code = resultService.success ? 200 : 400;
+  )
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
-const ControllerSearchLikeProduct = async (req, res, next) => {
-  const { providerid } = req.params;
+const searchLikeProductController = async (req, res) => {
+  const { providerid } = req.params
 
-  const resultService = await likeService.ServiceSearchLikeProviderProduct(
+  const resultService = await likeService.listLikesProviderProductService(
     providerid
-  );
-  const code = resultService.success ? 200 : 400;
+  )
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
-const ControllerInsertLikeProduct = async (req, res, next) => {
-  const { providerid, productid } = req.params;
-  const resultService = await likeService.ServiceCreateLikeProviderProduct(
+const insertLikeProductController = async (req, res) => {
+  const { providerid, productid } = req.params
+  const resultService = await likeService.createLikeProviderProductService(
     providerid,
     productid
-  );
-  const code = resultService.success ? 200 : 400;
+  )
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
-const ControllerDeleteLikeProduct = async (req, res, next) => {
-  const { params } = req;
-  const resultService = await likeService.ServiceRemoveLikeProviderProduct(
+const deleteLikeProductController = async (req, res) => {
+  const { params } = req
+  const resultService = await likeService.removeLikeProviderProductService(
     params.providerid,
     params.productid
-  );
-  const code = resultService.success ? 200 : 400;
+  )
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
 module.exports = {
-  ControllerListAllProviders,
-  ControllerListProviderById,
-  ControllerListProvidersByLocation,
-  ControllerInsertProvider,
-  ControllerUpdateProvider,
-  ControllerRemoveProvider,
-  ControllerListProductsByProvider,
-  ControllerChangeStatusProvider,
-  ControllerSearchLikeProduct,
-  ControllerInsertLikeProduct,
-  ControllerDeleteLikeProduct,
-};
+  listAllProvidersController,
+  listProviderByIdController,
+  listProvidersByLocationController,
+  insertProviderController,
+  updateProviderController,
+  removeProviderController,
+  listProductsByProviderController,
+  changeStatusProviderController,
+  searchLikeProductController,
+  insertLikeProductController,
+  deleteLikeProductController
+}
