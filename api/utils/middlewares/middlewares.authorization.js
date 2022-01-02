@@ -1,68 +1,64 @@
-const cryptographyUtils = require('../utils.cryptography');
-const userService = require('../../services/services.user');
+const cryptographyUtils = require('../utils.cryptography')
+const userService = require('../../services/services.user')
 
-const ErrorUserNotAllowed = require('../errors/errors.user_not_allowed');
-const ErrorUnauthenticatedUser = require('../errors/errors.user_not_authenticated');
+const ErrorUserNotAllowed = require('../errors/errors.user_not_allowed')
+const ErrorUnauthenticatedUser = require('../errors/errors.user_not_authenticated')
 
-const MiddlewareAuthorization = (rota = '*') => {
-  return async (req, res, next) => {
-    var test = rota;
-    var { token } = req.headers;
-    var provider_id = req.params.providerid;
-    var { id, email, typeUser } = cryptographyUtils.UtilDecodeToken(token);
+const authorizationMiddleware =
+  (rota = '*') =>
+  async (req, res, next) => {
+    const test = rota
+    const { token } = req.headers
+    const provider_id = req.params.providerid
+    const { id, email, typeUser } = cryptographyUtils.UtilDecodeToken(token)
 
-    const provider_status_kind = await userService.ServiceVerifyStatusProvider(
-      id
-    );
-    const profile_functionality =
-      await userService.ServiceVerifyFunctionalityProfile(typeUser, test);
+    const providerStatusKind = await userService.verifyStatusProviderService(id)
+    const profileFunctionality =
+      await userService.verifyFunctionalityProfileService(typeUser, test)
 
-    await Promise.all([provider_status_kind, profile_functionality])
-      .then(function (result) {
+    await Promise.all([providerStatusKind, profileFunctionality])
+      .then((result) => {
         if (test != '*') {
           if (!token) {
             return Promise.reject(
               new ErrorUnauthenticatedUser('Unauthenticated User Error')
-            );
+            )
           }
 
           if (!cryptographyUtils.UtilValidateToken(token)) {
             return Promise.reject(
               new ErrorUnauthenticatedUser('Unauthenticated User Error')
-            );
+            )
           }
 
           if (typeUser == 2 || typeUser == 3) {
             if (id !== provider_id) {
               return Promise.reject(
                 new ErrorUserNotAllowed('Unauthorized User!')
-              );
+              )
             }
           }
 
-          if (provider_status_kind) {
+          if (providerStatusKind) {
             return Promise.reject(
               new ErrorUserNotAllowed(
                 'The supplier has not yet been authorized! Contact the administrator.'
               )
-            );
+            )
           }
 
-          if (profile_functionality) {
-            return Promise.reject(
-              new ErrorUserNotAllowed('Unauthorized User!')
-            );
+          if (profileFunctionality) {
+            return Promise.reject(new ErrorUserNotAllowed('Unauthorized User!'))
           }
         }
 
-        return Promise.resolve(next());
+        return Promise.resolve(next())
       })
-      .catch(function (e) {
-        return res
+      .catch((e) =>
+        res
           .status(e.statusCode)
-          .send({ success: false, error: { message: e.message } });
-      });
-  };
-};
+          .send({ success: false, error: { message: e.message } })
+      )
+  }
 
-module.exports = MiddlewareAuthorization;
+module.exports = authorizationMiddleware
