@@ -225,7 +225,7 @@ const createProviderService = async (model) => {
     status
   } = model
 
-  if (await serviceUserProvider.ServiceVerifyCnpjExists(cnpj))
+  if (await serviceUserProvider.verifyCnpjExistsService(cnpj))
     return {
       success: false,
       message: 'operation cannot be performed',
@@ -273,7 +273,7 @@ const updateProviderService = async (providerId, body) => {
     }
   }
 
-  if (await serviceUserProvider.ServiceVerifyCnpj(providerId, body.cnpj)) {
+  if (await serviceUserProvider.verifyCnpjService(providerId, body.cnpj)) {
     return {
       success: false,
       message: 'operation cannot be performed',
@@ -281,7 +281,7 @@ const updateProviderService = async (providerId, body) => {
     }
   }
 
-  if (!(await serviceUserProvider.ServiceVerifyEmail(providerId, body.email))) {
+  if (!(await serviceUserProvider.verifyEmailService(providerId, body.email))) {
     return {
       success: false,
       message: 'operation cannot be performed',
