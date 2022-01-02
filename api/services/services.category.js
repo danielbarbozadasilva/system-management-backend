@@ -1,137 +1,127 @@
-const { category } = require('../models/models.index');
-const categoryMapper = require('../mappers/mappers.category');
-const fileUtils = require('../utils/utils.file');
-const ErrorBusinessRule = require('../utils/errors/errors.business_rule');
+const { category } = require('../models/models.index')
+const categoryMapper = require('../mappers/mappers.category')
+const fileUtils = require('../utils/utils.file')
+const ErrorBusinessRule = require('../utils/errors/errors.business_rule')
 
 const searchAllCategoryService = async () => {
-  const categoryDB = await category.find({}).sort({ description: 1 });
+  const categoryDB = await category.find({}).sort({ description: 1 })
   if (categoryDB.length > 0) {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data:
-        categoryDB.map(item => {
-          return categoryMapper.toDTO(item);
-        }),
-    };
-  } else {
-    throw new ErrorBusinessRule('No categories found');
+      data: categoryDB.map((item) => categoryMapper.toDTO(item))
+    }
   }
-};
+  throw new ErrorBusinessRule('No categories found')
+}
 
-const searchCategoryByIdService = async category_id => {
+const searchCategoryByIdService = async (categoryid) => {
   const categoryDB = await category.find({
-    _id: Object(category_id),
-  });
+    _id: Object(categoryid)
+  })
 
   if (categoryDB.length > 0) {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: categoryDB.map(item => {
-        return categoryMapper.toDTO(item);
-      }),
-    };
-  } else {
-    throw new ErrorBusinessRule('No categories found');
+      data: categoryDB.map((item) => categoryMapper.toDTO(item))
+    }
   }
-};
+  throw new ErrorBusinessRule('No categories found')
+}
 
-const addCategoryService = async body => {
+const addCategoryService = async (body) => {
   const categoryDB = await category.create({
     name: body.name,
     description: body.description,
     image: {
       origin: body.image.origin,
       name: body.image.newName,
-      type: body.image.type,
-    },
-  });
+      type: body.image.type
+    }
+  })
 
-  fileUtils.UtilMove(body.image.old_path, body.image.new_path);
+  fileUtils.UtilMove(body.image.old_path, body.image.new_path)
 
   categoryDB.image = {
     origin: body.image.origin,
     name: body.image.newName,
-    type: body.image.type,
-  };
+    type: body.image.type
+  }
 
   if (categoryDB) {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: categoryMapper.toDTO(categoryDB),
-    };
-  } else {
-    return {
-      success: false,
-      message: 'error when inserting to categories',
-    };
+      data: categoryMapper.toDTO(categoryDB)
+    }
   }
-};
+  return {
+    success: false,
+    message: 'error when inserting to categories'
+  }
+}
 
-const removeCategoryProductsService = async category_Id => {
-  const categoryDB = await category.findOne({ _id: category_Id });
+const removeCategoryProductsService = async (categoryId) => {
+  const categoryDB = await category.findOne({ _id: categoryId })
 
   if (!categoryDB) {
-    throw new ErrorBusinessRule("category_id doesn't exist.");
+    throw new ErrorBusinessRule("category_id doesn't exist.")
   }
 
-  const { image } = categoryDB;
+  const { image } = categoryDB
 
-  fileUtils.UtilRemove('category', image.name);
+  fileUtils.UtilRemove('category', image.name)
 
-  const deleteCategory = await category.deleteOne(categoryDB);
+  const deleteCategory = await category.deleteOne(categoryDB)
   if (deleteCategory) {
     return {
       success: true,
-      message: 'Operation performed successfully',
-    };
-  } else {
-    return {
-      success: false,
-      details: 'Error deleting category',
-    };
+      message: 'Operation performed successfully'
+    }
   }
-};
+  return {
+    success: false,
+    details: 'Error deleting category'
+  }
+}
 
-const updateCategoryService = async (category_Id, body) => {
-  const categoryDB = await category.findOne({ _id: category_Id });
+const updateCategoryService = async (categoryid, body) => {
+  const categoryDB = await category.findOne({ _id: categoryid })
   if (!categoryDB) {
-    throw new ErrorBusinessRule("category_id doesn't exist.");
+    throw new ErrorBusinessRule("category_id doesn't exist.")
   }
   if (typeof body.image === 'object') {
-    categoryDB.name = body.name;
-    categoryDB.description = body.description;
+    categoryDB.name = body.name
+    categoryDB.description = body.description
 
-    fileUtils.UtilRemove('category', categoryDB.image.name);
-    fileUtils.UtilMove(body.image.old_path, body.image.new_path);
+    fileUtils.UtilRemove('category', categoryDB.image.name)
+    fileUtils.UtilMove(body.image.old_path, body.image.new_path)
     categoryDB.image = {
       origin: body.image.origin,
       name: body.image.newName,
-      type: body.image.type,
-    };
-
-    const updateCategory = await categoryDB.save();
-    if (updateCategory) {
-      return {
-        success: true,
-        message: 'Operation performed successfully',
-        data: categoryMapper.toDTO(updateCategory),
-      };
+      type: body.image.type
     }
-  } else {
+
+    const updateCategory = await categoryDB.save()
+    if (!updateCategory) {
+      return {
+        success: false,
+        details: 'Error updating category'
+      }
+    }
     return {
-      success: false,
-      details: 'Error updating category',
-    };
+      success: true,
+      message: 'Operation performed successfully',
+      data: categoryMapper.toDTO(updateCategory)
+    }
   }
-};
+}
 
 module.exports = {
   searchAllCategoryService,
   searchCategoryByIdService,
   addCategoryService,
   removeCategoryProductsService,
-  updateCategoryService,
-};
+  updateCategoryService
+}

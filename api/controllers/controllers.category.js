@@ -36,7 +36,7 @@ const ControllerCreateCategory = async (req, res, next) => {
 
 const ControllerUpdateCategory = async (req, res, next) => {
   const { params, body } = req;
-  const resultService = await categoryService.ServiceUpdateCategory(
+  const resultService = await categoryService.updateCategoryService(
     params.categoryid,
     body
   );
