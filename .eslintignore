@@ -1,7 +1,4 @@
-node_modules
 .husky
-packages/react-art/npm/lib
-build/
-coverage/
-fixtures/
-scripts/bench/benchmarks/**/*.js
+.vscode
+docs
+node_modules
