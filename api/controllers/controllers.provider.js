@@ -2,12 +2,8 @@ const providerService = require('../services/services.provider')
 const likeService = require('../services/services.like')
 
 const listAllProvidersController = async (req, res) => {
-  const { like, alphabetical } = req.params
-
-  const resultService = await providerService.listAllProviderService(
-    like,
-    alphabetical
-  )
+  const { query } = req
+  const resultService = await providerService.listAllProviderService(query)
   const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
@@ -71,7 +67,7 @@ const updateProviderController = async (req, res) => {
 
 const removeProviderController = async (req, res) => {
   const { providerid } = req.params
-  const resultService = await providerService.updateProviderService(providerid)
+  const resultService = await providerService.removeProviderService(providerid)
   const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }

@@ -4,17 +4,13 @@ const middlewareValidateDTO = require('../../utils/middlewares/middlewares.valid
 const authorizationMiddleware = require('../../utils/middlewares/middlewares.authorization')
 
 module.exports = (router) => {
-  router.route('/provider/filterorder/:like/:alphabetical').get(
+  router.route('/provider/filter').get(
     authorizationMiddleware('*'),
-    middlewareValidateDTO('params', {
-      like: joi.string().messages({
-        'any.required': `"like" is a required field`,
-        'number.empty': `"like" can not be empty`
+    middlewareValidateDTO('query', {
+      namefilter: joi.string().optional().messages({
+        'any.required': `"name filter" is a required field`,
+        'string.empty': `"name filter" can not be empty`
       }),
-      alphabetical: joi.string().messages({
-        'any.required': `"alphabetical" is a required field`,
-        'number.empty': `"alphabetical" can not be empty`
-      })
     }),
     providerController.listAllProvidersController
   )

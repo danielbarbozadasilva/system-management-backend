@@ -1,4 +1,6 @@
+const { ObjectId } = require('mongodb')
 const { provider, product, client, like } = require('../models/models.index')
+
 const serviceUserProvider = require('./services.user')
 const emailUtils = require('../utils/utils.email')
 const { UtilCreateHash } = require('../utils/utils.cryptography')
@@ -6,18 +8,18 @@ const { toItemListDTO, toDTO } = require('../mappers/mappers.provider')
 const { EmailEnable } = require('../utils/utils.email.message.enable')
 const { EmailDisable } = require('../utils/utils.email.message.disable')
 
-const listAllProviderService = async (filterOrder) => {
+const listAllProviderService = async (nameFilter) => {
   let filter = {}
 
-  if (filterOrder.like === 1) {
-    filter = { count: -1 }
-  } else if (filterOrder.alphabetical === 1) {
+  if (Object.values(nameFilter) == 'alphabetical') {
     filter = { fantasyName: 1 }
-  } else if (filterOrder.like === undefined && filterOrder.like === undefined) {
+  } else if (Object.values(nameFilter) == 'like') {
+    filter = { count: -1 }
+  } else {
     filter = { fantasyName: -1 }
   }
 
-  const resultDB = await provider.find([
+  const resultDB = await provider.aggregate([
     {
       $lookup: {
         from: like.collection.name,
@@ -58,7 +60,6 @@ const listAllProviderService = async (filterOrder) => {
       $group: {
         _id: '$result_like.product',
         _id: '$_id',
-
         data: { $push: '$$ROOT' },
         count: { $sum: 1 }
       }
@@ -83,7 +84,7 @@ const listAllProviderService = async (filterOrder) => {
 
 const listProviderByIdService = async (filterId) => {
   const resultDB = await provider.aggregate([
-    { $match: { _id: filterId } },
+    { $match: { _id: ObjectId(filterId) } },
 
     {
       $lookup: {
@@ -149,11 +150,9 @@ const listProviderByIdService = async (filterId) => {
         data: { $push: '$$ROOT' },
         count: { $sum: 1 }
       }
-    },
-    { $sort: { count: 1 } }
+    }
   ])
-
-  if (!resultDB) {
+  if (!resultDB.length) {
     return {
       success: false,
       message: 'operation cannot be performed',
@@ -281,7 +280,7 @@ const updateProviderService = async (providerId, body) => {
     }
   }
 
-  if (!(await serviceUserProvider.verifyEmailService(providerId, body.email))) {
+  if (await serviceUserProvider.verifyEmailService(providerId, body.email)) {
     return {
       success: false,
       message: 'operation cannot be performed',
