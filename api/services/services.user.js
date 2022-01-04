@@ -57,9 +57,7 @@ const createCredentialService = async (email) => {
 
 const verifyFunctionalityProfileService = async (typeUser, test) => {
   const profile = searchTypeUserByIdService(typeUser)
-  if (
-    profile?.functionality?.includes(test) == true && profile.id ? true : false
-  ) {
+  if (profile?.functionality?.includes(test) == true && profile.id ? true : false) {
     return false
   } else {
     return true

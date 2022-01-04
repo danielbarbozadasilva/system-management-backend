@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb')
 const { provider, product, like, client } = require('../models/models.index')
 const { toDTOListLikeProviderProduct } = require('../mappers/mappers.client')
 
@@ -118,12 +119,27 @@ const removeLikeProviderProductService = async (providerId, productId) => {
 
 const listLikesClientProviderService = async (clientId) => {
   const resultLikeDB = await client.aggregate([
+    { $match: { _id: ObjectId(clientId) } },
     {
       $lookup: {
         from: like.collection.name,
         localField: '_id',
         foreignField: 'client',
         as: 'likes'
+      }
+    },
+    {
+      $unwind: {
+        path: '$result_like',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $match: {
+        'likes.client': {
+          $exists: true,
+          $ne: null
+        }
       }
     }
   ])
@@ -169,7 +185,7 @@ const createLikeClientProviderService = async (providerId, clientId) => {
       details: 'The client cannot like more than three providers!'
     }
   }
-  if (likeDB.length > 0) {
+  if (likeDB) {
     return {
       success: false,
       details: 'The client has already liked the provider!'

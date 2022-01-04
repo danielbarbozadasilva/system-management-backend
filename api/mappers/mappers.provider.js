@@ -1,74 +1,72 @@
-const fileUtils = require('../utils/utils.file');
+const fileUtils = require('../utils/utils.file')
 
 const toDTO = (model) => {
   const {
     id: _id,
     cnpj,
-    fantasy_name,
-    social_name,
+    fantasyName,
+    socialName,
     email,
     address,
     uf,
     city,
     responsible,
     phone,
-    status,
-  } = model;
+    status
+  } = model
 
   return {
     id: _id,
     cnpj,
-    fantasy_name,
-    social_name,
+    fantasyName,
+    socialName,
     email,
     address,
     uf,
     city,
     responsible,
     phone,
-    status,
-  };
-};
+    status
+  }
+}
 
-const toItemListDTO = (model) => {
-  return {
-    id: model._id,
-    category: model.category,
-    name: model.name,
-    description: model.description,
-    price: parseFloat(model.price).toLocaleString('pt-br', {
-      style: 'currency',
-      currency: 'BRL',
-    }),
-    image: fileUtils.UtilCreateAddressDownload('product', model.image.name),
-    provider: {
-      id: model.provider._id,
-      cnpj: model.provider.cnpj,
-      fantasy_name: model.provider.fantasy_name,
-      social_name: model.provider.social_name,
-      email: model.provider.email,
-      address: model.provider.address,
-      uf: model.provider.uf,
-      city: model.provider.city,
-      responsible: model.provider.responsible,
-      phone: model.provider.phone,
-      status: model.provider.status,
-    },
-  };
-};
+const toItemListDTO = (model) => ({
+  id: model._id,
+  category: model.category,
+  name: model.name,
+  description: model.description,
+  price: parseFloat(model.price).toLocaleString('pt-br', {
+    style: 'currency',
+    currency: 'BRL'
+  }),
+  image: fileUtils.UtilCreateAddressDownload('product', model.image.name),
+  provider: {
+    id: model.provider._id,
+    cnpj: model.provider.cnpj,
+    fantasyName: model.provider.fantasyName,
+    socialName: model.provider.socialName,
+    email: model.provider.email,
+    address: model.provider.address,
+    uf: model.provider.uf,
+    city: model.provider.city,
+    responsible: model.provider.responsible,
+    phone: model.provider.phone,
+    status: model.provider.status
+  }
+})
 
 const toDTOListLike = (model) => {
-  const { id: _id, provider, product } = model;
+  const { id: _id, provider, product } = model
 
   return {
     id: _id,
     provider,
-    product,
-  };
-};
+    product
+  }
+}
 
 module.exports = {
   toItemListDTO,
   toDTO,
-  toDTOListLike,
-};
+  toDTOListLike
+}
