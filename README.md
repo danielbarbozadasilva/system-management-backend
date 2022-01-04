@@ -71,7 +71,6 @@ In addition to publicizing the establishments, the System provides a user-friend
 
 > ## Libraries and Tools
 * NPM
-* Typescript
 * Git
 * Docker
 * MongoDb
@@ -87,41 +86,3 @@ In addition to publicizing the establishments, the System provides a user-friend
 * FileSystem
 <br/>
 <br/>
-
-> ## Node Features
-* API documentation with Swagger
-* Rest API with Express
-* Error Log
-* Security (Hashing, Encryption and Encoding)
-* Middlewares
-* Access Level on Routes (Admin, Provider, Client and Anonymous)
-* Deploy on Heroku
-* Serve Static Files
-<br/>
-<br/>
-
-> ## Features do Git
-* Alias
-* Log Personalizado
-* Branch
-* Reset
-* Amend
-* Tag
-* Stash
-* Rebase
-* Merge
-<br/>
-<br/>
-
-> ## MongoDb Features
-* Connect e Reconnect
-* Collections
-* InsertOne e InsertMany
-* Find, FindOne e FindOneAndUpdate
-* DeleteMany
-* UpdateOne
-* Aggregation (Match, Group, Unwind, Lookup, AddFields, Project, Sort)
-* ObjectId
-* Upsert e ReturnOriginal
-* Push, Divide, Multiply, ArrayElemAt, Cond, Sum
-* Filter, Map, Reduce, MergeObjects, ConcatArrays
