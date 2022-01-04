@@ -5,3 +5,4 @@ api/utils/file/products/**
 api/utils/file/temp/**
 node_modules
 .vscode
+data
