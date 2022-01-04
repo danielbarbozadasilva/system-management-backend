@@ -1,4 +1,4 @@
-const { verifyEmailBodyExistService } = require('./services.user')
+const { verifyEmailService, verifyEmailBodyExistService } = require('./services.user')
 const { client } = require('../models/models.index')
 const { toDTO } = require('../mappers/mappers.client')
 const { UtilCreateHash } = require('../utils/utils.cryptography')
@@ -47,6 +47,7 @@ const createClientService = async (model) => {
     password,
     status
   } = model
+
   if (!(await verifyEmailBodyExistService(email))) {
     return {
       success: false,
@@ -91,7 +92,7 @@ const updateClientService = async (clientId, body) => {
       details: ["client id doesn't exist."]
     }
   }
-  if (!(await verifyEmailBodyExistService(body.email))) {
+  if (await verifyEmailService(clientId, body.email)) {
     return {
       success: false,
       message: 'Operation cannot be performed',

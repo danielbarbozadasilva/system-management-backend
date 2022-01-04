@@ -10,6 +10,8 @@ const authorizationMiddleware =
     const test = rota
     const { token } = req.headers
     const provider_id = req.params.providerid
+    const client_id = req.params.clientid
+
     const { id, email, typeUser } = cryptographyUtils.UtilDecodeToken(token)
 
     const providerStatusKind = await userService.verifyStatusProviderService(id)
@@ -31,8 +33,15 @@ const authorizationMiddleware =
             )
           }
 
-          if (typeUser == 2 || typeUser == 3) {
+          if (typeUser == 2){
             if (id !== provider_id) {
+              return Promise.reject(
+                new ErrorUserNotAllowed('Unauthorized User!')
+              )
+            }
+          } 
+          else if(typeUser == 3) {
+            if (id !== client_id) {
               return Promise.reject(
                 new ErrorUserNotAllowed('Unauthorized User!')
               )

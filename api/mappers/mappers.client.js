@@ -2,9 +2,9 @@ const fileUtils = require('../utils/utils.file')
 
 const toDTO = (model) => ({
   id: model._id,
-  firstName: model.first_name,
-  lastName: model.last_name,
-  birthDate: model.birth_date,
+  firstName: model.firstName,
+  lastName: model.lastName,
+  birthDate: model.birthDate,
   phone: model.phone,
   uf: model.uf,
   city: model.city,
@@ -63,9 +63,9 @@ const toDTOListLikeClientProvider = (model) => {
     },
     client: {
       id: client._id,
-      firstName: client.first_name,
-      lastName: client.last_name,
-      birthDate: client.birth_date,
+      firstName: client.firstName,
+      lastName: client.lastName,
+      birthDate: client.birthDate,
       phone: client.phone,
       uf: client.uf,
       city: client.city,

@@ -5,7 +5,7 @@ const productMapper = require('../mappers/mappers.product')
 const listAllProductService = async () => {
   const productDB = await product.find({})
 
-  if (!productDB) {
+  if (!productDB.length) {
     return {
       success: false,
       message: 'could not perform the operation',
@@ -21,7 +21,6 @@ const listAllProductService = async () => {
 
 const listProductByIdService = async (productId) => {
   const productDB = await product.findById({ _id: productId })
-
   if (!productDB) {
     return {
       success: false,
@@ -114,7 +113,7 @@ const listProductWithFilterService = async (filters) => {
     .populate('provider')
     .populate('category')
 
-  if (!resultDB) {
+  if (!resultDB.length) {
     return {
       success: false,
       message: 'no results',
