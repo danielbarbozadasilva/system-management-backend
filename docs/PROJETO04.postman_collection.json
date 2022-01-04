@@ -82,7 +82,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/category/61a01ebbafcff5472a37c053",
+							"raw": "http://localhost:3011/v1/category/615a19fd4384691888d27098",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -91,7 +91,7 @@
 							"path": [
 								"v1",
 								"category",
-								"61a01ebbafcff5472a37c053"
+								"615a19fd4384691888d27098"
 							]
 						}
 					},
@@ -124,18 +124,18 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "fdfdf111gfg",
+									"value": "Categoria03",
 									"type": "text"
 								},
 								{
 									"key": "description",
-									"value": "categoria1desc22111fgfg",
+									"value": "descCategoria03",
 									"type": "text"
 								},
 								{
 									"key": "image",
 									"type": "file",
-									"src": "/home/pc01/Imagens/Captura de tela de 2021-10-18 04-58-20.png"
+									"src": "/home/pc01/Imagens/20190322051919-1254x450.jpg"
 								}
 							]
 						},
@@ -181,12 +181,12 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "categoria1",
+									"value": "cat04",
 									"type": "text"
 								},
 								{
 									"key": "description",
-									"value": "categoriadesc1",
+									"value": "cat04desc",
 									"type": "text"
 								},
 								{
@@ -197,7 +197,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/category/61a82c3fd22fbea4747a9d40",
+							"raw": "http://localhost:3011/v1/category/61d221fd8b413e9d4e5760d8",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -206,7 +206,7 @@
 							"path": [
 								"v1",
 								"category",
-								"61a82c3fd22fbea4747a9d40"
+								"61d221fd8b413e9d4e5760d8"
 							]
 						}
 					},
@@ -239,7 +239,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/category/61a82c3fd22fbea4747a9d40",
+							"raw": "http://localhost:3011/v1/category/61d221fd8b413e9d4e5760d8",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -248,7 +248,7 @@
 							"path": [
 								"v1",
 								"category",
-								"61a82c3fd22fbea4747a9d40"
+								"61d221fd8b413e9d4e5760d8"
 							]
 						}
 					},
@@ -286,7 +286,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"danielbarboza56@hotmail.com\",\n    \"password\": \"daniel\"\n}",
+							"raw": "{\n    \"email\": \"daniel80barboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -343,7 +343,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/filterorder/0/0",
+							"raw": "http://localhost:3011/v1/provider/filter?namefilter=like",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -352,9 +352,13 @@
 							"path": [
 								"v1",
 								"provider",
-								"filterorder",
-								"0",
-								"0"
+								"filter"
+							],
+							"query": [
+								{
+									"key": "namefilter",
+									"value": "like"
+								}
 							]
 						}
 					},
@@ -390,7 +394,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db",
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7dc",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -399,7 +403,7 @@
 							"path": [
 								"v1",
 								"provider",
-								"615a584a79b274425a6fa7db"
+								"615a584a79b274425a6fa7dc"
 							]
 						}
 					},
@@ -428,7 +432,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/619881d9d6f64bd542ced4d9/product",
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db/product",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -437,7 +441,7 @@
 							"path": [
 								"v1",
 								"provider",
-								"619881d9d6f64bd542ced4d9",
+								"615a584a79b274425a6fa7db",
 								"product"
 							]
 						}
@@ -468,7 +472,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"cnpj\": \"12.111.111/1101-65\",\n    \"fantasy_name\": \"Pizzaria Rei das Massas\",\n    \"social_name\": \"3Pizzaria e CIA\",\n    \"address\": \"3Rua Ministro Gomes, 44\",\n    \"uf\": \"3RJ\",\n    \"city\": \"3Rio de janeiro\",\n    \"responsible\": \"3Carlos Henrique\",\n    \"phone\": \"(31)2435-9098\",\n    \"email\": \"daniel80barboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
+							"raw": "{\n    \"cnpj\": \"21.111.111/1101-65\",\n    \"fantasyName\": \"Pizzaria Rei das Massas\",\n    \"socialName\": \"Pizzaria e CIA\",\n    \"address\": \"Rua Ministro Gomes, 44\",\n    \"uf\": \"RJ\",\n    \"city\": \"Rio de janeiro\",\n    \"responsible\": \"Carlos Henrique\",\n    \"phone\": \"(11)2435-9098\",\n    \"email\": \"daniel8012barboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -524,7 +528,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"cnpj\": \"19.125.476/0001-61\",\n    \"fantasy_name\": \"29Pizzaria Rei das Massas1\",\n    \"social_name\": \"29Pizzaria e CIA1\",\n    \"address\": \"29Rua Ministro Gomes, 441\",\n    \"uf\": \"29R1J\",\n    \"city\": \"29CARMO1\",\n    \"responsible\": \"29Carlos Henrique1\",\n    \"phone\": \"(29)3435-90911\",\n    \"email\": \"daniel901barboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
+							"raw": "{\n    \"cnpj\": \"21.111.111/1101-65\",\n    \"fantasyName\": \"Pizzaria Rei das Massas\",\n    \"socialName\": \"Pizzaria e CIA\",\n    \"address\": \"Rua Ministro Gomes, 44\",\n    \"uf\": \"RJ\",\n    \"city\": \"Rio de janeiro\",\n    \"responsible\": \"Carlos Henrique\",\n    \"phone\": \"(11)2435-9098\",\n    \"email\": \"daniel8012barboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -532,7 +536,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/61a82f094449f7b11772964f",
+							"raw": "http://localhost:3011/v1/provider/61d4bc813d362c0b6cae7bb9",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -541,7 +545,7 @@
 							"path": [
 								"v1",
 								"provider",
-								"61a82f094449f7b11772964f"
+								"61d4bc813d362c0b6cae7bb9"
 							]
 						}
 					},
@@ -574,7 +578,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/61a82f094449f7b11772964f/enable",
+							"raw": "http://localhost:3011/v1/provider/61d24d5707046b43f35e2ef0/enable",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -583,7 +587,7 @@
 							"path": [
 								"v1",
 								"provider",
-								"61a82f094449f7b11772964f",
+								"61d24d5707046b43f35e2ef0",
 								"enable"
 							]
 						}
@@ -613,7 +617,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/61a82f094449f7b11772964f",
+							"raw": "http://localhost:3011/v1/provider/61d24d5707046b43f35e2ef0",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -622,7 +626,7 @@
 							"path": [
 								"v1",
 								"provider",
-								"61a82f094449f7b11772964f"
+								"61d24d5707046b43f35e2ef0"
 							]
 						}
 					},
@@ -663,13 +667,6 @@
 								"filter",
 								"RJ",
 								"CARMO"
-							],
-							"query": [
-								{
-									"key": "city",
-									"value": "CARMO",
-									"disabled": true
-								}
 							]
 						}
 					},
@@ -702,7 +699,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/61a82f094449f7b11772964f/enable",
+							"raw": "http://localhost:3011/v1/provider/61d24d3907046b43f35e2ee6/enable",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -711,7 +708,7 @@
 							"path": [
 								"v1",
 								"provider",
-								"61a82f094449f7b11772964f",
+								"61d24d3907046b43f35e2ee6",
 								"enable"
 							]
 						}
@@ -791,7 +788,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7dc/product/6164ecf0912afe7ae51bf6a8/like",
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db/product/6164ecf0912afe7ae51bf6a8/like",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -800,7 +797,7 @@
 							"path": [
 								"v1",
 								"provider",
-								"615a584a79b274425a6fa7dc",
+								"615a584a79b274425a6fa7db",
 								"product",
 								"6164ecf0912afe7ae51bf6a8",
 								"like"
@@ -836,7 +833,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7dc/product/6164ecf0912afe7ae51bf6a8/like",
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db/product/6164ecf0912afe7ae51bf6a8/like",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -845,7 +842,7 @@
 							"path": [
 								"v1",
 								"provider",
-								"615a584a79b274425a6fa7dc",
+								"615a584a79b274425a6fa7db",
 								"product",
 								"6164ecf0912afe7ae51bf6a8",
 								"like"
@@ -901,18 +898,18 @@
 							],
 							"query": [
 								{
-									"key": "category",
-									"value": "615a19fd4384691888d27098"
-								},
-								{
 									"key": "provider",
 									"value": "615a584a79b274425a6fa7db",
 									"disabled": true
 								},
 								{
 									"key": "namelike",
-									"value": "TORTA DE CHOCOLATE3",
+									"value": "TESTE-PRODUCT01",
 									"disabled": true
+								},
+								{
+									"key": "category",
+									"value": "615a19fd4384691888d27098"
 								}
 							]
 						}
@@ -949,7 +946,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/product/6164ecf0912afe7ae51bf6a7",
+							"raw": "http://localhost:3011/v1/product/6164ecf0912afe7ae51bf6a8",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -958,7 +955,7 @@
 							"path": [
 								"v1",
 								"product",
-								"6164ecf0912afe7ae51bf6a7"
+								"6164ecf0912afe7ae51bf6a8"
 							]
 						}
 					},
@@ -1001,22 +998,22 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "teste-product0311",
+									"value": "teste-product",
 									"type": "text"
 								},
 								{
 									"key": "description",
-									"value": "teste-product03-description11",
+									"value": "teste-product-description",
 									"type": "text"
 								},
 								{
 									"key": "price",
-									"value": "11.11",
+									"value": "23.56",
 									"type": "text"
 								},
 								{
 									"key": "category",
-									"value": "61611e6ff0c5860e72da8757",
+									"value": "615a19fd4384691888d27098",
 									"type": "text"
 								},
 								{
@@ -1027,12 +1024,12 @@
 								{
 									"key": "image",
 									"type": "file",
-									"src": "/home/pc01/Imagens/81007f.png"
+									"src": "/C:/Users/danie/Pictures/istockphoto-1180542165-612x612.jpg"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db/product/",
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db/product",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1042,8 +1039,7 @@
 								"v1",
 								"provider",
 								"615a584a79b274425a6fa7db",
-								"product",
-								""
+								"product"
 							]
 						}
 					},
@@ -1102,12 +1098,12 @@
 								{
 									"key": "image",
 									"type": "file",
-									"src": "/home/pc01/Imagens/Captura de tela de 2021-09-17 13-11-57.png"
+									"src": "/C:/Users/danie/Pictures/fundo-colorido-de-pó-pastel-explosão-arco-íris-cor-poeira-sobre-preto-multicolorido-172639620.jpg"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db/product/6164ecf0912afe7ae51bf6a7",
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db/product/61d4a7d04664a63418f323a0",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1118,7 +1114,7 @@
 								"provider",
 								"615a584a79b274425a6fa7db",
 								"product",
-								"6164ecf0912afe7ae51bf6a7"
+								"61d4a7d04664a63418f323a0"
 							]
 						}
 					},
@@ -1211,7 +1207,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3011/v1/client/615cce324b51ba2b14c1b170",
+							"raw": "http://localhost:3011/v1/client/61d4aa301125340f28fb0a3b",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1220,7 +1216,7 @@
 							"path": [
 								"v1",
 								"client",
-								"615cce324b51ba2b14c1b170"
+								"61d4aa301125340f28fb0a3b"
 							]
 						}
 					},
@@ -1250,7 +1246,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"first_name\":\"Cliente-Daniel\",\n    \"last_name\":\"Cli-Daniel\",\n    \"birth_date\":\"05/03/1997\",\n    \"phone\":\"(21)99892-2989\",\n    \"uf\":\"RJ\",\n    \"city\":\"Rio de janeiro\",\n    \"email\":\"daniel880barboza@gmail.com\",\n    \"password\":\"daniel\",\n    \"status\": \"ENABLE\"\n}",
+							"raw": "{\n    \"firstName\":\"Cliente-Daniel\",\n    \"lastName\":\"Cli-Daniel\",\n    \"birthDate\":\"05/03/1997\",\n    \"phone\":\"(21)99892-2989\",\n    \"uf\":\"RJ\",\n    \"city\":\"Rio de janeiro\",\n    \"email\":\"daniel880barboza@gmail.com\",\n    \"password\":\"daniel\",\n    \"status\": \"ENABLE\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1296,7 +1292,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"first_name\":\"22Cliente-Daniel\",\n    \"last_name\":\"22Cli-Daniel\",\n    \"birth_date\":\"1997/02/17\",\n    \"phone\":\"(22)99892-2989\",\n    \"uf\":\"22RJ\",\n    \"city\":\"22Rio de janeiro\",\n    \"email\":\"daniel80111barboza@gmail.com\",\n    \"password\":\"daniel\"\n}",
+							"raw": "{\n    \"firstName\":\"Cliente-Daniel\",\n    \"lastName\":\"Cli-Daniel\",\n    \"birthDate\":\"05/03/1997\",\n    \"phone\":\"(21)99892-2989\",\n    \"uf\":\"RJ\",\n    \"city\":\"Rio de janeiro\",\n    \"email\":\"daniel880barboza@gmail.com\",\n    \"password\":\"daniel\",\n    \"status\": \"ENABLE\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1351,7 +1347,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/client/615cce324b51ba2b14c1b190",
+							"raw": "http://localhost:3011/v1/client/61d4aa301125340f28fb0a3b",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1360,7 +1356,7 @@
 							"path": [
 								"v1",
 								"client",
-								"615cce324b51ba2b14c1b190"
+								"61d4aa301125340f28fb0a3b"
 							]
 						}
 					},
@@ -1396,7 +1392,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/client/61abffa2884334621c8cdea3/like",
+							"raw": "http://localhost:3011/v1/client/615cce324b51ba2b14c1b170/like",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1405,7 +1401,7 @@
 							"path": [
 								"v1",
 								"client",
-								"61abffa2884334621c8cdea3",
+								"615cce324b51ba2b14c1b170",
 								"like"
 							]
 						}
@@ -1439,7 +1435,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/client/615cce324b51ba2b14c1b170/provider/619df6305118878cc0af441a/like",
+							"raw": "http://localhost:3011/v1/client/615cce324b51ba2b14c1b170/provider/615a584a79b274425a6fa7db/like",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1450,7 +1446,7 @@
 								"client",
 								"615cce324b51ba2b14c1b170",
 								"provider",
-								"619df6305118878cc0af441a",
+								"615a584a79b274425a6fa7db",
 								"like"
 							]
 						}
@@ -1484,7 +1480,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/client/615cce324b51ba2b14c1b170/provider/619df6305118878cc0af441a/like",
+							"raw": "http://localhost:3011/v1/client/615cce324b51ba2b14c1b170/provider/615a584a79b274425a6fa7db/like",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1495,7 +1491,7 @@
 								"client",
 								"615cce324b51ba2b14c1b170",
 								"provider",
-								"619df6305118878cc0af441a",
+								"615a584a79b274425a6fa7db",
 								"like"
 							]
 						}

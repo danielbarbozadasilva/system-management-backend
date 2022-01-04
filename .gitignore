@@ -1,8 +1,8 @@
+.husky
 .env
-file/**
+api/utils/file/category/**
+api/utils/file/products/**
+api/utils/file/temp/**
 node_modules
-.DS_Store
-.vscode/*
-.eslintrc.json
-.prettierrc.json
-.docker-compose.yml
+.vscode
+data

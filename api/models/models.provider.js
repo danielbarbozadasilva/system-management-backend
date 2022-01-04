@@ -1,65 +1,51 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
 
-const provider_schema = {
+const { Schema } = mongoose
+
+const providerSchema = {
   cnpj: {
     type: String,
     required: true,
-    trim: true,
+    trim: true
   },
-  fantasy_name: {
+  fantasyName: {
     type: String,
-    uppercase: true,
-    trim: true,
-    maxlength: 50,
-    minlength: 5,
-    required: true,
+    required: true
   },
-  social_name: {
+  socialName: {
     type: String,
-    uppercase: true,
-    trim: true,
-    maxlength: 50,
-    minlength: 5,
-    required: true,
+    required: true
   },
   address: {
     type: String,
-    uppercase: true,
-    trim: true,
-    maxlength: 50,
-    minlength: 5,
-    required: true,
+    required: true
   },
   uf: {
     type: String,
     required: true,
-    uppercase: true,
-    trim: true,
+    trim: true
   },
   city: {
     type: String,
     required: true,
-    uppercase: true,
-    trim: true,
+    trim: true
   },
   responsible: {
     type: String,
-    required: true,
-    uppercase: true,
-    trim: true,
+    required: true
   },
   phone: {
     type: String,
     required: true,
+    trim: true
   },
   status: {
     type: String,
     required: true,
     uppercase: true,
     trim: true,
-    default: 'DISABLE',
-  },
-};
+    default: 'DISABLE'
+  }
+}
 
-module.exports = provider_schema;
+module.exports = providerSchema

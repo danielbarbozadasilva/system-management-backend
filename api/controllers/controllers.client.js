@@ -1,118 +1,110 @@
-const serviceClientService = require('../services/services.client');
-const serviceLikeService = require('../services/services.like');
+const clientService = require('../services/services.client')
+const likeService = require('../services/services.like')
 
-const ControllerListAllClients = async (req, res, next) => {
-  const resultService = await serviceClientService.ServiceListAllClient();
-  const code = resultService.success ? 200 : 400;
+const listAllClientsController = async (req, res) => {
+  const resultService = await clientService.listAllClientService()
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
-const ControllerListClientById = async (req, res, next) => {
-  const { clientid } = req.params;
-  const resultService = await serviceClientService.ServiceSearchByIdClient(
+const listClientByIdController = async (req, res) => {
+  const { clientid } = req.params
+  const resultService = await clientService.listClientByIdService(clientid)
+  const code = resultService.success ? 200 : 400
+  const message = resultService.success
+    ? { message: resultService.message }
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
+
+const insertClientsController = async (req, res) => {
+  const { body } = req
+  const resultService = await clientService.createClientService(body)
+  const code = resultService.success ? 200 : 400
+  const message = resultService.success
+    ? { message: resultService.message }
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
+
+const updateClientsController = async (req, res) => {
+  const { clientid } = req.params
+  const { body } = req
+
+  const resultService = await clientService.updateClientService(clientid, body)
+  const code = resultService.success ? 200 : 400
+  const message = resultService.success
+    ? { message: resultService.message }
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
+
+const deleteClientsController = async (req, res) => {
+  const { clientid } = req.params
+  const resultService = await clientService.deleteClientService(clientid)
+  const code = resultService.success ? 200 : 400
+  const message = resultService.success
+    ? { message: resultService.message }
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
+
+const listLikeProviderController = async (req, res) => {
+  const { clientid } = req.params
+  const resultService = await likeService.listLikesClientProviderService(
     clientid
-  );
-  const code = resultService.success ? 200 : 400;
+  )
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
-const ControllerInsertClients = async (req, res, next) => {
-  const { body } = req;
-  const resultService = await serviceClientService.ServiceCreateClient(body);
-  const code = resultService.success ? 200 : 400;
-  const message = resultService.success
-    ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
-
-const ControllerUpdateClients = async (req, res, next) => {
-  const { clientid } = req.params;
-  const { body } = req;
-
-  const resultService = await serviceClientService.ServiceUpdateClient(
-    clientid,
-    body
-  );
-  const code = resultService.success ? 200 : 400;
-  const message = resultService.success
-    ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
-
-const ControllerDeleteClients = async (req, res, next) => {
-  const { clientid } = req.params;
-  const resultService = await serviceClientService.ServiceDeleteClient(
+const createLikeProviderController = async (req, res) => {
+  const { providerid, clientid } = req.params
+  const resultService = await likeService.createLikeClientProviderService(
+    providerid,
     clientid
-  );
-  const code = resultService.success ? 200 : 400;
+  )
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
-const ControllerSearchLikeProvider = async (req, res, next) => {
-  const { clientid } = req.params;
-  const resultService =
-    await serviceLikeService.ServiceSearchLikeClientProvider(clientid);
-  const code = resultService.success ? 200 : 400;
+const removeLikeProviderController = async (req, res) => {
+  const { providerid, clientid } = req.params
+  const resultService = await likeService.removeLikeClientProviderService(
+    providerid,
+    clientid
+  )
+  const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
-
-const ControllerInsertLikeProvider = async (req, res, next) => {
-  const { providerid, clientid } = req.params;
-  const resultService =
-    await serviceLikeService.ServiceCreateLikeClientProvider(
-      providerid,
-      clientid
-    );
-  const code = resultService.success ? 200 : 400;
-  const message = resultService.success
-    ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
-
-const ControllerRemoveLikeProvider = async (req, res, next) => {
-  const { providerid, clientid } = req.params;
-  const resultService =
-    await serviceLikeService.ServiceRemoveLikeClientProvider(
-      providerid,
-      clientid
-    );
-  const code = resultService.success ? 200 : 400;
-  const message = resultService.success
-    ? { message: resultService.message }
-    : { details: resultService.details };
-  const data = resultService.data ? resultService.data : '';
-  return res.status(code).send({ message: message, data });
-};
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
 
 module.exports = {
-  ControllerListAllClients,
-  ControllerListClientById,
-  ControllerInsertClients,
-  ControllerUpdateClients,
-  ControllerDeleteClients,
-  ControllerSearchLikeProvider,
-  ControllerInsertLikeProvider,
-  ControllerRemoveLikeProvider,
-};
+  listAllClientsController,
+  listClientByIdController,
+  insertClientsController,
+  updateClientsController,
+  deleteClientsController,
+  listLikeProviderController,
+  createLikeProviderController,
+  removeLikeProviderController
+}

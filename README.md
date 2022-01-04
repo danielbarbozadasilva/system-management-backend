@@ -53,6 +53,8 @@ In addition to publicizing the establishments, the System provides a user-friend
 [FR17] All users have the ability to list products by category sorted by favorite, by value and by description. Explanation: The System should display products by category sorted by favorite, by value and by description.
 
 [FR18] All users need to define the location (UF and city) to search. Explanation: The System should display filter users by locality (UF and city).
+<br/>
+<br/>
 
 > ## License
 - GPLv3 License

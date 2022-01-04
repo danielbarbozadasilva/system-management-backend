@@ -1,49 +1,41 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+
+const { Schema } = mongoose
 
 module.exports = {
   name: {
     type: String,
-    uppercase: true,
-    trim: true,
-    maxlength: 50,
-    minlength: 5,
-    required: true,
+    required: true
   },
   description: {
     type: String,
-    uppercase: true,
-    trim: true,
-    maxlength: 50,
-    minlength: 5,
-    required: true,
+    required: true
   },
   price: {
     type: Number,
     required: true,
-    trim: true,
-    default: 0,
+    default: 0
   },
   image: {
     origin: {
       type: String,
-      required: false,
+      required: false
     },
     name: {
       type: String,
-      required: false,
+      required: false
     },
     type: {
       type: String,
-      required: false,
-    },
+      required: false
+    }
   },
   category: {
     type: Schema.Types.ObjectId,
-    ref: 'category',
+    ref: 'category'
   },
   provider: {
     type: Schema.Types.ObjectId,
-    ref: 'provider',
-  },
-};
+    ref: 'provider'
+  }
+}

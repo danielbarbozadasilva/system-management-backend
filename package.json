@@ -9,7 +9,8 @@
     "start": "node ./index.js",
     "dev": "nodemon ./index.js",
     "add-seeders": "node ./db/seeders/seeders.index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -38,19 +39,21 @@
     "moment": "^2.29.1",
     "mongoose": "^5.12.9",
     "mongoose-data-seed": "^2.1.6",
-    "node-geocoder": "^3.28.0",
     "nodemon": "^2.0.7",
     "npm": "^7.15.0",
     "nuclide-prebuilt-libs": "^0.6.3",
     "path": "^0.12.7",
+    "restify": "^8.6.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "eslint": "^7.32.0",
-    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint": "^8.6.0",
+    "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-prettier": "^4.0.0",
-    "prettier": "^2.4.1"
+    "husky": "^7.0.4",
+    "lint-staged": "^12.1.4",
+    "prettier": "^2.5.1"
   }
 }
