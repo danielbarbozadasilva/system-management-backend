@@ -1,5 +1,5 @@
 {
-    "*.js": [
-        "eslint . --fix"
-    ]
-}
+    "api/**/*.{js,ts,jsx,tsx}": [
+      "eslint --fix"
+      ]
+    }
