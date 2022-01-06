@@ -5,12 +5,13 @@
   "version": "1.0.0",
   "description": "backend - Sistema de gestão de confeitarias",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "start": "node ./index.js",
     "dev": "nodemon ./index.js",
     "add-seeders": "node ./db/seeders/seeders.index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky install"
+    "postinstall": "husky install"
   },
   "repository": {
     "type": "git",
@@ -52,8 +53,10 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-prettier": "^4.0.0",
-    "husky": "^7.0.4",
-    "lint-staged": "^12.1.4",
+    "@commitlint/cli": "^16.0.0",
+    "@commitlint/config-conventional": "^16.0.0",
+    "husky": "^7.0.2",
+    "lint-staged": "^9.5.0",
     "prettier": "^2.5.1"
   }
 }
