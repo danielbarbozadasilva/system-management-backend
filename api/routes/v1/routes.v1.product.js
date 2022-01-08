@@ -8,7 +8,7 @@ module.exports = (router) => {
   router.route('/product').get(
     authorizationMiddleware('*'),
     middlewareValidateDTO('query', {
-      category: joi
+      categoria: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .messages({
@@ -16,7 +16,7 @@ module.exports = (router) => {
           'string.empty': `"category id" can not be empty`,
           'string.pattern.base': `"category id" out of the expected format`
         }),
-      provider: joi
+      fornecedor: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .messages({

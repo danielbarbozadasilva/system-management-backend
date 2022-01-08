@@ -95,6 +95,8 @@ const createProductService = async (body, providerid) => {
 const listProductWithFilterService = async (filters) => {
   const filter = {}
 
+  console.log(filters)
+
   if (filters.category) {
     filter.category = filters.category
   }
