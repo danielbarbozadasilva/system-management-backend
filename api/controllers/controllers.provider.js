@@ -27,10 +27,7 @@ const listProviderByIdController = async (req, res) => {
 
 const listProvidersByLocationController = async (req, res) => {
   const { uf, city } = req.params
-  const resultService = await providerService.listProvidersByLocationService(
-    uf,
-    city
-  )
+  const resultService = await providerService.listProvidersByLocationService(uf, city)
   const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }

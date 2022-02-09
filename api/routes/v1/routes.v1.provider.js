@@ -66,7 +66,7 @@ module.exports = (router) => {
     providerController.insertProviderController
   )
 
-  router.route('/provider/filter/:uf/:city').get(
+  router.route('/provider/filter/uf/:uf/city/:city').get(
     authorizationMiddleware('*'),
     middlewareValidateDTO('params', {
       uf: joi.string().messages({

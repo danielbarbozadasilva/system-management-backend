@@ -193,7 +193,7 @@ const listProvidersByLocationService = async (uf, city) => {
   } else {
     filter = { uf, city }
   }
-
+  
   const resultDB = await provider.find(filter)
   if (!resultDB) {
     return {
@@ -202,6 +202,7 @@ const listProvidersByLocationService = async (uf, city) => {
       details: ['The value does not exist']
     }
   }
+
   return {
     success: true,
     message: 'operation performed successfully',
@@ -224,19 +225,21 @@ const createProviderService = async (model) => {
     status
   } = model
 
-  if (await serviceUserProvider.verifyCnpjExistsService(cnpj))
+  if (await serviceUserProvider.verifyCnpjExistsService(cnpj)) {
     return {
       success: false,
       message: 'operation cannot be performed',
       details: ['There is already a registered provider for the entered cnpj']
     }
+  }
 
-  if (!(await serviceUserProvider.verifyEmailBodyExistService(email)))
+  if (!(await serviceUserProvider.verifyEmailBodyExistService(email))) {
     return {
       success: false,
       message: 'operation cannot be performed',
       details: ['There is already a registered user for the email entered']
     }
+  }
 
   const resultDB = await provider.create({
     cnpj,
