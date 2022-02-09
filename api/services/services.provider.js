@@ -193,7 +193,7 @@ const listProvidersByLocationService = async (uf, city) => {
   } else {
     filter = { uf, city }
   }
-  
+
   const resultDB = await provider.find(filter)
   if (!resultDB) {
     return {
