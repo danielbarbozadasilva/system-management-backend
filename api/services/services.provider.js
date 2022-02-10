@@ -56,14 +56,7 @@ const listAllProviderService = async (nameFilter) => {
         }
       }
     },
-    {
-      $group: {
-        _id: '$result_like.product',
-        _id: '$_id',
-        data: { $push: '$$ROOT' },
-        count: { $sum: 1 }
-      }
-    },
+
     { $sort: filter }
   ])
 
