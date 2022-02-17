@@ -5,30 +5,18 @@ const middlewareFileUploadMiddleware = require('../../utils/middlewares/middlewa
 const authorizationMiddleware = require('../../utils/middlewares/middlewares.authorization')
 
 module.exports = (router) => {
-  router.route('/product').get(
+  router.route('/product/name/:name/filter/:filter').get(
     authorizationMiddleware('*'),
-    middlewareValidateDTO('query', {
-      category: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .messages({
-          'any.required': `"category id" is a required field`,
-          'string.empty': `"category id" can not be empty`,
-          'string.pattern.base': `"category id" out of the expected format`
-        }),
-      provider: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .messages({
-          'any.required': `"provider id" is a required field`,
-          'string.empty': `"provider id" can not be empty`,
-          'string.pattern.base': `"provider id" out of the expected format`
-        }),
-      namelike: joi.string()
+    middlewareValidateDTO('params', {
+      name: joi.string().allow(''),
+      filter: joi.string().allow('')
     }),
     productController.filterProductController
   )
-
+  router.route('/product').get(
+    authorizationMiddleware('*'),
+    productController.listAllProductsController
+  )
   router.route('/product/:productid').get(
     authorizationMiddleware('*'),
     middlewareValidateDTO('params', {
@@ -37,9 +25,9 @@ module.exports = (router) => {
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"provider id" is a required field`,
-          'string.empty': `"provider id" can not be empty`,
-          'string.pattern.base': `"provider id" out of the expected format`
+          'any.required': '"provider id" is a required field',
+          'string.empty': '"provider id" can not be empty',
+          'string.pattern.base': '"provider id" out of the expected format'
         })
     }),
     productController.listProductByIdController
@@ -53,33 +41,33 @@ module.exports = (router) => {
         .regex(/^[0-9a-fA-F]{24}$/)
         .required()
         .messages({
-          'any.required': `"product id" is a required field`,
-          'string.empty': `"product id" can not be empty`,
-          'string.pattern.base': `"product id" out of the expected format`
+          'any.required': '"product id" is a required field',
+          'string.empty': '"product id" can not be empty',
+          'string.pattern.base': '"product id" out of the expected format'
         })
     }),
     middlewareValidateDTO(
       'body',
       {
         name: joi.string().required().messages({
-          'any.required': `"name" is a required field`,
-          'string.empty': `"name" can not be empty`
+          'any.required': '"name" is a required field',
+          'string.empty': '"name" can not be empty'
         }),
         description: joi.string().required().messages({
-          'any.required': `"description" is a required field`,
-          'string.empty': `"description" can not be empty`
+          'any.required': '"description" is a required field',
+          'string.empty': '"description" can not be empty'
         }),
         category: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
           .messages({
-            'any.required': `"category id" is a required field`,
-            'string.empty': `"category id" can not be empty`,
-            'string.pattern.base': `"category id" out of the expected format`
+            'any.required': '"category id" is a required field',
+            'string.empty': '"category id" can not be empty',
+            'string.pattern.base': '"category id" out of the expected format'
           }),
         price: joi.number().required().messages({
-          'any.required': `"preco" is a required field`
+          'any.required': '"preco" is a required field'
         })
       },
       {
@@ -96,17 +84,17 @@ module.exports = (router) => {
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .messages({
-          'any.required': `"provider id" is a required field`,
-          'string.empty': `"provider id" can not be empty`,
-          'string.pattern.base': `"provider id" out of the expected format`
+          'any.required': '"provider id" is a required field',
+          'string.empty': '"provider id" can not be empty',
+          'string.pattern.base': '"provider id" out of the expected format'
         }),
       productid: joi
         .string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .messages({
-          'any.required': `"product id" is a required field`,
-          'string.empty': `"product id" can not be empty`,
-          'string.pattern.base': `"product id" out of the expected format`
+          'any.required': '"product id" is a required field',
+          'string.empty': '"product id" can not be empty',
+          'string.pattern.base': '"product id" out of the expected format'
         }),
 
       allowUnknown: true

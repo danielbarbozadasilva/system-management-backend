@@ -92,26 +92,19 @@ const createProductService = async (body, providerid) => {
   }
 }
 
-const listProductWithFilterService = async (filters) => {
-  const filter = {}
+const listProductWithFilterService = async (name = '', filter) => {
+  const efilter = {}
 
-  if (filters.category) {
-    filter.category = filters.category
+  if (name == 'category') {
+    efilter.category = filter
+  } else if (name == 'provider') {
+    efilter.provider = filter
+  } else if (name == 'namelike') {
+    efilter.name = { $regex: `.*${filter}.*` }
   }
 
-  if (filters.provider) {
-    filter.provider = filters.provider
-  }
-
-  if (filters.namelike) {
-    filter.name = { $regex: `.*${filters.namelike}.*` }
-  }
-
-  const resultDB = await product
-    .find(filter)
-    .populate('product')
-    .populate('provider')
-    .populate('category')
+  const resultDB = await product.find(efilter)
+  console.log(efilter)
 
   if (!resultDB.length) {
     return {
