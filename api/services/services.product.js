@@ -94,7 +94,6 @@ const createProductService = async (body, providerid) => {
 
 const listProductWithFilterService = async (name = '', filter) => {
   const efilter = {}
-
   if (name == 'category') {
     efilter.category = filter
   } else if (name == 'provider') {
@@ -104,15 +103,8 @@ const listProductWithFilterService = async (name = '', filter) => {
   }
 
   const resultDB = await product.find(efilter)
-  console.log(efilter)
 
-  if (!resultDB.length) {
-    return {
-      success: false,
-      message: 'no results',
-      details: ['no results']
-    }
-  }
+
   return {
     success: true,
     message: 'operation performed successfully',
@@ -120,9 +112,8 @@ const listProductWithFilterService = async (name = '', filter) => {
   }
 }
 
-const updateProductService = async (productId, model) => {
+const updateProductService = async (productId, providerid, model) => {
   const productDB = await product.findOne({ _id: productId })
-
   if (!productDB) {
     return {
       success: false,
@@ -133,7 +124,6 @@ const updateProductService = async (productId, model) => {
 
   productDB.name = model.name
   productDB.description = model.description
-  productDB.status = model.status
   productDB.price = model.price
   productDB.category = model.category
   productDB.provider = model.provider
@@ -164,28 +154,8 @@ const updateProductService = async (productId, model) => {
   }
 }
 
-const deleteProductService = async ({ providerId, productId, userId }) => {
-  const [providerDB, productDB] = await Promise.all([
-    provider.findById(providerId),
-    product.findById(productId)
-  ])
-
-  if (!providerDB) {
-    return {
-      success: false,
-      message: 'Operation cannot be performed',
-      details: ['The provided provider does not exist.']
-    }
-  }
-
-  if (providerId !== userId) {
-    return {
-      success: false,
-      message: 'Operation cannot be performed',
-      details: ['The product to be excluded does not belong to the provider.']
-    }
-  }
-
+const deleteProductService = async ({ productId }) => {
+  const productDB = await product.findById(productId)
   if (!productDB) {
     return {
       success: false,
@@ -194,43 +164,14 @@ const deleteProductService = async ({ providerId, productId, userId }) => {
     }
   }
 
-  if (productDB.provider.toString() !== providerId) {
+  const resultDB = await product.deleteOne({ _id: productId })
+  if (!resultDB) {
     return {
       success: false,
       message: 'Operation cannot be performed',
-      details: ['The supplier entered is invalid.']
+      details: ['Error deleting data']
     }
   }
-
-  const categoryDB = await category.findById(productDB.category)
-  categoryDB.products = categoryDB.products.filter(
-    (item) => item.toString() !== productId
-  )
-
-  providerDB.products = providerDB.products.filter(
-    (item) => item.toString() !== productId
-  )
-
-  await Promise.all([
-    categoryDB.save(),
-    providerDB.save(),
-    product.deleteOne({ _id: productId })
-  ])
-
-  const { image } = productDB
-  fileUtils.UtilRemove('products', image.name)
-
-  const categoryArray = await category.find({ products: productId })
-
-  await Promise.all(
-    categoryArray.map(async (item) => {
-      const categoryProduct = item.products
-      const index = categoryProduct.findIndex((item) => item == productId)
-      categoryProduct.splice(index, 1)
-      await category.updateOne({ _id: item._id }, { products: categoryProduct })
-    })
-  )
-
   return {
     success: true,
     message: 'Operation performed successfully',
