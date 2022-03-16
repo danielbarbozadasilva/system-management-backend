@@ -34,33 +34,33 @@ const authorizationMiddleware =
           }
 
           if (typeUser == 2){
-            if (id !== provider_id) {
+            if (req.params.providerid !== provider_id) {
               return Promise.reject(
                 new ErrorUserNotAllowed('Unauthorized User!')
-              )
-            }
-          } 
-          else if(typeUser == 3) {
-            if (id !== client_id) {
-              return Promise.reject(
-                new ErrorUserNotAllowed('Unauthorized User!')
-              )
-            }
-          }
-
-          if (providerStatusKind) {
-            return Promise.reject(
-              new ErrorUserNotAllowed(
-                'The supplier has not yet been authorized! Contact the administrator.'
-              )
-            )
-          }
-
-          if (profileFunctionality) {
-            return Promise.reject(new ErrorUserNotAllowed('Unauthorized User!'))
-          }
-        }
-
+                )
+              }
+            } 
+            else if(typeUser == 3) {
+              if (id !== client_id) {
+                return Promise.reject(
+                  new ErrorUserNotAllowed('Unauthorized User!')
+                  )
+                }
+              }
+              
+              if (providerStatusKind) {
+                return Promise.reject(
+                  new ErrorUserNotAllowed(
+                    'The provider has not yet been authorized! Contact the administrator.'
+                    )
+                    )
+                  }
+                  
+                  if (profileFunctionality) {
+                    return Promise.reject(new ErrorUserNotAllowed('Unauthorized User!'))
+                  }
+                }
+                
         return Promise.resolve(next())
       })
       .catch((e) =>
