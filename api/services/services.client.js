@@ -44,8 +44,7 @@ const createClientService = async (model) => {
     uf,
     city,
     email,
-    password,
-    status
+    password
   } = model
 
   if (!(await verifyEmailBodyExistService(email))) {
@@ -59,7 +58,7 @@ const createClientService = async (model) => {
   const newClient = await client.create({
     firstName,
     lastName,
-    birthDate,
+    birthDate: new Date(birthDate),
     phone,
     uf,
     city,
