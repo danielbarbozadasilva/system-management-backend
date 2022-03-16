@@ -22,20 +22,6 @@ const listAllProviderService = async (nameFilter) => {
   const resultDB = await provider.aggregate([
     {
       $lookup: {
-        from: like.collection.name,
-        localField: '_id',
-        foreignField: 'provider',
-        as: 'result_like'
-      }
-    },
-    {
-      $unwind: {
-        path: '$result_like',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    {
-      $lookup: {
         from: product.collection.name,
         localField: 'result_like.product',
         foreignField: '_id',
@@ -48,15 +34,6 @@ const listAllProviderService = async (nameFilter) => {
         preserveNullAndEmptyArrays: true
       }
     },
-    {
-      $match: {
-        'result_like.product': {
-          $exists: true,
-          $ne: null
-        }
-      }
-    },
-
     { $sort: filter }
   ])
 
@@ -180,11 +157,15 @@ const listProductsProviderService = async (providerId) => {
 }
 
 const listProvidersByLocationService = async (uf, city) => {
+  console.log(uf, city)
   let filter = {}
   if (city == 'undefined' || city == 'x') {
     filter = { uf }
   } else {
     filter = { uf, city }
+  }
+  if (uf == 'x' && city == 'x') {
+    filter = { }
   }
 
   const resultDB = await provider.find(filter)
