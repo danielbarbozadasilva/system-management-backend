@@ -24,7 +24,7 @@ const searchCategoryByIdService = async (categoryid) => {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: categoryDB.map((item) => categoryMapper.toDTO(item))
+      data: categoryMapper.toDTO(...categoryDB)
     }
   }
   throw new ErrorBusinessRule('No categories found')
