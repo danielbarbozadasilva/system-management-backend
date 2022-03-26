@@ -1,58 +1,68 @@
-const path = require('path');
-const fs = require('fs');
-const formidable = require('formidable');
-const fileUtils = require('../utils.file');
-
-const ErrorBusinessRule = require('../errors/errors.business_rule');
+const path = require('path')
+const fs = require('fs')
+const formidable = require('formidable')
+const fileUtils = require('../../utils/utils.file')
+const ErrorBusinessRule = require('../errors/errors.business_rule')
 
 const postIsValid = (files) => {
   if (!files.image || files.image.name === '') {
-    return false;
+    return false
   }
-  return true;
-};
+  return true
+}
 
-const fileUpload = (destiny) => {
+const putIsValid = (files) => {
+  if (!files.image || files.image.name === '') {
+    return false
+  }
+  return true
+}
+
+const fileUpload = (destiny, isUpdate = false) => {
   return async (req, res, next) => {
-    return await new Promise(function (resolve, reject) {
-      const form = formidable.IncomingForm();
-      form.uploadDir = fileUtils.UtilCreateAddress('temp');
+    const form = formidable.IncomingForm()
+    form.uploadDir = fileUtils.UtilCreateAddress('temp')
+
+    const formfields = await new Promise(function (resolve, reject) {
       form.parse(req, (err, fields, files) => {
         if (err) {
-          return reject(err);
+          return reject(err)
         }
-        if (!postIsValid(files))
-          return reject(new ErrorBusinessRule('"image" is mandatory'));
 
-        req.body = {
+        resolve({
           ...fields,
-        };
+          files
+        })
+      })
+    })
 
-        if (files.image && files.image.name !== '') {
-          const newName = fileUtils.UtilCreateName(files.image.type);
-          const new_path = fileUtils.UtilCreateAddress(destiny, newName);
+    const { files, ...fields } = formfields
 
-          req.body.image = {
-            type: files.image.type,
-            origin: files.image.name,
-            old_path: files.image.path,
-            newName,
-            new_path,
-          };
-        }
-        return Promise.resolve(
-          {
-            ...fields,
-            files,
-          },
-          next()
-        );
-      });
-    }).catch(function (e) {
-      return res
-        .status(e.statusCode)
-        .send({ success: false, error: { message: e.message } });
-    });
-  };
-};
-module.exports = fileUpload;
+    req.body = {
+      ...fields
+    }
+
+    if (req.method === 'POST') {
+      if (!postIsValid(files)) {
+        throw new ErrorBusinessRule('"image" é de preenchimento obrigatório.')
+      }
+    }
+
+    if (files.image && files.image.name !== '') {
+      const newName = fileUtils.UtilCreateName(files.image.type)
+      const new_path = fileUtils.UtilCreateAddress(destiny, newName)
+
+      req.body.image = {
+        type: files.image.type,
+        origin: files.image.name,
+        old_path: files.image.path,
+        newName,
+        new_path
+      }
+    }
+
+    next()
+  }
+}
+
+module.exports = fileUpload
