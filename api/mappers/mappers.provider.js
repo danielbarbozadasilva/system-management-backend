@@ -30,43 +30,34 @@ const toDTO = (model) => {
   }
 }
 
-const toItemListDTO = (model) => ({
-  id: model._id,
-  category: model.category,
-  name: model.name,
-  description: model.description,
-  price: parseFloat(model.price).toLocaleString('pt-br', {
-    style: 'currency',
-    currency: 'BRL'
-  }),
-  image: fileUtils.UtilCreateAddressDownload('product', model.image.name),
-  provider: {
-    id: model.provider._id,
-    cnpj: model.provider.cnpj,
-    fantasyName: model.provider.fantasyName,
-    socialName: model.provider.socialName,
-    email: model.provider.email,
-    address: model.provider.address,
-    uf: model.provider.uf,
-    city: model.provider.city,
-    responsible: model.provider.responsible,
-    phone: model.provider.phone,
-    status: model.provider.status
-  }
-})
-
-const toDTOListLike = (model) => {
-  const { id: _id, provider, product } = model
-
+const toItemListDTO = (model) => {
   return {
-    id: _id,
-    provider,
-    product
+    id: model._id,
+    cnpj: model.cnpj,
+    fantasyName: model.fantasyName,
+    socialName: model.socialName,
+    email: model.email,
+    address: model.address,
+    kind: model.kind,
+    uf: model.uf,
+    city: model.city,
+    responsible: model.responsible,
+    phone: model.phone,    
+    status: model.status,
+    count_likes: Object.keys(model.count[0]).length
   }
+}
+
+const toDTOListProviderLike = (model) => {
+  return [{
+    id: model._id,
+    provider: model.provider,
+    product: model.product.name
+  }]
 }
 
 module.exports = {
   toItemListDTO,
   toDTO,
-  toDTOListLike
+  toDTOListProviderLike
 }
