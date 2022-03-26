@@ -4,13 +4,10 @@ const middlewareValidateDTO = require('../../utils/middlewares/middlewares.valid
 const authorizationMiddleware = require('../../utils/middlewares/middlewares.authorization')
 
 module.exports = (router) => {
-  router.route('/provider/filter').get(
+  router.route('/provider/filter/:namefilter').get(
     authorizationMiddleware('*'),
-    middlewareValidateDTO('query', {
-      namefilter: joi.string().optional().messages({
-        'any.required': '"name filter" is a required field',
-        'string.empty': '"name filter" can not be empty'
-      })
+    middlewareValidateDTO('params', {
+      namefilter: joi.string().allow('')
     }),
     providerController.listAllProvidersController
   )
@@ -128,7 +125,7 @@ module.exports = (router) => {
     providerController.listProductsByProviderController
   )
 
-  router.route('/provider/:providerid/:status').put(
+  router.route('/provider/:providerid/status/:status').put(
     authorizationMiddleware('CHANGE_STATUS_PROVIDER'),
     middlewareValidateDTO('params', {
       providerid: joi
