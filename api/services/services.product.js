@@ -101,9 +101,7 @@ const listProductWithFilterService = async (name = '', filter) => {
   } else if (name == 'namelike') {
     efilter.name = { $regex: `.*${filter}.*` }
   }
-
   const resultDB = await product.find(efilter)
-
 
   return {
     success: true,

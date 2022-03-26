@@ -20,41 +20,6 @@ const listAllProviderService = async (nameFilter) => {
   }
 
   const resultDB = await provider.aggregate([
-    {
-      $lookup: {
-        from: product.collection.name,
-        localField: 'result_like.product',
-        foreignField: '_id',
-        as: 'result_product'
-      }
-    },
-    {
-      $unwind: {
-        path: '$result_product',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    { $sort: filter }
-  ])
-
-  if (resultDB.length < 1) {
-    return {
-      success: false,
-      details: 'No likes found!'
-    }
-  }
-  if (resultDB.length > 0) {
-    return {
-      success: true,
-      message: 'Operation performed successfully!',
-      data: resultDB
-    }
-  }
-}
-
-const listProviderByIdService = async (filterId) => {
-  const resultDB = await provider.aggregate([
-    { $match: { _id: ObjectId(filterId) } },
 
     {
       $lookup: {
@@ -71,57 +36,55 @@ const listProviderByIdService = async (filterId) => {
       }
     },
     {
-      $lookup: {
-        from: client.collection.name,
-        localField: 'result_like.client',
-        foreignField: '_id',
-        as: 'result_client'
-      }
-    },
-    {
-      $unwind: {
-        path: '$client',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    {
-      $lookup: {
-        from: client.collection.name,
-        localField: 'result_like.client',
-        foreignField: '_id',
-        as: 'result_client'
-      }
-    },
-    {
-      $unwind: {
-        path: '$result_client',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    {
-      $lookup: {
-        from: product.collection.name,
-        localField: 'result_like.product',
-        foreignField: '_id',
-        as: 'result_product'
-      }
-    },
-    {
-      $unwind: {
-        path: '$result_product',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    {
       $group: {
-        _id: '$result_like.client',
         _id: '$_id',
+        occurances: { $push: { user: '$result_like.product' } },
+        doc: { $first: '$$ROOT' }
+      }
+    },
+    {
+      $replaceRoot: {
+        newRoot: { $mergeObjects: [{ count: '$occurances' }, '$doc'] }
+      }
+    }
 
-        data: { $push: '$$ROOT' },
-        count: { $sum: 1 }
+  ])
+
+  if (resultDB.length < 1) {
+    return {
+      success: false,
+      details: 'No likes found!'
+    }
+  }
+  if (resultDB.length > 0) {
+    return {
+      success: true,
+      message: 'Operation performed successfully!',
+      data: resultDB.map((item) => toItemListDTO(item))
+
+    }
+  }
+}
+
+const listProviderByIdService = async (filterId) => {
+  const resultDB = await provider.aggregate([
+    { $match: { _id: ObjectId(filterId) } },
+    {
+      $lookup: {
+        from: like.collection.name,
+        localField: '_id',
+        foreignField: 'provider',
+        as: 'result_like'
+      }
+    },
+    {
+      $unwind: {
+        path: '$result_like',
+        preserveNullAndEmptyArrays: true
       }
     }
   ])
+
   if (!resultDB.length) {
     return {
       success: false,
@@ -138,10 +101,7 @@ const listProviderByIdService = async (filterId) => {
 }
 
 const listProductsProviderService = async (providerId) => {
-  const resultDB = await product
-    .find({ provider: providerId })
-    .populate('provider')
-
+  const resultDB = await provider.find({ _id: ObjectId(providerId) })
   if (!resultDB.length > 0) {
     return {
       success: false,
@@ -149,15 +109,15 @@ const listProductsProviderService = async (providerId) => {
       details: ['The value does not exist']
     }
   }
+
   return {
     success: true,
     message: 'Operation performed successfully',
-    data: resultDB.map((item) => toItemListDTO(item))
+    data: resultDB.map((item) => toDTO(item))
   }
 }
 
 const listProvidersByLocationService = async (uf, city) => {
-  console.log(uf, city)
   let filter = {}
   if (city == 'undefined' || city == 'x') {
     filter = { uf }
@@ -329,7 +289,6 @@ const removeProviderService = async (providerId) => {
 
 const changeStatusService = async (providerId, status) => {
   const providerDB = await provider.findOne({ _id: providerId })
-
   if (!providerDB) {
     return {
       success: false,
@@ -365,7 +324,11 @@ const changeStatusService = async (providerId, status) => {
     }
     return {
       success: true,
-      message: 'Operation performed successfully'
+      message: 'Operation performed successfully',
+      data: {
+        id: providerDB._id,
+        name: providerDB.fantasyName
+      }
     }
   }
   if (!resultDB) {

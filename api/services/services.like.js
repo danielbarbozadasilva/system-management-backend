@@ -1,16 +1,15 @@
 const { ObjectId } = require('mongodb')
 const { provider, product, like, client } = require('../models/models.index')
-const { toDTOListLikeProviderProduct } = require('../mappers/mappers.client')
+const { toDTOListProviderLike } = require('../mappers/mappers.provider')
 
 const listLikesProviderProductService = async (providerId) => {
   const likeDB = await like
     .find({
-      provider: providerId
+      provider: Object(providerId)
     })
     .where('product')
     .ne(null)
     .populate('product')
-    .populate('provider')
 
   if (likeDB === 0) {
     return {
@@ -22,7 +21,7 @@ const listLikesProviderProductService = async (providerId) => {
     return {
       success: true,
       message: 'Operation performed successfully!',
-      data: likeDB.map((item) => toDTOListLikeProviderProduct(item))
+      data: toDTOListProviderLike(...likeDB)
     }
   }
 }
