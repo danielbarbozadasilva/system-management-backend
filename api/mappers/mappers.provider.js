@@ -31,6 +31,8 @@ const toDTO = (model) => {
 }
 
 const toItemListDTO = (model) => {
+  let qtd = 0
+
   return {
     id: model._id,
     cnpj: model.cnpj,
@@ -42,17 +44,51 @@ const toItemListDTO = (model) => {
     uf: model.uf,
     city: model.city,
     responsible: model.responsible,
-    phone: model.phone,    
+    phone: model.phone,
     status: model.status,
-    count_likes: Object.keys(model.count[0]).length
+    result_products: model.result_products.map((item) => {
+      return {
+        id: item?._id,
+        price: item?.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }),
+        category: item?.category,
+        provider: item?.provider,
+        name: item?.name,
+        description: item?.description,
+        image: item?.image
+      }
+    }),
+
+    result_client: model.result_client.map((item) => {
+      return {
+        id: item?._id,
+        name: item?.firstName + ' ' + item?.lastName,
+        email: item?.email,
+        kind: item?.kind
+      }
+    }),
+
+    result_likes: model.result_likes.map((item) => {
+      if (item?.product) {
+        qtd++
+        return [{
+          id: item?._id,
+          product: item?.product,
+          provider: item?.provider
+        }]
+      }
+    }).find(item => item !== null),
+
+    result_count: qtd
   }
 }
 
 const toDTOListProviderLike = (model) => {
   return [{
     id: model._id,
+    name: model.result_like.fantasyName,
+    email: model.result_like.email,
     provider: model.provider,
-    product: model.product.name
+    client: model.client
   }]
 }
 
