@@ -1,9 +1,40 @@
-const { product, category, provider } = require('../models/models.index')
+const { product, category, provider, client, like } = require('../models/models.index')
 const fileUtils = require('../utils/utils.file')
 const productMapper = require('../mappers/mappers.product')
 
 const listAllProductService = async () => {
-  const productDB = await product.find({})
+  const productDB = await product.aggregate([
+    {
+      $lookup: {
+        from: category.collection.name,
+        localField: 'category',
+        foreignField: '_id',
+        as: 'result_category'
+      }
+    },
+    {
+      $lookup: {
+        from: like.collection.name,
+        localField: '_id',
+        foreignField: 'product',
+        as: 'result_likes'
+      }
+    },
+   
+    {
+      $group: {
+        _id: '$_id',
+        occurances: { $push: { user: '$result_likes.product' } },
+        doc: { $first: '$$ROOT' }
+      }
+    },
+
+    {
+      $replaceRoot: {
+        newRoot: { $mergeObjects: [{ count: '$occurances' }, '$doc'] }
+      }
+    }
+  ])
 
   if (!productDB.length) {
     return {

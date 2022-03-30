@@ -20,34 +20,46 @@ const listAllProviderService = async (nameFilter) => {
   }
 
   const resultDB = await provider.aggregate([
-
+    {
+      $lookup: {
+        from: product.collection.name,
+        localField: '_id',
+        foreignField: 'provider',
+        as: 'result_products'
+      }
+    },
     {
       $lookup: {
         from: like.collection.name,
         localField: '_id',
         foreignField: 'provider',
-        as: 'result_like'
+        as: 'result_likes'
       }
     },
     {
-      $unwind: {
-        path: '$result_like',
-        preserveNullAndEmptyArrays: true
+      $lookup: {
+        from: client.collection.name,
+        localField: 'result_likes.client',
+        foreignField: '_id',
+        as: 'result_client'
       }
     },
     {
       $group: {
         _id: '$_id',
-        occurances: { $push: { user: '$result_like.product' } },
+        occurances: { $push: { user: '$result_likes.product' } },
         doc: { $first: '$$ROOT' }
       }
     },
+
     {
       $replaceRoot: {
         newRoot: { $mergeObjects: [{ count: '$occurances' }, '$doc'] }
       }
+    },
+    {
+      $sort: filter
     }
-
   ])
 
   if (resultDB.length < 1) {

@@ -1,27 +1,46 @@
 const { ObjectId } = require('mongodb')
 const { provider, product, like, client } = require('../models/models.index')
 const { toDTOListProviderLike } = require('../mappers/mappers.provider')
+const { toDTOListClientLike } = require('../mappers/mappers.client')
 
 const listLikesProviderProductService = async (providerId) => {
-  const likeDB = await like
-    .find({
-      provider: Object(providerId)
-    })
-    .where('product')
-    .ne(null)
-    .populate('product')
+  const resultDB = await like.aggregate([
+    { $match: { provider: ObjectId(providerId) } },
+    {
+      $lookup: {
+        from: product.collection.name,
+        localField: 'product',
+        foreignField: '_id',
+        as: 'result_like'
+      }
+    },
+    {
+      $unwind: {
+        path: '$result_like',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $match: {
+        'result_like._id': {
+          $exists: true,
+          $ne: null
+        }
+      }
+    }
+  ])
 
-  if (likeDB === 0) {
+  if (resultDB === 0) {
     return {
       success: false,
       details: 'No likes found!'
     }
   }
-  if (likeDB !== 0) {
+  if (resultDB !== 0) {
     return {
       success: true,
       message: 'Operation performed successfully!',
-      data: toDTOListProviderLike(...likeDB)
+      data: toDTOListClientLike(...resultDB)
     }
   }
 }
@@ -117,14 +136,14 @@ const removeLikeProviderProductService = async (providerId, productId) => {
 }
 
 const listLikesClientProviderService = async (clientId) => {
-  const resultLikeDB = await client.aggregate([
-    { $match: { _id: ObjectId(clientId) } },
+  const resultLikeDB = await like.aggregate([
+    { $match: { client: ObjectId(clientId) } },
     {
       $lookup: {
-        from: like.collection.name,
-        localField: '_id',
-        foreignField: 'client',
-        as: 'likes'
+        from: provider.collection.name,
+        localField: 'provider',
+        foreignField: '_id',
+        as: 'result_like'
       }
     },
     {
@@ -132,17 +151,8 @@ const listLikesClientProviderService = async (clientId) => {
         path: '$result_like',
         preserveNullAndEmptyArrays: true
       }
-    },
-    {
-      $match: {
-        'likes.client': {
-          $exists: true,
-          $ne: null
-        }
-      }
     }
   ])
-
   if (resultLikeDB == 0) {
     return {
       success: false,
@@ -153,7 +163,7 @@ const listLikesClientProviderService = async (clientId) => {
     return {
       success: true,
       message: 'Operation performed successfully!',
-      data: resultLikeDB
+      data: toDTOListProviderLike(...resultLikeDB)
     }
   }
 }
