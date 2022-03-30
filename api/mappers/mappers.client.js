@@ -78,8 +78,18 @@ const toDTOListLikeClientProvider = (model) => {
   }
 }
 
+const toDTOListClientLike = (model) => {
+  return [{
+    id: model._id,
+    name: model.result_like.name,
+    provider: model.provider,
+    client: model.client
+  }]
+}
+
 module.exports = {
   toDTO,
   toDTOListLikeProviderProduct,
-  toDTOListLikeClientProvider
+  toDTOListLikeClientProvider,
+  toDTOListClientLike
 }
