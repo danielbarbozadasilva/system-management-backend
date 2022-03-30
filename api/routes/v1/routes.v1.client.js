@@ -142,7 +142,7 @@ module.exports = (router) => {
           'string.pattern.base': '"client id" out of the expected format'
         })
     }),
-    clientController.listLikeProviderController
+    clientController.listLikeClientController
   ),
   router
     .route('/client/:clientid/provider/:providerid/like')
