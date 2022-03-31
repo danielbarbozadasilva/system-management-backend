@@ -83,13 +83,13 @@ const toItemListDTO = (model) => {
 }
 
 const toDTOListProviderLike = (model) => {
-  return [{
+  return {
     id: model._id,
     name: model.result_like.fantasyName,
     email: model.result_like.email,
     provider: model.provider,
     client: model.client
-  }]
+  }
 }
 
 module.exports = {
