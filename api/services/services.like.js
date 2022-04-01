@@ -19,17 +19,8 @@ const listLikesProviderProductService = async (providerId) => {
         path: '$result_like',
         preserveNullAndEmptyArrays: true
       }
-    },
-    {
-      $match: {
-        'result_like._id': {
-          $exists: true,
-          $ne: null
-        }
-      }
     }
   ])
-
   if (resultDB === 0) {
     return {
       success: false,
@@ -40,7 +31,7 @@ const listLikesProviderProductService = async (providerId) => {
     return {
       success: true,
       message: 'Operation performed successfully!',
-      data: toDTOListClientLike(...resultDB)
+      data: resultDB.map((item) => toDTOListClientLike(item))
     }
   }
 }
@@ -56,32 +47,38 @@ const createLikeProviderProductService = async (providerId, productId) => {
   if (!providerDB) {
     return {
       success: false,
-      details: 'The provider informed does not exist!'
+      details: 'O fornecedor informado não existe!'
     }
   }
+
   if (!productDB) {
     return {
       success: false,
-      details: 'The product informed does not exist!'
+      details: 'O produto informado não existe!'
     }
   }
+
   if (likeProviderDB.length >= 3) {
     return {
       success: false,
-      details: 'The provider cannot like more than three products!'
+      details: 'O fornecedor não pode curtir mais de 3 produtos!'
     }
   }
+
   if (likeDB.length > 0) {
     return {
       success: false,
-      details: 'The provider has already liked the product!'
+      details: 'O fornecedor já curtiu este produto!'
     }
   }
+
   const resp = await like.create({
     provider: providerId,
     product: productId
   })
+
   const resultLike = await Promise.all([resp.save()])
+
   if (resultLike) {
     return {
       success: true,
@@ -93,6 +90,7 @@ const createLikeProviderProductService = async (providerId, productId) => {
       }
     }
   }
+
   return {
     success: false,
     details: 'There is no like!'
@@ -112,14 +110,17 @@ const removeLikeProviderProductService = async (providerId, productId) => {
       details: 'The provider informed does not exist!'
     }
   }
+
   if (!productDB) {
     return {
       success: false,
       details: 'The product informed does not exist!'
     }
   }
+
   if (likeDB) {
     const resultLike = await Promise.all([like.deleteOne(likeDB)])
+
     if (resultLike) {
       return {
         success: true,
@@ -128,6 +129,7 @@ const removeLikeProviderProductService = async (providerId, productId) => {
         }
       }
     }
+
     return {
       success: false,
       details: 'There is no like!'
@@ -153,6 +155,7 @@ const listLikesClientProviderService = async (clientId) => {
       }
     }
   ])
+
   if (resultLikeDB == 0) {
     return {
       success: false,
@@ -163,52 +166,58 @@ const listLikesClientProviderService = async (clientId) => {
     return {
       success: true,
       message: 'Operation performed successfully!',
-      data: toDTOListProviderLike(...resultLikeDB)
+      data: resultLikeDB.map((item) => toDTOListProviderLike(item))
     }
   }
 }
 
 const createLikeClientProviderService = async (providerId, clientId) => {
   const [providerDB, clientDB, likeDB, likeProviderDB] = await Promise.all([
-    provider.findById(Object(providerId)),
+    provider.findById(providerId),
     client.findById(clientId),
     like.findOne({ provider: Object(providerId), client: clientId }),
-    like.find({ provider: providerId }).where('client').ne(null)
+    like.find({ client: Object(clientId) })
   ])
 
   if (!providerDB) {
     return {
       success: false,
-      details: 'The provider informed does not exist!'
+      details: 'O fornecedor informado não existe!'
     }
   }
+
   if (!clientDB) {
     return {
       success: false,
-      details: 'The client informed does not exist!'
+      details: 'O cliente informado não existe!'
     }
   }
+
   if (likeProviderDB.length >= 3) {
     return {
       success: false,
-      details: 'The client cannot like more than three providers!'
+      details: 'O cliente não pode curtir mais de três fornecedores!'
     }
   }
+
   if (likeDB) {
     return {
       success: false,
-      details: 'The client has already liked the provider!'
+      details: 'O cliente já curtiu esse fornecedor!'
     }
   }
+
   const resp = await like.create({
     provider: providerId,
     client: clientId
   })
+
   const resultLike = await Promise.all([resp.save()])
+
   if (resultLike) {
     return {
       success: true,
-      message: 'Successfully liked!',
+      message: 'Curtido com sucesso!',
       data: {
         id: resp._id,
         provider: resp.provider,
@@ -218,7 +227,7 @@ const createLikeClientProviderService = async (providerId, clientId) => {
   }
   return {
     success: false,
-    details: 'There is no like!'
+    details: 'Erro ao curtir!'
   }
 }
 
@@ -232,19 +241,19 @@ const removeLikeClientProviderService = async (providerId, clientId) => {
   if (!providerDB) {
     return {
       success: false,
-      details: 'The provider informed does not exist!'
+      details: 'O fornecedor informado não existe!'
     }
   }
   if (!clientDB) {
     return {
       success: false,
-      details: 'The client informed does not exist!'
+      details: 'O cliente informado não existe!'
     }
   }
   if (likeDB === null) {
     return {
       success: false,
-      details: 'like does not exist!'
+      details: 'A curtida não existe!'
     }
   }
   if (likeDB !== null) {
@@ -253,13 +262,13 @@ const removeLikeClientProviderService = async (providerId, clientId) => {
       return {
         success: true,
         data: {
-          message: 'like removed successfully!'
+          message: 'A curtida foi removida com sucesso!'
         }
       }
     }
     return {
       success: false,
-      details: 'Error deleting like!'
+      details: 'Erro ao remover a curtida!'
     }
   }
 }
