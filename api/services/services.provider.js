@@ -137,10 +137,10 @@ const listProvidersByLocationService = async (uf, city) => {
     filter = { uf, city }
   }
   if (uf == 'x' && city == 'x') {
-    filter = { }
+    filter = {}
   }
-
   const resultDB = await provider.find(filter)
+
   if (!resultDB) {
     return {
       success: false,

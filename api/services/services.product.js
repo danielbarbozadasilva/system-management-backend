@@ -20,7 +20,7 @@ const listAllProductService = async () => {
         as: 'result_likes'
       }
     },
-   
+
     {
       $group: {
         _id: '$_id',
@@ -125,10 +125,12 @@ const createProductService = async (body, providerid) => {
 
 const listProductWithFilterService = async (name = '', filter) => {
   const efilter = {}
-  if (name == 'category') {
-    efilter.category = filter
-  } else if (name == 'provider') {
-    efilter.provider = filter
+  if (name == 'like') {
+    efilter.like = filter
+  } else if (name == 'price') {
+    efilter.price = filter
+  } else if (name == 'description') {
+    efilter.description = filter
   } else if (name == 'namelike') {
     efilter.name = { $regex: `.*${filter}.*` }
   }
