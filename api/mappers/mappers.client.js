@@ -82,7 +82,6 @@ const toDTOListClientLike = (model) => {
   return {
     id: model._id,
     name: model.result_like.name,
-    description: model.result_like.description,
     provider: model.provider,
     client: model.client
   }
