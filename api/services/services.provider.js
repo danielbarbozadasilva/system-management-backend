@@ -14,7 +14,7 @@ const listAllProviderService = async (nameFilter) => {
   if (Object.values(nameFilter) == 'alphabetical') {
     filter = { fantasyName: 1 }
   } else if (Object.values(nameFilter) == 'like') {
-    filter = { count: -1 }
+    filter = { result_likes: -1 }
   } else {
     filter = { fantasyName: -1 }
   }
@@ -339,7 +339,9 @@ const changeStatusService = async (providerId, status) => {
       message: 'Operation performed successfully',
       data: {
         id: providerDB._id,
-        name: providerDB.fantasyName
+        name: providerDB.fantasyName,
+        status: status
+
       }
     }
   }
