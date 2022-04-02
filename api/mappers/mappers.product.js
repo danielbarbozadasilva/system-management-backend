@@ -9,7 +9,7 @@ const toDTO = (model) => {
       style: 'currency',
       currency: 'BRL'
     }),
-    image: fileUtils.UtilCreateAddressDownload('product', model.image.name),
+    image: fileUtils.UtilCreateAddressDownload('products', model.image.name),
     categoryName: model.result_category.map((item) => {
       return item?.name
     }),
@@ -34,7 +34,7 @@ const toItemListDTO = (model) => {
       style: 'currency',
       currency: 'BRL'
     }),
-    image: fileUtils.UtilCreateAddressDownload('product', model.image.name),
+    image: fileUtils.UtilCreateAddressDownload('products', model.image.name),
     provider: {
       id: model.provider._id,
       cnpj: model.provider.cnpj,

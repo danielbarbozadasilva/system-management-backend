@@ -38,7 +38,7 @@ const toDTOListLikeProviderProduct = (model) => ({
         currency: 'BRL'
       }),
       image: fileUtils.UtilCreateAddressDownload(
-        'product',
+        'products',
         model.product.image.name
       )
     },

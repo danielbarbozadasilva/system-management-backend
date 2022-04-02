@@ -54,7 +54,7 @@ const toItemListDTO = (model) => {
         provider: item?.provider,
         name: item?.name,
         description: item?.description,
-        image: item?.image
+        image: fileUtils.UtilCreateAddressDownload('category', item.image.name)
       }
     }),
 
