@@ -124,7 +124,7 @@ const createProductService = async (body, providerid) => {
 }
 
 const listProductWithFilterService = async (name, filter) => {
-  let search = { $match: { name: { $regex: '.*.*' } } }
+  let search = ''
   let efilter = { description: 1 }
 
   if (name == 'like') {
@@ -134,11 +134,11 @@ const listProductWithFilterService = async (name, filter) => {
   } else if (name == 'description') {
     efilter = { description: -1 }
   } else if (filter == 'nameFilter') {
-    search = { $match: { name: { $regex: `.*${name.replace(' ', '')}.*` } } }
+    search = name
   }
 
   const productDB = await product.aggregate([
-    search,
+    { $match: { name: { $regex: `.*${search.replace(' ', '')}.*` } } },
     {
       $lookup: {
         from: like.collection.name,
@@ -168,7 +168,7 @@ const listProductWithFilterService = async (name, filter) => {
   return {
     success: true,
     message: 'operation performed successfully',
-    data: productDB
+    data: productDB.map((item) => productMapper.toDTO(item))
   }
 }
 
