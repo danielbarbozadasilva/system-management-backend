@@ -8,7 +8,7 @@ module.exports = (router) => {
   router.route('/product/name/:name/filter/:filter').get(
     authorizationMiddleware('*'),
     middlewareValidateDTO('params', {
-      name: joi.string().allow(''),
+      name: joi.string().allow(null, '').max(500),
       filter: joi.string().allow('')
     }),
     productController.filterProductController

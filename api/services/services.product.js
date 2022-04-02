@@ -123,23 +123,52 @@ const createProductService = async (body, providerid) => {
   }
 }
 
-const listProductWithFilterService = async (name = '', filter) => {
-  const efilter = {}
+const listProductWithFilterService = async (name, filter) => {
+  let search = { $match: { name: { $regex: '.*.*' } } }
+  let efilter = { description: 1 }
+
   if (name == 'like') {
-    efilter.like = filter
+    efilter = { result_likes: -1 }
   } else if (name == 'price') {
-    efilter.price = filter
+    efilter = { price: -1 }
   } else if (name == 'description') {
-    efilter.description = filter
-  } else if (name == 'namelike') {
-    efilter.name = { $regex: `.*${filter}.*` }
+    efilter = { description: -1 }
+  } else if (filter == 'nameFilter') {
+    search = { $match: { name: { $regex: `.*${name.replace(' ', '')}.*` } } }
   }
-  const resultDB = await product.find(efilter)
+
+  const productDB = await product.aggregate([
+    search,
+    {
+      $lookup: {
+        from: like.collection.name,
+        localField: '_id',
+        foreignField: 'product',
+        as: 'result_likes'
+      }
+    },
+    {
+      $group: {
+        _id: '$_id',
+        occurances: { $push: { user: '$result_likes.product' } },
+        doc: { $first: '$$ROOT' }
+      }
+    },
+
+    {
+      $replaceRoot: {
+        newRoot: { $mergeObjects: [{ count: '$occurances' }, '$doc'] }
+      }
+    },
+    {
+      $sort: efilter
+    }
+  ])
 
   return {
     success: true,
     message: 'operation performed successfully',
-    data: resultDB
+    data: productDB
   }
 }
 

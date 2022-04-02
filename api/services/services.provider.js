@@ -18,7 +18,7 @@ const listAllProviderService = async (nameFilter) => {
   } else {
     filter = { fantasyName: -1 }
   }
-
+  
   const resultDB = await provider.aggregate([
     {
       $lookup: {
