@@ -1,3 +1,4 @@
+const { remove } = require('lodash')
 const fileUtils = require('../utils/utils.file')
 
 const toDTO = (model) => {
@@ -66,18 +67,26 @@ const toItemListDTO = (model) => {
         kind: item?.kind
       }
     }),
-
     result_likes: model.result_likes.map((item) => {
       if (item?.product) {
         qtd++
-        return [{
+        return {
           id: item?._id,
-          product: item?.product,
-          provider: item?.provider
-        }]
+          nameProduct: model.result_products.map((cat) => {
+            if ('' + cat._id == item?.product) {
+              return cat.name
+            }
+          }).filter(item => item).toString(),
+          priceProduct: model.result_products.map((cat) => {
+            if ('' + cat._id == item?.product) {
+              return cat.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+            }
+          }).filter(item => item).toString(),
+          nameProvider: model.fantasyName,
+          email: model.email
+        }
       }
-    }).find(item => item !== null),
-
+    }),
     result_count: qtd
   }
 }

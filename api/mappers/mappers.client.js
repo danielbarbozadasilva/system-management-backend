@@ -82,6 +82,8 @@ const toDTOListClientLike = (model) => {
   return {
     id: model._id,
     name: model.result_like.name,
+    email: model.result_like.email,
+    price: model.result_like.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }),
     provider: model.provider,
     client: model.client
   }
