@@ -4,21 +4,7 @@ const formidable = require('formidable')
 const fileUtils = require('../../utils/utils.file')
 const ErrorBusinessRule = require('../errors/errors.business_rule')
 
-const postIsValid = (files) => {
-  if (!files.image || files.image.name === '') {
-    return false
-  }
-  return true
-}
-
-const putIsValid = (files) => {
-  if (!files.image || files.image.name === '') {
-    return false
-  }
-  return true
-}
-
-const fileUpload = (destiny, isUpdate = false) => {
+const fileUpload = (destiny) => {
   return async (req, res, next) => {
     const form = formidable.IncomingForm()
     form.uploadDir = fileUtils.UtilCreateAddress('temp')
@@ -43,7 +29,7 @@ const fileUpload = (destiny, isUpdate = false) => {
     }
 
     if (req.method === 'POST') {
-      if (!postIsValid(files)) {
+      if (!files.image || files.image.name === '') {
         throw new ErrorBusinessRule('"image" é de preenchimento obrigatório.')
       }
     }
