@@ -197,20 +197,19 @@ const updateProductService = async (productId, providerid, model) => {
 
     fileUtils.UtilRemove('products', productDB.image.name)
     fileUtils.UtilMove(model.image.old_path, model.image.new_path)
-
-    const result = await productDB.save()
-    if (!result) {
-      return {
-        success: false,
-        message: 'could not perform the operation',
-        details: ['The product id does not exist.']
-      }
-    }
+  }
+  const result = await productDB.save()
+  if (!result) {
     return {
-      success: true,
-      message: 'Operation performed successfully!',
-      data: productMapper.toItemListDTO(productDB)
+      success: false,
+      message: 'could not perform the operation',
+      details: ['The product id does not exist.']
     }
+  }
+  return {
+    success: true,
+    message: 'Operation performed successfully!',
+    data: productMapper.toItemListDTO(productDB)
   }
 }
 
