@@ -91,30 +91,35 @@ const updateCategoryService = async (categoryId, body) => {
   if (!categoryDB) {
     throw new ErrorBusinessRule("category_id doesn't exist.")
   }
-  if (typeof body.image === 'object') {
-    categoryDB.name = body.name
-    categoryDB.description = body.description
 
-    fileUtils.UtilRemove('category', categoryDB.image.name)
-    fileUtils.UtilMove(body.image.old_path, body.image.new_path)
+  categoryDB.name = body.name
+  categoryDB.description = body.description
+
+  if (typeof body.image === 'object') {
     categoryDB.image = {
       origin: body.image.origin,
       name: body.image.newName,
       type: body.image.type
     }
 
-    const updateCategory = await categoryDB.save()
-    if (!updateCategory) {
-      return {
-        success: false,
-        details: 'Error updating category'
-      }
-    }
+    fileUtils.UtilRemove('category', categoryDB.image.name)
+    fileUtils.UtilMove(body.image.old_path, body.image.new_path)
+  }
+  console.log('body' + JSON.stringify(categoryDB))
+
+  const updateCategory = await categoryDB.save()
+  console.log('updateCategory' + JSON.stringify(updateCategory))
+
+  if (!updateCategory) {
     return {
-      success: true,
-      message: 'Operation performed successfully',
-      data: categoryMapper.toDTO(updateCategory)
+      success: false,
+      details: 'Error updating category'
     }
+  }
+  return {
+    success: true,
+    message: 'Operation performed successfully',
+    data: categoryMapper.toDTO(updateCategory)
   }
 }
 
