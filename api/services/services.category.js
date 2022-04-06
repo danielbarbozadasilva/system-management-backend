@@ -105,10 +105,8 @@ const updateCategoryService = async (categoryId, body) => {
     fileUtils.UtilRemove('category', categoryDB.image.name)
     fileUtils.UtilMove(body.image.old_path, body.image.new_path)
   }
-  console.log('body' + JSON.stringify(categoryDB))
 
   const updateCategory = await categoryDB.save()
-  console.log('updateCategory' + JSON.stringify(updateCategory))
 
   if (!updateCategory) {
     return {
