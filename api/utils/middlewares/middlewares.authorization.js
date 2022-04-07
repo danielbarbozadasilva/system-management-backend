@@ -12,7 +12,7 @@ const authorizationMiddleware =
     const provider_id = req.params.providerid
     const client_id = req.params.clientid
 
-    const { id, email, typeUser } = cryptographyUtils.UtilDecodeToken(token)
+    const { id, typeUser } = cryptographyUtils.UtilDecodeToken(token)
 
     const providerStatusKind = await userService.verifyStatusProviderService(id)
     const profileFunctionality =
@@ -63,11 +63,12 @@ const authorizationMiddleware =
                 
         return Promise.resolve(next())
       })
-      .catch((e) =>
+      .catch((e) => {
         res
-          .status(e.statusCode)
+          .status(e.statusCode || 401)
           .send({ success: false, error: { message: e.message } })
-      )
+      })
   }
 
 module.exports = authorizationMiddleware
+
