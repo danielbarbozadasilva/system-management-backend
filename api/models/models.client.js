@@ -32,7 +32,11 @@ const clientSchema = {
     required: true,
     uppercase: true,
     trim: true
-  }
+  },
+  likes: [{
+    type: Schema.Types.ObjectId,
+    ref: 'provider'
+  }]
 }
 
 module.exports = clientSchema
