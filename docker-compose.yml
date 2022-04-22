@@ -2,7 +2,7 @@ version: '3.0'
 services:
   mongodb:
     image: mongo
-    container_name: containermongo
+    container_name: containermongod
     volumes:
       - ./data:/data/db
     ports:

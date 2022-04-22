@@ -7,7 +7,6 @@ const profile = [
     id: 1,
     description: 'admin',
     functionality: [
-      'ADD_PROVIDER',
       'UPDATE_PROVIDER',
       'REMOVE_PROVIDER',
       'CHANGE_STATUS_PROVIDER',
@@ -22,8 +21,8 @@ const profile = [
     functionality: [
       'SEARCH_PRODUCT',
       'CREATE_PRODUCT',
-      'UPDATE_PRODUCT',
       'REMOVE_PRODUCT',
+      'UPDATE_PRODUCT',
       'CREATE_LIKE_PRODUCT',
       'REMOVE_LIKE_PRODUCT'
     ]
@@ -37,7 +36,7 @@ const profile = [
 
 const searchTypeUserByIdService = (type) => {
   return profile.find((item) => {
-    return item.id === type ? true : false
+    return item.id === type
   })
 }
 
@@ -57,7 +56,7 @@ const createCredentialService = async (email) => {
 
 const verifyFunctionalityProfileService = async (typeUser, test) => {
   const profile = searchTypeUserByIdService(typeUser)
-  if (profile?.functionality?.includes(test) == true && profile.id ? true : false) {
+  if (!!(profile?.functionality?.includes(test) == true && profile.id)) {
     return false
   } else {
     return true
@@ -66,12 +65,12 @@ const verifyFunctionalityProfileService = async (typeUser, test) => {
 
 const verifyEmailBodyExistService = async (email) => {
   const users = await user.find({ email })
-  return users.length > 0 ? false : true
+  return !(users.length > 0)
 }
 
 const verifyCnpjExistsService = async (cnpj) => {
   const result = await provider.find({ cnpj })
-  return result.length > 0 ? true : false
+  return result.length > 0
 }
 
 const verifyEmailService = async (id, data) => {
@@ -79,7 +78,7 @@ const verifyEmailService = async (id, data) => {
     .findOne(Object({ email: data }))
     .where('_id')
     .ne(id)
-  return result ? true : false
+  return !!result
 }
 
 const verifyCnpjService = async (id, data) => {
@@ -87,7 +86,7 @@ const verifyCnpjService = async (id, data) => {
     .findOne(Object({ cnpj: data }))
     .where('_id')
     .ne(id)
-  return result ? true : false
+  return !!result
 }
 
 const authenticateService = async (email, password) => {
@@ -118,7 +117,7 @@ const verifyStatusProviderService = async (id) => {
     _id: id,
     kind: 'provider',
     status: 'ANALYSIS'
-  });
+  })
 
   if (result.length === 0) {
     return false
@@ -128,9 +127,9 @@ const verifyStatusProviderService = async (id) => {
 }
 
 const userIsValidService = async (email, password) => {
-  return (await user.findOne({
+  return !!(await user.findOne({
     email: email, password: cryptography.UtilCreateHash(password)
-  })) ? true : false
+  }))
 }
 
 module.exports = {

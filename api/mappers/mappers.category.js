@@ -1,13 +1,11 @@
 const fileUtils = require('../utils/utils.file')
 
 const toDTO = (model) => {
-  const { image, _id, name, description, status } = model
   return {
-    id: _id,
-    name,
-    description,
-    status,
-    image: fileUtils.UtilCreateAddressDownload('category', image.name)
+    id: model._id,
+    name: model.name,
+    description: model.description,
+    image: fileUtils.UtilCreateAddressDownload('category', model.image.name)
   }
 }
 

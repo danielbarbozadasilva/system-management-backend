@@ -2,8 +2,8 @@ const providerService = require('../services/services.provider')
 const likeService = require('../services/services.like')
 
 const listAllProvidersController = async (req, res) => {
-  const { query } = req
-  const resultService = await providerService.listAllProviderService(query)
+  const { params } = req
+  const resultService = await providerService.listAllProviderService(params)
   const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
@@ -105,7 +105,6 @@ const changeStatusProviderController = async (req, res) => {
 
 const searchLikeProductController = async (req, res) => {
   const { providerid } = req.params
-
   const resultService = await likeService.listLikesProviderProductService(
     providerid
   )

@@ -82,7 +82,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/category/615a19fd4384691888d27098",
+							"raw": "http://localhost:3011/v1/category/61611e6ff0c5860e72da8757",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -91,7 +91,7 @@
 							"path": [
 								"v1",
 								"category",
-								"615a19fd4384691888d27098"
+								"61611e6ff0c5860e72da8757"
 							]
 						}
 					},
@@ -124,18 +124,18 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "Categoria03",
+									"value": "yyCategoria03",
 									"type": "text"
 								},
 								{
 									"key": "description",
-									"value": "descCategoria03",
+									"value": "yydescCategoria03",
 									"type": "text"
 								},
 								{
 									"key": "image",
 									"type": "file",
-									"src": "/home/pc01/Imagens/20190322051919-1254x450.jpg"
+									"src": "/C:/Users/pc01/Pictures/img0.jpg"
 								}
 							]
 						},
@@ -286,7 +286,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"daniel80barboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
+							"raw": "{\n    \"email\": \"danielbarboza56@hotmail.com\",\n    \"password\": \"daniel\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -343,7 +343,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/filter?namefilter=like",
+							"raw": "http://localhost:3011/v1/provider/filter/like",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -352,13 +352,8 @@
 							"path": [
 								"v1",
 								"provider",
-								"filter"
-							],
-							"query": [
-								{
-									"key": "namefilter",
-									"value": "like"
-								}
+								"filter",
+								"like"
 							]
 						}
 					},
@@ -394,7 +389,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7dc",
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -403,7 +398,7 @@
 							"path": [
 								"v1",
 								"provider",
-								"615a584a79b274425a6fa7dc"
+								"615a584a79b274425a6fa7db"
 							]
 						}
 					},
@@ -655,7 +650,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/filter/RJ/CARMO",
+							"raw": "http://localhost:3011/v1/provider/filter/uf/RJ/city/CARMO",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -665,7 +660,9 @@
 								"v1",
 								"provider",
 								"filter",
+								"uf",
 								"RJ",
+								"city",
 								"CARMO"
 							]
 						}
@@ -756,6 +753,13 @@
 								"provider",
 								"615a584a79b274425a6fa7db",
 								"like"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -886,7 +890,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/product?category=615a19fd4384691888d27098",
+							"raw": "http://localhost:3011/v1/product",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -898,18 +902,64 @@
 							],
 							"query": [
 								{
-									"key": "provider",
-									"value": "615a584a79b274425a6fa7db",
+									"key": "namelike",
+									"value": "TESTE-PRODUCT01",
 									"disabled": true
-								},
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "product.listAllWithFiler",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:3011/v1/product/name/provider/filter/615a584a79b274425a6fa7db",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3011",
+							"path": [
+								"v1",
+								"product",
+								"name",
+								"provider",
+								"filter",
+								"615a584a79b274425a6fa7db"
+							],
+							"query": [
 								{
 									"key": "namelike",
 									"value": "TESTE-PRODUCT01",
 									"disabled": true
-								},
-								{
-									"key": "category",
-									"value": "615a19fd4384691888d27098"
 								}
 							]
 						}
@@ -998,17 +1048,17 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "teste-product",
+									"value": "qteste-product",
 									"type": "text"
 								},
 								{
 									"key": "description",
-									"value": "teste-product-description",
+									"value": "qteste-product-description",
 									"type": "text"
 								},
 								{
 									"key": "price",
-									"value": "23.56",
+									"value": "33.56",
 									"type": "text"
 								},
 								{
@@ -1024,7 +1074,7 @@
 								{
 									"key": "image",
 									"type": "file",
-									"src": "/C:/Users/danie/Pictures/istockphoto-1180542165-612x612.jpg"
+									"src": "/C:/Users/pc01/Pictures/img0.jpg"
 								}
 							]
 						},
@@ -1072,38 +1122,38 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "Torta de chocolate3",
+									"value": "eesdsdsdsd",
 									"type": "text"
 								},
 								{
 									"key": "description",
-									"value": "Torta de chocolate com recheio1",
+									"value": "ee",
 									"type": "text"
 								},
 								{
 									"key": "price",
-									"value": "33.95",
+									"value": "333",
 									"type": "text"
 								},
 								{
 									"key": "category",
-									"value": "615a19fd4384691888d27098",
+									"value": "61611e6ff0c5860e72da8757",
 									"type": "text"
 								},
 								{
 									"key": "provider",
-									"value": "615a584a79b274425a6fa7db",
+									"value": "615a584a79b274425a6fa7dc",
 									"type": "text"
 								},
 								{
 									"key": "image",
 									"type": "file",
-									"src": "/C:/Users/danie/Pictures/fundo-colorido-de-pó-pastel-explosão-arco-íris-cor-poeira-sobre-preto-multicolorido-172639620.jpg"
+									"src": "/C:/Users/pc01/Pictures/img0.jpg"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db/product/61d4a7d04664a63418f323a0",
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db/product/6164ecf0912afe7ae51bf6a8",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1114,7 +1164,7 @@
 								"provider",
 								"615a584a79b274425a6fa7db",
 								"product",
-								"61d4a7d04664a63418f323a0"
+								"6164ecf0912afe7ae51bf6a8"
 							]
 						}
 					},
@@ -1159,6 +1209,35 @@
 							"path": [
 								"v1",
 								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "product.delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3011/v1/provider/621812fd1ae0ca1ed099cc5c/product/6164ecf0912afe7ae51bf6a7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3011",
+							"path": [
+								"v1",
+								"provider",
+								"621812fd1ae0ca1ed099cc5c",
+								"product",
+								"6164ecf0912afe7ae51bf6a7"
 							]
 						}
 					},
