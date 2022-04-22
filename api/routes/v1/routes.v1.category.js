@@ -16,17 +16,17 @@ module.exports = (router) => {
 
     .post(
       authorizationMiddleware('CREATE_CATEGORY'),
-      middlewareFileUploadMiddleware('category'),
+      middlewareFileUploadMiddleware('category', true),
       middlewareValidateDTO(
         'body',
         {
           name: joi.string().required().messages({
-            'any.required': `"name" is a required field`,
-            'string.empty': `"name" can not be empty`
+            'any.required': '"name" is a required field',
+            'string.empty': '"name" can not be empty'
           }),
           description: joi.string().required().messages({
-            'any.required': `"description" is a required field`,
-            'string.empty': `"description" can not be empty`
+            'any.required': '"description" is a required field',
+            'string.empty': '"description" can not be empty'
           })
         },
         {
@@ -39,15 +39,15 @@ module.exports = (router) => {
   router
     .route('/category/:categoryid')
     .get(
-      authorizationMiddleware('*'),
+      authorizationMiddleware('REMOVE_CATEGORY'),
       middlewareValidateDTO('params', {
         categoryid: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
           .messages({
-            'any.required': `"category id" is a required field`,
-            'string.empty': `"category id" can not be empty`
+            'any.required': '"category id" is a required field',
+            'string.empty': '"category id" can not be empty'
           })
       }),
       asyncMiddleware(controllerCategory.listCategoryByIdController)
@@ -55,35 +55,35 @@ module.exports = (router) => {
 
     .put(
       authorizationMiddleware('UPDATE_CATEGORY'),
-      middlewareFileUploadMiddleware('category', true),
+      middlewareFileUploadMiddleware('category'),
       middlewareValidateDTO('params', {
         categoryid: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
           .messages({
-            'any.required': `"category id" is a required field`,
-            'string.empty': `"category id" can not be empty`,
-            'string.regex': `"category id" out of the expected format`
+            'any.required': '"category id" is a required field',
+            'string.empty': '"category id" can not be empty',
+            'string.regex': '"category id" out of the expected format'
           })
       }),
       middlewareValidateDTO(
         'body',
         {
           name: joi.string().required().messages({
-            'any.required': `"name" is a required field`,
-            'string.empty': `"name" can not be empty`
+            'any.required': '"name" is a required field',
+            'string.empty': '"name" can not be empty'
           }),
           description: joi.string().required().messages({
-            'any.required': `"description" is a required field`,
-            'string.empty': `"description" can not be empty`
+            'any.required': '"description" is a required field',
+            'string.empty': '"description" can not be empty'
           })
         },
         {
           allowUnknown: true
         }
       ),
-      asyncMiddleware(controllerCategory.updateCategoryController)
+      controllerCategory.updateCategoryController
     )
 
     .delete(
@@ -94,9 +94,9 @@ module.exports = (router) => {
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
           .messages({
-            'any.required': `"category id" is a required field`,
-            'string.empty': `"category id" can not be empty`,
-            'string.regex': `"category id" out of the expected format`
+            'any.required': '"category id" is a required field',
+            'string.empty': '"category id" can not be empty',
+            'string.regex': '"category id" out of the expected format'
           })
       }),
       asyncMiddleware(controllerCategory.removeCategoryController)

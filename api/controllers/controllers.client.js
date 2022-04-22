@@ -57,7 +57,7 @@ const deleteClientsController = async (req, res) => {
   return res.status(code).send({ message, data })
 }
 
-const listLikeProviderController = async (req, res) => {
+const listLikeClientController = async (req, res) => {
   const { clientid } = req.params
   const resultService = await likeService.listLikesClientProviderService(
     clientid
@@ -104,7 +104,7 @@ module.exports = {
   insertClientsController,
   updateClientsController,
   deleteClientsController,
-  listLikeProviderController,
+  listLikeClientController,
   createLikeProviderController,
   removeLikeProviderController
 }

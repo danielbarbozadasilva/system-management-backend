@@ -14,57 +14,52 @@ const listAllProviderService = async (nameFilter) => {
   if (Object.values(nameFilter) == 'alphabetical') {
     filter = { fantasyName: 1 }
   } else if (Object.values(nameFilter) == 'like') {
-    filter = { count: -1 }
+    filter = { result_likes: -1 }
   } else {
     filter = { fantasyName: -1 }
   }
-
+  
   const resultDB = await provider.aggregate([
+    {
+      $lookup: {
+        from: product.collection.name,
+        localField: '_id',
+        foreignField: 'provider',
+        as: 'result_products'
+      }
+    },
     {
       $lookup: {
         from: like.collection.name,
         localField: '_id',
         foreignField: 'provider',
-        as: 'result_like'
-      }
-    },
-    {
-      $unwind: {
-        path: '$result_like',
-        preserveNullAndEmptyArrays: true
+        as: 'result_likes'
       }
     },
     {
       $lookup: {
-        from: product.collection.name,
-        localField: 'result_like.product',
+        from: client.collection.name,
+        localField: 'result_likes.client',
         foreignField: '_id',
-        as: 'result_product'
-      }
-    },
-    {
-      $unwind: {
-        path: '$result_product',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    {
-      $match: {
-        'result_like.product': {
-          $exists: true,
-          $ne: null
-        }
+        as: 'result_client'
       }
     },
     {
       $group: {
-        _id: '$result_like.product',
         _id: '$_id',
-        data: { $push: '$$ROOT' },
-        count: { $sum: 1 }
+        occurances: { $push: { user: '$result_likes.product' } },
+        doc: { $first: '$$ROOT' }
       }
     },
-    { $sort: filter }
+
+    {
+      $replaceRoot: {
+        newRoot: { $mergeObjects: [{ count: '$occurances' }, '$doc'] }
+      }
+    },
+    {
+      $sort: filter
+    }
   ])
 
   if (resultDB.length < 1) {
@@ -77,7 +72,8 @@ const listAllProviderService = async (nameFilter) => {
     return {
       success: true,
       message: 'Operation performed successfully!',
-      data: resultDB
+      data: resultDB.map((item) => toItemListDTO(item))
+
     }
   }
 }
@@ -85,7 +81,6 @@ const listAllProviderService = async (nameFilter) => {
 const listProviderByIdService = async (filterId) => {
   const resultDB = await provider.aggregate([
     { $match: { _id: ObjectId(filterId) } },
-
     {
       $lookup: {
         from: like.collection.name,
@@ -99,59 +94,9 @@ const listProviderByIdService = async (filterId) => {
         path: '$result_like',
         preserveNullAndEmptyArrays: true
       }
-    },
-    {
-      $lookup: {
-        from: client.collection.name,
-        localField: 'result_like.client',
-        foreignField: '_id',
-        as: 'result_client'
-      }
-    },
-    {
-      $unwind: {
-        path: '$client',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    {
-      $lookup: {
-        from: client.collection.name,
-        localField: 'result_like.client',
-        foreignField: '_id',
-        as: 'result_client'
-      }
-    },
-    {
-      $unwind: {
-        path: '$result_client',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    {
-      $lookup: {
-        from: product.collection.name,
-        localField: 'result_like.product',
-        foreignField: '_id',
-        as: 'result_product'
-      }
-    },
-    {
-      $unwind: {
-        path: '$result_product',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    {
-      $group: {
-        _id: '$result_like.client',
-        _id: '$_id',
-
-        data: { $push: '$$ROOT' },
-        count: { $sum: 1 }
-      }
     }
   ])
+
   if (!resultDB.length) {
     return {
       success: false,
@@ -168,10 +113,7 @@ const listProviderByIdService = async (filterId) => {
 }
 
 const listProductsProviderService = async (providerId) => {
-  const resultDB = await product
-    .find({ provider: providerId })
-    .populate('provider')
-
+  const resultDB = await provider.find({ _id: ObjectId(providerId) })
   if (!resultDB.length > 0) {
     return {
       success: false,
@@ -179,10 +121,11 @@ const listProductsProviderService = async (providerId) => {
       details: ['The value does not exist']
     }
   }
+
   return {
     success: true,
     message: 'Operation performed successfully',
-    data: resultDB.map((item) => toItemListDTO(item))
+    data: resultDB.map((item) => toDTO(item))
   }
 }
 
@@ -193,8 +136,11 @@ const listProvidersByLocationService = async (uf, city) => {
   } else {
     filter = { uf, city }
   }
-
+  if (uf == 'x' && city == 'x') {
+    filter = {}
+  }
   const resultDB = await provider.find(filter)
+
   if (!resultDB) {
     return {
       success: false,
@@ -202,6 +148,7 @@ const listProvidersByLocationService = async (uf, city) => {
       details: ['The value does not exist']
     }
   }
+
   return {
     success: true,
     message: 'operation performed successfully',
@@ -224,19 +171,21 @@ const createProviderService = async (model) => {
     status
   } = model
 
-  if (await serviceUserProvider.verifyCnpjExistsService(cnpj))
+  if (await serviceUserProvider.verifyCnpjExistsService(cnpj)) {
     return {
       success: false,
       message: 'operation cannot be performed',
       details: ['There is already a registered provider for the entered cnpj']
     }
+  }
 
-  if (!(await serviceUserProvider.verifyEmailBodyExistService(email)))
+  if (!(await serviceUserProvider.verifyEmailBodyExistService(email))) {
     return {
       success: false,
       message: 'operation cannot be performed',
       details: ['There is already a registered user for the email entered']
     }
+  }
 
   const resultDB = await provider.create({
     cnpj,
@@ -352,7 +301,6 @@ const removeProviderService = async (providerId) => {
 
 const changeStatusService = async (providerId, status) => {
   const providerDB = await provider.findOne({ _id: providerId })
-
   if (!providerDB) {
     return {
       success: false,
@@ -388,7 +336,13 @@ const changeStatusService = async (providerId, status) => {
     }
     return {
       success: true,
-      message: 'Operation performed successfully'
+      message: 'Operation performed successfully',
+      data: {
+        id: providerDB._id,
+        name: providerDB.fantasyName,
+        status: status
+
+      }
     }
   }
   if (!resultDB) {

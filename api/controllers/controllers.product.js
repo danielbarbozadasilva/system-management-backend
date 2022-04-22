@@ -1,8 +1,18 @@
 const productService = require('../services/services.product')
 
 const filterProductController = async (req, res) => {
-  const { query } = req
-  const resultService = await productService.listProductWithFilterService(query)
+  const { name, filter } = req.params
+  const resultService = await productService.listProductWithFilterService(name, filter)
+  const code = resultService.success ? 200 : 400
+  const message = resultService.success
+    ? { message: resultService.message }
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
+
+const listAllProductsController = async (req, res) => {
+  const resultService = await productService.listAllProductService()
   const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
@@ -41,6 +51,7 @@ const updateProductController = async (req, res) => {
   const { params, body } = req
   const resultService = await productService.updateProductService(
     params.productid,
+    params.providerid,
     body
   )
   const code = resultService.success ? 200 : 400
@@ -52,9 +63,8 @@ const updateProductController = async (req, res) => {
 }
 
 const removeProductController = async (req, res) => {
-  const { providerid, productid } = req.params
+  const { productid } = req.params
   const resultService = await productService.deleteProductService({
-    providerId: providerid,
     productId: productid
   })
   const code = resultService.success ? 200 : 400
@@ -67,6 +77,7 @@ const removeProductController = async (req, res) => {
 
 module.exports = {
   filterProductController,
+  listAllProductsController,
   listProductByIdController,
   insertProductController,
   updateProductController,
