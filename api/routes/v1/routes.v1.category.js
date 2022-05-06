@@ -11,12 +11,12 @@ module.exports = (router) => {
     .route('/category')
     .get(
       authorizationMiddleware('*'),
-      asyncMiddleware(controllerCategory.listAllCategoryController)
+      controllerCategory.listAllCategoryController
     )
 
     .post(
       authorizationMiddleware('CREATE_CATEGORY'),
-      middlewareFileUploadMiddleware('category', true),
+      asyncMiddleware(middlewareFileUploadMiddleware('category', true)),
       middlewareValidateDTO(
         'body',
         {
@@ -55,7 +55,7 @@ module.exports = (router) => {
 
     .put(
       authorizationMiddleware('UPDATE_CATEGORY'),
-      middlewareFileUploadMiddleware('category'),
+      asyncMiddleware(middlewareFileUploadMiddleware('category')),
       middlewareValidateDTO('params', {
         categoryid: joi
           .string()
