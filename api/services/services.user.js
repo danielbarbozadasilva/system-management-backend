@@ -41,7 +41,7 @@ const searchTypeUserByIdService = (type) => {
 }
 
 const createCredentialService = async (email) => {
-  const userDB = await user.findOne({ email: email })
+  const userDB = await user.findOne({ email })
   const userDTO = userMapper.toUserDTO(userDB)
   const userToken = cryptography.UtilCreateToken(userDTO)
   if (userDTO && userToken) {
@@ -56,7 +56,7 @@ const createCredentialService = async (email) => {
 
 const verifyFunctionalityProfileService = async (typeUser, test) => {
   const profile = searchTypeUserByIdService(typeUser)
-  if (!!(profile?.functionality?.includes(test) == true && profile.id)) {
+  if (profile?.functionality?.includes(test) == true && profile.id) {
     return false
   } else {
     return true
@@ -128,7 +128,7 @@ const verifyStatusProviderService = async (id) => {
 
 const userIsValidService = async (email, password) => {
   return !!(await user.findOne({
-    email: email, password: cryptography.UtilCreateHash(password)
+    email, password: cryptography.UtilCreateHash(password)
   }))
 }
 
