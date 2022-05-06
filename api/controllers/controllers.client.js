@@ -1,5 +1,4 @@
 const clientService = require('../services/services.client')
-const likeService = require('../services/services.like')
 
 const listAllClientsController = async (req, res) => {
   const resultService = await clientService.listAllClientService()
@@ -59,7 +58,7 @@ const deleteClientsController = async (req, res) => {
 
 const listLikeClientController = async (req, res) => {
   const { clientid } = req.params
-  const resultService = await likeService.listLikesClientProviderService(
+  const resultService = await clientService.listLikesClientProviderService(
     clientid
   )
   const code = resultService.success ? 200 : 400
@@ -72,7 +71,7 @@ const listLikeClientController = async (req, res) => {
 
 const createLikeProviderController = async (req, res) => {
   const { providerid, clientid } = req.params
-  const resultService = await likeService.createLikeClientProviderService(
+  const resultService = await clientService.createLikeClientProviderService(
     providerid,
     clientid
   )
@@ -86,7 +85,7 @@ const createLikeProviderController = async (req, res) => {
 
 const removeLikeProviderController = async (req, res) => {
   const { providerid, clientid } = req.params
-  const resultService = await likeService.removeLikeClientProviderService(
+  const resultService = await clientService.removeLikeClientProviderService(
     providerid,
     clientid
   )

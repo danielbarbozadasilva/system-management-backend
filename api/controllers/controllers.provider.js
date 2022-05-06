@@ -1,5 +1,4 @@
 const providerService = require('../services/services.provider')
-const likeService = require('../services/services.like')
 
 const listAllProvidersController = async (req, res) => {
   const { params } = req
@@ -105,7 +104,7 @@ const changeStatusProviderController = async (req, res) => {
 
 const searchLikeProductController = async (req, res) => {
   const { providerid } = req.params
-  const resultService = await likeService.listLikesProviderProductService(
+  const resultService = await providerService.listLikesProviderProductService(
     providerid
   )
   const code = resultService.success ? 200 : 400
@@ -118,7 +117,7 @@ const searchLikeProductController = async (req, res) => {
 
 const insertLikeProductController = async (req, res) => {
   const { providerid, productid } = req.params
-  const resultService = await likeService.createLikeProviderProductService(
+  const resultService = await providerService.createLikeProviderProductService(
     providerid,
     productid
   )
@@ -132,7 +131,7 @@ const insertLikeProductController = async (req, res) => {
 
 const deleteLikeProductController = async (req, res) => {
   const { params } = req
-  const resultService = await likeService.removeLikeProviderProductService(
+  const resultService = await providerService.removeLikeProviderProductService(
     params.providerid,
     params.productid
   )

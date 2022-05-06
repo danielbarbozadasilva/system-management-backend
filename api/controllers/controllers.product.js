@@ -51,7 +51,6 @@ const updateProductController = async (req, res) => {
   const { params, body } = req
   const resultService = await productService.updateProductService(
     params.productid,
-    params.providerid,
     body
   )
   const code = resultService.success ? 200 : 400
