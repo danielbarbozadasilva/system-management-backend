@@ -10,14 +10,7 @@ const toDTO = (model) => {
       currency: 'BRL'
     }),
     image: fileUtils.UtilCreateAddressDownload('products', model.image.name),
-    provider: model.provider,
-    result_likes: model.result_likes.map((item) => {
-      return {
-        id: item?._id,
-        product: item?.product,
-        provider: item?.provider
-      }
-    })
+    provider: model.provider
   }
 }
 

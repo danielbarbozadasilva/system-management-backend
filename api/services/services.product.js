@@ -1,4 +1,4 @@
-const { product, category, provider, client, like } = require('../models/models.index')
+const { product, category, provider } = require('../models/models.index')
 const fileUtils = require('../utils/utils.file')
 const productMapper = require('../mappers/mappers.product')
 
@@ -6,32 +6,10 @@ const listAllProductService = async () => {
   const productDB = await product.aggregate([
     {
       $lookup: {
-        from: category.collection.name,
-        localField: 'category',
+        from: provider.collection.name,
+        localField: 'provider',
         foreignField: '_id',
-        as: 'result_category'
-      }
-    },
-    {
-      $lookup: {
-        from: like.collection.name,
-        localField: '_id',
-        foreignField: 'product',
-        as: 'result_likes'
-      }
-    },
-
-    {
-      $group: {
-        _id: '$_id',
-        occurances: { $push: { user: '$result_likes.product' } },
-        doc: { $first: '$$ROOT' }
-      }
-    },
-
-    {
-      $replaceRoot: {
-        newRoot: { $mergeObjects: [{ count: '$occurances' }, '$doc'] }
+        as: 'provider'
       }
     }
   ])
@@ -51,7 +29,9 @@ const listAllProductService = async () => {
 }
 
 const listProductByIdService = async (productId) => {
-  const productDB = await product.findById({ _id: productId })
+  const productDB = await product
+    .findById({ _id: productId })
+    .populate('provider')
   if (!productDB) {
     return {
       success: false,
@@ -128,29 +108,29 @@ const listProductWithFilterService = async (name, filter) => {
   let efilter = { description: 1 }
 
   if (name == 'like') {
-    efilter = { result_likes: -1 }
+    efilter = { count: -1 }
   } else if (name == 'price') {
     efilter = { price: -1 }
   } else if (name == 'description') {
     efilter = { description: -1 }
   } else if (filter == 'nameFilter') {
-    search = name
+    search = name.toLowerCase()
   }
 
   const productDB = await product.aggregate([
     { $match: { name: { $regex: `.*${search.replace(' ', '')}.*` } } },
     {
       $lookup: {
-        from: like.collection.name,
+        from: provider.collection.name,
         localField: '_id',
-        foreignField: 'product',
-        as: 'result_likes'
+        foreignField: 'likes',
+        as: 'likes'
       }
     },
     {
       $group: {
         _id: '$_id',
-        occurances: { $push: { user: '$result_likes.product' } },
+        occurances: { $push: { $size: '$likes._id' } },
         doc: { $first: '$$ROOT' }
       }
     },
@@ -172,7 +152,7 @@ const listProductWithFilterService = async (name, filter) => {
   }
 }
 
-const updateProductService = async (productId, providerid, model) => {
+const updateProductService = async (productId, body) => {
   const productDB = await product.findOne({ _id: productId })
   if (!productDB) {
     return {
@@ -182,21 +162,21 @@ const updateProductService = async (productId, providerid, model) => {
     }
   }
 
-  productDB.name = model.name
-  productDB.description = model.description
-  productDB.price = model.price
-  productDB.category = model.category
-  productDB.provider = model.provider
+  productDB.name = body.name
+  productDB.description = body.description
+  productDB.price = body.price
+  productDB.category = body.category
+  productDB.provider = body.provider
 
-  if (typeof model.image === 'object') {
+  if (typeof body.image === 'object') {
     productDB.image = {
-      origin: model.image.origin,
-      name: model.image.newName,
-      type: model.image.type
+      origin: body.image.origin,
+      name: body.image.newName,
+      type: body.image.type
     }
 
     fileUtils.UtilRemove('products', productDB.image.name)
-    fileUtils.UtilMove(model.image.old_path, model.image.new_path)
+    fileUtils.UtilMove(body.image.old_path, body.image.new_path)
   }
   const result = await productDB.save()
   if (!result) {

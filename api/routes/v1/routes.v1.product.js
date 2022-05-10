@@ -6,9 +6,9 @@ const authorizationMiddleware = require('../../utils/middlewares/middlewares.aut
 const asyncMiddleware = require('../../utils/middlewares/middlewares.async')
 
 module.exports = (router) => {
-  router.route('/product/name/:name/filter/:filter').get(
+  router.route('/product').get(
     authorizationMiddleware('*'),
-    middlewareValidateDTO('params', {
+    middlewareValidateDTO('query', {
       name: joi.string().allow(null, '').max(500),
       filter: joi.string().allow('')
     }),
