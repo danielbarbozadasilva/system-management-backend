@@ -37,9 +37,9 @@ module.exports = (router) => {
     )
 
   router
-    .route('/category/:categoryid')
+    .route('/category/:categoryid/product')
     .get(
-      authorizationMiddleware('REMOVE_CATEGORY'),
+      authorizationMiddleware('*'),
       middlewareValidateDTO('params', {
         categoryid: joi
           .string()

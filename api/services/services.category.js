@@ -1,4 +1,4 @@
-const { category } = require('../models/models.index')
+const { category, product } = require('../models/models.index')
 const categoryMapper = require('../mappers/mappers.category')
 const fileUtils = require('../utils/utils.file')
 const ErrorBusinessRule = require('../utils/errors/errors.business_rule')
@@ -16,15 +16,15 @@ const searchAllCategoryService = async () => {
 }
 
 const searchCategoryByIdService = async (categoryid) => {
-  const categoryDB = await category.find({
-    _id: Object(categoryid)
-  })
+  const categoryDB = await product.find({
+    category: Object(categoryid)
+  }).populate("category")
 
   if (categoryDB.length > 0) {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: categoryMapper.toDTO(...categoryDB)
+      data: categoryDB.map((item) => categoryMapper.toDTOCategoryProduct(item))
     }
   }
   throw new ErrorBusinessRule('No categories found')

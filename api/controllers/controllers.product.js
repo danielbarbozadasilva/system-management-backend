@@ -1,7 +1,8 @@
 const productService = require('../services/services.product')
 
 const filterProductController = async (req, res) => {
-  const { name, filter } = req.params
+
+  const {name, filter} = req.query
   const resultService = await productService.listProductWithFilterService(name, filter)
   const code = resultService.success ? 200 : 400
   const message = resultService.success
