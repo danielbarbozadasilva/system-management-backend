@@ -16,7 +16,9 @@ module.exports = (router) => {
     authorizationMiddleware('*'),
     middlewareValidateDTO('body', {
       cnpj: joi
-        .string().regex(/^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/).required()
+        .string()
+        .regex(/^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/)
+        .required()
         .messages({
           'any.required': '"cnpj" is a required field',
           'string.empty': '"cnpj" can not be empty'
@@ -93,6 +95,57 @@ module.exports = (router) => {
       }),
       providerController.listProviderByIdController
     )
+    .put(
+      authorizationMiddleware('UPDATE_PROVIDER'),
+      middlewareValidateDTO('body', {
+        cnpj: joi
+          .string()
+          .regex(/^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/)
+          .required()
+          .messages({
+            'any.required': '"cnpj" is a required field',
+            'string.empty': '"cnpj" can not be empty'
+          }),
+        fantasyName: joi.string().required().messages({
+          'any.required': '"fantasy name" is a required field',
+          'string.empty': '"fantasy name" can not be empty'
+        }),
+        socialName: joi.string().required().messages({
+          'any.required': '"social name" is a required field',
+          'string.empty': '"social name" can not be empty'
+        }),
+        address: joi.string().required().messages({
+          'any.required': '"address" is a required field',
+          'string.empty': '"address" can not be empty'
+        }),
+        uf: joi.string().required().messages({
+          'any.required': '"uf" is a required field',
+          'string.empty': '"uf" can not be empty'
+        }),
+        city: joi.string().required().messages({
+          'any.required': '"city" is a required field',
+          'string.empty': '"city" can not be empty'
+        }),
+        responsible: joi.string().required().messages({
+          'any.required': '"responsible" is a required field',
+          'string.empty': '"responsible" can not be empty'
+        }),
+        phone: joi.string().required().messages({
+          'any.required': '"phone" is a required field',
+          'string.empty': '"phone" can not be empty'
+        }),
+        email: joi.string().email().required().messages({
+          'any.required': '"email" is a required field',
+          'string.empty': '"email" can not be empty'
+        }),
+        password: joi.string().required().messages({
+          'any.required': '"password" is a required field',
+          'string.empty': '"password" can not be empty'
+        })
+      }),
+      providerController.updateProviderController
+    )
+
     .delete(
       authorizationMiddleware('REMOVE_PROVIDER'),
       middlewareValidateDTO('params', {
