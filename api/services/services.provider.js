@@ -5,6 +5,8 @@ const serviceUserProvider = require('./services.user')
 const emailUtils = require('../utils/utils.email')
 const { UtilCreateHash } = require('../utils/utils.cryptography')
 const { toItemListDTO, toDTO } = require('../mappers/mappers.provider')
+const mapperProduct = require('../mappers/mappers.product')
+
 const { EmailEnable } = require('../utils/utils.email.message.enable')
 const { EmailDisable } = require('../utils/utils.email.message.disable')
 const { toDTOLikeLength } = require('../mappers/mappers.client')
@@ -94,29 +96,22 @@ const listProviderByIdService = async (filterId) => {
 }
 
 const listProductsProviderService = async (providerId) => {
-  const resultDB = await provider.aggregate([
-    { $match: { _id: ObjectId(providerId) } },
+  const resultDB = await product.aggregate([
+    { $match: { provider: ObjectId(providerId) } },
     {
       $lookup: {
-        from: product.collection.name,
-        localField: '_id',
-        foreignField: 'provider',
-        as: 'products'
+        from: provider.collection.name,
+        localField: 'provider',
+        foreignField: '_id',
+        as: 'provider'
       }
     }
   ])
-  if (!resultDB.length > 0) {
-    return {
-      success: false,
-      message: 'operation cannot be performed',
-      details: ['The value does not exist']
-    }
-  }
 
   return {
     success: true,
     message: 'Operation performed successfully',
-    data: resultDB
+    data: resultDB.map((item) => mapperProduct.toDTO(item))
   }
 }
 

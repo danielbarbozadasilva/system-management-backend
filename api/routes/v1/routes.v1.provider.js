@@ -93,7 +93,7 @@ module.exports = (router) => {
             'string.pattern.base': '"provider id" out of the expected format'
           })
       }),
-      providerController.listProviderByIdController
+      providerController.listProductsByProviderController
     )
     .put(
       authorizationMiddleware('UPDATE_PROVIDER'),
@@ -161,22 +161,6 @@ module.exports = (router) => {
       }),
       providerController.removeProviderController
     )
-
-  router.route('/provider/:providerid/product').get(
-    authorizationMiddleware('*'),
-    middlewareValidateDTO('params', {
-      providerid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': '"provider id" is a required field',
-          'string.empty': '"provider id" can not be empty',
-          'string.pattern.base': '"provider id" out of the expected format'
-        })
-    }),
-    providerController.listProductsByProviderController
-  )
 
   router.route('/provider/:providerid/status/:status').put(
     authorizationMiddleware('CHANGE_STATUS_PROVIDER'),
