@@ -1,7 +1,6 @@
 const productService = require('../services/services.product')
 
 const filterProductController = async (req, res) => {
-
   const {name, filter} = req.query
   const resultService = await productService.listProductWithFilterService(name, filter)
   const code = resultService.success ? 200 : 400
@@ -51,6 +50,7 @@ const insertProductController = async (req, res) => {
 const updateProductController = async (req, res) => {
   const { params, body } = req
   const resultService = await productService.updateProductService(
+    params.providerid,
     params.productid,
     body
   )
@@ -63,10 +63,11 @@ const updateProductController = async (req, res) => {
 }
 
 const removeProductController = async (req, res) => {
-  const { productid } = req.params
-  const resultService = await productService.deleteProductService({
-    productId: productid
-  })
+  const { providerid, productid } = req.params
+  const resultService = await productService.deleteProductService(
+    providerid,
+    productid
+  )
   const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
