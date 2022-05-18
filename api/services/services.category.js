@@ -1,33 +1,57 @@
-const { category, product } = require('../models/models.index')
+const { ObjectId } = require('mongodb')
+const { category, product, provider } = require('../models/models.index')
 const categoryMapper = require('../mappers/mappers.category')
+const mapperProduct = require('../mappers/mappers.product')
 const fileUtils = require('../utils/utils.file')
 const ErrorBusinessRule = require('../utils/errors/errors.business_rule')
 
+
 const searchAllCategoryService = async () => {
   const categoryDB = await category.find({}).sort({ description: 1 })
-  if (categoryDB.length > 0) {
-    return {
-      success: true,
-      message: 'Operation performed successfully',
-      data: categoryDB.map((item) => categoryMapper.toDTO(item))
-    }
+  return {
+    success: true,
+    message: 'Operation performed successfully',
+    data: categoryDB.map((item) => categoryMapper.toDTO(item))
   }
-  throw new ErrorBusinessRule('No categories found')
 }
 
 const searchCategoryByIdService = async (categoryid) => {
-  const categoryDB = await product.find({
-    category: Object(categoryid)
-  }).populate("category")
-
-  if (categoryDB.length > 0) {
-    return {
-      success: true,
-      message: 'Operation performed successfully',
-      data: categoryDB.map((item) => categoryMapper.toDTOCategoryProduct(item))
-    }
+  const categoryDB = await category.find({ _id: Object(categoryid) })
+  if (!categoryDB.length) {
+    throw new ErrorBusinessRule("category_id doesn't exist.")
   }
-  throw new ErrorBusinessRule('No categories found')
+  return {
+    success: true,
+    message: 'Operation performed successfully',
+    data: categoryMapper.toDTO(...categoryDB)
+  }
+}
+
+const searchCategoryByIdProductService = async (categoryid) => {
+  const categoryDB = await product.aggregate([
+    { $match: { category: ObjectId(categoryid) } },
+    {
+      $lookup: {
+        from: provider.collection.name,
+        localField: 'provider',
+        foreignField: '_id',
+        as: 'provider'
+      }
+    },
+    {
+      $lookup: {
+        from: category.collection.name,
+        localField: 'category',
+        foreignField: '_id',
+        as: 'category'
+      }
+    }
+  ])
+  return {
+    success: true,
+    message: 'Operation performed successfully',
+    data: categoryDB.map((item) => mapperProduct.toDTOLikeProductList(item))
+  }
 }
 
 const addCategoryService = async (body) => {
@@ -64,16 +88,27 @@ const addCategoryService = async (body) => {
 
 const removeCategoryProductsService = async (categoryId) => {
   const categoryDB = await category.findOne({ _id: categoryId })
+  const productDB = await product.find({ category: categoryId })
 
   if (!categoryDB) {
     throw new ErrorBusinessRule("category_id doesn't exist.")
   }
 
   const { image } = categoryDB
-
   fileUtils.UtilRemove('category', image.name)
 
   const deleteCategory = await category.deleteOne(categoryDB)
+
+  if (productDB.length !== 0) {
+    await product.deleteMany({ category: categoryId })
+    productDB.forEach(async (object) => {
+      fileUtils.UtilRemove('products', object.image.name)
+      await provider.updateMany({
+        $pull: { likes: object._id }
+      })
+    })
+  }
+
   if (deleteCategory) {
     return {
       success: true,
@@ -124,6 +159,7 @@ const updateCategoryService = async (categoryId, body) => {
 module.exports = {
   searchAllCategoryService,
   searchCategoryByIdService,
+  searchCategoryByIdProductService,
   addCategoryService,
   removeCategoryProductsService,
   updateCategoryService
