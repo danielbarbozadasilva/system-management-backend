@@ -31,8 +31,6 @@ const toDTO = (model) => {
 }
 
 const toItemListDTO = (model) => {
-  const qtd = 0
-
   return {
     id: model._id,
     cnpj: model.cnpj,
@@ -53,7 +51,10 @@ const toItemListDTO = (model) => {
     result_products: model.result_products?.map((item) => {
       return {
         id: item?._id,
-        price: item?.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }),
+        price: parseFloat(item?.price).toLocaleString('pt-br', {
+          style: 'currency',
+          currency: 'BRL'
+        }),
         category: item?.category,
         provider: item?.provider,
         name: item?.name,
@@ -74,8 +75,11 @@ const toItemListDTO = (model) => {
     result_likes: model.result_likes?.map((item) => {
       return {
         id: item?._id,
-        nameProduct: item?.name,
-        priceProduct: item?.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }),
+        name: item?.name,
+        priceProduct: parseFloat(item?.price).toLocaleString('pt-br', {
+          style: 'currency',
+          currency: 'BRL'
+        }),
         nameProvider: model.fantasyName,
         email: model.email
       }
