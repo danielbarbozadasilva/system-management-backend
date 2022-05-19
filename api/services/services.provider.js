@@ -1,5 +1,10 @@
 const { ObjectId } = require('mongodb')
-const { provider, product, client } = require('../models/models.index')
+const {
+  provider,
+  product,
+  client,
+  category
+} = require('../models/models.index')
 
 const serviceUserProvider = require('./services.user')
 const emailUtils = require('../utils/utils.email')
@@ -67,34 +72,6 @@ const listAllProviderService = async (nameFilter) => {
   }
 }
 
-const listProviderByIdService = async (filterId) => {
-  const resultDB = await provider.aggregate([
-    { $match: { _id: ObjectId(filterId) } },
-    {
-      $lookup: {
-        from: product.collection.name,
-        localField: 'likes',
-        foreignField: '_id',
-        as: 'likes'
-      }
-    }
-  ])
-
-  if (!resultDB.length) {
-    return {
-      success: false,
-      message: 'operation cannot be performed',
-      details: ['The supplier does not exist']
-    }
-  }
-
-  return {
-    success: true,
-    message: 'operation performed successfully',
-    data: resultDB
-  }
-}
-
 const listProductsProviderService = async (providerId) => {
   const resultDB = await product.aggregate([
     { $match: { provider: ObjectId(providerId) } },
@@ -105,13 +82,21 @@ const listProductsProviderService = async (providerId) => {
         foreignField: '_id',
         as: 'provider'
       }
+    },
+    {
+      $lookup: {
+        from: category.collection.name,
+        localField: 'category',
+        foreignField: '_id',
+        as: 'category'
+      }
     }
   ])
 
   return {
     success: true,
     message: 'Operation performed successfully',
-    data: resultDB.map((item) => mapperProduct.toDTO(item))
+    data: resultDB.map((item) => mapperProduct.toDTOLikeProductList(item))
   }
 }
 
@@ -471,7 +456,6 @@ const removeLikeProviderProductService = async (providerId, productId) => {
 
 module.exports = {
   listAllProviderService,
-  listProviderByIdService,
   listProductsProviderService,
   listProvidersByLocationService,
   createProviderService,
