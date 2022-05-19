@@ -114,11 +114,11 @@ const listProductWithFilterService = async (name, filter) => {
   } else if (name == 'description') {
     efilter = { description: -1 }
   } else if (filter == 'nameFilter') {
-    search = name.toLowerCase()
+    search = name.trim()
   }
 
   const productDB = await product.aggregate([
-    { $match: { name: { $regex: `.*${search.replace(' ', '')}.*` } } },
+    { $match: { name: { $regex: `.*${search}.*`, $options: 'i' } } },
     {
       $lookup: {
         from: provider.collection.name,
@@ -152,16 +152,18 @@ const listProductWithFilterService = async (name, filter) => {
   }
 }
 
-const updateProductService = async (productId, body) => {
-  const productDB = await product.findOne({ _id: productId })
+const updateProductService = async (providerId, productId, body) => {
+  const productDB = await product.findOne({
+    _id: `${productId}`,
+    provider: `${providerId}`
+  })
   if (!productDB) {
     return {
       success: false,
       message: 'could not perform the operation',
-      details: ['The product id does not exist.']
+      details: ['The id does not exist.']
     }
   }
-
   productDB.name = body.name
   productDB.description = body.description
   productDB.price = body.price
@@ -193,14 +195,24 @@ const updateProductService = async (productId, body) => {
   }
 }
 
-const deleteProductService = async ({ productId }) => {
-  const productDB = await product.findById(productId)
+const deleteProductService = async (providerId, productId) => {
+  const productDB = await product.findOne({
+    _id: `${productId}`,
+    provider: `${providerId}`
+  })
   if (!productDB) {
     return {
       success: false,
-      message: 'Operation cannot be performed',
-      details: ['O product informed does not exist.']
+      message: 'could not perform the operation',
+      details: ['The id does not exist.']
     }
+  }
+
+  const likeDB = provider.find({ likes: `${productId}` })
+  if (likeDB.length !== 0) {
+    await provider.updateMany({
+      $pull: { likes: `${productId}` }
+    })
   }
 
   const resultDB = await product.deleteOne({ _id: productId })
