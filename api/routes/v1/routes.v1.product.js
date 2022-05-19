@@ -20,12 +20,28 @@ module.exports = (router) => {
       authorizationMiddleware('*'),
       productController.listAllProductsController
     )
+  router.route('/product/:productid').get(
+    authorizationMiddleware('*'),
+    middlewareValidateDTO('params', {
+      productid: joi
+        .string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .messages({
+          'any.required': '"provider id" is a required field',
+          'string.empty': '"provider id" can not be empty',
+          'string.pattern.base': '"provider id" out of the expected format'
+        })
+    }),
+    productController.listProductByIdController
+  )
   router
-    .route('/product/:productid')
-    .get(
-      authorizationMiddleware('*'),
+    .route('/provider/:providerid/product/:productid')
+    .put(
+      authorizationMiddleware('UPDATE_PRODUCT'),
+      asyncMiddleware(middlewareFileUploadMiddleware('products')),
       middlewareValidateDTO('params', {
-        productid: joi
+        providerid: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
@@ -33,14 +49,7 @@ module.exports = (router) => {
             'any.required': '"provider id" is a required field',
             'string.empty': '"provider id" can not be empty',
             'string.pattern.base': '"provider id" out of the expected format'
-          })
-      }),
-      productController.listProductByIdController
-    )
-    .put(
-      authorizationMiddleware('UPDATE_PRODUCT'),
-      asyncMiddleware(middlewareFileUploadMiddleware('products')),
-      middlewareValidateDTO('params', {
+          }),
         productid: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)
@@ -84,6 +93,15 @@ module.exports = (router) => {
     .delete(
       authorizationMiddleware('REMOVE_PRODUCT'),
       middlewareValidateDTO('params', {
+        providerid: joi
+          .string()
+          .regex(/^[0-9a-fA-F]{24}$/)
+          .required()
+          .messages({
+            'any.required': '"provider id" is a required field',
+            'string.empty': '"provider id" can not be empty',
+            'string.pattern.base': '"provider id" out of the expected format'
+          }),
         productid: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)
