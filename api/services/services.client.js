@@ -1,6 +1,5 @@
 const { client, provider } = require('../models/models.index')
 const { ObjectId } = require('mongodb')
-
 const {
   verifyEmailService,
   verifyEmailBodyExistService
@@ -173,7 +172,7 @@ const listLikesClientProviderService = async (clientId) => {
     return {
       success: true,
       message: 'Operation performed successfully!',
-      data: resultLikeDB.map((item) => toDTOListProviderLike(item))
+      data: toDTOListProviderLike(...resultLikeDB)
     }
   }
 }
