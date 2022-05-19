@@ -37,7 +37,7 @@ module.exports = (router) => {
     )
 
   router
-    .route('/category/:categoryid/product')
+    .route('/category/:categoryid')
     .get(
       authorizationMiddleware('*'),
       middlewareValidateDTO('params', {
@@ -101,4 +101,19 @@ module.exports = (router) => {
       }),
       asyncMiddleware(controllerCategory.removeCategoryController)
     )
+
+  router.route('/category/:categoryid/product').get(
+    authorizationMiddleware('*'),
+    middlewareValidateDTO('params', {
+      categoryid: joi
+        .string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .messages({
+          'any.required': '"category id" is a required field',
+          'string.empty': '"category id" can not be empty'
+        })
+    }),
+    controllerCategory.listCategoryByIdProductController
+  )
 }
