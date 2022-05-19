@@ -78,8 +78,8 @@
 							}
 						],
 						"body": {
-							"mode": "formdata",
-							"formdata": []
+							"mode": "urlencoded",
+							"urlencoded": []
 						},
 						"url": {
 							"raw": "http://localhost:3011/v1/category/61611e6ff0c5860e72da8757",
@@ -92,6 +92,52 @@
 								"v1",
 								"category",
 								"61611e6ff0c5860e72da8757"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "category_products.listById",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:3011/v1/category/61611e6ff0c5860e72da8757/product",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3011",
+							"path": [
+								"v1",
+								"category",
+								"61611e6ff0c5860e72da8757",
+								"product"
 							]
 						}
 					},
@@ -192,7 +238,7 @@
 								{
 									"key": "image",
 									"type": "file",
-									"src": []
+									"src": "/C:/Users/pc01/Pictures/img0.jpg"
 								}
 							]
 						},
@@ -427,7 +473,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db/product",
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7dc",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -436,8 +482,7 @@
 							"path": [
 								"v1",
 								"provider",
-								"615a584a79b274425a6fa7db",
-								"product"
+								"615a584a79b274425a6fa7dc"
 							]
 						}
 					},
@@ -750,7 +795,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/6239352f6258cd1778099921/product/6245f4208dcc4c25407a90a1/like",
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db/product/62814caab2c8083250f7cc9b/like",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -759,9 +804,9 @@
 							"path": [
 								"v1",
 								"provider",
-								"6239352f6258cd1778099921",
+								"615a584a79b274425a6fa7db",
 								"product",
-								"6245f4208dcc4c25407a90a1",
+								"62814caab2c8083250f7cc9b",
 								"like"
 							]
 						}
@@ -944,7 +989,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/product/name/price/filter/price",
+							"raw": "http://localhost:3011/v1/product?name=&filter=nameFilter",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -952,11 +997,22 @@
 							"port": "3011",
 							"path": [
 								"v1",
-								"product",
-								"name",
-								"price",
-								"filter",
-								"price"
+								"product"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": ""
+								},
+								{
+									"key": "filter",
+									"value": "nameFilter"
+								},
+								{
+									"key": "nameFilter",
+									"value": "dadad",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -1073,7 +1129,7 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "dadadad",
+									"value": "aaaaaa",
 									"type": "text"
 								},
 								{
@@ -1104,7 +1160,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/product/62754559dabafc383c96803a",
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7dc/product/62754559dabafc383c96803a",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1112,6 +1168,8 @@
 							"port": "3011",
 							"path": [
 								"v1",
+								"provider",
+								"615a584a79b274425a6fa7dc",
 								"product",
 								"62754559dabafc383c96803a"
 							]
@@ -1131,7 +1189,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3011/v1/product/627544305f6fbe183c73a97f",
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db/product/62814caab2c8083250f7cc9b",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1139,8 +1197,10 @@
 							"port": "3011",
 							"path": [
 								"v1",
+								"provider",
+								"615a584a79b274425a6fa7db",
 								"product",
-								"627544305f6fbe183c73a97f"
+								"62814caab2c8083250f7cc9b"
 							]
 						}
 					},
