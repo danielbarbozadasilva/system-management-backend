@@ -9,17 +9,15 @@ if (node_environment === 'development') {
 }
 
 const category = require('./seeders.add_category')
-const likes = require('./seeders.add_likes')
 const product = require('./seeders.add_product')
 const users = require('./seeders.add_users')
 
 const removeSeeders = async () => {
   const categoryDB = await category.removeCategory()
-  const likesDB = await likes.removeLike()
   const productDB = await product.removeProduct()
   const usersDB = await users.removeUsers()
 
-  await Promise.all([categoryDB, likesDB, productDB, usersDB])
+  await Promise.all([categoryDB, productDB, usersDB])
     .then((result) => {
       console.log(
         `${JSON.stringify(result)}\n` + `\n` + `--> Successfully remove seeders`
@@ -35,9 +33,8 @@ const addSeeders = async () => {
   const categoryDB = await category.createCategory()
   const usersDB = await users.createUsers()
   const productDB = await product.createProduct()
-  const likesDB = await likes.createLike()
 
-  await Promise.all([removeAllDB, categoryDB, usersDB, productDB, likesDB])
+  await Promise.all([removeAllDB, categoryDB, usersDB, productDB])
     .then((result) => {
       console.log(
         `${JSON.stringify(result)}\n` +

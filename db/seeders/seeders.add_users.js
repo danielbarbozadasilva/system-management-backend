@@ -23,7 +23,8 @@ const createUsers = async () => {
         phone: '(21)3352-1018',
         email: 'daniel80barboza@gmail.com',
         password: md5(`daniel${process.env.MD5_SECRET}`),
-        status: 'ENABLE'
+        status: 'ENABLE',
+        likes: ['6164ecf0912afe7ae51bf6a7']
       },
       {
         _id: Object('615a584a79b274425a6fa7dc'),
@@ -38,7 +39,8 @@ const createUsers = async () => {
         phone: '(21)2452-9911',
         email: 'daniel90barboza@gmail.com',
         password: md5(`daniel${process.env.MD5_SECRET}`),
-        status: 'ENABLE'
+        status: 'ENABLE',
+        likes: ['6164ecf0912afe7ae51bf6a8']
       }
     ),
     await client.create(
@@ -53,7 +55,8 @@ const createUsers = async () => {
         city: 'RIO DE JANEIRO',
         email: 'daniel95barboza@gmail.com',
         password: md5(`daniel${process.env.MD5_SECRET}`),
-        status: 'ENABLE'
+        status: 'ENABLE',
+        likes: ['615a584a79b274425a6fa7db']
       },
       {
         _id: Object('615cce324b51ba2b14c1b190'),
@@ -66,7 +69,8 @@ const createUsers = async () => {
         city: 'CARMO',
         email: 'daniel59barboza@gmail.com',
         password: md5(`daniel${process.env.MD5_SECRET}`),
-        status: 'ENABLE'
+        status: 'ENABLE',
+        likes: ['615a584a79b274425a6fa7db']
       }
     )
   ])

@@ -1,6 +1,5 @@
 .env
-api/utils/file/category/**
-api/utils/file/products/**
+
 api/utils/file/temp/**
 node_modules
 .vscode
