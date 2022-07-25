@@ -12,7 +12,7 @@ module.exports = {
     required: true
   },
   price: {
-    type: Number,
+    type: Schema.Types.Decimal128,
     required: true,
     default: 0
   },

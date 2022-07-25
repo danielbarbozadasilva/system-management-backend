@@ -17,6 +17,24 @@ const toDTO = (model) => {
   }
 }
 
+const toDTOListProviderLike = (model) => {
+  let count = 0
+  return {
+    id: model._id,
+    name: model.firstName + ' ' + model.lastName,
+    email: model.email,
+    provider: model.result_likes.map((item) => {
+      count++
+      return {
+        id: item._id,
+        name: item.fantasyName,
+        email: item.email
+      }
+    }),
+    count
+  }
+}
+
 const toDTOListLikeProviderProduct = (model) => ({
   provider: {
     id: model.provider._id,
@@ -78,20 +96,14 @@ const toDTOListLikeClientProvider = (model) => {
   }
 }
 
-const toDTOListClientLike = (model) => {
-  return {
-    id: model._id,
-    name: model.result_like.name,
-    email: model.result_like.email,
-    price: model.result_like.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }),
-    provider: model.provider,
-    client: model.client
-  }
+const toDTOLikeLength = (item) => {
+  return item.likes.length
 }
 
 module.exports = {
   toDTO,
   toDTOListLikeProviderProduct,
   toDTOListLikeClientProvider,
-  toDTOListClientLike
+  toDTOLikeLength,
+  toDTOListProviderLike
 }

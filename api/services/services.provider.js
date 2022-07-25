@@ -1,12 +1,20 @@
 const { ObjectId } = require('mongodb')
-const { provider, product, client, like } = require('../models/models.index')
+const {
+  provider,
+  product,
+  client,
+  category
+} = require('../models/models.index')
 
 const serviceUserProvider = require('./services.user')
 const emailUtils = require('../utils/utils.email')
 const { UtilCreateHash } = require('../utils/utils.cryptography')
 const { toItemListDTO, toDTO } = require('../mappers/mappers.provider')
+const mapperProduct = require('../mappers/mappers.product')
+
 const { EmailEnable } = require('../utils/utils.email.message.enable')
 const { EmailDisable } = require('../utils/utils.email.message.disable')
+const { toDTOLikeLength } = require('../mappers/mappers.client')
 
 const listAllProviderService = async (nameFilter) => {
   let filter = {}
@@ -18,7 +26,7 @@ const listAllProviderService = async (nameFilter) => {
   } else {
     filter = { fantasyName: -1 }
   }
-  
+
   const resultDB = await provider.aggregate([
     {
       $lookup: {
@@ -30,31 +38,18 @@ const listAllProviderService = async (nameFilter) => {
     },
     {
       $lookup: {
-        from: like.collection.name,
-        localField: '_id',
-        foreignField: 'provider',
+        from: product.collection.name,
+        localField: 'likes',
+        foreignField: '_id',
         as: 'result_likes'
       }
     },
     {
       $lookup: {
         from: client.collection.name,
-        localField: 'result_likes.client',
-        foreignField: '_id',
+        localField: '_id',
+        foreignField: 'likes',
         as: 'result_client'
-      }
-    },
-    {
-      $group: {
-        _id: '$_id',
-        occurances: { $push: { user: '$result_likes.product' } },
-        doc: { $first: '$$ROOT' }
-      }
-    },
-
-    {
-      $replaceRoot: {
-        newRoot: { $mergeObjects: [{ count: '$occurances' }, '$doc'] }
       }
     },
     {
@@ -73,59 +68,35 @@ const listAllProviderService = async (nameFilter) => {
       success: true,
       message: 'Operation performed successfully!',
       data: resultDB.map((item) => toItemListDTO(item))
-
     }
-  }
-}
-
-const listProviderByIdService = async (filterId) => {
-  const resultDB = await provider.aggregate([
-    { $match: { _id: ObjectId(filterId) } },
-    {
-      $lookup: {
-        from: like.collection.name,
-        localField: '_id',
-        foreignField: 'provider',
-        as: 'result_like'
-      }
-    },
-    {
-      $unwind: {
-        path: '$result_like',
-        preserveNullAndEmptyArrays: true
-      }
-    }
-  ])
-
-  if (!resultDB.length) {
-    return {
-      success: false,
-      message: 'operation cannot be performed',
-      details: ['The supplier does not exist']
-    }
-  }
-
-  return {
-    success: true,
-    message: 'operation performed successfully',
-    data: resultDB
   }
 }
 
 const listProductsProviderService = async (providerId) => {
-  const resultDB = await provider.find({ _id: ObjectId(providerId) })
-  if (!resultDB.length > 0) {
-    return {
-      success: false,
-      message: 'operation cannot be performed',
-      details: ['The value does not exist']
+  const resultDB = await product.aggregate([
+    { $match: { provider: ObjectId(providerId) } },
+    {
+      $lookup: {
+        from: provider.collection.name,
+        localField: 'provider',
+        foreignField: '_id',
+        as: 'provider'
+      }
+    },
+    {
+      $lookup: {
+        from: category.collection.name,
+        localField: 'category',
+        foreignField: '_id',
+        as: 'category'
+      }
     }
-  }
+  ])
 
   return {
     success: true,
     message: 'Operation performed successfully',
-    data: resultDB.map((item) => toDTO(item))
+    data: resultDB.map((item) => mapperProduct.toDTOLikeProductList(item))
   }
 }
 
@@ -209,9 +180,7 @@ const createProviderService = async (model) => {
 }
 
 const updateProviderService = async (providerId, body) => {
-  const resultFind = await provider
-    .findById({ _id: providerId })
-    .sort({ fantasyName: 1 })
+  const resultFind = await provider.findById({ _id: providerId })
 
   if (!resultFind) {
     return {
@@ -280,14 +249,9 @@ const removeProviderService = async (providerId) => {
     }
   }
   const deleteProductDB = await product.deleteMany({ provider: providerId })
-  const deleteLikeDB = await like.deleteMany({ _id: providerId })
   const deleteProviderDB = await provider.deleteOne({ _id: providerId })
 
-  if (
-    deleteProductDB.ok !== 1 ||
-    deleteLikeDB.ok !== 1 ||
-    deleteProviderDB.ok !== 1
-  ) {
+  if (deleteProductDB.ok !== 1 || deleteProviderDB.ok !== 1) {
     return {
       success: false,
       details: 'Error deleting provider and products'
@@ -340,8 +304,7 @@ const changeStatusService = async (providerId, status) => {
       data: {
         id: providerDB._id,
         name: providerDB.fantasyName,
-        status: status
-
+        status
       }
     }
   }
@@ -353,13 +316,153 @@ const changeStatusService = async (providerId, status) => {
   }
 }
 
+const listLikesProviderProductService = async (providerId) => {
+  const resultDB = await provider.aggregate([
+    { $match: { _id: ObjectId(providerId) } },
+    {
+      $lookup: {
+        from: product.collection.name,
+        localField: 'likes',
+        foreignField: '_id',
+        as: 'result_likes'
+      }
+    }
+  ])
+
+  if (resultDB === 0) {
+    return {
+      success: false,
+      details: 'No likes found!'
+    }
+  }
+  if (resultDB !== 0) {
+    return {
+      success: true,
+      message: 'Operation performed successfully!',
+      data: toItemListDTO(...resultDB)
+    }
+  }
+}
+
+const createLikeProviderProductService = async (providerId, productId) => {
+  const [providerDB, productDB, likeDB, likeProviderDB] = await Promise.all([
+    provider.findById(providerId),
+    product.findById(productId),
+    provider.aggregate([
+      { $match: { _id: ObjectId(providerId) } },
+      {
+        $lookup: {
+          from: product.collection.name,
+          localField: 'likes',
+          foreignField: '_id',
+          as: 'likes'
+        }
+      }
+    ]),
+    provider.find({ _id: `${providerId}`, likes: `${productId}` })
+  ])
+
+  if (!providerDB) {
+    return {
+      success: false,
+      details: 'O fornecedor informado não existe!'
+    }
+  }
+
+  if (!productDB) {
+    return {
+      success: false,
+      details: 'O produto informado não existe!'
+    }
+  }
+
+  if (toDTOLikeLength(...likeDB) >= 3) {
+    return {
+      success: false,
+      details: 'O fornecedor não pode curtir mais de 3 produtos!'
+    }
+  }
+
+  if (likeProviderDB.length > 0) {
+    return {
+      success: false,
+      details: 'O fornecedor já curtiu este produto!'
+    }
+  }
+
+  const resultLike = await provider.findByIdAndUpdate(providerId, {
+    $push: { likes: productId }
+  })
+
+  if (resultLike) {
+    return {
+      success: true,
+      message: 'Successfully liked!',
+      data: {
+        provider: resultLike._id,
+        product: productId
+      }
+    }
+  }
+
+  return {
+    success: false,
+    details: 'There is no like!'
+  }
+}
+
+const removeLikeProviderProductService = async (providerId, productId) => {
+  const [providerDB, productDB, likeDB] = await Promise.all([
+    provider.findById(providerId),
+    product.findById(productId),
+    provider.find({ _id: `${providerId}`, likes: `${productId}` })
+  ])
+
+  if (!providerDB) {
+    return {
+      success: false,
+      details: 'The provider informed does not exist!'
+    }
+  }
+
+  if (!productDB) {
+    return {
+      success: false,
+      details: 'The product informed does not exist!'
+    }
+  }
+
+  if (likeDB) {
+    const resultLike = await provider.updateOne(
+      { _id: ObjectId(`${providerId}`) },
+      { $pull: { likes: `${productId}` } }
+    )
+
+    if (resultLike) {
+      return {
+        success: true,
+        data: {
+          message: 'like removed successfully!'
+        }
+      }
+    }
+
+    return {
+      success: false,
+      details: 'There is no like!'
+    }
+  }
+}
+
 module.exports = {
   listAllProviderService,
-  listProviderByIdService,
   listProductsProviderService,
   listProvidersByLocationService,
   createProviderService,
   updateProviderService,
   removeProviderService,
-  changeStatusService
+  changeStatusService,
+  listLikesProviderProductService,
+  createLikeProviderProductService,
+  removeLikeProviderProductService
 }

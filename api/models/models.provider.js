@@ -45,7 +45,11 @@ const providerSchema = {
     uppercase: true,
     trim: true,
     default: 'DISABLE'
-  }
+  },
+  likes: [{
+    type: Schema.Types.ObjectId,
+    ref: 'product'
+  }]
 }
 
 module.exports = providerSchema

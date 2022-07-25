@@ -1,4 +1,3 @@
-const { remove } = require('lodash')
 const fileUtils = require('../utils/utils.file')
 
 const toDTO = (model) => {
@@ -32,8 +31,6 @@ const toDTO = (model) => {
 }
 
 const toItemListDTO = (model) => {
-  let qtd = 0
-
   return {
     id: model._id,
     cnpj: model.cnpj,
@@ -47,19 +44,26 @@ const toItemListDTO = (model) => {
     responsible: model.responsible,
     phone: model.phone,
     status: model.status,
-    result_products: model.result_products.map((item) => {
+    count_products: model?.result_products?.length,
+    count_likes_products: model?.result_likes?.length,
+    count_likes_clients: model?.result_client?.length,
+
+    result_products: model.result_products?.map((item) => {
       return {
         id: item?._id,
-        price: item?.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }),
+        price: parseFloat(item?.price).toLocaleString('pt-br', {
+          style: 'currency',
+          currency: 'BRL'
+        }),
         category: item?.category,
         provider: item?.provider,
         name: item?.name,
         description: item?.description,
-        image: fileUtils.UtilCreateAddressDownload('category', item.image.name)
+        image: fileUtils.UtilCreateAddressDownload('product', item.image.name)
       }
     }),
 
-    result_client: model.result_client.map((item) => {
+    result_client: model.result_client?.map((item) => {
       return {
         id: item?._id,
         name: item?.firstName + ' ' + item?.lastName,
@@ -67,42 +71,24 @@ const toItemListDTO = (model) => {
         kind: item?.kind
       }
     }),
-    result_likes: model.result_likes.map((item) => {
-      if (item?.product) {
-        qtd++
-        return {
-          id: item?._id,
-          nameProduct: model.result_products.map((cat) => {
-            if ('' + cat._id == item?.product) {
-              return cat.name
-            }
-          }).filter(item => item).toString(),
-          priceProduct: model.result_products.map((cat) => {
-            if ('' + cat._id == item?.product) {
-              return cat.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
-            }
-          }).filter(item => item).toString(),
-          nameProvider: model.fantasyName,
-          email: model.email
-        }
+
+    result_likes: model.result_likes?.map((item) => {
+      return {
+        id: item?._id,
+        name: item?.name,
+        priceProduct: parseFloat(item?.price).toLocaleString('pt-br', {
+          style: 'currency',
+          currency: 'BRL'
+        }),
+        nameProvider: model.fantasyName,
+        email: model.email
       }
-    }),
-    result_count: qtd
+    })
   }
 }
 
-const toDTOListProviderLike = (model) => {
-  return {
-    id: model._id,
-    name: model.result_like.fantasyName,
-    email: model.result_like.email,
-    provider: model.provider,
-    client: model.client
-  }
-}
 
 module.exports = {
   toItemListDTO,
-  toDTO,
-  toDTOListProviderLike
+  toDTO
 }

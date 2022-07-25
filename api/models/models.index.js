@@ -69,24 +69,11 @@ const product = mongoose.model(
   })
 )
 
-const likeSchema = require('./models.like')
-
-const like = mongoose.model(
-  'like',
-  createSchema(undefined, likeSchema, {
-    collection: 'likeCollection',
-    toJSON: {
-      virtuals: true
-    }
-  })
-)
-
 module.exports = {
   category,
   user,
   admin,
   provider,
   product,
-  like,
   client
 }

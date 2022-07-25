@@ -10,14 +10,33 @@ const toDTO = (model) => {
       currency: 'BRL'
     }),
     image: fileUtils.UtilCreateAddressDownload('products', model.image.name),
+    category: model.category,
     provider: model.provider,
-    result_likes: model.result_likes.map((item) => {
-      return {
-        id: item?._id,
-        product: item?.product,
-        provider: item?.provider
+    likes: model.count[0] === 1? true : false
+  }
+}
+
+const toDTOLikeProductList = (model) => {
+  return {
+    id: model._id,
+    name: model.name,
+    description: model.description,
+    price: parseFloat(model.price).toLocaleString('pt-br', {
+      style: 'currency',
+      currency: 'BRL'
+    }),
+    image: fileUtils.UtilCreateAddressDownload('products', model.image.name),
+    provider: model.provider[0]._id,
+    category: model.category[0].name,
+    likes: model.provider.map((item) => {
+      for (var i in item.likes) {
+        if (JSON.stringify(item.likes[i]) == JSON.stringify(model._id)) {
+          return true
+        }
       }
-    })
+      return false
+    })[0],
+    result_client: model.result_client
   }
 }
 
@@ -49,5 +68,6 @@ const toItemListDTO = (model) => {
 
 module.exports = {
   toItemListDTO,
+  toDTOLikeProductList,
   toDTO
 }

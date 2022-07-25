@@ -23,6 +23,19 @@ const listCategoryByIdController = async (req, res) => {
   return res.status(code).send({ message, data })
 }
 
+const listCategoryByIdProductController = async (req, res) => {
+  const { params } = req
+  const resultService = await categoryService.searchCategoryByIdProductService(
+    params.categoryid
+  )
+  const code = resultService.success ? 200 : 400
+  const message = resultService.success
+    ? { message: resultService.message }
+    : { details: resultService.details }
+  const data = resultService.data ? resultService.data : ''
+  return res.status(code).send({ message, data })
+}
+
 const createCategoryController = async (req, res) => {
   const { body } = req
   const resultService = await categoryService.addCategoryService(body)
@@ -64,6 +77,7 @@ const removeCategoryController = async (req, res) => {
 module.exports = {
   listAllCategoryController,
   listCategoryByIdController,
+  listCategoryByIdProductController,
   createCategoryController,
   updateCategoryController,
   removeCategoryController

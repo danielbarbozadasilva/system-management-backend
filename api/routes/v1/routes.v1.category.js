@@ -11,12 +11,12 @@ module.exports = (router) => {
     .route('/category')
     .get(
       authorizationMiddleware('*'),
-      asyncMiddleware(controllerCategory.listAllCategoryController)
+      controllerCategory.listAllCategoryController
     )
 
     .post(
       authorizationMiddleware('CREATE_CATEGORY'),
-      middlewareFileUploadMiddleware('category', true),
+      asyncMiddleware(middlewareFileUploadMiddleware('category', true)),
       middlewareValidateDTO(
         'body',
         {
@@ -39,7 +39,7 @@ module.exports = (router) => {
   router
     .route('/category/:categoryid')
     .get(
-      authorizationMiddleware('REMOVE_CATEGORY'),
+      authorizationMiddleware('*'),
       middlewareValidateDTO('params', {
         categoryid: joi
           .string()
@@ -55,7 +55,7 @@ module.exports = (router) => {
 
     .put(
       authorizationMiddleware('UPDATE_CATEGORY'),
-      middlewareFileUploadMiddleware('category'),
+      asyncMiddleware(middlewareFileUploadMiddleware('category')),
       middlewareValidateDTO('params', {
         categoryid: joi
           .string()
@@ -101,4 +101,19 @@ module.exports = (router) => {
       }),
       asyncMiddleware(controllerCategory.removeCategoryController)
     )
+
+  router.route('/category/:categoryid/product').get(
+    authorizationMiddleware('*'),
+    middlewareValidateDTO('params', {
+      categoryid: joi
+        .string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .messages({
+          'any.required': '"category id" is a required field',
+          'string.empty': '"category id" can not be empty'
+        })
+    }),
+    controllerCategory.listCategoryByIdProductController
+  )
 }
