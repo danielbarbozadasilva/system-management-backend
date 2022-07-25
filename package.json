@@ -10,8 +10,7 @@
     "start": "node ./index.js",
     "dev": "nodemon ./index.js",
     "add-seeders": "node ./db/seeders/seeders.index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "husky install"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -48,15 +47,11 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@commitlint/cli": "^16.0.0",
-    "@commitlint/config-conventional": "^16.0.0",
-    "eslint": "^8.6.0",
+    "eslint": "^8.19.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-prettier": "^4.0.0",
-    "husky": "^7.0.2",
-    "lint-staged": "^9.5.0",
-    "prettier": "^2.5.1"
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.7.1"
   }
 }
