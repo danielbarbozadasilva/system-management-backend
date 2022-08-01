@@ -5,16 +5,16 @@ const {
   client,
   category
 } = require('../models/models.index')
-
 const serviceUserProvider = require('./services.user')
 const emailUtils = require('../utils/utils.email')
 const { UtilCreateHash } = require('../utils/utils.cryptography')
 const { toItemListDTO, toDTO } = require('../mappers/mappers.provider')
 const mapperProduct = require('../mappers/mappers.product')
-
 const { EmailEnable } = require('../utils/utils.email.message.enable')
 const { EmailDisable } = require('../utils/utils.email.message.disable')
 const { toDTOLikeLength } = require('../mappers/mappers.client')
+const { createCredentialService } = require('./services.user')
+const ErrorBusinessRule = require('../utils/errors/errors.business_rule')
 
 const listAllProviderService = async (nameFilter) => {
   let filter = {}
@@ -127,55 +127,39 @@ const listProvidersByLocationService = async (uf, city) => {
   }
 }
 
-const createProviderService = async (model) => {
-  const {
-    cnpj,
-    fantasyName,
-    socialName,
-    address,
-    uf,
-    city,
-    responsible,
-    phone,
-    email,
-    password,
-    status
-  } = model
+const createProviderService = async (body) => {
+  let data = {}
 
-  if (await serviceUserProvider.verifyCnpjExistsService(cnpj)) {
-    return {
-      success: false,
-      message: 'operation cannot be performed',
-      details: ['There is already a registered provider for the entered cnpj']
-    }
+  if (await serviceUserProvider.verifyCnpjExistsService(body.cnpj)) {
+    throw new ErrorBusinessRule('Este cnpj já está em uso!')
   }
 
-  if (!(await serviceUserProvider.verifyEmailBodyExistService(email))) {
-    return {
-      success: false,
-      message: 'operation cannot be performed',
-      details: ['There is already a registered user for the email entered']
-    }
+  if (await serviceUserProvider.verifyEmailBodyExistService(body.email)) {
+    throw new ErrorBusinessRule('Este e-mail já está em uso!')
   }
 
   const resultDB = await provider.create({
-    cnpj,
-    fantasyName,
-    socialName,
-    address,
-    uf,
-    city,
-    responsible,
-    phone,
-    email,
-    password: UtilCreateHash(password),
+    cnpj: body.cnpj,
+    fantasyName: body.fantasyName,
+    socialName: body.socialName,
+    address: body.address,
+    uf: body.uf,
+    city: body.city,
+    responsible: body.responsible,
+    phone: body.phone,
+    email: body.email,
+    password: UtilCreateHash(body.password),
     status: 'ANALYSIS'
   })
+
+  if (body.auth) {
+    data = await createCredentialService(body.email)
+  }
 
   return {
     success: true,
     message: 'Operation performed successfully',
-    data: [toDTO(resultDB)]
+    data: data || { ...toDTO(resultDB) }
   }
 }
 
@@ -191,19 +175,11 @@ const updateProviderService = async (providerId, body) => {
   }
 
   if (await serviceUserProvider.verifyCnpjService(providerId, body.cnpj)) {
-    return {
-      success: false,
-      message: 'operation cannot be performed',
-      details: ['There is already a registered provider for the entered cnpj']
-    }
+    throw new ErrorBusinessRule('Este cnpj já está em uso!')
   }
 
   if (await serviceUserProvider.verifyEmailService(providerId, body.email)) {
-    return {
-      success: false,
-      message: 'operation cannot be performed',
-      details: ['There is already a registered provider for the entered email']
-    }
+    throw new ErrorBusinessRule('Este e-mail já está em uso!')
   }
   const newProvider = await provider.updateOne(
     { _id: providerId },
@@ -229,6 +205,7 @@ const updateProviderService = async (providerId, body) => {
       details: ['The value does not exist']
     }
   }
+
   return {
     success: true,
     message: 'Data updated successfully',

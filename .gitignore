@@ -1,5 +1,5 @@
 .env
-
+instruções.txt
 api/utils/file/temp/**
 node_modules
 .vscode

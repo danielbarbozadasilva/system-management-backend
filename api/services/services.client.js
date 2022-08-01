@@ -1,5 +1,5 @@
-const { client, provider } = require('../models/models.index')
 const { ObjectId } = require('mongodb')
+const { client, provider } = require('../models/models.index')
 const {
   verifyEmailService,
   verifyEmailBodyExistService
@@ -8,6 +8,8 @@ const { toDTO } = require('../mappers/mappers.client')
 const { UtilCreateHash } = require('../utils/utils.cryptography')
 const { toDTOLikeLength } = require('../mappers/mappers.client')
 const { toDTOListProviderLike } = require('../mappers/mappers.client')
+const { createCredentialService } = require('./services.user')
+const ErrorBusinessRule = require('../utils/errors/errors.business_rule')
 
 const listAllClientService = async () => {
   const resultadoDB = await client.find({}).sort({ name: 1 })
@@ -41,41 +43,33 @@ const listClientByIdService = async (clientId) => {
   }
 }
 
-const createClientService = async (model) => {
-  const { firstName, lastName, birthDate, phone, uf, city, email, password } =
-    model
+const createClientService = async (body) => {
+  let data = {}
 
-  if (!(await verifyEmailBodyExistService(email))) {
-    return {
-      success: false,
-      message: 'Operation cannot be performed',
-      details: ['There is already a registered user for the network email']
-    }
+  if (await verifyEmailBodyExistService(body.email)) {
+    throw new ErrorBusinessRule('Este e-mail já está em uso!')
   }
 
   const newClient = await client.create({
-    firstName,
-    lastName,
-    birthDate: new Date(birthDate),
-    phone,
-    uf,
-    city,
-    email,
-    password: UtilCreateHash(password),
+    firstName: body.firstName,
+    lastName: body.lastName,
+    birthDate: new Date(body.birthDate),
+    phone: body.phone,
+    uf: body.uf,
+    city: body.city,
+    email: body.email,
+    password: UtilCreateHash(body.password),
     status: 'ENABLE'
   })
-  if (!newClient) {
-    return {
-      success: false,
-      details: 'No client found'
-    }
+
+  if (body.auth) {
+    data = await createCredentialService(body.email)
   }
+
   return {
     success: true,
     message: 'Operation performed successfully',
-    data: {
-      ...toDTO(newClient)
-    }
+    data: data || { ...toDTO(newClient) }
   }
 }
 
@@ -90,11 +84,7 @@ const updateClientService = async (clientId, body) => {
     }
   }
   if (await verifyEmailService(clientId, body.email)) {
-    return {
-      success: false,
-      message: 'Operation cannot be performed',
-      details: ['There is already a registered user for the network email']
-    }
+    throw new ErrorBusinessRule('Este e-mail já está em uso!')
   }
 
   const newClient = await client.updateOne(

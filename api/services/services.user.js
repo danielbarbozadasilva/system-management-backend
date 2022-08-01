@@ -1,6 +1,7 @@
 const { user, provider } = require('../models/models.index')
 const cryptography = require('../utils/utils.cryptography')
 const userMapper = require('../mappers/mappers.user')
+const ErrorGeneric = require('../utils/errors/erros.generic_error')
 
 const profile = [
   {
@@ -34,11 +35,8 @@ const profile = [
   }
 ]
 
-const searchTypeUserByIdService = (type) => {
-  return profile.find((item) => {
-    return item.id === type
-  })
-}
+const searchTypeUserByIdService = (type) =>
+  profile.find((item) => item.id === type)
 
 const createCredentialService = async (email) => {
   const userDB = await user.findOne({ email })
@@ -49,23 +47,32 @@ const createCredentialService = async (email) => {
       token: userToken,
       userDTO
     }
-  } else {
-    return false
   }
+  return false
 }
+
+const userIsActiveService = async (email) => {
+  const resultDB = await user.find({ email, status: 'ENABLE' })
+  return !!resultDB.length > 0
+}
+
+const userIsValidService = async (email, password) =>
+  !!(await user.findOne({
+    email,
+    password: cryptography.UtilCreateHash(password)
+  }))
 
 const verifyFunctionalityProfileService = async (typeUser, test) => {
   const profile = searchTypeUserByIdService(typeUser)
   if (profile?.functionality?.includes(test) == true && profile.id) {
     return false
-  } else {
-    return true
   }
+  return true
 }
 
 const verifyEmailBodyExistService = async (email) => {
   const users = await user.find({ email })
-  return !(users.length > 0)
+  return users.length > 0
 }
 
 const verifyCnpjExistsService = async (cnpj) => {
@@ -90,25 +97,42 @@ const verifyCnpjService = async (id, data) => {
 }
 
 const authenticateService = async (email, password) => {
-  const resultadoDB = await userIsValidService(email, password)
-  if (!resultadoDB) {
-    return {
-      success: false,
-      message: 'Unable to authenticate user',
-      details: ['Invalid username or password']
+  try {
+    const resultadoDB = await userIsValidService(email, password)
+    if (!resultadoDB) {
+      return {
+        success: false,
+        message: 'Não foi possivel autenticar o usuário',
+        details: ['E-mail ou senha inválidos!']
+      }
     }
-  }
-  const resCreateCredential = await createCredentialService(email)
-  if (!resCreateCredential) {
-    return {
-      success: false,
-      details: ['it was not possible to create the credential']
+
+    const resultActive = await userIsActiveService(email)
+    if (!resultActive) {
+      return {
+        success: false,
+        message: 'Não foi possivel efetuar o login',
+        details: [
+          'Sua conta está desativada. Entre em contato com o Administrador!'
+        ]
+      }
     }
-  }
-  return {
-    success: true,
-    message: 'Successfully authenticated user',
-    data: resCreateCredential
+
+    const resultCredentials = await createCredentialService(email)
+    if (!resultCredentials) {
+      return {
+        success: false,
+        details: ['Não foi possivel criar a credencial!']
+      }
+    }
+
+    return {
+      success: true,
+      message: 'Usuário autenticado com sucesso!',
+      data: resultCredentials
+    }
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
   }
 }
 
@@ -121,15 +145,8 @@ const verifyStatusProviderService = async (id) => {
 
   if (result.length === 0) {
     return false
-  } else {
-    return true
   }
-}
-
-const userIsValidService = async (email, password) => {
-  return !!(await user.findOne({
-    email, password: cryptography.UtilCreateHash(password)
-  }))
+  return true
 }
 
 module.exports = {
