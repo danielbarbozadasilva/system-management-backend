@@ -52,7 +52,7 @@ const createCredentialService = async (email) => {
 }
 
 const userIsActiveService = async (email) => {
-  const resultDB = await user.find({ email, status: 'ENABLE' })
+  const resultDB = await user.find({ email }).where('status').ne('ANALYSIS')
   return !!resultDB.length > 0
 }
 
