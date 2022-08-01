@@ -8,10 +8,10 @@ const authorizationMiddleware =
   async (req, res, next) => {
     const test = rota
     const { token } = req.headers
-    const { type } = cryptographyUtils.UtilDecodeToken(token)
+    const { typeUser } = cryptographyUtils.UtilDecodeToken(token)
 
     await userService
-      .verifyFunctionalityProfileService(type, test)
+      .verifyFunctionalityProfileService(typeUser, test)
       .then((result) => {
         if (test != '*') {
           if (!token) {
