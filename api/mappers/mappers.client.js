@@ -6,12 +6,12 @@ const toDTO = (model) => {
     id: model._id,
     firstName: model.firstName,
     lastName: model.lastName,
-    name: model.firstName + ' ' + model.lastName,
+    name: `${model.firstName} ${model.lastName}`,
     birthDate: date.toLocaleDateString(model.birthDate),
     phone: model.phone,
     uf: model.uf,
     city: model.city,
-    status: model.status,
+    status: model.status === 'ENABLE' ? 'Ativo' : 'Desativado',
     email: model.email,
     password: model.password
   }
@@ -21,7 +21,7 @@ const toDTOListProviderLike = (model) => {
   let count = 0
   return {
     id: model._id,
-    name: model.firstName + ' ' + model.lastName,
+    name: `${model.firstName} ${model.lastName}`,
     email: model.email,
     provider: model.result_likes.map((item) => {
       count++
@@ -96,9 +96,7 @@ const toDTOListLikeClientProvider = (model) => {
   }
 }
 
-const toDTOLikeLength = (item) => {
-  return item.likes.length
-}
+const toDTOLikeLength = (item) => item.likes.length
 
 module.exports = {
   toDTO,
