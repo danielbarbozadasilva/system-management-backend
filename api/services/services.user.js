@@ -63,8 +63,8 @@ const userIsValidService = async (email, password) =>
   }))
 
 const verifyFunctionalityProfileService = async (typeUser, test) => {
-  const profile = searchTypeUserByIdService(typeUser)
-  if (profile?.functionality?.includes(test) == true && profile.id) {
+  const resp = searchTypeUserByIdService(typeUser)
+  if (resp?.functionality?.includes(test) == true && resp.id) {
     return false
   }
   return true
