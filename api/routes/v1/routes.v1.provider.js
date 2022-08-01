@@ -10,7 +10,7 @@ module.exports = (router) => {
     middlewareValidateDTO('params', {
       namefilter: joi.string().allow('')
     }),
-    providerController.listAllProvidersController
+    asyncMiddleware(providerController.listAllProvidersController)
   )
 
   router.route('/provider').post(
@@ -77,7 +77,7 @@ module.exports = (router) => {
         'string.empty': '"city" can not be empty'
       })
     }),
-    providerController.listProvidersByLocationController
+    asyncMiddleware(providerController.listProvidersByLocationController)
   )
 
   router
@@ -95,7 +95,7 @@ module.exports = (router) => {
             'string.pattern.base': '"provider id" out of the expected format'
           })
       }),
-      providerController.listProductsByProviderController
+      asyncMiddleware(providerController.listProductsByProviderController)
     )
     .put(
       authorizationMiddleware('UPDATE_PROVIDER'),
@@ -161,7 +161,7 @@ module.exports = (router) => {
             'string.pattern.base': '"provider id" out of the expected format'
           })
       }),
-      providerController.removeProviderController
+      asyncMiddleware(providerController.removeProviderController)
     )
 
   router.route('/provider/:providerid/status/:status').put(
@@ -181,7 +181,7 @@ module.exports = (router) => {
         'string.empty': '"status" can not be empty'
       })
     }),
-    providerController.changeStatusProviderController
+    asyncMiddleware(providerController.changeStatusProviderController)
   )
 
   router.route('/provider/:providerid/like').get(
@@ -197,7 +197,7 @@ module.exports = (router) => {
           'string.pattern.base': '"provider id" out of the expected format'
         })
     }),
-    providerController.searchLikeProductController
+    asyncMiddleware(providerController.searchLikeProductController)
   )
 
   router
@@ -224,7 +224,7 @@ module.exports = (router) => {
             'string.pattern.base': '"product id" out of the expected format'
           })
       }),
-      providerController.insertLikeProductController
+      asyncMiddleware(providerController.insertLikeProductController)
     )
     .delete(
       authorizationMiddleware('REMOVE_LIKE_PRODUCT'),
@@ -248,6 +248,6 @@ module.exports = (router) => {
             'string.pattern.base': '"product id" out of the expected format'
           })
       }),
-      providerController.deleteLikeProductController
+      asyncMiddleware(providerController.deleteLikeProductController)
     )
 }

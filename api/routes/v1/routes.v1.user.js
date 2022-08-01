@@ -2,6 +2,7 @@ const joi = require('joi')
 
 const userController = require('../../controllers/controllers.user')
 const middlewareValidateDTO = require('../../utils/middlewares/middlewares.validate_dto')
+const asyncMiddleware = require('../../utils/middlewares/middlewares.async')
 
 module.exports = (router) => {
   router.route('/auth').post(
@@ -15,6 +16,6 @@ module.exports = (router) => {
         'string.empty': `"password" can not be empty`
       })
     }),
-    userController.authController
+    asyncMiddleware(userController.authController)
   )
 }

@@ -11,7 +11,7 @@ module.exports = (router) => {
     .route('/category')
     .get(
       authorizationMiddleware('*'),
-      controllerCategory.listAllCategoryController
+      asyncMiddleware(controllerCategory.listAllCategoryController)
     )
 
     .post(
@@ -33,7 +33,7 @@ module.exports = (router) => {
           allowUnknown: true
         }
       ),
-      controllerCategory.createCategoryController
+      asyncMiddleware(controllerCategory.createCategoryController)
     )
 
   router
@@ -83,7 +83,7 @@ module.exports = (router) => {
           allowUnknown: true
         }
       ),
-      controllerCategory.updateCategoryController
+      asyncMiddleware(controllerCategory.updateCategoryController)
     )
 
     .delete(
@@ -114,6 +114,6 @@ module.exports = (router) => {
           'string.empty': '"category id" can not be empty'
         })
     }),
-    controllerCategory.listCategoryByIdProductController
+    asyncMiddleware(controllerCategory.listCategoryByIdProductController)
   )
 }

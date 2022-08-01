@@ -12,14 +12,16 @@ module.exports = (router) => {
       name: joi.string().allow(null, '').max(500),
       filter: joi.string().allow('')
     }),
-    productController.filterProductController
+    asyncMiddleware(productController.filterProductController)
   )
+
   router
     .route('/product')
     .get(
       authorizationMiddleware('*'),
-      productController.listAllProductsController
+      asyncMiddleware(productController.listAllProductsController)
     )
+
   router.route('/product/:productid').get(
     authorizationMiddleware('*'),
     middlewareValidateDTO('params', {
@@ -33,8 +35,9 @@ module.exports = (router) => {
           'string.pattern.base': '"provider id" out of the expected format'
         })
     }),
-    productController.listProductByIdController
+    asyncMiddleware(productController.listProductByIdController)
   )
+
   router
     .route('/provider/:providerid/product/:productid')
     .put(
@@ -88,7 +91,7 @@ module.exports = (router) => {
           allowUnknown: true
         }
       ),
-      productController.updateProductController
+      asyncMiddleware(productController.updateProductController)
     )
     .delete(
       authorizationMiddleware('REMOVE_PRODUCT'),
@@ -112,8 +115,9 @@ module.exports = (router) => {
             'string.pattern.base': '"product id" out of the expected format'
           })
       }),
-      productController.removeProductController
+      asyncMiddleware(productController.removeProductController)
     )
+
   router.route('/provider/:providerid/product').post(
     authorizationMiddleware('CREATE_PRODUCT'),
     asyncMiddleware(middlewareFileUploadMiddleware('products')),
@@ -156,6 +160,6 @@ module.exports = (router) => {
         allowUnknown: true
       }
     ),
-    productController.insertProductController
+    asyncMiddleware(productController.insertProductController)
   )
 }

@@ -20,7 +20,7 @@ module.exports = (router) => {
             'string.pattern.base': '"client id" out of the expected format'
           })
       }),
-      clientController.listClientByIdController
+      asyncMiddleware(clientController.listClientByIdController)
     )
     .put(
       authorizationMiddleware('*'),
@@ -88,7 +88,7 @@ module.exports = (router) => {
             'string.pattern.base': '"client id" out of the expected format'
           })
       }),
-      clientController.deleteClientsController
+      asyncMiddleware(clientController.deleteClientsController)
     ),
     router
       .route('/client')
@@ -146,7 +146,7 @@ module.exports = (router) => {
             'string.pattern.base': '"client id" out of the expected format'
           })
       }),
-      clientController.listLikeClientController
+      asyncMiddleware(clientController.listLikeClientController)
     ),
     router
       .route('/client/:clientid/provider/:providerid/like')
@@ -172,7 +172,7 @@ module.exports = (router) => {
               'string.pattern.base': '"provider id" out of the expected format'
             })
         }),
-        clientController.createLikeProviderController
+        asyncMiddleware(clientController.createLikeProviderController)
       )
       .delete(
         authorizationMiddleware('CLIENT_LIKE_REMOVE'),
@@ -196,6 +196,6 @@ module.exports = (router) => {
               'string.pattern.base': '"provider id" out of the expected format'
             })
         }),
-        clientController.removeLikeProviderController
+        asyncMiddleware(clientController.removeLikeProviderController)
       )
 }
