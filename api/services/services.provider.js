@@ -15,411 +15,405 @@ const { EmailDisable } = require('../utils/utils.email.message.disable')
 const { toDTOLikeLength } = require('../mappers/mappers.client')
 const { createCredentialService } = require('./services.user')
 const ErrorBusinessRule = require('../utils/errors/errors.business_rule')
+const ErrorGeneric = require('../utils/errors/erros.generic_error')
 
 const listAllProviderService = async (nameFilter) => {
-  let filter = {}
+  try {
+    let filter = {}
 
-  if (Object.values(nameFilter) == 'alphabetical') {
-    filter = { fantasyName: 1 }
-  } else if (Object.values(nameFilter) == 'like') {
-    filter = { result_likes: -1 }
-  } else {
-    filter = { fantasyName: -1 }
-  }
+    if (Object.values(nameFilter) == 'alphabetical') {
+      filter = { fantasyName: 1 }
+    } else if (Object.values(nameFilter) == 'like') {
+      filter = { result_likes: -1 }
+    } else {
+      filter = { fantasyName: -1 }
+    }
 
-  const resultDB = await provider.aggregate([
-    {
-      $lookup: {
-        from: product.collection.name,
-        localField: '_id',
-        foreignField: 'provider',
-        as: 'result_products'
+    const resultDB = await provider.aggregate([
+      {
+        $lookup: {
+          from: product.collection.name,
+          localField: '_id',
+          foreignField: 'provider',
+          as: 'result_products'
+        }
+      },
+      {
+        $lookup: {
+          from: product.collection.name,
+          localField: 'likes',
+          foreignField: '_id',
+          as: 'result_likes'
+        }
+      },
+      {
+        $lookup: {
+          from: client.collection.name,
+          localField: '_id',
+          foreignField: 'likes',
+          as: 'result_client'
+        }
+      },
+      {
+        $sort: filter
       }
-    },
-    {
-      $lookup: {
-        from: product.collection.name,
-        localField: 'likes',
-        foreignField: '_id',
-        as: 'result_likes'
-      }
-    },
-    {
-      $lookup: {
-        from: client.collection.name,
-        localField: '_id',
-        foreignField: 'likes',
-        as: 'result_client'
-      }
-    },
-    {
-      $sort: filter
-    }
-  ])
+    ])
 
-  if (resultDB.length < 1) {
-    return {
-      success: false,
-      details: 'No likes found!'
+    if (resultDB.length < 1) {
+      return {
+        success: false,
+        details: 'No likes found!'
+      }
     }
-  }
-  if (resultDB.length > 0) {
-    return {
-      success: true,
-      message: 'Operation performed successfully!',
-      data: resultDB.map((item) => toItemListDTO(item))
+    if (resultDB.length > 0) {
+      return {
+        success: true,
+        message: 'Operation performed successfully!',
+        data: resultDB.map((item) => toItemListDTO(item))
+      }
     }
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
   }
 }
 
 const listProductsProviderService = async (providerId) => {
-  const resultDB = await product.aggregate([
-    { $match: { provider: ObjectId(providerId) } },
-    {
-      $lookup: {
-        from: provider.collection.name,
-        localField: 'provider',
-        foreignField: '_id',
-        as: 'provider'
+  try {
+    const resultDB = await product.aggregate([
+      { $match: { provider: ObjectId(providerId) } },
+      {
+        $lookup: {
+          from: provider.collection.name,
+          localField: 'provider',
+          foreignField: '_id',
+          as: 'provider'
+        }
+      },
+      {
+        $lookup: {
+          from: category.collection.name,
+          localField: 'category',
+          foreignField: '_id',
+          as: 'category'
+        }
       }
-    },
-    {
-      $lookup: {
-        from: category.collection.name,
-        localField: 'category',
-        foreignField: '_id',
-        as: 'category'
-      }
-    }
-  ])
+    ])
 
-  return {
-    success: true,
-    message: 'Operation performed successfully',
-    data: resultDB.map((item) => mapperProduct.toDTOLikeProductList(item))
+    return {
+      success: true,
+      message: 'Operation performed successfully',
+      data: resultDB.map((item) => mapperProduct.toDTOLikeProductList(item))
+    }
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
   }
 }
 
 const listProvidersByLocationService = async (uf, city) => {
-  let filter = {}
-  if (city == 'undefined' || city == 'x') {
-    filter = { uf }
-  } else {
-    filter = { uf, city }
-  }
-  if (uf == 'x' && city == 'x') {
-    filter = {}
-  }
-  const resultDB = await provider.find(filter)
-
-  if (!resultDB) {
-    return {
-      success: false,
-      message: 'operation cannot be performed',
-      details: ['The value does not exist']
+  try {
+    let filter = {}
+    if (city == 'undefined' || city == 'x') {
+      filter = { uf }
+    } else {
+      filter = { uf, city }
     }
-  }
+    if (uf == 'x' && city == 'x') {
+      filter = {}
+    }
+    const resultDB = await provider.find(filter)
 
-  return {
-    success: true,
-    message: 'operation performed successfully',
-    data: resultDB
+    if (!resultDB) {
+      return {
+        success: false,
+        message: 'operation cannot be performed',
+        details: ['The value does not exist']
+      }
+    }
+
+    return {
+      success: true,
+      message: 'operation performed successfully',
+      data: resultDB
+    }
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
   }
 }
 
 const createProviderService = async (body) => {
-  let data = {}
+  try {
+    let data = {}
 
-  if (await serviceUserProvider.verifyCnpjExistsService(body.cnpj)) {
-    throw new ErrorBusinessRule('Este cnpj já está em uso!')
-  }
+    if (await serviceUserProvider.verifyCnpjExistsService(body.cnpj)) {
+      throw new ErrorBusinessRule('Este cnpj já está em uso!')
+    }
 
-  if (await serviceUserProvider.verifyEmailBodyExistService(body.email)) {
-    throw new ErrorBusinessRule('Este e-mail já está em uso!')
-  }
+    if (await serviceUserProvider.verifyEmailBodyExistService(body.email)) {
+      throw new ErrorBusinessRule('Este e-mail já está em uso!')
+    }
 
-  const resultDB = await provider.create({
-    cnpj: body.cnpj,
-    fantasyName: body.fantasyName,
-    socialName: body.socialName,
-    address: body.address,
-    uf: body.uf,
-    city: body.city,
-    responsible: body.responsible,
-    phone: body.phone,
-    email: body.email,
-    password: UtilCreateHash(body.password),
-    status: 'ANALYSIS'
-  })
+    const resultDB = await provider.create({
+      cnpj: body.cnpj,
+      fantasyName: body.fantasyName,
+      socialName: body.socialName,
+      address: body.address,
+      uf: body.uf,
+      city: body.city,
+      responsible: body.responsible,
+      phone: body.phone,
+      email: body.email,
+      password: UtilCreateHash(body.password),
+      status: 'ANALYSIS'
+    })
 
-  if (body.auth) {
-    data = await createCredentialService(body.email)
-  }
+    if (body.auth) {
+      data = await createCredentialService(body.email)
+    }
 
-  return {
-    success: true,
-    message: 'Operation performed successfully',
-    data: data || { ...toDTO(resultDB) }
+    return {
+      success: true,
+      message: 'Operation performed successfully',
+      data: data || { ...toDTO(resultDB) }
+    }
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
   }
 }
 
 const updateProviderService = async (providerId, body) => {
-  const resultFind = await provider.findById({ _id: providerId })
+  try {
+    const resultFind = await provider.findById({ _id: providerId })
 
-  if (!resultFind) {
-    return {
-      success: false,
-      message: 'could not perform the operation',
-      details: ["provider id doesn't exist."]
-    }
-  }
-
-  if (await serviceUserProvider.verifyCnpjService(providerId, body.cnpj)) {
-    throw new ErrorBusinessRule('Este cnpj já está em uso!')
-  }
-
-  if (await serviceUserProvider.verifyEmailService(providerId, body.email)) {
-    throw new ErrorBusinessRule('Este e-mail já está em uso!')
-  }
-  const newProvider = await provider.updateOne(
-    { _id: providerId },
-    {
-      $set: {
-        cnpj: body.cnpj,
-        fantasyName: body.fantasyName,
-        socialName: body.socialName,
-        address: body.address,
-        uf: body.uf,
-        city: body.city,
-        responsible: body.responsible,
-        phone: body.phone,
-        email: body.email,
-        password: UtilCreateHash(body.password)
+    if (!resultFind) {
+      return {
+        success: false,
+        message: 'could not perform the operation',
+        details: ["provider id doesn't exist."]
       }
     }
-  )
-  if (!newProvider) {
-    return {
-      success: false,
-      message: 'operation cannot be performed',
-      details: ['The value does not exist']
-    }
-  }
 
-  return {
-    success: true,
-    message: 'Data updated successfully',
-    data: {
-      ...toDTO(newProvider)
+    if (await serviceUserProvider.verifyCnpjService(providerId, body.cnpj)) {
+      throw new ErrorBusinessRule('Este cnpj já está em uso!')
     }
+
+    if (await serviceUserProvider.verifyEmailService(providerId, body.email)) {
+      throw new ErrorBusinessRule('Este e-mail já está em uso!')
+    }
+    const newProvider = await provider.updateOne(
+      { _id: providerId },
+      {
+        $set: {
+          cnpj: body.cnpj,
+          fantasyName: body.fantasyName,
+          socialName: body.socialName,
+          address: body.address,
+          uf: body.uf,
+          city: body.city,
+          responsible: body.responsible,
+          phone: body.phone,
+          email: body.email,
+          password: UtilCreateHash(body.password)
+        }
+      }
+    )
+    if (!newProvider) {
+      return {
+        success: false,
+        message: 'operation cannot be performed',
+        details: ['The value does not exist']
+      }
+    }
+
+    return {
+      success: true,
+      message: 'Data updated successfully',
+      data: {
+        ...toDTO(newProvider)
+      }
+    }
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
   }
 }
 
 const removeProviderService = async (providerId) => {
-  const providerDB = await provider.findOne({ _id: providerId })
+  try {
+    const providerDB = await provider.findOne({ _id: providerId })
 
-  if (!providerDB) {
-    return {
-      success: false,
-      message: 'could not perform the operation',
-      details: ["provider id doesn't exist."]
+    if (!providerDB) {
+      return {
+        success: false,
+        message: 'could not perform the operation',
+        details: ["provider id doesn't exist."]
+      }
     }
-  }
-  const deleteProductDB = await product.deleteMany({ provider: providerId })
-  const deleteProviderDB = await provider.deleteOne({ _id: providerId })
+    const deleteProductDB = await product.deleteMany({ provider: providerId })
+    const deleteProviderDB = await provider.deleteOne({ _id: providerId })
 
-  if (deleteProductDB.ok !== 1 || deleteProviderDB.ok !== 1) {
-    return {
-      success: false,
-      details: 'Error deleting provider and products'
+    if (deleteProductDB.ok !== 1 || deleteProviderDB.ok !== 1) {
+      return {
+        success: false,
+        details: 'Error deleting provider and products'
+      }
     }
-  }
-  return {
-    success: true,
-    message: 'Operation performed successfully'
+    return {
+      success: true,
+      message: 'Operation performed successfully'
+    }
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
   }
 }
 
 const changeStatusService = async (providerId, status) => {
-  const providerDB = await provider.findOne({ _id: providerId })
-  if (!providerDB) {
-    return {
-      success: false,
-      message: 'operation cannot be performed',
-      details: ['There is no provider registered for the provided id provider']
-    }
-  }
-
-  const resultDB = await provider.updateOne(
-    { _id: providerId },
-    {
-      $set: {
-        status
+  try {
+    const providerDB = await provider.findOne({ _id: providerId })
+    if (!providerDB) {
+      return {
+        success: false,
+        message: 'operation cannot be performed',
+        details: [
+          'There is no provider registered for the provided id provider'
+        ]
       }
     }
-  )
 
-  if (resultDB) {
-    if (status === 'ENABLE' || status === 'ANALYSIS') {
-      emailUtils.UtilSendEmail({
-        to: providerDB.email,
-        from: process.env.SENDGRID_SENDER,
-        subject: `Activation Confirmation ${providerDB.socialName}`,
-        html: EmailEnable('subject', `${process.env.URL}/signin`)
-      })
-    } else if (status === 'DISABLE') {
-      emailUtils.UtilSendEmail({
-        to: providerDB.email,
-        from: process.env.SENDGRID_SENDER,
-        subject: `Inactivation Confirmation ${providerDB.socialName}`,
-        html: EmailDisable('subject')
-      })
-    }
-    return {
-      success: true,
-      message: 'Operation performed successfully',
-      data: {
-        id: providerDB._id,
-        name: providerDB.fantasyName,
-        status
+    const resultDB = await provider.updateOne(
+      { _id: providerId },
+      {
+        $set: {
+          status
+        }
+      }
+    )
+
+    if (resultDB) {
+      if (status === 'ENABLE' || status === 'ANALYSIS') {
+        emailUtils.UtilSendEmail({
+          to: providerDB.email,
+          from: process.env.SENDGRID_SENDER,
+          subject: `Activation Confirmation ${providerDB.socialName}`,
+          html: EmailEnable('subject', `${process.env.URL}/signin`)
+        })
+      } else if (status === 'DISABLE') {
+        emailUtils.UtilSendEmail({
+          to: providerDB.email,
+          from: process.env.SENDGRID_SENDER,
+          subject: `Inactivation Confirmation ${providerDB.socialName}`,
+          html: EmailDisable('subject')
+        })
+      }
+      return {
+        success: true,
+        message: 'Operation performed successfully',
+        data: {
+          id: providerDB._id,
+          name: providerDB.fantasyName,
+          status
+        }
       }
     }
-  }
-  if (!resultDB) {
-    return {
-      success: false,
-      message: 'operation cannot be performed'
+    if (!resultDB) {
+      return {
+        success: false,
+        message: 'operation cannot be performed'
+      }
     }
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
   }
 }
 
 const listLikesProviderProductService = async (providerId) => {
-  const resultDB = await provider.aggregate([
-    { $match: { _id: ObjectId(providerId) } },
-    {
-      $lookup: {
-        from: product.collection.name,
-        localField: 'likes',
-        foreignField: '_id',
-        as: 'result_likes'
-      }
-    }
-  ])
-
-  if (resultDB === 0) {
-    return {
-      success: false,
-      details: 'No likes found!'
-    }
-  }
-  if (resultDB !== 0) {
-    return {
-      success: true,
-      message: 'Operation performed successfully!',
-      data: toItemListDTO(...resultDB)
-    }
-  }
-}
-
-const createLikeProviderProductService = async (providerId, productId) => {
-  const [providerDB, productDB, likeDB, likeProviderDB] = await Promise.all([
-    provider.findById(providerId),
-    product.findById(productId),
-    provider.aggregate([
+  try {
+    const resultDB = await provider.aggregate([
       { $match: { _id: ObjectId(providerId) } },
       {
         $lookup: {
           from: product.collection.name,
           localField: 'likes',
           foreignField: '_id',
-          as: 'likes'
+          as: 'result_likes'
         }
       }
-    ]),
-    provider.find({ _id: `${providerId}`, likes: `${productId}` })
-  ])
+    ])
 
-  if (!providerDB) {
-    return {
-      success: false,
-      details: 'O fornecedor informado não existe!'
-    }
-  }
-
-  if (!productDB) {
-    return {
-      success: false,
-      details: 'O produto informado não existe!'
-    }
-  }
-
-  if (toDTOLikeLength(...likeDB) >= 3) {
-    return {
-      success: false,
-      details: 'O fornecedor não pode curtir mais de 3 produtos!'
-    }
-  }
-
-  if (likeProviderDB.length > 0) {
-    return {
-      success: false,
-      details: 'O fornecedor já curtiu este produto!'
-    }
-  }
-
-  const resultLike = await provider.findByIdAndUpdate(providerId, {
-    $push: { likes: productId }
-  })
-
-  if (resultLike) {
-    return {
-      success: true,
-      message: 'Successfully liked!',
-      data: {
-        provider: resultLike._id,
-        product: productId
+    if (resultDB === 0) {
+      return {
+        success: false,
+        details: 'No likes found!'
       }
     }
-  }
-
-  return {
-    success: false,
-    details: 'There is no like!'
+    if (resultDB !== 0) {
+      return {
+        success: true,
+        message: 'Operation performed successfully!',
+        data: toItemListDTO(...resultDB)
+      }
+    }
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
   }
 }
 
-const removeLikeProviderProductService = async (providerId, productId) => {
-  const [providerDB, productDB, likeDB] = await Promise.all([
-    provider.findById(providerId),
-    product.findById(productId),
-    provider.find({ _id: `${providerId}`, likes: `${productId}` })
-  ])
+const createLikeProviderProductService = async (providerId, productId) => {
+  try {
+    const [providerDB, productDB, likeDB, likeProviderDB] = await Promise.all([
+      provider.findById(providerId),
+      product.findById(productId),
+      provider.aggregate([
+        { $match: { _id: ObjectId(providerId) } },
+        {
+          $lookup: {
+            from: product.collection.name,
+            localField: 'likes',
+            foreignField: '_id',
+            as: 'likes'
+          }
+        }
+      ]),
+      provider.find({ _id: `${providerId}`, likes: `${productId}` })
+    ])
 
-  if (!providerDB) {
-    return {
-      success: false,
-      details: 'The provider informed does not exist!'
+    if (!providerDB) {
+      return {
+        success: false,
+        details: 'O fornecedor informado não existe!'
+      }
     }
-  }
 
-  if (!productDB) {
-    return {
-      success: false,
-      details: 'The product informed does not exist!'
+    if (!productDB) {
+      return {
+        success: false,
+        details: 'O produto informado não existe!'
+      }
     }
-  }
 
-  if (likeDB) {
-    const resultLike = await provider.updateOne(
-      { _id: ObjectId(`${providerId}`) },
-      { $pull: { likes: `${productId}` } }
-    )
+    if (toDTOLikeLength(...likeDB) >= 3) {
+      return {
+        success: false,
+        details: 'O fornecedor não pode curtir mais de 3 produtos!'
+      }
+    }
+
+    if (likeProviderDB.length > 0) {
+      return {
+        success: false,
+        details: 'O fornecedor já curtiu este produto!'
+      }
+    }
+
+    const resultLike = await provider.findByIdAndUpdate(providerId, {
+      $push: { likes: productId }
+    })
 
     if (resultLike) {
       return {
         success: true,
+        message: 'Successfully liked!',
         data: {
-          message: 'like removed successfully!'
+          provider: resultLike._id,
+          product: productId
         }
       }
     }
@@ -428,6 +422,55 @@ const removeLikeProviderProductService = async (providerId, productId) => {
       success: false,
       details: 'There is no like!'
     }
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+  }
+}
+
+const removeLikeProviderProductService = async (providerId, productId) => {
+  try {
+    const [providerDB, productDB, likeDB] = await Promise.all([
+      provider.findById(providerId),
+      product.findById(productId),
+      provider.find({ _id: `${providerId}`, likes: `${productId}` })
+    ])
+
+    if (!providerDB) {
+      return {
+        success: false,
+        details: 'The provider informed does not exist!'
+      }
+    }
+
+    if (!productDB) {
+      return {
+        success: false,
+        details: 'The product informed does not exist!'
+      }
+    }
+
+    if (likeDB) {
+      const resultLike = await provider.updateOne(
+        { _id: ObjectId(`${providerId}`) },
+        { $pull: { likes: `${productId}` } }
+      )
+
+      if (resultLike) {
+        return {
+          success: true,
+          data: {
+            message: 'like removed successfully!'
+          }
+        }
+      }
+
+      return {
+        success: false,
+        details: 'There is no like!'
+      }
+    }
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
   }
 }
 
