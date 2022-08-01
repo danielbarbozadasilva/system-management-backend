@@ -2,6 +2,7 @@ const joi = require('joi')
 const providerController = require('../../controllers/controllers.provider')
 const middlewareValidateDTO = require('../../utils/middlewares/middlewares.validate_dto')
 const authorizationMiddleware = require('../../utils/middlewares/middlewares.authorization')
+const asyncMiddleware = require('../../utils/middlewares/middlewares.async')
 
 module.exports = (router) => {
   router.route('/provider/filter/:namefilter').get(
@@ -58,9 +59,10 @@ module.exports = (router) => {
       password: joi.string().required().messages({
         'any.required': '"password" is a required field',
         'string.empty': '"password" can not be empty'
-      })
+      }),
+      auth: joi.boolean().optional()
     }),
-    providerController.insertProviderController
+    asyncMiddleware(providerController.insertProviderController)
   )
 
   router.route('/provider/filter/uf/:uf/city/:city').get(
@@ -143,7 +145,7 @@ module.exports = (router) => {
           'string.empty': '"password" can not be empty'
         })
       }),
-      providerController.updateProviderController
+      asyncMiddleware(providerController.updateProviderController)
     )
 
     .delete(
