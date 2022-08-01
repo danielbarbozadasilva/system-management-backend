@@ -1,32 +1,18 @@
 const fileUtils = require('../utils/utils.file')
 
 const toDTO = (model) => {
-  const {
-    id: _id,
-    cnpj,
-    fantasyName,
-    socialName,
-    email,
-    address,
-    uf,
-    city,
-    responsible,
-    phone,
-    status
-  } = model
-
   return {
-    id: _id,
-    cnpj,
-    fantasyName,
-    socialName,
-    email,
-    address,
-    uf,
-    city,
-    responsible,
-    phone,
-    status
+    id: model._id,
+    cnpj: model.cnpj,
+    fantasyName: model.fantasyName,
+    socialName: model.socialName,
+    email: model.email,
+    address: model.address,
+    uf: model.uf,
+    city: model.city,
+    responsible: model.responsible,
+    phone: model.phone,
+    status: model.status,
   }
 }
 
