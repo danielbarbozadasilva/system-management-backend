@@ -1,5 +1,4 @@
 const { category } = require('../../api/models/models.index')
-const fileUtils = require('../../api/utils/utils.file')
 
 const createCategory = async () => {
   const resultDB = await category.create(

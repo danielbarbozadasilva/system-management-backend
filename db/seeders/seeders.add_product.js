@@ -1,5 +1,4 @@
 const { product } = require('../../api/models/models.index')
-const fileUtils = require('../../api/utils/utils.file')
 
 const createProduct = async () => {
   const resultDB = await product.create(
