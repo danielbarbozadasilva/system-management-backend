@@ -3,8 +3,8 @@ const db = require('../config')
 
 mongoose.connect(db.uri, { useUnifiedTopology: true, useNewUrlParser: true })
 
-const node_environment = process.env.NODE_ENV || 'development'
-if (node_environment === 'development') {
+const nodeEnvironment = process.env.NODE_ENV || 'development'
+if (nodeEnvironment === 'development') {
   require('dotenv').config()
 }
 

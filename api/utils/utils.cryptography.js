@@ -1,37 +1,37 @@
 const md5 = require('md5')
 const jwt = require('jsonwebtoken')
 
-const md5_hash_secret = process.env.MD5_SECRET
-const jwt_hash_secret = process.env.JWT_SECRET
-const jwt_time_limit = process.env.JWT_VALID_TIME
+const md5HashSecret = process.env.MD5_SECRET
+const jwtHashSecret = process.env.JWT_SECRET
+const jwtTimeLimit = process.env.JWT_VALID_TIME
 
 const UtilCreateHash = (password) => {
-  const verify_hash = md5(password + md5_hash_secret)
-  if (verify_hash) {
-    return verify_hash
+  const hashVerify = md5(password + md5HashSecret)
+  if (hashVerify) {
+    return hashVerify
   }
   return false
 }
 
 const UtilCreateToken = (model) => {
-  const verify_data = jwt.sign({ ...model }, jwt_hash_secret, {
-    expiresIn: `${jwt_time_limit}`
+  const dataVerify = jwt.sign({ ...model }, jwtHashSecret, {
+    expiresIn: `${jwtTimeLimit}`
   })
-  if (verify_data) {
-    return verify_data
+  if (dataVerify) {
+    return dataVerify
   }
   return false
 }
 
 const UtilDecodeToken = (token) => {
-  const verify_decode = jwt.decode(token)
-  if (verify_decode) {
-    return verify_decode
+  const decodeVerify = jwt.decode(token)
+  if (decodeVerify) {
+    return decodeVerify
   }
   return false
 }
 const UtilValidateToken = (token) => {
-  const verify = jwt.verify(token, jwt_hash_secret)
+  const verify = jwt.verify(token, jwtHashSecret)
   if (verify) {
     return verify
   }

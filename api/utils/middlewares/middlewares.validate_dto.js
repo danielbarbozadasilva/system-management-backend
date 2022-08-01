@@ -1,7 +1,8 @@
 const Joi = require('joi')
 
-const MiddlewareValidateDTO = (type, params, options = {}) => {
-  return (req, res, next) => {
+const MiddlewareValidateDTO =
+  (type, params, options = {}) =>
+  (req, res, next) => {
     const schema = Joi.object().keys(params)
     const result = schema.validate(req[type], {
       allowUnknown: false,
@@ -9,9 +10,10 @@ const MiddlewareValidateDTO = (type, params, options = {}) => {
     })
 
     if (result.error) {
-      const message = result.error.details.reduce((acc, item) => {
-        return [...acc, item.message]
-      }, [])
+      const message = result.error.details.reduce(
+        (acc, item) => [...acc, item.message],
+        []
+      )
 
       return res.status(400).send({
         success: false,
@@ -21,5 +23,4 @@ const MiddlewareValidateDTO = (type, params, options = {}) => {
 
     return next()
   }
-}
 module.exports = MiddlewareValidateDTO

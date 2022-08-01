@@ -50,7 +50,7 @@ const createProductService = async (body, providerid) => {
   const [providerDB, categoryDB, moveFile, productDB] = await Promise.all([
     provider.findById({ _id: Object(providerid) }),
     category.findById({ _id: Object(body.category) }),
-    fileUtils.UtilMove(body.image.old_path, body.image.new_path),
+    fileUtils.UtilMove(body.image.oldPath, body.image.newPath),
     product.create({
       name: body.name,
       description: body.description,
@@ -178,7 +178,7 @@ const updateProductService = async (providerId, productId, body) => {
     }
 
     fileUtils.UtilRemove('products', productDB.image.name)
-    fileUtils.UtilMove(body.image.old_path, body.image.new_path)
+    fileUtils.UtilMove(body.image.oldPath, body.image.newPath)
   }
   const result = await productDB.save()
   if (!result) {

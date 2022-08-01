@@ -5,7 +5,6 @@ const mapperProduct = require('../mappers/mappers.product')
 const fileUtils = require('../utils/utils.file')
 const ErrorBusinessRule = require('../utils/errors/errors.business_rule')
 
-
 const searchAllCategoryService = async () => {
   const categoryDB = await category.find({}).sort({ description: 1 })
   return {
@@ -65,7 +64,7 @@ const addCategoryService = async (body) => {
     }
   })
 
-  fileUtils.UtilMove(body.image.old_path, body.image.new_path)
+  fileUtils.UtilMove(body.image.oldPath, body.image.newPath)
 
   categoryDB.image = {
     origin: body.image.origin,
@@ -138,7 +137,7 @@ const updateCategoryService = async (categoryId, body) => {
     }
 
     fileUtils.UtilRemove('category', categoryDB.image.name)
-    fileUtils.UtilMove(body.image.old_path, body.image.new_path)
+    fileUtils.UtilMove(body.image.oldPath, body.image.newPath)
   }
 
   const updateCategory = await categoryDB.save()
