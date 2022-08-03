@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "37e958c9-094c-4772-8413-de61ce6a45bb",
 		"name": "PROJETO04",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11940030"
 	},
 	"item": [
 		{
@@ -166,24 +167,8 @@
 							}
 						],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "name",
-									"value": "yyCategoria03",
-									"type": "text"
-								},
-								{
-									"key": "description",
-									"value": "yydescCategoria03",
-									"type": "text"
-								},
-								{
-									"key": "image",
-									"type": "file",
-									"src": []
-								}
-							]
+							"mode": "raw",
+							"raw": ""
 						},
 						"url": {
 							"raw": "http://localhost:3011/v1/category",
@@ -332,7 +317,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"daniel80barboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
+							"raw": "{\n    \"email\": \"daniel95barboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1249,7 +1234,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3011/v1/client/627565e15121862e28092849",
+							"raw": "http://localhost:3011/v1/client/615cce324b51ba2b14c1b170",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1258,7 +1243,7 @@
 							"path": [
 								"v1",
 								"client",
-								"627565e15121862e28092849"
+								"615cce324b51ba2b14c1b170"
 							]
 						}
 					},
@@ -1434,7 +1419,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/client/62643c152925114398198f16/like",
+							"raw": "http://localhost:3011/v1/client/615cce324b51ba2b14c1b170/like",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1443,7 +1428,7 @@
 							"path": [
 								"v1",
 								"client",
-								"62643c152925114398198f16",
+								"615cce324b51ba2b14c1b170",
 								"like"
 							]
 						}
@@ -1477,7 +1462,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/client/62643c152925114398198f16/provider/615a584a79b274425a6fa7db/like",
+							"raw": "http://localhost:3011/v1/client/615cce324b51ba2b14c1b170/provider/615a584a79b274425a6fa7dc/like",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1486,9 +1471,9 @@
 							"path": [
 								"v1",
 								"client",
-								"62643c152925114398198f16",
+								"615cce324b51ba2b14c1b170",
 								"provider",
-								"615a584a79b274425a6fa7db",
+								"615a584a79b274425a6fa7dc",
 								"like"
 							]
 						}
