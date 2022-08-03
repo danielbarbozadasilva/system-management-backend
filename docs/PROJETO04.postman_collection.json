@@ -83,7 +83,7 @@
 							"urlencoded": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/category/61611e6ff0c5860e72da8757",
+							"raw": "http://localhost:3011/v1/category/62ead0af072ada5e08be2ff2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -92,7 +92,7 @@
 							"path": [
 								"v1",
 								"category",
-								"61611e6ff0c5860e72da8757"
+								"62ead0af072ada5e08be2ff2"
 							]
 						}
 					},
@@ -128,7 +128,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/category/61611e6ff0c5860e72da8757/product",
+							"raw": "http://localhost:3011/v1/category/62ead0af072ada5e08be2ff2/product",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -137,7 +137,7 @@
 							"path": [
 								"v1",
 								"category",
-								"61611e6ff0c5860e72da8757",
+								"62ead0af072ada5e08be2ff2",
 								"product"
 							]
 						}
@@ -167,8 +167,24 @@
 							}
 						],
 						"body": {
-							"mode": "raw",
-							"raw": ""
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "categoria03",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "categoria03desc",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/pc01/Pictures/Yoda2.jpg"
+								}
+							]
 						},
 						"url": {
 							"raw": "http://localhost:3011/v1/category",
@@ -223,12 +239,12 @@
 								{
 									"key": "image",
 									"type": "file",
-									"src": "/C:/Users/pc01/Pictures/img0.jpg"
+									"src": "/C:/Users/pc01/Pictures/maxresdefault.jpg"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/category/61611e6ff0c5860e72da8757",
+							"raw": "http://localhost:3011/v1/category/62ead0af072ada5e08be2ff2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -237,7 +253,7 @@
 							"path": [
 								"v1",
 								"category",
-								"61611e6ff0c5860e72da8757"
+								"62ead0af072ada5e08be2ff2"
 							]
 						}
 					},
@@ -270,7 +286,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/category/61d221fd8b413e9d4e5760d8",
+							"raw": "http://localhost:3011/v1/category/62eacf4c6e5a427084500941",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -279,7 +295,7 @@
 							"path": [
 								"v1",
 								"category",
-								"61d221fd8b413e9d4e5760d8"
+								"62eacf4c6e5a427084500941"
 							]
 						}
 					},
@@ -317,7 +333,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"daniel95barboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
+							"raw": "{\n    \"email\": \"daniel80barboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -497,7 +513,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"cnpj\": \"14.125.476/0001-63\",\n    \"fantasyName\": \"dddd Rei das Massas\",\n    \"socialName\": \"ddd e CIA\",\n    \"address\": \"Rua ddd Gomes, 44\",\n    \"uf\": \"RJ\",\n    \"city\": \"Rio de janeiro\",\n    \"responsible\": \"ddd Henrique\",\n    \"phone\": \"(11)2435-9098\",\n    \"email\": \"daniel18012barboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
+							"raw": "{\n    \"cnpj\": \"14.125.476/0001-63\",\n    \"fantasyName\": \"dddd Rei das Massas\",\n    \"socialName\": \"ddd e CIA\",\n    \"address\": \"Rua ddd Gomes, 44\",\n    \"uf\": \"RJ\",\n    \"city\": \"Rio de janeiro\",\n    \"responsible\": \"ddd Henrique\",\n    \"phone\": \"(11)2435-9098\",\n    \"email\": \"daniel80barboza@gmail.com\",\n    \"password\": \"daniel\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -780,7 +796,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db/product/62814caab2c8083250f7cc9b/like",
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db/product/6164ecf0912afe7ae51bf6a7/like",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -791,7 +807,7 @@
 								"provider",
 								"615a584a79b274425a6fa7db",
 								"product",
-								"62814caab2c8083250f7cc9b",
+								"6164ecf0912afe7ae51bf6a7",
 								"like"
 							]
 						}
@@ -929,7 +945,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/product/6245f4388dcc4c25407a90a8",
+							"raw": "http://localhost:3011/v1/product/6164ecf0912afe7ae51bf6a7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -938,7 +954,7 @@
 							"path": [
 								"v1",
 								"product",
-								"6245f4388dcc4c25407a90a8"
+								"6164ecf0912afe7ae51bf6a7"
 							]
 						}
 					},
@@ -1040,7 +1056,7 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "ttqteste-product",
+									"value": "aaaaaaaaaaaaaddd",
 									"type": "text"
 								},
 								{
@@ -1114,7 +1130,7 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "aaaaaa",
+									"value": "ssssssxxxx",
 									"type": "text"
 								},
 								{
@@ -1145,7 +1161,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7dc/product/62754559dabafc383c96803a",
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7dc/product/62eae45356c80e2420726e70",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1156,7 +1172,7 @@
 								"provider",
 								"615a584a79b274425a6fa7dc",
 								"product",
-								"62754559dabafc383c96803a"
+								"62eae45356c80e2420726e70"
 							]
 						}
 					},
@@ -1174,7 +1190,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7db/product/62814caab2c8083250f7cc9b",
+							"raw": "http://localhost:3011/v1/provider/615a584a79b274425a6fa7dc/product/62eae45356c80e2420726e70",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1183,9 +1199,9 @@
 							"path": [
 								"v1",
 								"provider",
-								"615a584a79b274425a6fa7db",
+								"615a584a79b274425a6fa7dc",
 								"product",
-								"62814caab2c8083250f7cc9b"
+								"62eae45356c80e2420726e70"
 							]
 						}
 					},
@@ -1273,7 +1289,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"firstName\":\"Cliente-Daniel\",\n    \"lastName\":\"Cli-Daniel\",\n    \"birthDate\":\"05/03/1997\",\n    \"phone\":\"(21)99892-2989\",\n    \"uf\":\"RJ\",\n    \"city\":\"Rio de janeiro\",\n    \"email\":\"daniel88d0barboza@gmail.com\",\n    \"password\":\"daniel\"\n}",
+							"raw": "{\n    \"firstName\":\"Cliente-Daniel\",\n    \"lastName\":\"Cli-Daniel\",\n    \"birthDate\":\"05/03/1997\",\n    \"phone\":\"(21)99892-2989\",\n    \"uf\":\"RJ\",\n    \"city\":\"Rio de janeiro\",\n    \"email\":\"daniel8011111111barboza@gmail.com\",\n    \"password\":\"daniel\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1319,7 +1335,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"firstName\":\"ddCliente-Daniel\",\n    \"lastName\":\"ddddCli-Daniel\",\n    \"birthDate\":\"05/03/1997\",\n    \"phone\":\"(21)99892-2989\",\n    \"uf\":\"RJ\",\n    \"city\":\"Rio de janeiro\",\n    \"email\":\"daniel880barboza@gmail.com\",\n    \"password\":\"daniel\",\n    \"status\": \"ENABLE\"\n}",
+							"raw": "{\n    \"firstName\":\"xxxxxxxxxxxxxxxaaddCliente-Daniel\",\n    \"lastName\":\"xdaaaaddddCli-Daniel\",\n    \"birthDate\":\"05/03/1997\",\n    \"phone\":\"(21)99892-2989\",\n    \"uf\":\"RJ\",\n    \"city\":\"Rio de janeiro\",\n    \"email\":\"daniel880barboza@gmail.com\",\n    \"password\":\"daniel\",\n    \"status\": \"ENABLE\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1327,7 +1343,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/client/627565e15121862e28092849",
+							"raw": "http://localhost:3011/v1/client/615cce324b51ba2b14c1b170",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1336,7 +1352,7 @@
 							"path": [
 								"v1",
 								"client",
-								"627565e15121862e28092849"
+								"615cce324b51ba2b14c1b170"
 							]
 						}
 					},
@@ -1374,7 +1390,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/client/627565e15121862e28092849",
+							"raw": "http://localhost:3011/v1/client/615cce324b51ba2b14c1b170",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1383,7 +1399,7 @@
 							"path": [
 								"v1",
 								"client",
-								"627565e15121862e28092849"
+								"615cce324b51ba2b14c1b170"
 							]
 						}
 					},
@@ -1507,7 +1523,7 @@
 							"formdata": []
 						},
 						"url": {
-							"raw": "http://localhost:3011/v1/client/62643c152925114398198f16/provider/615a584a79b274425a6fa7db/like",
+							"raw": "http://localhost:3011/v1/client/615cce324b51ba2b14c1b170/provider/615a584a79b274425a6fa7dc/like",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1516,9 +1532,9 @@
 							"path": [
 								"v1",
 								"client",
-								"62643c152925114398198f16",
+								"615cce324b51ba2b14c1b170",
 								"provider",
-								"615a584a79b274425a6fa7db",
+								"615a584a79b274425a6fa7dc",
 								"like"
 							]
 						}
