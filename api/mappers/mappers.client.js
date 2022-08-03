@@ -13,22 +13,25 @@ const toDTO = (model) => {
     city: model.city,
     status: model.status === 'ENABLE' ? 'Ativo' : 'Desativado',
     email: model.email,
-    password: model.password
+    password: model.password,
+    likes: model?.likes?.filter((item) => ({
+      id: item
+    }))
   }
 }
 
 const toDTOListProviderLike = (model) => {
   let count = 0
   return {
-    id: model._id,
-    name: `${model.firstName} ${model.lastName}`,
-    email: model.email,
-    provider: model.result_likes.map((item) => {
+    id: model?._id,
+    name: `${model?.firstName} ${model?.lastName}`,
+    email: model?.email,
+    provider: model?.result_likes?.map((item) => {
       count++
       return {
-        id: item._id,
-        name: item.fantasyName,
-        email: item.email
+        id: item?._id,
+        name: item?.fantasyName,
+        email: item?.email
       }
     }),
     count
@@ -66,35 +69,34 @@ const toDTOListLikeProviderProduct = (model) => ({
   }
 })
 
-const toDTOListLikeClientProvider = (model) => {
-  const { _id, client, provider } = model
-
-  return {
-    id: _id,
-    provider: {
-      id: provider._id,
-      cnpj: provider.cnpj,
-      fantasyName: provider.fantasyName,
-      socialName: provider.socialName,
-      address: provider.address,
-      uf: provider.uf,
-      city: provider.city,
-      responsible: provider.responsible,
-      phone: provider.phone,
-      status: provider.status
-    },
-    client: {
-      id: client._id,
-      firstName: client.firstName,
-      lastName: client.lastName,
-      birthDate: client.birthDate,
-      phone: client.phone,
-      uf: client.uf,
-      city: client.city,
-      status: client.status
-    }
+const toDTOListLikeClientProvider = (item) => {
+  const data = {
+    id: item._id,
+    cnpj: item.cnpj,
+    email: item.email,
+    fantasyName: item.fantasyName,
+    socialName: item.socialName,
+    address: item.address,
+    uf: item.uf,
+    city: item.city,
+    responsible: item.responsible,
+    phone: item.phone,
+    status: item.status
   }
+  return { provider: data }
 }
+
+const toDTOListLikeClient = (model) => ({
+  id: model._id,
+  firstName: model.firstName,
+  lastName: model.lastName,
+  birthDate: model.birthDate,
+  phone: model.phone,
+  uf: model.uf,
+  city: model.city,
+  status: model.status,
+  likes: model.likes
+})
 
 const toDTOLikeLength = (item) => item.likes.length
 
@@ -103,5 +105,6 @@ module.exports = {
   toDTOListLikeProviderProduct,
   toDTOListLikeClientProvider,
   toDTOLikeLength,
-  toDTOListProviderLike
+  toDTOListProviderLike,
+  toDTOListLikeClient
 }
