@@ -52,7 +52,10 @@ const createCredentialService = async (email) => {
 }
 
 const userIsActiveService = async (email) => {
-  const resultDB = await user.find({ email }).where('status').ne('ANALYSIS')
+  const resultDB = await user
+    .find({ email })
+    .where('status')
+    .nin(['ANALYSIS', 'DISABLE'])
   return !!resultDB.length > 0
 }
 
@@ -132,7 +135,7 @@ const authenticateService = async (email, password) => {
       data: resultCredentials
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
