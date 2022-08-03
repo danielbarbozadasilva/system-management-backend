@@ -13,7 +13,6 @@ const mapperProduct = require('../mappers/mappers.product')
 const { EmailEnable } = require('../utils/utils.email.message.enable')
 const { EmailDisable } = require('../utils/utils.email.message.disable')
 const { toDTOLikeLength } = require('../mappers/mappers.client')
-const { createCredentialService } = require('./services.user')
 const ErrorBusinessRule = require('../utils/errors/errors.business_rule')
 const ErrorGeneric = require('../utils/errors/erros.generic_error')
 
@@ -141,17 +140,14 @@ const listProvidersByLocationService = async (uf, city) => {
 }
 
 const createProviderService = async (body) => {
+  if (await serviceUserProvider.verifyCnpjExistsService(body.cnpj)) {
+    throw new ErrorBusinessRule('Este cnpj já está em uso!')
+  }
+
+  if (await serviceUserProvider.verifyEmailBodyExistService(body.email)) {
+    throw new ErrorBusinessRule('Este e-mail já está em uso!')
+  }
   try {
-    let data = {}
-
-    if (await serviceUserProvider.verifyCnpjExistsService(body.cnpj)) {
-      throw new ErrorBusinessRule('Este cnpj já está em uso!')
-    }
-
-    if (await serviceUserProvider.verifyEmailBodyExistService(body.email)) {
-      throw new ErrorBusinessRule('Este e-mail já está em uso!')
-    }
-
     const resultDB = await provider.create({
       cnpj: body.cnpj,
       fantasyName: body.fantasyName,
@@ -166,14 +162,10 @@ const createProviderService = async (body) => {
       status: 'ANALYSIS'
     })
 
-    if (body.auth) {
-      data = await createCredentialService(body.email)
-    }
-
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: data || { ...toDTO(resultDB) }
+      data: toDTO(resultDB)
     }
   } catch (err) {
     throw new ErrorGeneric(`Internal Server Error! ${err}`)

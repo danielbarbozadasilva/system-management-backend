@@ -20,18 +20,14 @@ const searchAllCategoryService = async () => {
 }
 
 const searchCategoryByIdService = async (categoryid) => {
-  try {
-    const categoryDB = await category.find({ _id: Object(categoryid) })
-    if (!categoryDB.length) {
-      throw new ErrorBusinessRule("category_id doesn't exist.")
-    }
-    return {
-      success: true,
-      message: 'Operation performed successfully',
-      data: categoryMapper.toDTO(...categoryDB)
-    }
-  } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! ${err}`)
+  const categoryDB = await category.find({ _id: Object(categoryid) })
+  if (!categoryDB.length) {
+    throw new ErrorBusinessRule("category_id doesn't exist.")
+  }
+  return {
+    success: true,
+    message: 'Operation performed successfully',
+    data: categoryMapper.toDTO(...categoryDB)
   }
 }
 
@@ -103,14 +99,14 @@ const addCategoryService = async (body) => {
 }
 
 const removeCategoryProductsService = async (categoryId) => {
+  const categoryDB = await category.findOne({ _id: categoryId })
+  const productDB = await product.find({ category: categoryId })
+
+  if (!categoryDB) {
+    throw new ErrorBusinessRule("category_id doesn't exist.")
+  }
+
   try {
-    const categoryDB = await category.findOne({ _id: categoryId })
-    const productDB = await product.find({ category: categoryId })
-
-    if (!categoryDB) {
-      throw new ErrorBusinessRule("category_id doesn't exist.")
-    }
-
     const { image } = categoryDB
     fileUtils.UtilRemove('category', image.name)
 
@@ -143,12 +139,12 @@ const removeCategoryProductsService = async (categoryId) => {
 }
 
 const updateCategoryService = async (categoryId, body) => {
-  try {
-    const categoryDB = await category.findOne({ _id: categoryId })
-    if (!categoryDB) {
-      throw new ErrorBusinessRule("category id doesn't exist.")
-    }
+  const categoryDB = await category.findOne({ _id: categoryId })
+  if (!categoryDB) {
+    throw new ErrorBusinessRule("category id doesn't exist.")
+  }
 
+  try {
     categoryDB.name = body.name
     categoryDB.description = body.description
 

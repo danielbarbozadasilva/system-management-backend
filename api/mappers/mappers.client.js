@@ -69,23 +69,6 @@ const toDTOListLikeProviderProduct = (model) => ({
   }
 })
 
-const toDTOListLikeClientProvider = (item) => {
-  const data = {
-    id: item._id,
-    cnpj: item.cnpj,
-    email: item.email,
-    fantasyName: item.fantasyName,
-    socialName: item.socialName,
-    address: item.address,
-    uf: item.uf,
-    city: item.city,
-    responsible: item.responsible,
-    phone: item.phone,
-    status: item.status
-  }
-  return { provider: data }
-}
-
 const toDTOListLikeClient = (model) => ({
   id: model._id,
   firstName: model.firstName,
@@ -103,7 +86,6 @@ const toDTOLikeLength = (item) => item.likes.length
 module.exports = {
   toDTO,
   toDTOListLikeProviderProduct,
-  toDTOListLikeClientProvider,
   toDTOLikeLength,
   toDTOListProviderLike,
   toDTOListLikeClient

@@ -34,27 +34,27 @@ const listAllClientService = async () => {
 }
 
 const listClientByIdService = async (clientId) => {
-  try {
-    const resultDB = await client.findById({ _id: clientId })
-
+  const resultDB = await client.findById({ _id: clientId })
+  if (!resultDB) {
     return {
-      success: true,
-      message: 'Operation performed successfully',
-      data: toDTO(resultDB)
+      success: false,
+      details: 'No client found'
     }
-  } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! ${err}`)
+  }
+  return {
+    success: true,
+    message: 'Operation performed successfully',
+    data: toDTO(resultDB)
   }
 }
 
 const createClientService = async (body) => {
+  let data = {}
+
+  if (await verifyEmailBodyExistService(body.email)) {
+    throw new ErrorBusinessRule('Este e-mail já está em uso!')
+  }
   try {
-    let data = {}
-
-    if (await verifyEmailBodyExistService(body.email)) {
-      throw new ErrorBusinessRule('Este e-mail já está em uso!')
-    }
-
     const newClient = await client.create({
       firstName: body.firstName,
       lastName: body.lastName,
@@ -74,7 +74,7 @@ const createClientService = async (body) => {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: data || { ...toDTO(newClient) }
+      data: data?.token ? data : toDTO(newClient)
     }
   } catch (err) {
     throw new ErrorGeneric(`Internal Server Error! ${err}`)
@@ -82,20 +82,20 @@ const createClientService = async (body) => {
 }
 
 const updateClientService = async (clientId, body) => {
+  const resultFind = await client.findById({ _id: clientId })
+
+  if (!resultFind) {
+    return {
+      success: false,
+      message: 'could not perform the operation',
+      details: ["client id doesn't exist."]
+    }
+  }
+  if (await verifyEmailService(clientId, body.email)) {
+    throw new ErrorBusinessRule('Este e-mail já está em uso!')
+  }
+
   try {
-    const resultFind = await client.findById({ _id: clientId })
-
-    if (!resultFind) {
-      return {
-        success: false,
-        message: 'could not perform the operation',
-        details: ["client id doesn't exist."]
-      }
-    }
-    if (await verifyEmailService(clientId, body.email)) {
-      throw new ErrorBusinessRule('Este e-mail já está em uso!')
-    }
-
     const newClient = await client.updateOne(
       { _id: clientId },
       {
@@ -128,16 +128,17 @@ const updateClientService = async (clientId, body) => {
 }
 
 const deleteClientService = async (clientId) => {
-  try {
-    const resultFind = await client.findById({ _id: clientId })
+  const resultFind = await client.findById({ _id: clientId })
 
-    if (!resultFind) {
-      return {
-        success: false,
-        message: 'could not perform the operation',
-        details: ["client id doesn't exist."]
-      }
+  if (!resultFind) {
+    return {
+      success: false,
+      message: 'could not perform the operation',
+      details: ["client id doesn't exist."]
     }
+  }
+
+  try {
     const deleteProviderDB = await client.deleteOne({ _id: clientId })
 
     if (!deleteProviderDB) {
@@ -156,75 +157,71 @@ const deleteClientService = async (clientId) => {
 }
 
 const listLikesClientProviderService = async (clientId) => {
-  try {
-    const resultLikeDB = await client.aggregate([
+  const resultLikeDB = await client.aggregate([
+    { $match: { _id: ObjectId(clientId) } },
+    {
+      $lookup: {
+        from: provider.collection.name,
+        localField: 'likes',
+        foreignField: '_id',
+        as: 'result_likes'
+      }
+    }
+  ])
+
+  return {
+    success: true,
+    message: 'Operation performed successfully!',
+    data: toDTOListProviderLike(...resultLikeDB)
+  }
+}
+
+const createLikeClientProviderService = async (providerId, clientId) => {
+  const [providerDB, clientDB, likeDB, resultLike] = await Promise.all([
+    provider.findById(providerId),
+    client.findById(clientId),
+    client.aggregate([
       { $match: { _id: ObjectId(clientId) } },
       {
         $lookup: {
           from: provider.collection.name,
           localField: 'likes',
           foreignField: '_id',
-          as: 'result_likes'
+          as: 'likes'
         }
       }
-    ])
+    ]),
+    client.find({ _id: `${clientId}`, likes: `${providerId}` })
+  ])
 
+  if (!providerDB) {
     return {
-      success: true,
-      message: 'Operation performed successfully!',
-      data: toDTOListProviderLike(...resultLikeDB)
+      success: false,
+      details: 'O fornecedor informado não existe!'
     }
-  } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
-}
 
-const createLikeClientProviderService = async (providerId, clientId) => {
+  if (!clientDB) {
+    return {
+      success: false,
+      details: 'O cliente informado não existe!'
+    }
+  }
+
+  if (toDTOLikeLength(...likeDB) >= 3) {
+    return {
+      success: false,
+      details: 'O cliente não pode curtir mais de três fornecedores!'
+    }
+  }
+  if (resultLike.length !== 0) {
+    return {
+      success: false,
+      details: 'O cliente já curtiu esse fornecedor!'
+    }
+  }
+
   try {
-    const [providerDB, clientDB, likeDB, resultLike] = await Promise.all([
-      provider.findById(providerId),
-      client.findById(clientId),
-      client.aggregate([
-        { $match: { _id: ObjectId(clientId) } },
-        {
-          $lookup: {
-            from: provider.collection.name,
-            localField: 'likes',
-            foreignField: '_id',
-            as: 'likes'
-          }
-        }
-      ]),
-      client.find({ _id: `${clientId}`, likes: `${providerId}` })
-    ])
-
-    if (!providerDB) {
-      return {
-        success: false,
-        details: 'O fornecedor informado não existe!'
-      }
-    }
-
-    if (!clientDB) {
-      return {
-        success: false,
-        details: 'O cliente informado não existe!'
-      }
-    }
-
-    if (toDTOLikeLength(...likeDB) >= 3) {
-      return {
-        success: false,
-        details: 'O cliente não pode curtir mais de três fornecedores!'
-      }
-    }
-    if (resultLike.length !== 0) {
-      return {
-        success: false,
-        details: 'O cliente já curtiu esse fornecedor!'
-      }
-    }
-
     const resultDB = await client.findByIdAndUpdate(clientId, {
       $push: { likes: providerId }
     })
@@ -249,32 +246,32 @@ const createLikeClientProviderService = async (providerId, clientId) => {
 }
 
 const removeLikeClientProviderService = async (providerId, clientId) => {
+  const [providerDB, clientDB, likeDB] = await Promise.all([
+    provider.findById(providerId),
+    client.findById(clientId),
+    client.find({ _id: `${clientId}`, likes: `${providerId}` })
+  ])
+
+  if (!providerDB) {
+    return {
+      success: false,
+      details: 'O fornecedor informado não existe!'
+    }
+  }
+  if (!clientDB) {
+    return {
+      success: false,
+      details: 'O cliente informado não existe!'
+    }
+  }
+
+  if (likeDB.length === 0) {
+    return {
+      success: false,
+      details: 'A curtida não existe!'
+    }
+  }
   try {
-    const [providerDB, clientDB, likeDB] = await Promise.all([
-      provider.findById(providerId),
-      client.findById(clientId),
-      client.find({ _id: `${clientId}`, likes: `${providerId}` })
-    ])
-
-    if (!providerDB) {
-      return {
-        success: false,
-        details: 'O fornecedor informado não existe!'
-      }
-    }
-    if (!clientDB) {
-      return {
-        success: false,
-        details: 'O cliente informado não existe!'
-      }
-    }
-
-    if (likeDB.length === 0) {
-      return {
-        success: false,
-        details: 'A curtida não existe!'
-      }
-    }
     if (likeDB.length !== 0) {
       const resultLike = await client.updateOne(
         { _id: ObjectId(`${clientId}`) },

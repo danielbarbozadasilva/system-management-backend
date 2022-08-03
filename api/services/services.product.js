@@ -4,92 +4,81 @@ const productMapper = require('../mappers/mappers.product')
 const ErrorGeneric = require('../utils/errors/erros.generic_error')
 
 const listAllProductService = async () => {
-  try {
-    const productDB = await product.aggregate([
-      {
-        $lookup: {
-          from: provider.collection.name,
-          localField: 'provider',
-          foreignField: '_id',
-          as: 'provider'
-        }
+  const productDB = await product.aggregate([
+    {
+      $lookup: {
+        from: provider.collection.name,
+        localField: 'provider',
+        foreignField: '_id',
+        as: 'provider'
       }
-    ])
+    }
+  ])
 
-    if (!productDB.length) {
-      return {
-        success: false,
-        message: 'could not perform the operation',
-        details: ['The product id does not exist.']
-      }
-    }
+  if (!productDB.length) {
     return {
-      success: true,
-      message: 'Operation performed successfully',
-      data: productDB.map((item) => productMapper.toDTO(item))
+      success: false,
+      message: 'could not perform the operation',
+      details: ['The product id does not exist.']
     }
-  } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! ${err}`)
+  }
+  return {
+    success: true,
+    message: 'Operation performed successfully',
+    data: productDB.map((item) => productMapper.toDTO(item))
   }
 }
 
 const listProductByIdService = async (productId) => {
-  try {
-    const productDB = await product
-      .findById({ _id: productId })
-      .populate('provider')
-    if (!productDB) {
-      return {
-        success: false,
-        message: 'could not perform the operation',
-        details: ['The product id does not exist.']
-      }
-    }
+  const productDB = await product
+    .findById({ _id: productId })
+    .populate('provider')
+  if (!productDB) {
     return {
-      success: true,
-      message: 'Operation performed successfully',
-      data: productMapper.toItemListDTO(productDB)
+      success: false,
+      message: 'could not perform the operation',
+      details: ['The product id does not exist.']
     }
-  } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! ${err}`)
+  }
+  return {
+    success: true,
+    message: 'Operation performed successfully',
+    data: productMapper.toItemListDTO(productDB)
   }
 }
 
 const createProductService = async (body, providerid) => {
+  const [providerDB, categoryDB] = await Promise.all([
+    provider.findById({ _id: Object(providerid) }),
+    category.findById({ _id: Object(body.category) })
+  ])
+
+  if (!providerDB) {
+    return {
+      success: false,
+      message: 'Operation cannot be performed',
+      details: ['There is no provider registered for the provided id provider']
+    }
+  }
+
+  if (!categoryDB) {
+    return {
+      success: false,
+      message: 'Operation cannot be performed',
+      details: ['There is no category registered for the category id entered']
+    }
+  }
+
+  const moveFile = fileUtils.UtilMove(body.image.oldPath, body.image.newPath)
+  if (moveFile !== undefined) {
+    return {
+      success: false,
+      message: 'Operation cannot be performed',
+      details: ['It is not possible to move the product']
+    }
+  }
   try {
-    const [providerDB, categoryDB] = await Promise.all([
-      provider.findById({ _id: Object(providerid) }),
-      category.findById({ _id: Object(body.category) })
-    ])
-
-    if (!providerDB) {
-      return {
-        success: false,
-        message: 'Operation cannot be performed',
-        details: [
-          'There is no provider registered for the provided id provider'
-        ]
-      }
-    }
-
-    if (!categoryDB) {
-      return {
-        success: false,
-        message: 'Operation cannot be performed',
-        details: ['There is no category registered for the category id entered']
-      }
-    }
-
-    const moveFile = fileUtils.UtilMove(body.image.oldPath, body.image.newPath)
-    if (moveFile !== undefined) {
-      return {
-        success: false,
-        message: 'Operation cannot be performed',
-        details: ['It is not possible to move the product']
-      }
-    }
-
-    const productDB = product.create({
+    const productDB = await product.create({
       name: body.name,
       description: body.description,
       price: body.price,
@@ -176,18 +165,18 @@ const listProductWithFilterService = async (name, filter) => {
 }
 
 const updateProductService = async (providerId, productId, body) => {
-  try {
-    const productDB = await product.findOne({
-      _id: `${productId}`,
-      provider: `${providerId}`
-    })
-    if (!productDB) {
-      return {
-        success: false,
-        message: 'could not perform the operation',
-        details: ['The id does not exist.']
-      }
+  const productDB = await product.findOne({
+    _id: `${productId}`,
+    provider: `${providerId}`
+  })
+  if (!productDB) {
+    return {
+      success: false,
+      message: 'could not perform the operation',
+      details: ['The id does not exist.']
     }
+  }
+  try {
     productDB.name = body.name
     productDB.description = body.description
     productDB.price = body.price
@@ -223,20 +212,21 @@ const updateProductService = async (providerId, productId, body) => {
 }
 
 const deleteProductService = async (providerId, productId) => {
-  try {
-    const productDB = await product.findOne({
-      _id: `${productId}`,
-      provider: `${providerId}`
-    })
-    if (!productDB) {
-      return {
-        success: false,
-        message: 'could not perform the operation',
-        details: ['The id does not exist.']
-      }
+  const productDB = await product.findOne({
+    _id: `${productId}`,
+    provider: `${providerId}`
+  })
+  if (!productDB) {
+    return {
+      success: false,
+      message: 'could not perform the operation',
+      details: ['The id does not exist.']
     }
+  }
 
-    const likeDB = provider.find({ likes: `${productId}` })
+  const likeDB = provider.find({ likes: `${productId}` })
+
+  try {
     if (likeDB.length !== 0) {
       await provider.updateMany({
         $pull: { likes: `${productId}` }
