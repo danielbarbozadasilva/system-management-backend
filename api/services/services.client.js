@@ -4,10 +4,12 @@ const {
   verifyEmailService,
   verifyEmailBodyExistService
 } = require('./services.user')
-const { toDTO } = require('../mappers/mappers.client')
 const { UtilCreateHash } = require('../utils/utils.cryptography')
-const { toDTOLikeLength } = require('../mappers/mappers.client')
-const { toDTOListProviderLike } = require('../mappers/mappers.client')
+const {
+  toDTO,
+  toDTOListProviderLike,
+  toDTOLikeLength
+} = require('../mappers/mappers.client')
 const { createCredentialService } = require('./services.user')
 const ErrorBusinessRule = require('../utils/errors/errors.business_rule')
 const ErrorGeneric = require('../utils/errors/erros.generic_error')
@@ -27,28 +29,21 @@ const listAllClientService = async () => {
       data: resultadoDB.map((item) => toDTO(item))
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
 const listClientByIdService = async (clientId) => {
   try {
-    const resultadoDB = await client.findById({ _id: clientId })
-    if (!resultadoDB) {
-      return {
-        success: false,
-        details: 'No client found'
-      }
-    }
+    const resultDB = await client.findById({ _id: clientId })
+
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: {
-        ...toDTO(resultadoDB)
-      }
+      data: toDTO(resultDB)
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -82,7 +77,7 @@ const createClientService = async (body) => {
       data: data || { ...toDTO(newClient) }
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -128,7 +123,7 @@ const updateClientService = async (clientId, body) => {
       message: 'Data updated successfully'
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -156,7 +151,7 @@ const deleteClientService = async (clientId) => {
       message: 'Client deleted successfully'
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -174,21 +169,13 @@ const listLikesClientProviderService = async (clientId) => {
       }
     ])
 
-    if (resultLikeDB == 0) {
-      return {
-        success: false,
-        details: 'No likes found!'
-      }
-    }
-    if (resultLikeDB !== 0) {
-      return {
-        success: true,
-        message: 'Operation performed successfully!',
-        data: toDTOListProviderLike(...resultLikeDB)
-      }
+    return {
+      success: true,
+      message: 'Operation performed successfully!',
+      data: toDTOListProviderLike(...resultLikeDB)
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -257,7 +244,7 @@ const createLikeClientProviderService = async (providerId, clientId) => {
       details: 'Erro ao curtir!'
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -281,6 +268,7 @@ const removeLikeClientProviderService = async (providerId, clientId) => {
         details: 'O cliente informado não existe!'
       }
     }
+
     if (likeDB.length === 0) {
       return {
         success: false,
@@ -306,7 +294,7 @@ const removeLikeClientProviderService = async (providerId, clientId) => {
       }
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 

@@ -73,7 +73,7 @@ const listAllProviderService = async (nameFilter) => {
       }
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -105,7 +105,7 @@ const listProductsProviderService = async (providerId) => {
       data: resultDB.map((item) => mapperProduct.toDTOLikeProductList(item))
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -136,7 +136,7 @@ const listProvidersByLocationService = async (uf, city) => {
       data: resultDB
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -176,7 +176,7 @@ const createProviderService = async (body) => {
       data: data || { ...toDTO(resultDB) }
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -232,7 +232,7 @@ const updateProviderService = async (providerId, body) => {
       }
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -261,7 +261,7 @@ const removeProviderService = async (providerId) => {
       message: 'Operation performed successfully'
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -320,7 +320,7 @@ const changeStatusService = async (providerId, status) => {
       }
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -338,21 +338,13 @@ const listLikesProviderProductService = async (providerId) => {
       }
     ])
 
-    if (resultDB === 0) {
-      return {
-        success: false,
-        details: 'No likes found!'
-      }
-    }
-    if (resultDB !== 0) {
-      return {
-        success: true,
-        message: 'Operation performed successfully!',
-        data: toItemListDTO(...resultDB)
-      }
+    return {
+      success: true,
+      message: 'Operation performed successfully!',
+      data: toItemListDTO(...resultDB)
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -423,7 +415,7 @@ const createLikeProviderProductService = async (providerId, productId) => {
       details: 'There is no like!'
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -470,7 +462,7 @@ const removeLikeProviderProductService = async (providerId, productId) => {
       }
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 

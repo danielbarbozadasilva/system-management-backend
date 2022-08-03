@@ -15,7 +15,7 @@ const searchAllCategoryService = async () => {
       data: categoryDB.map((item) => categoryMapper.toDTO(item))
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -31,7 +31,7 @@ const searchCategoryByIdService = async (categoryid) => {
       data: categoryMapper.toDTO(...categoryDB)
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -62,7 +62,7 @@ const searchCategoryByIdProductService = async (categoryid) => {
       data: categoryDB.map((item) => mapperProduct.toDTOLikeProductList(item))
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -98,7 +98,7 @@ const addCategoryService = async (body) => {
       details: 'error when inserting to categories'
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -138,7 +138,7 @@ const removeCategoryProductsService = async (categoryId) => {
       message: 'Operation performed successfully'
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -177,7 +177,7 @@ const updateCategoryService = async (categoryId, body) => {
       data: categoryMapper.toDTO(updateCategory)
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 

@@ -29,7 +29,7 @@ const listAllProductService = async () => {
       data: productDB.map((item) => productMapper.toDTO(item))
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -51,28 +51,15 @@ const listProductByIdService = async (productId) => {
       data: productMapper.toItemListDTO(productDB)
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
 const createProductService = async (body, providerid) => {
   try {
-    const [providerDB, categoryDB, moveFile, productDB] = await Promise.all([
+    const [providerDB, categoryDB] = await Promise.all([
       provider.findById({ _id: Object(providerid) }),
-      category.findById({ _id: Object(body.category) }),
-      fileUtils.UtilMove(body.image.oldPath, body.image.newPath),
-      product.create({
-        name: body.name,
-        description: body.description,
-        price: body.price,
-        category: body.category,
-        provider: providerid,
-        image: {
-          origin: body.image.origin,
-          name: body.image.newName,
-          type: body.image.type
-        }
-      })
+      category.findById({ _id: Object(body.category) })
     ])
 
     if (!providerDB) {
@@ -84,6 +71,7 @@ const createProductService = async (body, providerid) => {
         ]
       }
     }
+
     if (!categoryDB) {
       return {
         success: false,
@@ -91,13 +79,8 @@ const createProductService = async (body, providerid) => {
         details: ['There is no category registered for the category id entered']
       }
     }
-    if (!productDB) {
-      return {
-        success: false,
-        message: 'Operation cannot be performed',
-        details: ['It is not possible to insert the product']
-      }
-    }
+
+    const moveFile = fileUtils.UtilMove(body.image.oldPath, body.image.newPath)
     if (moveFile !== undefined) {
       return {
         success: false,
@@ -105,6 +88,27 @@ const createProductService = async (body, providerid) => {
         details: ['It is not possible to move the product']
       }
     }
+
+    const productDB = product.create({
+      name: body.name,
+      description: body.description,
+      price: body.price,
+      category: body.category,
+      provider: providerid,
+      image: {
+        origin: body.image.origin,
+        name: body.image.newName,
+        type: body.image.type
+      }
+    })
+    if (!productDB) {
+      return {
+        success: false,
+        message: 'Operation cannot be performed',
+        details: ['It is not possible to insert the product']
+      }
+    }
+
     return {
       success: true,
       message: 'operation performed successfully',
@@ -114,7 +118,7 @@ const createProductService = async (body, providerid) => {
       }
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -167,7 +171,7 @@ const listProductWithFilterService = async (name, filter) => {
       data: productDB.map((item) => productMapper.toDTO(item))
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -214,7 +218,7 @@ const updateProductService = async (providerId, productId, body) => {
       data: productMapper.toItemListDTO(productDB)
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -256,7 +260,7 @@ const deleteProductService = async (providerId, productId) => {
       }
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! Código: ${err.name}`)
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
