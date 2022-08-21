@@ -7,7 +7,7 @@ const {
 } = require('../models/models.index')
 const serviceUserProvider = require('./services.user')
 const emailUtils = require('../utils/utils.email')
-const { UtilCreateHash } = require('../utils/utils.cryptography')
+const { createHash } = require('../utils/utils.cryptography')
 const { toItemListDTO, toDTO } = require('../mappers/mappers.provider')
 const mapperProduct = require('../mappers/mappers.product')
 const { EmailEnable } = require('../utils/utils.email.message.enable')
@@ -158,7 +158,7 @@ const createProviderService = async (body) => {
       responsible: body.responsible,
       phone: body.phone,
       email: body.email,
-      password: UtilCreateHash(body.password),
+      password: createHash(body.password),
       status: 'ANALYSIS'
     })
 
@@ -204,7 +204,7 @@ const updateProviderService = async (providerId, body) => {
           responsible: body.responsible,
           phone: body.phone,
           email: body.email,
-          password: UtilCreateHash(body.password)
+          password: createHash(body.password)
         }
       }
     )

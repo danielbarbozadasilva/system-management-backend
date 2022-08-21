@@ -41,7 +41,7 @@ const toItemListDTO = (model) => ({
     provider: item?.provider,
     name: item?.name,
     description: item?.description,
-    image: fileUtils.UtilCreateAddressDownload('product', item.image.name)
+    image: fileUtils.utilCreateAddressDownload('product', item.image.name)
   })),
 
   result_client: model.result_client?.map((item) => ({

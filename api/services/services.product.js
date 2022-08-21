@@ -69,7 +69,7 @@ const createProductService = async (body, providerid) => {
     }
   }
 
-  const moveFile = fileUtils.UtilMove(body.image.oldPath, body.image.newPath)
+  const moveFile = fileUtils.utilMove(body.image.oldPath, body.image.newPath)
   if (moveFile !== undefined) {
     return {
       success: false,
@@ -190,8 +190,8 @@ const updateProductService = async (providerId, productId, body) => {
         type: body.image.type
       }
 
-      fileUtils.UtilRemove('products', productDB.image.name)
-      fileUtils.UtilMove(body.image.oldPath, body.image.newPath)
+      fileUtils.utilRemove('products', productDB.image.name)
+      fileUtils.utilMove(body.image.oldPath, body.image.newPath)
     }
     const result = await productDB.save()
     if (!result) {

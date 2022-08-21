@@ -4,7 +4,7 @@ const {
   verifyEmailService,
   verifyEmailBodyExistService
 } = require('./services.user')
-const { UtilCreateHash } = require('../utils/utils.cryptography')
+const { createHash } = require('../utils/utils.cryptography')
 const {
   toDTO,
   toDTOListProviderLike,
@@ -63,7 +63,7 @@ const createClientService = async (body) => {
       uf: body.uf,
       city: body.city,
       email: body.email,
-      password: UtilCreateHash(body.password),
+      password: createHash(body.password),
       status: 'ENABLE'
     })
 
@@ -107,7 +107,7 @@ const updateClientService = async (clientId, body) => {
           uf: body.uf,
           city: body.city,
           email: body.email,
-          password: UtilCreateHash(body.password)
+          password: createHash(body.password)
         }
       }
     )

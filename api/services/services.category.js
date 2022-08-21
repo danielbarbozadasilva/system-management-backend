@@ -74,7 +74,7 @@ const addCategoryService = async (body) => {
       }
     })
 
-    fileUtils.UtilMove(body.image.oldPath, body.image.newPath)
+    fileUtils.utilMove(body.image.oldPath, body.image.newPath)
 
     categoryDB.image = {
       origin: body.image.origin,
@@ -108,14 +108,14 @@ const removeCategoryProductsService = async (categoryId) => {
 
   try {
     const { image } = categoryDB
-    fileUtils.UtilRemove('category', image.name)
+    fileUtils.utilRemove('category', image.name)
 
     const deleteCategory = await category.deleteOne(categoryDB)
 
     if (productDB.length !== 0) {
       await product.deleteMany({ category: categoryId })
       productDB.forEach(async (object) => {
-        fileUtils.UtilRemove('products', object.image.name)
+        fileUtils.utilRemove('products', object.image.name)
         await provider.updateMany({
           $pull: { likes: object._id }
         })
@@ -155,8 +155,8 @@ const updateCategoryService = async (categoryId, body) => {
         type: body.image.type
       }
 
-      fileUtils.UtilRemove('category', categoryDB.image.name)
-      fileUtils.UtilMove(body.image.oldPath, body.image.newPath)
+      fileUtils.utilRemove('category', categoryDB.image.name)
+      fileUtils.utilMove(body.image.oldPath, body.image.newPath)
     }
 
     const updateCategory = await categoryDB.save()

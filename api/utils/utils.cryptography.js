@@ -1,46 +1,48 @@
 const md5 = require('md5')
 const jwt = require('jsonwebtoken')
+const ErrorAllowedUser = require('./errors/errors.user_not_allowed')
 
 const md5HashSecret = process.env.MD5_SECRET
 const jwtHashSecret = process.env.JWT_SECRET
 const jwtTimeLimit = process.env.JWT_VALID_TIME
 
-const UtilCreateHash = (password) => {
-  const hashVerify = md5(password + md5HashSecret)
-  if (hashVerify) {
-    return hashVerify
+const createHash = (password) => {
+  const verifyHash = md5(password + md5HashSecret)
+  if (verifyHash) {
+    return verifyHash
   }
   return false
 }
 
-const UtilCreateToken = (model) => {
-  const dataVerify = jwt.sign({ ...model }, jwtHashSecret, {
+const createToken = (model) => {
+  const verifyData = jwt.sign({ ...model }, jwtHashSecret, {
     expiresIn: `${jwtTimeLimit}`
   })
-  if (dataVerify) {
-    return dataVerify
+  if (verifyData) {
+    return verifyData
   }
   return false
 }
 
-const UtilDecodeToken = (token) => {
-  const decodeVerify = jwt.decode(token)
-  if (decodeVerify) {
-    return decodeVerify
+const decodeToken = (token) => {
+  const verifyDecode = jwt.decode(token)
+  if (verifyDecode) {
+    return verifyDecode
   }
   return false
 }
-const UtilValidateToken = (token) => {
-  const verify = jwt.verify(token, jwtHashSecret)
-  if (verify) {
-    return verify
+
+const tokenIsValid = (token) => {
+  try {
+    jwt?.verify(token, jwtHashSecret)
+  } catch (err) {
+    throw new ErrorAllowedUser('Usuário não autenticado!')
   }
-  return false
 }
 
 module.exports = {
-  UtilCreateHash,
-  UtilCreateToken,
-  UtilValidateToken,
-  UtilDecodeToken
+  createHash,
+  createToken,
+  tokenIsValid,
+  decodeToken
 }

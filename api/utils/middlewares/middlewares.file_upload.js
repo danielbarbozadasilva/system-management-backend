@@ -4,7 +4,7 @@ const ErrorBusinessRule = require('../errors/errors.business_rule')
 
 const fileUpload = (destiny) => async (req, res, next) => {
   const form = formidable.IncomingForm()
-  form.uploadDir = fileUtils.UtilCreateAddress('temp')
+  form.uploadDir = fileUtils.utilCreateAddress('temp')
 
   const formfields = await new Promise((resolve, reject) => {
     form.parse(req, (err, fields, files) => {
@@ -32,8 +32,8 @@ const fileUpload = (destiny) => async (req, res, next) => {
   }
 
   if (files.image && files.image.name !== '') {
-    const newName = fileUtils.UtilCreateName(files.image.type)
-    const newPath = fileUtils.UtilCreateAddress(destiny, newName)
+    const newName = fileUtils.utilCreateName(files.image.type)
+    const newPath = fileUtils.utilCreateAddress(destiny, newName)
 
     req.body.image = {
       type: files.image.type,

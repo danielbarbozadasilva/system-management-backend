@@ -5,32 +5,32 @@ const path = require('path')
 const rootAddress = `${__dirname}/file`.replaceAll('\\', '/')
 const imageAddress = process.env.IMAGE_PATH
 
-const UtilCreateAddress = (destiny, fileName = '') =>
+const utilCreateAddress = (destiny, fileName = '') =>
   path.join(rootAddress, destiny, fileName)
 
-const UtilCreateAddressDownload = (source, fileName) => {
+const utilCreateAddressDownload = (source, fileName) => {
   const address = path.join(source, fileName).replace('\\', '/')
   return `${imageAddress + address}`
 }
 
-const UtilCreateName = (type) => {
+const utilCreateName = (type) => {
   const resp = type.split('/')[1]
   return `${uuid()}.${resp}`
 }
 
-const UtilMove = (oldPath, newPath) => fs.renameSync(oldPath, newPath)
+const utilMove = (oldPath, newPath) => fs.renameSync(oldPath, newPath)
 
-const UtilRemove = (source, file) => {
-  const fileAddress = UtilCreateAddress(source, file)
+const utilRemove = (source, file) => {
+  const fileAddress = utilCreateAddress(source, file)
   if (fs.existsSync(fileAddress)) {
     fs.unlinkSync(fileAddress)
   }
 }
 
 module.exports = {
-  UtilCreateAddress,
-  UtilCreateAddressDownload,
-  UtilCreateName,
-  UtilMove,
-  UtilRemove
+  utilCreateAddress,
+  utilCreateAddressDownload,
+  utilCreateName,
+  utilMove,
+  utilRemove
 }
