@@ -19,16 +19,15 @@ O Sistema tem como objetivo listar as confeitarias e gerenciá-las, possibilitan
 ## **Descrição geral**
 REGALE é um sistema web que visa estabelecer um relacionamento entre o cliente e um nicho de mercado específico. Todas as suas funcionalidades foram pensadas para proporcionar conforto e comodidade aos seus usuários.
 
-A proposta do Sistema é divulgar o estabelecimento, problema recorrente em confeitarias que estão iniciando no mercado, pois ainda não possuem uma forma eficaz de divulgação.
+A proposta do Sistema é divulgar estabelecimentos, cujo problema se faz presente em confeitarias que estão iniciando no mercado, pois ainda não possuem uma forma eficaz de divulgação.
 
-Além de divulgar os estabelecimentos, o Sistema disponibiliza uma interface amigável e de fácil uso por parte do usuário da plataforma. Os usuários do sistema são o administrador, o proprietário da confeitaria (fornecedor) e o cliente. Onde todos têm acesso ao sistema de acordo com suas credenciais e permissões de acesso. 
+Além de realizar a divulgação, o Sistema disponibiliza uma interface amigável e de fácil uso para o usuário da plataforma. Os usuários do sistema são o administrador, o proprietário da confeitaria (fornecedor) e o cliente. Onde todos têm acesso ao sistema de acordo com suas credenciais e permissões de acesso. 
 
 O Sistema permite ao Administrador gerenciar categorias, fornecedores e clientes. O proprietário da confeitaria pode gerenciar seus produtos, assim como favoritá-los. O cliente possui a opção de avaliar os fornecedores. Além disso, o Sistema possui uma tela inicial que permite ao público em geral navegar facilmente através de filtros de busca entre categorias, produtos e fornecedores.
 <br/>
 <br/>
 
 ## **Instalação com Docker**
-
 Clone o repositório na pasta de sua preferência.
 ```
 git clone https://github.com/danielbarbozadasilva/system-management-backend.git
@@ -47,8 +46,8 @@ JWT_VALID_TIME=9000000000
 URL=http://localhost:3000
 IMAGE_PATH=http://localhost:3011/static/
 
-SENDGRID_SENDER=danielbarboza56@hotmail.com
-SENDGRID_API_KEY=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
+SENDGRID_SENDER=example@gmail.com
+SENDGRID_API_KEY=example
 ```
 
 Abra a pasta do repositório clonado, e instale as dependências do projeto através do comando:
@@ -60,15 +59,14 @@ Logo após o término da instalação. Instale o Docker e o docker compose atrav
 ```
 https://docs.docker.com/desktop/windows/install/
 ```
-Com o Docker instalado, execute o seguinte comando:
+Com o Docker instalado, abra o terminal na pasta do projeto e execute o seguinte comando:
 ```
 docker-compose up
 ``` 
+Obs.: O comando acima populará o banco de dados com as migrations e os seeders.
+<br />
+<br />
 
-Logo após, para criar as coleções no MongoDB, execute o seguinte comando:
-```
-npm run add-seeders
-```
 
 Execute o comando para rodar o projeto:
 ```
@@ -234,12 +232,10 @@ RF015 – O sistema deve filtrar os fornecedores por localidade e ordem alfabét
 <br/>
 
 > ## Metodologias e Padrões
-* Camelcase
 * Conventional commits
 * MVC
 * GitFlow
-* Casos de uso
-* Middlewares para o tratamento de erros
+* Error handler
 
 <br/>
 <br/>
