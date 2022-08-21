@@ -109,7 +109,7 @@ db.categoryCollection.insert([
 
 db.createCollection("productCollection")
 db.productCollection.insert([
-   {
+  {
       _id: ObjectId('6164ecf0912afe7ae51bf6a7'),
       category: ObjectId('615a19fd4384691888d27098'),
       provider: ObjectId('615a584a79b274425a6fa7db'),
