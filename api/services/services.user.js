@@ -2,12 +2,13 @@ const { user, provider } = require('../models/models.index')
 const cryptography = require('../utils/utils.cryptography')
 const userMapper = require('../mappers/mappers.user')
 const ErrorGeneric = require('../utils/errors/erros.generic_error')
+const ErrorAllowedUser = require('../utils/errors/errors.user_not_allowed')
 
 const profile = [
   {
-    id: 1,
+    type: 1,
     description: 'admin',
-    functionality: [
+    permission: [
       'UPDATE_PROVIDER',
       'REMOVE_PROVIDER',
       'CHANGE_STATUS_PROVIDER',
@@ -17,9 +18,9 @@ const profile = [
     ]
   },
   {
-    id: 2,
+    type: 2,
     description: 'provider',
-    functionality: [
+    permission: [
       'SEARCH_PRODUCT',
       'CREATE_PRODUCT',
       'REMOVE_PRODUCT',
@@ -29,19 +30,24 @@ const profile = [
     ]
   },
   {
-    id: 3,
+    type: 3,
     description: 'client',
-    functionality: ['CLIENT_LIKE_CREATE', 'CLIENT_LIKE_REMOVE']
+    permission: ['CLIENT_LIKE_CREATE', 'CLIENT_LIKE_REMOVE']
   }
 ]
 
-const searchTypeUserByIdService = (type) =>
-  profile.find((item) => item.id === type)
+const checkPermissionService = (type, permission) => {
+  const result = profile.find((item) => item.type === type)
+  const check = result?.permission?.includes(permission)
+  if (!check) {
+    throw new ErrorAllowedUser('Usuário não autorizado!')
+  }
+}
 
 const createCredentialService = async (email) => {
   const userDB = await user.findOne({ email })
   const userDTO = userMapper.toUserDTO(userDB)
-  const userToken = cryptography.UtilCreateToken(userDTO)
+  const userToken = cryptography.createToken(userDTO)
   if (userDTO && userToken) {
     return {
       token: userToken,
@@ -62,16 +68,8 @@ const userIsActiveService = async (email) => {
 const userIsValidService = async (email, password) =>
   !!(await user.findOne({
     email,
-    password: cryptography.UtilCreateHash(password)
+    password: cryptography.createHash(password)
   }))
-
-const verifyFunctionalityProfileService = async (typeUser, test) => {
-  const resp = searchTypeUserByIdService(typeUser)
-  if (resp?.functionality?.includes(test) == true && resp.id) {
-    return false
-  }
-  return true
-}
 
 const verifyEmailBodyExistService = async (email) => {
   const users = await user.find({ email })
@@ -155,11 +153,10 @@ const verifyStatusProviderService = async (id) => {
 module.exports = {
   authenticateService,
   verifyStatusProviderService,
-  searchTypeUserByIdService,
+  checkPermissionService,
   createCredentialService,
   verifyCnpjExistsService,
   verifyEmailBodyExistService,
-  verifyFunctionalityProfileService,
   userIsValidService,
   verifyEmailService,
   verifyCnpjService
