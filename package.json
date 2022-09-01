@@ -9,7 +9,6 @@
   "scripts": {
     "start": "node ./index.js",
     "dev": "nodemon ./index.js",
-    "add-seeders": "node ./db/seeders/seeders.index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -27,6 +26,7 @@
     "cors": "^2.8.5",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
     "formable": "^0.0.1",
     "formidable": "^1.2.2",
     "fs": "^0.0.1-security",
