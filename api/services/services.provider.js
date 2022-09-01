@@ -13,8 +13,8 @@ const mapperProduct = require('../mappers/mappers.product')
 const { EmailEnable } = require('../utils/utils.email.message.enable')
 const { EmailDisable } = require('../utils/utils.email.message.disable')
 const { toDTOLikeLength } = require('../mappers/mappers.client')
-const ErrorBusinessRule = require('../utils/errors/errors.business_rule')
-const ErrorGeneric = require('../utils/errors/erros.generic_error')
+const ErrorBusinessRule = require('../utils/errors/errors.business-rule')
+const ErrorGeneric = require('../utils/errors/erros.generic-error')
 
 const listAllProviderService = async (nameFilter) => {
   try {

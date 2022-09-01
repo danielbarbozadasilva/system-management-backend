@@ -1,8 +1,8 @@
 const { user, provider } = require('../models/models.index')
 const cryptography = require('../utils/utils.cryptography')
 const userMapper = require('../mappers/mappers.user')
-const ErrorGeneric = require('../utils/errors/erros.generic_error')
-const ErrorAllowedUser = require('../utils/errors/errors.user_not_allowed')
+const ErrorGeneric = require('../utils/errors/erros.generic-error')
+const ErrorNotAuthorizedUser = require('../utils/errors/errors.user-not-authorized')
 
 const profile = [
   {
@@ -40,7 +40,7 @@ const checkPermissionService = (type, permission) => {
   const result = profile.find((item) => item.type === type)
   const check = result?.permission?.includes(permission)
   if (!check) {
-    throw new ErrorAllowedUser('Usuário não autorizado!')
+    throw new ErrorNotAuthorizedUser('Usuário não autorizado!')
   }
 }
 

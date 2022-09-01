@@ -11,8 +11,8 @@ const {
   toDTOLikeLength
 } = require('../mappers/mappers.client')
 const { createCredentialService } = require('./services.user')
-const ErrorBusinessRule = require('../utils/errors/errors.business_rule')
-const ErrorGeneric = require('../utils/errors/erros.generic_error')
+const ErrorBusinessRule = require('../utils/errors/errors.business-rule')
+const ErrorGeneric = require('../utils/errors/erros.generic-error')
 
 const listAllClientService = async () => {
   try {

@@ -3,8 +3,8 @@ const { category, product, provider } = require('../models/models.index')
 const categoryMapper = require('../mappers/mappers.category')
 const mapperProduct = require('../mappers/mappers.product')
 const fileUtils = require('../utils/utils.file')
-const ErrorBusinessRule = require('../utils/errors/errors.business_rule')
-const ErrorGeneric = require('../utils/errors/erros.generic_error')
+const ErrorBusinessRule = require('../utils/errors/errors.business-rule')
+const ErrorGeneric = require('../utils/errors/erros.generic-error')
 
 const searchAllCategoryService = async () => {
   try {

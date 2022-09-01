@@ -1,7 +1,7 @@
 const { product, category, provider } = require('../models/models.index')
 const fileUtils = require('../utils/utils.file')
 const productMapper = require('../mappers/mappers.product')
-const ErrorGeneric = require('../utils/errors/erros.generic_error')
+const ErrorGeneric = require('../utils/errors/erros.generic-error')
 
 const listAllProductService = async () => {
   const productDB = await product.aggregate([
