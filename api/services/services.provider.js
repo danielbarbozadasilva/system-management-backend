@@ -281,14 +281,14 @@ const changeStatusService = async (providerId, status) => {
 
     if (resultDB) {
       if (status === 'ENABLE' || status === 'ANALYSIS') {
-        emailUtils.UtilSendEmail({
+        emailUtils.utilSendEmail({
           to: providerDB.email,
           from: process.env.SENDGRID_SENDER,
           subject: `Activation Confirmation ${providerDB.socialName}`,
           html: EmailEnable('subject', `${process.env.URL}/signin`)
         })
       } else if (status === 'DISABLE') {
-        emailUtils.UtilSendEmail({
+        emailUtils.utilSendEmail({
           to: providerDB.email,
           from: process.env.SENDGRID_SENDER,
           subject: `Inactivation Confirmation ${providerDB.socialName}`,

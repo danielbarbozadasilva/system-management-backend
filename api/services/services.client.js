@@ -16,8 +16,8 @@ const ErrorGeneric = require('../utils/errors/erros.generic-error')
 
 const listAllClientService = async () => {
   try {
-    const resultadoDB = await client.find({}).sort({ name: 1 })
-    if (!resultadoDB) {
+    const resultDB = await client.find({}).sort({ name: 1 })
+    if (!resultDB) {
       return {
         success: false,
         details: 'No client found'
@@ -26,7 +26,7 @@ const listAllClientService = async () => {
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: resultadoDB.map((item) => toDTO(item))
+      data: resultDB.map((item) => toDTO(item))
     }
   } catch (err) {
     throw new ErrorGeneric(`Internal Server Error! ${err}`)
