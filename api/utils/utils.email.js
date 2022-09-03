@@ -2,7 +2,7 @@ const sgMail = require('@sendgrid/mail')
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
-const UtilSendEmail = async ({ to, from, subject, text, html }) => {
+const utilSendEmail = async ({ to, from, subject, text, html }) => {
   const msg = {
     to,
     from,
@@ -22,5 +22,5 @@ const UtilSendEmail = async ({ to, from, subject, text, html }) => {
 }
 
 module.exports = {
-  UtilSendEmail
+  utilSendEmail
 }
