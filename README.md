@@ -134,50 +134,18 @@ RF015 – O sistema deve filtrar os fornecedores por localidade e ordem alfabét
 ## **Regras de negócio**
 <br/>
 
-| Controle de acesso (RN001) |  |
-| --- | --- |
-|`Descrição:` Os acessos permitidos ao sistema serão: Administrador, Fornecedor (confeitaria) e Cliente. O usuário anonimo terá acesso apenas ao portal do site.    |
-|  |
-
-| Controle de veracidade (RN02) |  |
-| --- | --- |
-|`Descrição:` Apenas fornecedores autorizados pelo administrador poderão ter acesso ao sistema.    |
-|  |
-
-| Limite de ação (RN003) |  |
-| --- | --- |
-|`Descrição:` Apenas o Administrador poderá incluir, editar e excluir categorias no sistema.  |
-|  |
-
-| Limite de ação (RN004) |  |
-| --- | --- |
-|`Descrição:` Apenas o Administrador poderá visualizar informações sobre os clientes.  |
-|  |
-
-| Controle de estoque (RN005) |  |
-| --- | --- |
-|`Descrição:` Somente o gerente da confeitaria (fornecedor) terá permissão para incluir, alterar e excluir seus produtos no sistema.  |
-|  |
-
-| Limite de ação (RN006) |  |
-| --- | --- |
-|`Descrição:` Somente o gerente da confeitaria (fornecedor) terá permissão de favoritar os seus próprios produtos.   |
-|  |
-
-| Limite de ação (RN007) |  |
-| --- | --- |
-|`Descrição:` O gerente da confeitaria (fornecedor) terá permissão de favoritar apenas 3 (três) de seus próprios produtos.   |
-|  |
-
-| Limite de ação (RN008) |  |
-| --- | --- |
-|`Descrição:` Somente o cliente terá permissão de favoritar a confeitaria (fornecedor).   |
-|  |
-
-| Limite de ação (RN009) |  |
-| --- | --- |
-|`Descrição:` O cliente terá permissão de favoritar apenas 3 (três) fornecedores.   |
-|  |
+| Identificação | Classificação | Descrição |
+| --- | --- | --- |
+|RN001   |Controle de acesso     |Os acessos permitidos ao sistema serão: Administrador, Fornecedor (confeitaria) e Cliente. O usuário anonimo terá acesso apenas ao portal do site.    |
+|RN002   |Controle de veracidade     | Apenas fornecedores autorizados pelo administrador poderão ter acesso ao sistema.    |
+|RN003   |Limite de ação     |Apenas o Administrador poderá incluir, editar e excluir categorias no sistema.     |
+|RN004   |Limite de ação     | Apenas o Administrador poderá visualizar informações sobre os clientes.    |
+|RN005   |Controle de estoque     | Somente o gerente da confeitaria (fornecedor) terá permissão para incluir, alterar e excluir seus produtos no sistema.    |
+|RN006   |Limite de ação     | Somente o gerente da confeitaria (fornecedor) terá permissão de favoritar os seus próprios produtos.  
+|RN007   |Limite de ação     | O gerente da confeitaria (fornecedor) terá permissão de favoritar apenas 3 (três) de seus próprios produtos.   
+|RN008   |Limite de ação     | Somente o cliente terá permissão de favoritar a confeitaria (fornecedor).  
+|RN009   |Limite de ação     | O cliente terá permissão de favoritar apenas 3 (três) fornecedores.  
+|  |  |  |
 
 <br/>
 <br/>
