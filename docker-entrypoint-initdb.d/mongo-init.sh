@@ -18,7 +18,7 @@ db.usersCollection.insert([
     _id: ObjectId('62fc635ea0eee6e7c8ac263e'),
     kind: 'admin',
     email: 'danielbarboza56@hotmail.com',
-    name: 'admin',
+    name: 'Daniel Barboza',
     password: '37007245b64245f0647f692ae8ac2087'
   },
   {
