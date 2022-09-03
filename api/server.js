@@ -1,10 +1,9 @@
+const { version, name } = require('../package.json')
 const express = require('express')
 const cors = require('cors')
-const { formatError } = require('./utils/errors/errors.handler')
+require('express-async-errors')
 const mongoose = require('mongoose')
 const db = require('../db/config')
-const { version, name } = require('../package.json')
-require('express-async-errors')
 
 mongoose.connect(
   db.uri,
@@ -33,10 +32,6 @@ app.use('/static', express.static(`${__dirname}/..` + `/api/utils/file`))
 const router = require('./routes/routes.index')
 
 router(app)
-
-app.use((err, req, res, next) => {
-  formatError(err, res)
-})
 
 const port = process.env.PORT ? Number(process.env.PORT) : 3001
 
