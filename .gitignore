@@ -1,4 +1,5 @@
 .env
+.env.test
 instruções.txt
 api/utils/file/temp/**
 node_modules
