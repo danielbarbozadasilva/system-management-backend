@@ -5,6 +5,7 @@ const middlewareValidateDTO = require('../../utils/middlewares/middlewares.valid
 const middlewareFileUploadMiddleware = require('../../utils/middlewares/middlewares.file-upload')
 const authenticationMiddleware = require('../../utils/middlewares/middlewares.authentication')
 const authorizationMiddleware = require('../../utils/middlewares/middlewares.authorization')
+const verifyDbMiddleware = require('../../utils/middlewares/middlewares.verify-exists')
 
 module.exports = (router) => {
   router
@@ -52,6 +53,7 @@ module.exports = (router) => {
             'string.empty': '"category id" can not be empty'
           })
       }),
+      verifyDbMiddleware.verifyIdCategoryDbMiddleware,
       controllerCategory.listCategoryByIdController
     )
 
@@ -86,6 +88,7 @@ module.exports = (router) => {
           allowUnknown: true
         }
       ),
+      verifyDbMiddleware.verifyIdCategoryDbMiddleware,
       controllerCategory.updateCategoryController
     )
 
@@ -103,6 +106,7 @@ module.exports = (router) => {
             'string.regex': '"category id" out of the expected format'
           })
       }),
+      verifyDbMiddleware.verifyIdCategoryDbMiddleware,
       controllerCategory.removeCategoryController
     )
 
@@ -118,6 +122,7 @@ module.exports = (router) => {
           'string.empty': '"category id" can not be empty'
         })
     }),
+    verifyDbMiddleware.verifyIdCategoryDbMiddleware,
     controllerCategory.listCategoryByIdProductController
   )
 }
