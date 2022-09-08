@@ -21,9 +21,6 @@ const searchAllCategoryService = async () => {
 
 const searchCategoryByIdService = async (categoryid) => {
   const categoryDB = await category.find({ _id: Object(categoryid) })
-  if (!categoryDB.length) {
-    throw new ErrorBusinessRule("category_id doesn't exist.")
-  }
   return {
     success: true,
     message: 'Operation performed successfully',
@@ -99,14 +96,10 @@ const addCategoryService = async (body) => {
 }
 
 const removeCategoryProductsService = async (categoryId) => {
-  const categoryDB = await category.findOne({ _id: categoryId })
-  const productDB = await product.find({ category: categoryId })
-
-  if (!categoryDB) {
-    throw new ErrorBusinessRule("category_id doesn't exist.")
-  }
-
   try {
+    const categoryDB = await category.findOne({ _id: categoryId })
+    const productDB = await product.find({ category: categoryId })
+
     const { image } = categoryDB
     fileUtils.utilRemove('category', image.name)
 
@@ -114,6 +107,7 @@ const removeCategoryProductsService = async (categoryId) => {
 
     if (productDB.length !== 0) {
       await product.deleteMany({ category: categoryId })
+
       productDB.forEach(async (object) => {
         fileUtils.utilRemove('products', object.image.name)
         await provider.updateMany({
@@ -139,12 +133,8 @@ const removeCategoryProductsService = async (categoryId) => {
 }
 
 const updateCategoryService = async (categoryId, body) => {
-  const categoryDB = await category.findOne({ _id: categoryId })
-  if (!categoryDB) {
-    throw new ErrorBusinessRule("category id doesn't exist.")
-  }
-
   try {
+    const categoryDB = await category.findOne({ _id: categoryId })
     categoryDB.name = body.name
     categoryDB.description = body.description
 

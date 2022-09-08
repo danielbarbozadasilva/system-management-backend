@@ -1,17 +1,7 @@
 const { ObjectId } = require('mongodb')
 const { client, provider } = require('../models/models.index')
-const {
-  verifyEmailService,
-  verifyEmailBodyExistService
-} = require('./services.user')
 const { createHash } = require('../utils/utils.cryptography')
-const {
-  toDTO,
-  toDTOListProviderLike,
-  toDTOLikeLength
-} = require('../mappers/mappers.client')
-const { createCredentialService } = require('./services.user')
-const ErrorBusinessRule = require('../utils/errors/errors.business-rule')
+const { toDTO, toDTOListProviderLike } = require('../mappers/mappers.client')
 const ErrorGeneric = require('../utils/errors/erros.generic-error')
 
 const listAllClientService = async () => {
@@ -35,12 +25,6 @@ const listAllClientService = async () => {
 
 const listClientByIdService = async (clientId) => {
   const resultDB = await client.findById({ _id: clientId })
-  if (!resultDB) {
-    return {
-      success: false,
-      details: 'No client found'
-    }
-  }
   return {
     success: true,
     message: 'Operation performed successfully',
@@ -49,11 +33,6 @@ const listClientByIdService = async (clientId) => {
 }
 
 const createClientService = async (body) => {
-  let data = {}
-
-  if (await verifyEmailBodyExistService(body.email)) {
-    throw new ErrorBusinessRule('Este e-mail já está em uso!')
-  }
   try {
     const newClient = await client.create({
       firstName: body.firstName,
@@ -67,14 +46,10 @@ const createClientService = async (body) => {
       status: 'ENABLE'
     })
 
-    if (body.auth) {
-      data = await createCredentialService(body.email)
-    }
-
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: data?.token ? data : toDTO(newClient)
+      data: toDTO(newClient)
     }
   } catch (err) {
     throw new ErrorGeneric(`Internal Server Error! ${err}`)
@@ -82,19 +57,6 @@ const createClientService = async (body) => {
 }
 
 const updateClientService = async (clientId, body) => {
-  const resultFind = await client.findById({ _id: clientId })
-
-  if (!resultFind) {
-    return {
-      success: false,
-      message: 'could not perform the operation',
-      details: ["client id doesn't exist."]
-    }
-  }
-  if (await verifyEmailService(clientId, body.email)) {
-    throw new ErrorBusinessRule('Este e-mail já está em uso!')
-  }
-
   try {
     const newClient = await client.updateOne(
       { _id: clientId },
@@ -128,19 +90,8 @@ const updateClientService = async (clientId, body) => {
 }
 
 const deleteClientService = async (clientId) => {
-  const resultFind = await client.findById({ _id: clientId })
-
-  if (!resultFind) {
-    return {
-      success: false,
-      message: 'could not perform the operation',
-      details: ["client id doesn't exist."]
-    }
-  }
-
   try {
     const deleteProviderDB = await client.deleteOne({ _id: clientId })
-
     if (!deleteProviderDB) {
       return {
         success: false,
@@ -177,50 +128,6 @@ const listLikesClientProviderService = async (clientId) => {
 }
 
 const createLikeClientProviderService = async (providerId, clientId) => {
-  const [providerDB, clientDB, likeDB, resultLike] = await Promise.all([
-    provider.findById(providerId),
-    client.findById(clientId),
-    client.aggregate([
-      { $match: { _id: ObjectId(clientId) } },
-      {
-        $lookup: {
-          from: provider.collection.name,
-          localField: 'likes',
-          foreignField: '_id',
-          as: 'likes'
-        }
-      }
-    ]),
-    client.find({ _id: `${clientId}`, likes: `${providerId}` })
-  ])
-
-  if (!providerDB) {
-    return {
-      success: false,
-      details: 'O fornecedor informado não existe!'
-    }
-  }
-
-  if (!clientDB) {
-    return {
-      success: false,
-      details: 'O cliente informado não existe!'
-    }
-  }
-
-  if (toDTOLikeLength(...likeDB) >= 3) {
-    return {
-      success: false,
-      details: 'O cliente não pode curtir mais de três fornecedores!'
-    }
-  }
-  if (resultLike.length !== 0) {
-    return {
-      success: false,
-      details: 'O cliente já curtiu esse fornecedor!'
-    }
-  }
-
   try {
     const resultDB = await client.findByIdAndUpdate(clientId, {
       $push: { likes: providerId }
@@ -229,16 +136,8 @@ const createLikeClientProviderService = async (providerId, clientId) => {
     if (resultDB) {
       return {
         success: true,
-        message: 'Fornecedor curtido com sucesso!',
-        data: {
-          client: resultDB._id,
-          provider: providerId
-        }
+        message: 'Fornecedor curtido com sucesso!'
       }
-    }
-    return {
-      success: false,
-      details: 'Erro ao curtir!'
     }
   } catch (err) {
     throw new ErrorGeneric(`Internal Server Error! ${err}`)
@@ -246,48 +145,16 @@ const createLikeClientProviderService = async (providerId, clientId) => {
 }
 
 const removeLikeClientProviderService = async (providerId, clientId) => {
-  const [providerDB, clientDB, likeDB] = await Promise.all([
-    provider.findById(providerId),
-    client.findById(clientId),
-    client.find({ _id: `${clientId}`, likes: `${providerId}` })
-  ])
-
-  if (!providerDB) {
-    return {
-      success: false,
-      details: 'O fornecedor informado não existe!'
-    }
-  }
-  if (!clientDB) {
-    return {
-      success: false,
-      details: 'O cliente informado não existe!'
-    }
-  }
-
-  if (likeDB.length === 0) {
-    return {
-      success: false,
-      details: 'A curtida não existe!'
-    }
-  }
   try {
-    if (likeDB.length !== 0) {
-      const resultLike = await client.updateOne(
-        { _id: ObjectId(`${clientId}`) },
-        { $pull: { likes: `${providerId}` } }
-      )
-      if (resultLike) {
-        return {
-          success: true,
-          data: {
-            message: 'A curtida foi removida com sucesso!'
-          }
-        }
-      }
-      return {
-        success: false,
-        details: 'Erro ao remover a curtida!'
+    await client.updateOne(
+      { _id: ObjectId(`${clientId}`) },
+      { $pull: { likes: `${providerId}` } }
+    )
+
+    return {
+      success: true,
+      data: {
+        message: 'A curtida foi removida com sucesso!'
       }
     }
   } catch (err) {
