@@ -3,6 +3,7 @@ const clientController = require('../../controllers/controllers.client')
 const middlewareValidateDTO = require('../../utils/middlewares/middlewares.validate-dto')
 const authenticationMiddleware = require('../../utils/middlewares/middlewares.authentication')
 const authorizationMiddleware = require('../../utils/middlewares/middlewares.authorization')
+const verifyDbMiddleware = require('../../utils/middlewares/middlewares.verify-exists')
 
 module.exports = (router) => {
   router
@@ -21,6 +22,7 @@ module.exports = (router) => {
             'string.pattern.base': '"client id" out of the expected format'
           })
       }),
+      verifyDbMiddleware.verifyIdClientDbMiddleware,
       clientController.listClientByIdController
     )
     .put(
@@ -75,6 +77,8 @@ module.exports = (router) => {
           'string.empty': '"password" can not be empty'
         })
       }),
+      verifyDbMiddleware.verifyIdClientDbMiddleware,
+      verifyDbMiddleware.verifyEmailBodyExists,
       clientController.updateClientsController
     )
     .delete(
@@ -91,6 +95,7 @@ module.exports = (router) => {
             'string.pattern.base': '"client id" out of the expected format'
           })
       }),
+      verifyDbMiddleware.verifyIdClientDbMiddleware,
       clientController.deleteClientsController
     ),
     router
@@ -135,6 +140,7 @@ module.exports = (router) => {
           }),
           auth: joi.boolean().optional()
         }),
+        verifyDbMiddleware.verifyEmailExists,
         clientController.insertClientsController
       ),
     router.route('/client/:clientid/like').get(
@@ -151,6 +157,7 @@ module.exports = (router) => {
             'string.pattern.base': '"client id" out of the expected format'
           })
       }),
+      verifyDbMiddleware.verifyIdClientDbMiddleware,
       clientController.listLikeClientController
     ),
     router
@@ -178,6 +185,9 @@ module.exports = (router) => {
               'string.pattern.base': '"provider id" out of the expected format'
             })
         }),
+        verifyDbMiddleware.verifyIdClientDbMiddleware,
+        verifyDbMiddleware.verifyIdProviderDbMiddleware,
+        verifyDbMiddleware.verifyLikeClientDbMiddleware,
         clientController.createLikeProviderController
       )
       .delete(
@@ -203,6 +213,8 @@ module.exports = (router) => {
               'string.pattern.base': '"provider id" out of the expected format'
             })
         }),
+        verifyDbMiddleware.verifyIdClientDbMiddleware,
+        verifyDbMiddleware.verifyIdProviderDbMiddleware,
         clientController.removeLikeProviderController
       )
 }
