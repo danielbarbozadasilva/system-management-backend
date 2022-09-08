@@ -81,12 +81,9 @@ const toDTOListLikeClient = (model) => ({
   likes: model.likes
 })
 
-const toDTOLikeLength = (item) => item.likes.length
-
 module.exports = {
   toDTO,
   toDTOListLikeProviderProduct,
-  toDTOLikeLength,
   toDTOListProviderLike,
   toDTOListLikeClient
 }

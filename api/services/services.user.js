@@ -1,8 +1,9 @@
-const { user, provider } = require('../models/models.index')
+const { user } = require('../models/models.index')
 const cryptography = require('../utils/utils.cryptography')
 const userMapper = require('../mappers/mappers.user')
 const ErrorGeneric = require('../utils/errors/erros.generic-error')
-const ErrorNotAuthorizedUser = require('../utils/errors/errors.user-not-authorized')
+const ErrorNotAuthorized = require('../utils/errors/errors.user-not-authorized')
+const ErrorNotAuthenticated = require('../utils/errors/errors.user-not-authenticated')
 
 const profile = [
   {
@@ -40,8 +41,9 @@ const checkPermissionService = (type, permission) => {
   const result = profile.find((item) => item.type === type)
   const check = result?.permission?.includes(permission)
   if (!check) {
-    throw new ErrorNotAuthorizedUser('Usuário não autorizado!')
+    throw new ErrorNotAuthorized('Usuário não autorizado!')
   }
+  return !!check
 }
 
 const createCredentialService = async (email) => {
@@ -62,63 +64,29 @@ const userIsActiveService = async (email) => {
     .find({ email })
     .where('status')
     .nin(['ANALYSIS', 'DISABLE'])
-  return !!resultDB.length > 0
+
+  if (!resultDB) {
+    throw new ErrorNotAuthorized('Sua conta foi desativada pelo Administrador!')
+  }
+  return !!resultDB
 }
 
-const userIsValidService = async (email, password) =>
-  !!(await user.findOne({
+const userIsValidService = async (email, password) => {
+  const userDB = await user.findOne({
     email,
     password: cryptography.createHash(password)
-  }))
+  })
 
-const verifyEmailBodyExistService = async (email) => {
-  const users = await user.find({ email })
-  return users.length > 0
-}
-
-const verifyCnpjExistsService = async (cnpj) => {
-  const result = await provider.find({ cnpj })
-  return result.length > 0
-}
-
-const verifyEmailService = async (id, data) => {
-  const result = await provider
-    .findOne(Object({ email: data }))
-    .where('_id')
-    .ne(id)
-  return !!result
-}
-
-const verifyCnpjService = async (id, data) => {
-  const result = await provider
-    .findOne(Object({ cnpj: data }))
-    .where('_id')
-    .ne(id)
-  return !!result
+  if (!userDB) {
+    throw new ErrorNotAuthenticated('Cpf ou senha inválidos!')
+  }
+  return !!userDB
 }
 
 const authenticateService = async (email, password) => {
+  await userIsValidService(email, password)
+  await userIsActiveService(email)
   try {
-    const resultadoDB = await userIsValidService(email, password)
-    if (!resultadoDB) {
-      return {
-        success: false,
-        message: 'Não foi possivel autenticar o usuário',
-        details: ['E-mail ou senha inválidos!']
-      }
-    }
-
-    const resultActive = await userIsActiveService(email)
-    if (!resultActive) {
-      return {
-        success: false,
-        message: 'Não foi possivel efetuar o login',
-        details: [
-          'Sua conta está desativada. Entre em contato com o Administrador!'
-        ]
-      }
-    }
-
     const resultCredentials = await createCredentialService(email)
     if (!resultCredentials) {
       return {
@@ -155,9 +123,5 @@ module.exports = {
   verifyStatusProviderService,
   checkPermissionService,
   createCredentialService,
-  verifyCnpjExistsService,
-  verifyEmailBodyExistService,
-  userIsValidService,
-  verifyEmailService,
-  verifyCnpjService
+  userIsValidService
 }
