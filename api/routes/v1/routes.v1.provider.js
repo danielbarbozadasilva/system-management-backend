@@ -3,6 +3,7 @@ const providerController = require('../../controllers/controllers.provider')
 const middlewareValidateDTO = require('../../utils/middlewares/middlewares.validate-dto')
 const authenticationMiddleware = require('../../utils/middlewares/middlewares.authentication')
 const authorizationMiddleware = require('../../utils/middlewares/middlewares.authorization')
+const verifyDbMiddleware = require('../../utils/middlewares/middlewares.verify-exists')
 
 module.exports = (router) => {
   router.route('/provider/filter/:namefilter').get(
@@ -59,22 +60,19 @@ module.exports = (router) => {
       password: joi.string().required().messages({
         'any.required': '"password" is a required field',
         'string.empty': '"password" can not be empty'
-      })
+      }),
+      auth: joi.boolean().optional()
     }),
+    verifyDbMiddleware.verifyEmailExists,
+    verifyDbMiddleware.verifyCnpjExists,
     providerController.insertProviderController
   )
 
   router.route('/provider/filter/uf/:uf/city/:city').get(
     authorizationMiddleware('*'),
     middlewareValidateDTO('params', {
-      uf: joi.string().messages({
-        'any.required': '"uf" is a required field',
-        'string.empty': '"uf" can not be empty'
-      }),
-      city: joi.string().messages({
-        'any.required': '"city" is a required field',
-        'string.empty': '"city" can not be empty'
-      })
+      uf: joi.string().allow(''),
+      city: joi.string().allow('')
     }),
     providerController.listProvidersByLocationController
   )
@@ -94,11 +92,23 @@ module.exports = (router) => {
             'string.pattern.base': '"provider id" out of the expected format'
           })
       }),
+      verifyDbMiddleware.verifyIdProviderDbMiddleware,
       providerController.listProductsByProviderController
     )
     .put(
       authenticationMiddleware(),
       authorizationMiddleware('*'),
+      middlewareValidateDTO('params', {
+        providerid: joi
+          .string()
+          .regex(/^[0-9a-fA-F]{24}$/)
+          .required()
+          .messages({
+            'any.required': '"provider id" is a required field',
+            'string.empty': '"provider id" can not be empty',
+            'string.pattern.base': '"provider id" out of the expected format'
+          })
+      }),
       middlewareValidateDTO('body', {
         cnpj: joi
           .string()
@@ -145,6 +155,9 @@ module.exports = (router) => {
           'string.empty': '"password" can not be empty'
         })
       }),
+      verifyDbMiddleware.verifyIdProviderDbMiddleware,
+      verifyDbMiddleware.verifyEmailBodyExists,
+      verifyDbMiddleware.verifyCnpjBodyExists,
       providerController.updateProviderController
     )
 
@@ -162,6 +175,7 @@ module.exports = (router) => {
             'string.pattern.base': '"provider id" out of the expected format'
           })
       }),
+      verifyDbMiddleware.verifyIdProviderDbMiddleware,
       providerController.removeProviderController
     )
 
@@ -183,6 +197,7 @@ module.exports = (router) => {
         'string.empty': '"status" can not be empty'
       })
     }),
+    verifyDbMiddleware.verifyIdProviderDbMiddleware,
     providerController.changeStatusProviderController
   )
 
@@ -200,6 +215,7 @@ module.exports = (router) => {
           'string.pattern.base': '"provider id" out of the expected format'
         })
     }),
+    verifyDbMiddleware.verifyIdProviderDbMiddleware,
     providerController.searchLikeProductController
   )
 
@@ -228,6 +244,9 @@ module.exports = (router) => {
             'string.pattern.base': '"product id" out of the expected format'
           })
       }),
+      verifyDbMiddleware.verifyIdProviderDbMiddleware,
+      verifyDbMiddleware.verifyIdProductDbMiddleware,
+      verifyDbMiddleware.verifyLikeProviderDbMiddleware,
       providerController.insertLikeProductController
     )
     .delete(
@@ -253,6 +272,8 @@ module.exports = (router) => {
             'string.pattern.base': '"product id" out of the expected format'
           })
       }),
+      verifyDbMiddleware.verifyIdProviderDbMiddleware,
+      verifyDbMiddleware.verifyIdProductDbMiddleware,
       providerController.deleteLikeProductController
     )
 }
