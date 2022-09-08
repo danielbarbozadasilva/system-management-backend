@@ -14,7 +14,7 @@ mongoose.connect(
     useFindAndModify: false
   },
   (err) => {
-    console.log(`Unable to connect to MongoDB server\n${err}`)
+    if (err) console.log(`Unable to connect to MongoDB server\n${err}`)
   }
 )
 
