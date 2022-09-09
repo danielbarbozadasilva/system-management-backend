@@ -10,8 +10,7 @@ const profile = [
     type: 1,
     description: 'admin',
     permission: [
-      'UPDATE_PROVIDER',
-      'REMOVE_PROVIDER',
+      'CLIENT_SEARCH',
       'CHANGE_STATUS_PROVIDER',
       'CREATE_CATEGORY',
       'UPDATE_CATEGORY',
@@ -33,7 +32,7 @@ const profile = [
   {
     type: 3,
     description: 'client',
-    permission: ['CLIENT_LIKE_CREATE', 'CLIENT_LIKE_REMOVE']
+    permission: ['CLIENT_SEARCH_ID', 'CLIENT_LIKE_CREATE', 'CLIENT_LIKE_REMOVE']
   }
 ]
 
@@ -61,7 +60,7 @@ const createCredentialService = async (email) => {
 
 const userIsActiveService = async (email) => {
   const resultDB = await user
-    .find({ email })
+    .findOne({ email })
     .where('status')
     .nin(['ANALYSIS', 'DISABLE'])
 
@@ -105,22 +104,8 @@ const authenticateService = async (email, password) => {
   }
 }
 
-const verifyStatusProviderService = async (id) => {
-  const result = await user.find({
-    _id: id,
-    kind: 'provider',
-    status: 'ANALYSIS'
-  })
-
-  if (result.length === 0) {
-    return false
-  }
-  return true
-}
-
 module.exports = {
   authenticateService,
-  verifyStatusProviderService,
   checkPermissionService,
   createCredentialService,
   userIsValidService

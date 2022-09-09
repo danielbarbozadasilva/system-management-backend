@@ -1,22 +1,18 @@
 const { ObjectId } = require('mongodb')
 const { client, provider } = require('../models/models.index')
 const { createHash } = require('../utils/utils.cryptography')
-const { toDTO, toDTOListProviderLike } = require('../mappers/mappers.client')
+const mapperClient = require('../mappers/mappers.client')
+const serviceUserProvider = require('./services.user')
 const ErrorGeneric = require('../utils/errors/erros.generic-error')
 
 const listAllClientService = async () => {
   try {
     const resultDB = await client.find({}).sort({ name: 1 })
-    if (!resultDB) {
-      return {
-        success: false,
-        details: 'No client found'
-      }
-    }
+
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: resultDB.map((item) => toDTO(item))
+      data: resultDB.map((item) => mapperClient.toDTO(item))
     }
   } catch (err) {
     throw new ErrorGeneric(`Internal Server Error! ${err}`)
@@ -24,16 +20,23 @@ const listAllClientService = async () => {
 }
 
 const listClientByIdService = async (clientId) => {
-  const resultDB = await client.findById({ _id: clientId })
-  return {
-    success: true,
-    message: 'Operation performed successfully',
-    data: toDTO(resultDB)
+  try {
+    const resultDB = await client.findById({ _id: clientId })
+
+    return {
+      success: true,
+      message: 'Operation performed successfully',
+      data: mapperClient.toDTO(resultDB)
+    }
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
 const createClientService = async (body) => {
   try {
+    let data = {}
+
     const newClient = await client.create({
       firstName: body.firstName,
       lastName: body.lastName,
@@ -46,88 +49,43 @@ const createClientService = async (body) => {
       status: 'ENABLE'
     })
 
+    if (body.auth) {
+      data = await serviceUserProvider.createCredentialService(body.email)
+    }
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: toDTO(newClient)
+      data: data?.token ? data : mapperClient.toDTO(newClient)
     }
   } catch (err) {
     throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
-const updateClientService = async (clientId, body) => {
+const listLikesClientService = async (clientId) => {
   try {
-    const newClient = await client.updateOne(
-      { _id: clientId },
+    const resultLikeDB = await client.aggregate([
+      { $match: { _id: ObjectId(clientId) } },
       {
-        $set: {
-          firstName: body.firstName,
-          lastName: body.lastName,
-          birthDate: body.birthDate,
-          phone: body.phone,
-          uf: body.uf,
-          city: body.city,
-          email: body.email,
-          password: createHash(body.password)
+        $lookup: {
+          from: provider.collection.name,
+          localField: 'likes',
+          foreignField: '_id',
+          as: 'result_likes'
         }
       }
-    )
-    if (!newClient) {
-      return {
-        success: false,
-        message: 'Error updating data'
-      }
-    }
+    ])
 
     return {
       success: true,
-      message: 'Data updated successfully'
+      message: 'Operation performed successfully!',
+      data: mapperClient.toDTOListProviderLike(...resultLikeDB)
     }
   } catch (err) {
     throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
-
-const deleteClientService = async (clientId) => {
-  try {
-    const deleteProviderDB = await client.deleteOne({ _id: clientId })
-    if (!deleteProviderDB) {
-      return {
-        success: false,
-        message: 'Error deleting customer'
-      }
-    }
-    return {
-      success: true,
-      message: 'Client deleted successfully'
-    }
-  } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! ${err}`)
-  }
-}
-
-const listLikesClientProviderService = async (clientId) => {
-  const resultLikeDB = await client.aggregate([
-    { $match: { _id: ObjectId(clientId) } },
-    {
-      $lookup: {
-        from: provider.collection.name,
-        localField: 'likes',
-        foreignField: '_id',
-        as: 'result_likes'
-      }
-    }
-  ])
-
-  return {
-    success: true,
-    message: 'Operation performed successfully!',
-    data: toDTOListProviderLike(...resultLikeDB)
-  }
-}
-
-const createLikeClientProviderService = async (providerId, clientId) => {
+const createLikeService = async (providerId, clientId) => {
   try {
     const resultDB = await client.findByIdAndUpdate(clientId, {
       $push: { likes: providerId }
@@ -144,7 +102,7 @@ const createLikeClientProviderService = async (providerId, clientId) => {
   }
 }
 
-const removeLikeClientProviderService = async (providerId, clientId) => {
+const removeLikeService = async (providerId, clientId) => {
   try {
     await client.updateOne(
       { _id: ObjectId(`${clientId}`) },
@@ -153,9 +111,7 @@ const removeLikeClientProviderService = async (providerId, clientId) => {
 
     return {
       success: true,
-      data: {
-        message: 'A curtida foi removida com sucesso!'
-      }
+      message: 'A curtida foi removida com sucesso!'
     }
   } catch (err) {
     throw new ErrorGeneric(`Internal Server Error! ${err}`)
@@ -166,9 +122,7 @@ module.exports = {
   listAllClientService,
   listClientByIdService,
   createClientService,
-  updateClientService,
-  deleteClientService,
-  listLikesClientProviderService,
-  createLikeClientProviderService,
-  removeLikeClientProviderService
+  listLikesClientService,
+  createLikeService,
+  removeLikeService
 }

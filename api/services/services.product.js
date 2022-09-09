@@ -4,14 +4,18 @@ const productMapper = require('../mappers/mappers.product')
 const ErrorGeneric = require('../utils/errors/erros.generic-error')
 
 const listProductByIdService = async (productId) => {
-  const productDB = await product
-    .findById({ _id: productId })
-    .populate('provider')
+  try {
+    const productDB = await product
+      .findById({ _id: productId })
+      .populate('provider')
 
-  return {
-    success: true,
-    message: 'Operation performed successfully',
-    data: productMapper.toItemListDTO(productDB)
+    return {
+      success: true,
+      message: 'Operation performed successfully',
+      data: productMapper.toItemListDTO(productDB)
+    }
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -90,17 +94,17 @@ const listProductWithFilterService = async (name, filter = '') => {
 }
 
 const updateProductService = async (providerId, productId, body) => {
-  const productDB = await product.findOne({
-    _id: `${productId}`,
-    provider: `${providerId}`
-  })
-
   try {
+    const productDB = await product.findOne({
+      _id: `${productId}`,
+      provider: `${providerId}`
+    })
+
     productDB.name = body.name
     productDB.description = body.description
     productDB.price = body.price
     productDB.category = body.category
-    productDB.provider = body.provider
+    productDB.provider = providerId
 
     if (typeof body.image === 'object') {
       productDB.image = {
@@ -121,7 +125,7 @@ const updateProductService = async (providerId, productId, body) => {
       data: productMapper.toItemListDTO(productDB)
     }
   } catch (err) {
-    throw new ErrorGeneric(`Internal Server Error! ${err}`)
+    throw new ErrorGeneric(`Internal Server Error!`)
   }
 }
 

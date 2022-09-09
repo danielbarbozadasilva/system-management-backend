@@ -28,8 +28,8 @@ const toItemListDTO = (model) => ({
   phone: model.phone,
   status: model.status,
   count_products: model?.result_products?.length,
-  count_likes_products: model?.result_likes?.length,
-  count_likes_clients: model?.result_client?.length,
+  count_likes_products: model?.likes?.length,
+  count_likes_clients: model?.clients?.length,
 
   result_products: model.result_products?.map((item) => ({
     id: item?._id,
@@ -44,14 +44,14 @@ const toItemListDTO = (model) => ({
     image: fileUtils.utilCreateAddressDownload('product', item.image.name)
   })),
 
-  result_client: model.result_client?.map((item) => ({
+  clients: model.clients?.map((item) => ({
     id: item?._id,
     name: `${item?.firstName} ${item?.lastName}`,
     email: item?.email,
     kind: item?.kind
   })),
 
-  result_likes: model.result_likes?.map((item) => ({
+  likes: model.likes?.map((item) => ({
     id: item?._id,
     name: item?.name,
     priceProduct: parseFloat(item?.price).toLocaleString('pt-br', {
@@ -63,7 +63,30 @@ const toItemListDTO = (model) => ({
   }))
 })
 
+const toDTOLikeList = (model) => ({
+  id: model._id,
+  name: model.name,
+  description: model.description,
+  price: parseFloat(model.price).toLocaleString('pt-br', {
+    style: 'currency',
+    currency: 'BRL'
+  }),
+  image: fileUtils.utilCreateAddressDownload('products', model.image.name),
+  provider: model.provider[0]._id,
+  category: model.category[0].name,
+  likes: model.provider.map((item) => {
+    for (const i in item.likes) {
+      if (JSON.stringify(item.likes[i]) == JSON.stringify(model._id)) {
+        return true
+      }
+    }
+    return false
+  })[0],
+  result_client: model.result_client
+})
+
 module.exports = {
+  toDTOLikeList,
   toItemListDTO,
   toDTO
 }

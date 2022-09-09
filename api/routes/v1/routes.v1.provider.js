@@ -60,8 +60,7 @@ module.exports = (router) => {
       password: joi.string().required().messages({
         'any.required': '"password" is a required field',
         'string.empty': '"password" can not be empty'
-      }),
-      auth: joi.boolean().optional()
+      })
     }),
     verifyDbMiddleware.verifyEmailExists,
     verifyDbMiddleware.verifyCnpjExists,
@@ -77,107 +76,22 @@ module.exports = (router) => {
     providerController.listProvidersByLocationController
   )
 
-  router
-    .route('/provider/:providerid')
-    .get(
-      authorizationMiddleware('*'),
-      middlewareValidateDTO('params', {
-        providerid: joi
-          .string()
-          .regex(/^[0-9a-fA-F]{24}$/)
-          .required()
-          .messages({
-            'any.required': '"provider id" is a required field',
-            'string.empty': '"provider id" can not be empty',
-            'string.pattern.base': '"provider id" out of the expected format'
-          })
-      }),
-      verifyDbMiddleware.verifyIdProviderDbMiddleware,
-      providerController.listProductsByProviderController
-    )
-    .put(
-      authenticationMiddleware(),
-      authorizationMiddleware('*'),
-      middlewareValidateDTO('params', {
-        providerid: joi
-          .string()
-          .regex(/^[0-9a-fA-F]{24}$/)
-          .required()
-          .messages({
-            'any.required': '"provider id" is a required field',
-            'string.empty': '"provider id" can not be empty',
-            'string.pattern.base': '"provider id" out of the expected format'
-          })
-      }),
-      middlewareValidateDTO('body', {
-        cnpj: joi
-          .string()
-          .regex(/^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/)
-          .required()
-          .messages({
-            'any.required': '"cnpj" is a required field',
-            'string.empty': '"cnpj" can not be empty'
-          }),
-        fantasyName: joi.string().required().messages({
-          'any.required': '"fantasy name" is a required field',
-          'string.empty': '"fantasy name" can not be empty'
-        }),
-        socialName: joi.string().required().messages({
-          'any.required': '"social name" is a required field',
-          'string.empty': '"social name" can not be empty'
-        }),
-        address: joi.string().required().messages({
-          'any.required': '"address" is a required field',
-          'string.empty': '"address" can not be empty'
-        }),
-        uf: joi.string().required().messages({
-          'any.required': '"uf" is a required field',
-          'string.empty': '"uf" can not be empty'
-        }),
-        city: joi.string().required().messages({
-          'any.required': '"city" is a required field',
-          'string.empty': '"city" can not be empty'
-        }),
-        responsible: joi.string().required().messages({
-          'any.required': '"responsible" is a required field',
-          'string.empty': '"responsible" can not be empty'
-        }),
-        phone: joi.string().required().messages({
-          'any.required': '"phone" is a required field',
-          'string.empty': '"phone" can not be empty'
-        }),
-        email: joi.string().email().required().messages({
-          'any.required': '"email" is a required field',
-          'string.empty': '"email" can not be empty'
-        }),
-        password: joi.string().required().messages({
-          'any.required': '"password" is a required field',
-          'string.empty': '"password" can not be empty'
+  router.route('/provider/:providerid').get(
+    authorizationMiddleware('*'),
+    middlewareValidateDTO('params', {
+      providerid: joi
+        .string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .messages({
+          'any.required': '"provider id" is a required field',
+          'string.empty': '"provider id" can not be empty',
+          'string.pattern.base': '"provider id" out of the expected format'
         })
-      }),
-      verifyDbMiddleware.verifyIdProviderDbMiddleware,
-      verifyDbMiddleware.verifyEmailBodyExists,
-      verifyDbMiddleware.verifyCnpjBodyExists,
-      providerController.updateProviderController
-    )
-
-    .delete(
-      authenticationMiddleware(),
-      authorizationMiddleware('REMOVE_PROVIDER'),
-      middlewareValidateDTO('params', {
-        providerid: joi
-          .string()
-          .regex(/^[0-9a-fA-F]{24}$/)
-          .required()
-          .messages({
-            'any.required': '"provider id" is a required field',
-            'string.empty': '"provider id" can not be empty',
-            'string.pattern.base': '"provider id" out of the expected format'
-          })
-      }),
-      verifyDbMiddleware.verifyIdProviderDbMiddleware,
-      providerController.removeProviderController
-    )
+    }),
+    verifyDbMiddleware.verifyIdProviderDbMiddleware,
+    providerController.listProductsByProviderController
+  )
 
   router.route('/provider/:providerid/status/:status').put(
     authenticationMiddleware(),
@@ -192,10 +106,15 @@ module.exports = (router) => {
           'string.empty': '"provider id" can not be empty',
           'string.pattern.base': '"provider id" out of the expected format'
         }),
-      status: joi.string().required().messages({
-        'any.required': '"status" is a required field',
-        'string.empty': '"status" can not be empty'
-      })
+      status: joi
+        .string()
+        .valid('ENABLE', 'DISABLE')
+        .insensitive()
+        .required()
+        .messages({
+          'any.required': '"status" is a required field',
+          'string.empty': '"status" can not be empty'
+        })
     }),
     verifyDbMiddleware.verifyIdProviderDbMiddleware,
     providerController.changeStatusProviderController
@@ -247,7 +166,7 @@ module.exports = (router) => {
       verifyDbMiddleware.verifyIdProviderDbMiddleware,
       verifyDbMiddleware.verifyIdProductDbMiddleware,
       verifyDbMiddleware.verifyLikeProviderDbMiddleware,
-      providerController.insertLikeProductController
+      providerController.createLikeProductController
     )
     .delete(
       authenticationMiddleware(),
@@ -274,6 +193,7 @@ module.exports = (router) => {
       }),
       verifyDbMiddleware.verifyIdProviderDbMiddleware,
       verifyDbMiddleware.verifyIdProductDbMiddleware,
+      verifyDbMiddleware.verifyProviderLikeNotExistsDbMiddleware,
       providerController.deleteLikeProductController
     )
 }

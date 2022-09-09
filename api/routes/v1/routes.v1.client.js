@@ -6,102 +6,28 @@ const authorizationMiddleware = require('../../utils/middlewares/middlewares.aut
 const verifyDbMiddleware = require('../../utils/middlewares/middlewares.verify-exists')
 
 module.exports = (router) => {
-  router
-    .route('/client/:clientid')
-    .get(
-      authenticationMiddleware(),
-      authorizationMiddleware('*'),
-      middlewareValidateDTO('params', {
-        clientid: joi
-          .string()
-          .regex(/^[0-9a-fA-F]{24}$/)
-          .required()
-          .messages({
-            'any.required': '"client id" is a required field',
-            'string.empty': '"client id" must not be empty',
-            'string.pattern.base': '"client id" out of the expected format'
-          })
-      }),
-      verifyDbMiddleware.verifyIdClientDbMiddleware,
-      clientController.listClientByIdController
-    )
-    .put(
-      authenticationMiddleware(),
-      authorizationMiddleware('*'),
-      middlewareValidateDTO('params', {
-        clientid: joi
-          .string()
-          .regex(/^[0-9a-fA-F]{24}$/)
-          .required()
-          .messages({
-            'any.required': '"client id" is a required field',
-            'string.empty': '"client id" can not be empty',
-            'string.pattern.base': '"client id" out of the expected format'
-          })
-      }),
-      middlewareValidateDTO('body', {
-        firstName: joi.string().required().messages({
-          'any.required': '"first name" is a required field',
-          'string.empty': '"first name" can not be empty'
-        }),
-        lastName: joi.string().required().messages({
-          'any.required': '"last name" is a required field',
-          'string.empty': '"last name" can not be empty'
-        }),
-        birthDate: joi.string().required().messages({
-          'any.required': '"birth date" is a required field',
-          'string.empty': '"birth date" can not be empty'
-        }),
-        uf: joi.string().required().messages({
-          'any.required': '"uf" is a required field',
-          'string.empty': '"uf" can not be empty'
-        }),
-        city: joi.string().required().messages({
-          'any.required': '"city" is a required field',
-          'string.empty': '"city" can not be empty'
-        }),
-        status: joi.string().required().messages({
-          'any.required': '"status" is a required field',
-          'string.empty': '"status" can not be empty'
-        }),
-        phone: joi.string().required().messages({
-          'any.required': '"phone" is a required field',
-          'string.empty': '"phone" can not be empty'
-        }),
-        email: joi.string().required().messages({
-          'any.required': '"email" is a required field',
-          'string.empty': '"email" can not be empty'
-        }),
-        password: joi.string().required().messages({
-          'any.required': '"password" is a required field',
-          'string.empty': '"password" can not be empty'
+  router.route('/client/:clientid').get(
+    authenticationMiddleware(),
+    authorizationMiddleware('CLIENT_SEARCH_ID'),
+    middlewareValidateDTO('params', {
+      clientid: joi
+        .string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .messages({
+          'any.required': '"client id" is a required field',
+          'string.empty': '"client id" must not be empty',
+          'string.pattern.base': '"client id" out of the expected format'
         })
-      }),
-      verifyDbMiddleware.verifyIdClientDbMiddleware,
-      verifyDbMiddleware.verifyEmailBodyExists,
-      clientController.updateClientsController
-    )
-    .delete(
-      authenticationMiddleware(),
-      authorizationMiddleware('*'),
-      middlewareValidateDTO('params', {
-        clientid: joi
-          .string()
-          .regex(/^[0-9a-fA-F]{24}$/)
-          .required()
-          .messages({
-            'any.required': '"client id" is a required field',
-            'string.empty': '"client id" must not be empty',
-            'string.pattern.base': '"client id" out of the expected format'
-          })
-      }),
-      verifyDbMiddleware.verifyIdClientDbMiddleware,
-      clientController.deleteClientsController
-    ),
+    }),
+    verifyDbMiddleware.verifyIdClientDbMiddleware,
+    clientController.listClientByIdController
+  ),
     router
       .route('/client')
       .get(
         authenticationMiddleware(),
+        authorizationMiddleware('CLIENT_SEARCH'),
         authorizationMiddleware('*'),
         clientController.listAllClientsController
       )
@@ -188,7 +114,7 @@ module.exports = (router) => {
         verifyDbMiddleware.verifyIdClientDbMiddleware,
         verifyDbMiddleware.verifyIdProviderDbMiddleware,
         verifyDbMiddleware.verifyLikeClientDbMiddleware,
-        clientController.createLikeProviderController
+        clientController.createLikeController
       )
       .delete(
         authenticationMiddleware(),
@@ -215,6 +141,7 @@ module.exports = (router) => {
         }),
         verifyDbMiddleware.verifyIdClientDbMiddleware,
         verifyDbMiddleware.verifyIdProviderDbMiddleware,
-        clientController.removeLikeProviderController
+        verifyDbMiddleware.verifyClientLikeNotExistsDbMiddleware,
+        clientController.removeLikeController
       )
 }

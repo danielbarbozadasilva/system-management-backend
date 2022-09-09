@@ -24,9 +24,9 @@ const listCategoryByIdController = async (req, res) => {
 }
 
 const listCategoryByIdProductController = async (req, res) => {
-  const { params } = req
+  const { categoryid } = req.params
   const resultService = await categoryService.searchCategoryByIdProductService(
-    params.categoryid
+    categoryid
   )
   const code = resultService.success ? 200 : 400
   const message = resultService.success

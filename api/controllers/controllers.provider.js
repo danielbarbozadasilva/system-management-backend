@@ -1,8 +1,8 @@
 const providerService = require('../services/services.provider')
 
 const listAllProvidersController = async (req, res) => {
-  const { params } = req
-  const resultService = await providerService.listAllProviderService(params)
+  const { namefilter } = req.params
+  const resultService = await providerService.listAllProviderService(namefilter)
   const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
@@ -41,32 +41,6 @@ const listProvidersByLocationController = async (req, res) => {
 const insertProviderController = async (req, res) => {
   const { body } = req
   const resultService = await providerService.createProviderService(body)
-  const code = resultService.success ? 200 : 400
-  const message = resultService.success
-    ? { message: resultService.message }
-    : { details: resultService.details }
-  const data = resultService.data ? resultService.data : ''
-  return res.status(code).send({ message, data })
-}
-
-const updateProviderController = async (req, res) => {
-  const { body } = req
-  const { providerid } = req.params
-  const resultService = await providerService.updateProviderService(
-    providerid,
-    body
-  )
-  const code = resultService.success ? 200 : 400
-  const message = resultService.success
-    ? { message: resultService.message }
-    : { details: resultService.details }
-  const data = resultService.data ? resultService.data : ''
-  return res.status(code).send({ message, data })
-}
-
-const removeProviderController = async (req, res) => {
-  const { providerid } = req.params
-  const resultService = await providerService.removeProviderService(providerid)
   const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
@@ -115,7 +89,7 @@ const searchLikeProductController = async (req, res) => {
   return res.status(code).send({ message, data })
 }
 
-const insertLikeProductController = async (req, res) => {
+const createLikeProductController = async (req, res) => {
   const { providerid, productid } = req.params
   const resultService = await providerService.createLikeProviderProductService(
     providerid,
@@ -148,11 +122,9 @@ module.exports = {
   listProviderByIdController,
   listProvidersByLocationController,
   insertProviderController,
-  updateProviderController,
-  removeProviderController,
   listProductsByProviderController,
   changeStatusProviderController,
   searchLikeProductController,
-  insertLikeProductController,
+  createLikeProductController,
   deleteLikeProductController
 }

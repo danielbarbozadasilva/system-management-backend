@@ -1,5 +1,3 @@
-const fileUtils = require('../utils/utils.file')
-
 const toDTO = (model) => {
   const date = new Date()
   return {
@@ -38,52 +36,7 @@ const toDTOListProviderLike = (model) => {
   }
 }
 
-const toDTOListLikeProviderProduct = (model) => ({
-  provider: {
-    id: model.provider._id,
-    cnpj: model.provider.cnpj,
-    fantasyName: model.provider.fantasyName,
-    socialName: model.provider.socialName,
-    address: model.provider.address,
-    uf: model.provider.uf,
-    city: model.provider.city,
-    responsible: model.provider.responsible,
-    phone: model.provider.phone,
-    status: model.provider.status,
-    product: {
-      id: model.product._id,
-      name: model.product.name,
-      description: model.product.description,
-      price: parseFloat(model.product.price).toLocaleString('pt-br', {
-        style: 'currency',
-        currency: 'BRL'
-      }),
-      image: fileUtils.utilCreateAddressDownload(
-        'products',
-        model.product.image.name
-      )
-    },
-    like: {
-      like_id: model._id
-    }
-  }
-})
-
-const toDTOListLikeClient = (model) => ({
-  id: model._id,
-  firstName: model.firstName,
-  lastName: model.lastName,
-  birthDate: model.birthDate,
-  phone: model.phone,
-  uf: model.uf,
-  city: model.city,
-  status: model.status,
-  likes: model.likes
-})
-
 module.exports = {
   toDTO,
-  toDTOListLikeProviderProduct,
-  toDTOListProviderLike,
-  toDTOListLikeClient
+  toDTOListProviderLike
 }
