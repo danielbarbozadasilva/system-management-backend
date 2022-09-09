@@ -72,6 +72,32 @@ const verifyLikeClientDbMiddleware = async (req, res, next) => {
   next()
 }
 
+const verifyClientLikeNotExistsDbMiddleware = async (req, res, next) => {
+  const likeDB = await client.find({
+    _id: `${req.params.clientid}`,
+    likes: `${req.params.providerid}`
+  })
+
+  if (!likeDB.length) {
+    throw new ErrorUnprocessableEntity(`Esta curtida não existe!`)
+  }
+
+  next()
+}
+
+const verifyProviderLikeNotExistsDbMiddleware = async (req, res, next) => {
+  const likeDB = await provider.find({
+    _id: `${req.params.providerid}`,
+    likes: `${req.params.productid}`
+  })
+
+  if (!likeDB.length) {
+    throw new ErrorUnprocessableEntity(`Esta curtida não existe!`)
+  }
+
+  next()
+}
+
 const verifyLikeProviderDbMiddleware = async (req, res, next) => {
   const [likeDB, likeProviderDB] = await Promise.all([
     provider.aggregate([
@@ -104,7 +130,7 @@ const verifyLikeProviderDbMiddleware = async (req, res, next) => {
 }
 
 const verifyEmailExists = async (req, res, next) => {
-  const resultEmail = await user.find({ email: req.body.email })
+  const resultEmail = await user.findOne({ email: req.body.email })
   if (resultEmail !== null) {
     throw new ErrorBusinessRule('Este e-mail já está em uso!')
   }
@@ -112,31 +138,9 @@ const verifyEmailExists = async (req, res, next) => {
 }
 
 const verifyCnpjExists = async (req, res, next) => {
-  const resultCnpj = await user.find({ cnpj: req.body.cnpj })
+  const resultCnpj = await user.findOne({ cnpj: req.body.cnpj })
   if (resultCnpj !== null) {
     throw new ErrorBusinessRule('Este cnpj já está em uso!')
-  }
-  next()
-}
-
-const verifyEmailBodyExists = async (req, res, next) => {
-  const resultEmail = await user
-    .findOne(Object({ email: req.body.email }))
-    .where('_id')
-    .ne(req.params.id)
-  if (resultEmail !== null) {
-    throw new ErrorBusinessRule('Este e-mail já está em uso!')
-  }
-  next()
-}
-
-const verifyCnpjBodyExists = async (req, res, next) => {
-  const resultCnpj = await user
-    .findOne(Object({ cnpj: req.body.cnpj }))
-    .where('_id')
-    .ne(req.params.id)
-  if (resultCnpj !== null) {
-    throw new ErrorBusinessRule('Este e-mail já está em uso!')
   }
   next()
 }
@@ -147,9 +151,9 @@ module.exports = {
   verifyIdProviderDbMiddleware,
   verifyIdClientDbMiddleware,
   verifyLikeClientDbMiddleware,
+  verifyClientLikeNotExistsDbMiddleware,
   verifyLikeProviderDbMiddleware,
+  verifyProviderLikeNotExistsDbMiddleware,
   verifyEmailExists,
-  verifyCnpjExists,
-  verifyEmailBodyExists,
-  verifyCnpjBodyExists
+  verifyCnpjExists
 }
