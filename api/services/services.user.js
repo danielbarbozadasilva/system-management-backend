@@ -22,6 +22,7 @@ const profile = [
     description: 'provider',
     permission: [
       'SEARCH_PRODUCT',
+      'SEARCH_PRODUCT_ID',
       'CREATE_PRODUCT',
       'REMOVE_PRODUCT',
       'UPDATE_PRODUCT',
@@ -104,9 +105,23 @@ const authenticateService = async (email, password) => {
   }
 }
 
+const checkIdAuthorizationService = (idToken, idUser, type) => {
+  let authorized = false
+
+  if (idUser && type !== 1) {
+    authorized = idUser != idToken
+
+    if (authorized) {
+      throw new ErrorNotAuthorized('Usuário não autorizado!')
+    }
+  }
+  return authorized
+}
+
 module.exports = {
   authenticateService,
   checkPermissionService,
   createCredentialService,
-  userIsValidService
+  userIsValidService,
+  checkIdAuthorizationService
 }

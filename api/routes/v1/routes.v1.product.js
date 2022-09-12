@@ -17,11 +17,11 @@ module.exports = (router) => {
   )
 
   router
-    .route('/product/:productid')
+    .route('/provider/:providerid/product/:productid')
     .get(
       authorizationMiddleware('*'),
       middlewareValidateDTO('params', {
-        productid: joi
+        providerid: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
@@ -29,9 +29,19 @@ module.exports = (router) => {
             'any.required': '"provider id" is a required field',
             'string.empty': '"provider id" can not be empty',
             'string.pattern.base': '"provider id" out of the expected format'
+          }),
+        productid: joi
+          .string()
+          .regex(/^[0-9a-fA-F]{24}$/)
+          .required()
+          .messages({
+            'any.required': '"product id" is a required field',
+            'string.empty': '"product id" can not be empty',
+            'string.pattern.base': '"product id" out of the expected format'
           })
       }),
       verifyDbMiddleware.verifyIdProductDbMiddleware,
+      verifyDbMiddleware.verifyIdProviderDbMiddleware,
       productController.listProductByIdController
     )
     .delete(
