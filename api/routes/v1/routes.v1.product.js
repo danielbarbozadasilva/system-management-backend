@@ -48,6 +48,15 @@ module.exports = (router) => {
       authenticationMiddleware(),
       authorizationMiddleware('REMOVE_PRODUCT'),
       middlewareValidateDTO('params', {
+        providerid: joi
+          .string()
+          .regex(/^[0-9a-fA-F]{24}$/)
+          .required()
+          .messages({
+            'any.required': '"provider id" is a required field',
+            'string.empty': '"provider id" can not be empty',
+            'string.pattern.base': '"provider id" out of the expected format'
+          }),
         productid: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)
@@ -61,63 +70,62 @@ module.exports = (router) => {
       verifyDbMiddleware.verifyIdProductDbMiddleware,
       productController.removeProductController
     )
-
-  router.route('/provider/:providerid/product/:productid').put(
-    authenticationMiddleware(),
-    authorizationMiddleware('UPDATE_PRODUCT'),
-    middlewareFileUploadMiddleware('products'),
-    middlewareValidateDTO('params', {
-      providerid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': '"provider id" is a required field',
-          'string.empty': '"provider id" can not be empty',
-          'string.pattern.base': '"provider id" out of the expected format'
-        }),
-      productid: joi
-        .string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          'any.required': '"product id" is a required field',
-          'string.empty': '"product id" can not be empty',
-          'string.pattern.base': '"product id" out of the expected format'
-        })
-    }),
-    middlewareValidateDTO(
-      'body',
-      {
-        name: joi.string().required().messages({
-          'any.required': '"name" is a required field',
-          'string.empty': '"name" can not be empty'
-        }),
-        description: joi.string().required().messages({
-          'any.required': '"description" is a required field',
-          'string.empty': '"description" can not be empty'
-        }),
-        category: joi
+    .put(
+      authenticationMiddleware(),
+      authorizationMiddleware('UPDATE_PRODUCT'),
+      middlewareFileUploadMiddleware('products'),
+      middlewareValidateDTO('params', {
+        providerid: joi
           .string()
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
           .messages({
-            'any.required': '"category id" is a required field',
-            'string.empty': '"category id" can not be empty',
-            'string.pattern.base': '"category id" out of the expected format'
+            'any.required': '"provider id" is a required field',
+            'string.empty': '"provider id" can not be empty',
+            'string.pattern.base': '"provider id" out of the expected format'
           }),
-        price: joi.number().required().messages({
-          'any.required': '"preco" is a required field'
-        })
-      },
-      {
-        allowUnknown: true
-      }
-    ),
-    verifyDbMiddleware.verifyIdProductDbMiddleware,
-    verifyDbMiddleware.verifyIdProviderDbMiddleware,
-    productController.updateProductController
-  )
+        productid: joi
+          .string()
+          .regex(/^[0-9a-fA-F]{24}$/)
+          .required()
+          .messages({
+            'any.required': '"product id" is a required field',
+            'string.empty': '"product id" can not be empty',
+            'string.pattern.base': '"product id" out of the expected format'
+          })
+      }),
+      middlewareValidateDTO(
+        'body',
+        {
+          name: joi.string().required().messages({
+            'any.required': '"name" is a required field',
+            'string.empty': '"name" can not be empty'
+          }),
+          description: joi.string().required().messages({
+            'any.required': '"description" is a required field',
+            'string.empty': '"description" can not be empty'
+          }),
+          category: joi
+            .string()
+            .regex(/^[0-9a-fA-F]{24}$/)
+            .required()
+            .messages({
+              'any.required': '"category id" is a required field',
+              'string.empty': '"category id" can not be empty',
+              'string.pattern.base': '"category id" out of the expected format'
+            }),
+          price: joi.number().required().messages({
+            'any.required': '"preco" is a required field'
+          })
+        },
+        {
+          allowUnknown: true
+        }
+      ),
+      verifyDbMiddleware.verifyIdProductDbMiddleware,
+      verifyDbMiddleware.verifyIdProviderDbMiddleware,
+      productController.updateProductController
+    )
 
   router.route('/provider/:providerid/product').post(
     authenticationMiddleware(),
