@@ -8,7 +8,6 @@ const verifyDbMiddleware = require('../../utils/middlewares/middlewares.verify-e
 
 module.exports = (router) => {
   router.route('/product').get(
-    authorizationMiddleware('*'),
     middlewareValidateDTO('query', {
       name: joi.string().allow(null, ''),
       filter: joi.string().allow(null, '')
@@ -19,7 +18,6 @@ module.exports = (router) => {
   router
     .route('/provider/:providerid/product/:productid')
     .get(
-      authorizationMiddleware('*'),
       middlewareValidateDTO('params', {
         providerid: joi
           .string()
@@ -41,12 +39,9 @@ module.exports = (router) => {
           })
       }),
       verifyDbMiddleware.verifyIdProductDbMiddleware,
-      verifyDbMiddleware.verifyIdProviderDbMiddleware,
       productController.listProductByIdController
     )
     .delete(
-      authenticationMiddleware(),
-      authorizationMiddleware('REMOVE_PRODUCT'),
       middlewareValidateDTO('params', {
         providerid: joi
           .string()
@@ -67,12 +62,12 @@ module.exports = (router) => {
             'string.pattern.base': '"product id" out of the expected format'
           })
       }),
+      authenticationMiddleware(),
+      authorizationMiddleware('REMOVE_PRODUCT'),
       verifyDbMiddleware.verifyIdProductDbMiddleware,
       productController.removeProductController
     )
     .put(
-      authenticationMiddleware(),
-      authorizationMiddleware('UPDATE_PRODUCT'),
       middlewareFileUploadMiddleware('products'),
       middlewareValidateDTO('params', {
         providerid: joi
@@ -122,14 +117,13 @@ module.exports = (router) => {
           allowUnknown: true
         }
       ),
+      authenticationMiddleware(),
+      authorizationMiddleware('UPDATE_PRODUCT'),
       verifyDbMiddleware.verifyIdProductDbMiddleware,
-      verifyDbMiddleware.verifyIdProviderDbMiddleware,
       productController.updateProductController
     )
 
   router.route('/provider/:providerid/product').post(
-    authenticationMiddleware(),
-    authorizationMiddleware('CREATE_PRODUCT'),
     middlewareFileUploadMiddleware('products'),
     middlewareValidateDTO('params', {
       providerid: joi
@@ -170,6 +164,8 @@ module.exports = (router) => {
         allowUnknown: true
       }
     ),
+    authenticationMiddleware(),
+    authorizationMiddleware('CREATE_PRODUCT'),
     verifyDbMiddleware.verifyIdProviderDbMiddleware,
     productController.insertProductController
   )

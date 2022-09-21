@@ -10,10 +10,7 @@ const verifyDbMiddleware = require('../../utils/middlewares/middlewares.verify-e
 module.exports = (router) => {
   router
     .route('/category')
-    .get(
-      authorizationMiddleware('*'),
-      controllerCategory.listAllCategoryController
-    )
+    .get(controllerCategory.listAllCategoryController)
 
     .post(
       authenticationMiddleware(),
@@ -111,7 +108,6 @@ module.exports = (router) => {
     )
 
   router.route('/category/:categoryid/product').get(
-    authorizationMiddleware('*'),
     middlewareValidateDTO('params', {
       categoryid: joi
         .string()

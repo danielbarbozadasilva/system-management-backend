@@ -27,7 +27,7 @@ const createToken = (model) => {
 
 const decodeToken = (token) => {
   try {
-    return jwt.decode(token)
+    return jwt?.decode(token)
   } catch (error) {
     throw new ErrorGeneric(`Error decoding token! ${error}`)
   }

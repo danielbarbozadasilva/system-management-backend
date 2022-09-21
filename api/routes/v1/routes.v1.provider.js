@@ -7,7 +7,6 @@ const verifyDbMiddleware = require('../../utils/middlewares/middlewares.verify-e
 
 module.exports = (router) => {
   router.route('/provider/filter/:namefilter').get(
-    authorizationMiddleware('*'),
     middlewareValidateDTO('params', {
       namefilter: joi.string().allow('')
     }),
@@ -15,7 +14,6 @@ module.exports = (router) => {
   )
 
   router.route('/provider').post(
-    authorizationMiddleware('*'),
     middlewareValidateDTO('body', {
       cnpj: joi
         .string()
@@ -68,7 +66,6 @@ module.exports = (router) => {
   )
 
   router.route('/provider/filter/uf/:uf/city/:city').get(
-    authorizationMiddleware('*'),
     middlewareValidateDTO('params', {
       uf: joi.string().allow(''),
       city: joi.string().allow('')
@@ -77,7 +74,6 @@ module.exports = (router) => {
   )
 
   router.route('/provider/:providerid').get(
-    authorizationMiddleware('*'),
     middlewareValidateDTO('params', {
       providerid: joi
         .string()
@@ -94,8 +90,6 @@ module.exports = (router) => {
   )
 
   router.route('/provider/:providerid/status/:status').put(
-    authenticationMiddleware(),
-    authorizationMiddleware('CHANGE_STATUS_PROVIDER'),
     middlewareValidateDTO('params', {
       providerid: joi
         .string()
@@ -116,13 +110,13 @@ module.exports = (router) => {
           'string.empty': '"status" can not be empty'
         })
     }),
+    authenticationMiddleware(),
+    authorizationMiddleware('CHANGE_STATUS_PROVIDER'),
     verifyDbMiddleware.verifyIdProviderDbMiddleware,
     providerController.changeStatusProviderController
   )
 
   router.route('/provider/:providerid/like').get(
-    authenticationMiddleware(),
-    authorizationMiddleware('*'),
     middlewareValidateDTO('params', {
       providerid: joi
         .string()
@@ -134,6 +128,8 @@ module.exports = (router) => {
           'string.pattern.base': '"provider id" out of the expected format'
         })
     }),
+    authenticationMiddleware(),
+    authorizationMiddleware('*'),
     verifyDbMiddleware.verifyIdProviderDbMiddleware,
     providerController.searchLikeProductController
   )
@@ -141,8 +137,6 @@ module.exports = (router) => {
   router
     .route('/provider/:providerid/product/:productid/like')
     .post(
-      authenticationMiddleware(),
-      authorizationMiddleware('CREATE_LIKE_PRODUCT'),
       middlewareValidateDTO('params', {
         providerid: joi
           .string()
@@ -163,14 +157,13 @@ module.exports = (router) => {
             'string.pattern.base': '"product id" out of the expected format'
           })
       }),
-      verifyDbMiddleware.verifyIdProviderDbMiddleware,
+      authenticationMiddleware(),
+      authorizationMiddleware('CREATE_LIKE_PRODUCT'),
       verifyDbMiddleware.verifyIdProductDbMiddleware,
       verifyDbMiddleware.verifyLikeProviderDbMiddleware,
       providerController.createLikeProductController
     )
     .delete(
-      authenticationMiddleware(),
-      authorizationMiddleware('REMOVE_LIKE_PRODUCT'),
       middlewareValidateDTO('params', {
         providerid: joi
           .string()
@@ -191,7 +184,8 @@ module.exports = (router) => {
             'string.pattern.base': '"product id" out of the expected format'
           })
       }),
-      verifyDbMiddleware.verifyIdProviderDbMiddleware,
+      authenticationMiddleware(),
+      authorizationMiddleware('REMOVE_LIKE_PRODUCT'),
       verifyDbMiddleware.verifyIdProductDbMiddleware,
       verifyDbMiddleware.verifyProviderLikeNotExistsDbMiddleware,
       providerController.deleteLikeProductController

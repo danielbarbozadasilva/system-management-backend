@@ -7,8 +7,6 @@ const verifyDbMiddleware = require('../../utils/middlewares/middlewares.verify-e
 
 module.exports = (router) => {
   router.route('/client/:clientid').get(
-    authenticationMiddleware(),
-    authorizationMiddleware('CLIENT_SEARCH_ID'),
     middlewareValidateDTO('params', {
       clientid: joi
         .string()
@@ -20,6 +18,8 @@ module.exports = (router) => {
           'string.pattern.base': '"client id" out of the expected format'
         })
     }),
+    authenticationMiddleware(),
+    authorizationMiddleware('CLIENT_SEARCH_ID'),
     verifyDbMiddleware.verifyIdClientDbMiddleware,
     clientController.listClientByIdController
   ),
@@ -28,12 +28,10 @@ module.exports = (router) => {
       .get(
         authenticationMiddleware(),
         authorizationMiddleware('CLIENT_SEARCH'),
-        authorizationMiddleware('*'),
         clientController.listAllClientsController
       )
 
       .post(
-        authorizationMiddleware('*'),
         middlewareValidateDTO('body', {
           firstName: joi.string().required().messages({
             'any.required': '"first name" is a required field',
@@ -70,8 +68,6 @@ module.exports = (router) => {
         clientController.insertClientsController
       ),
     router.route('/client/:clientid/like').get(
-      authenticationMiddleware(),
-      authorizationMiddleware('*'),
       middlewareValidateDTO('params', {
         clientid: joi
           .string()
@@ -83,14 +79,13 @@ module.exports = (router) => {
             'string.pattern.base': '"client id" out of the expected format'
           })
       }),
+      authenticationMiddleware(),
       verifyDbMiddleware.verifyIdClientDbMiddleware,
       clientController.listLikeClientController
     ),
     router
       .route('/client/:clientid/provider/:providerid/like')
       .post(
-        authenticationMiddleware(),
-        authorizationMiddleware('CLIENT_LIKE_CREATE'),
         middlewareValidateDTO('params', {
           clientid: joi
             .string()
@@ -111,14 +106,14 @@ module.exports = (router) => {
               'string.pattern.base': '"provider id" out of the expected format'
             })
         }),
+        authenticationMiddleware(),
+        authorizationMiddleware('CLIENT_LIKE_CREATE'),
         verifyDbMiddleware.verifyIdClientDbMiddleware,
         verifyDbMiddleware.verifyIdProviderDbMiddleware,
         verifyDbMiddleware.verifyLikeClientDbMiddleware,
         clientController.createLikeController
       )
       .delete(
-        authenticationMiddleware(),
-        authorizationMiddleware('CLIENT_LIKE_REMOVE'),
         middlewareValidateDTO('params', {
           clientid: joi
             .string()
@@ -139,6 +134,8 @@ module.exports = (router) => {
               'string.pattern.base': '"provider id" out of the expected format'
             })
         }),
+        authenticationMiddleware(),
+        authorizationMiddleware('CLIENT_LIKE_REMOVE'),
         verifyDbMiddleware.verifyIdClientDbMiddleware,
         verifyDbMiddleware.verifyIdProviderDbMiddleware,
         verifyDbMiddleware.verifyClientLikeNotExistsDbMiddleware,
