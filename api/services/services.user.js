@@ -112,7 +112,9 @@ const checkIdAuthorizationService = (idToken, idUser, type) => {
     authorized = idUser != idToken
 
     if (authorized) {
-      throw new ErrorNotAuthorized('Usuário não autorizado!')
+      throw new ErrorNotAuthorized(
+        "Usuário não autorizado! Você só pode realizar a operação usando o seu próprio 'Id'"
+      )
     }
   }
   return authorized
