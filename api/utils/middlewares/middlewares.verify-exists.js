@@ -18,17 +18,15 @@ const verifyIdCategoryDbMiddleware = async (req, res, next) => {
 }
 
 const verifyIdProductDbMiddleware = async (req, res, next) => {
-  const productDB = await product.findOne({ _id: req.params.productid })
-  if (!productDB) {
-    throw new ErrorUnprocessableEntity(`Não existe um produto com esse id!`)
-  }
-  next()
-}
+  const productDB = await product.findOne({
+    _id: req.params.productid,
+    provider: req.params.providerid
+  })
 
-const verifyIdProviderDbMiddleware = async (req, res, next) => {
-  const providerDB = await provider.findOne({ _id: req.params.providerid })
-  if (!providerDB) {
-    throw new ErrorUnprocessableEntity(`Não existe um fornecedor com esse id!`)
+  if (!productDB) {
+    throw new ErrorUnprocessableEntity(
+      `Fornecedor ou produto inválidos! Certifique-se que o produto pertence ao fornecedor. `
+    )
   }
   next()
 }
@@ -125,6 +123,14 @@ const verifyLikeProviderDbMiddleware = async (req, res, next) => {
 
   if (likeProviderDB.length > 0) {
     throw new ErrorBusinessRule('O fornecedor já curtiu este produto!')
+  }
+  next()
+}
+
+const verifyIdProviderDbMiddleware = async (req, res, next) => {
+  const providerDB = await provider.findOne({ _id: req.params.providerid })
+  if (!providerDB) {
+    throw new ErrorUnprocessableEntity(`Não existe um fornecedor com esse id!`)
   }
   next()
 }
