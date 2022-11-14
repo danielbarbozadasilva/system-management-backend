@@ -1,4 +1,4 @@
-# **Api Sistema REGALE**
+# **Api RESTful Sistema REGALE**
 ## **Introdução**
 A todo momento surgem novos estabelecimentos comerciais, muitos dos quais não têm os meios de promoção ou são de difícil localização. O Sistema REGALE possui a proposta de solucionar esse problema, com foco em confeitarias, ele permite ao usuário através de um sistema web localizar as confeitarias mais próximas a sua localidade. Assim como os produtos ofertados por elas.
 A API foi desenvolvida utilizando o NodeJs, ExpressJs e Banco de dados MongoDB.
@@ -136,7 +136,7 @@ RF015 – O sistema deve filtrar os fornecedores por localidade e ordem alfabét
 
 | Identificação | Classificação | Descrição |
 | --- | --- | --- |
-|RN001   |Controle de acesso     |Os acessos permitidos ao sistema serão: Administrador, Fornecedor (confeitaria) e Cliente. O usuário anonimo terá acesso apenas ao portal do site.    |
+|RN001   |Controle de acesso     |Os acessos permitidos ao sistema serão: Administrador, Fornecedor (confeitaria) e Cliente. O usuário anônimo terá acesso apenas ao portal do site.    |
 |RN002   |Controle de veracidade     | Apenas fornecedores autorizados pelo administrador poderão ter acesso ao sistema.    |
 |RN003   |Limite de ação     |Apenas o Administrador poderá incluir, editar e excluir categorias no sistema.     |
 |RN004   |Limite de ação     | Apenas o Administrador poderá visualizar informações sobre os clientes.    |
@@ -200,8 +200,8 @@ RF015 – O sistema deve filtrar os fornecedores por localidade e ordem alfabét
 <br/>
 
 > ## Metodologias e Padrões
+* RESTful
 * Conventional commits
-* MVC
 * GitFlow
 * Error handler
 
