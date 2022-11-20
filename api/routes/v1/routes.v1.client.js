@@ -61,8 +61,7 @@ module.exports = (router) => {
           password: joi.string().required().messages({
             'any.required': '"password" is a required field',
             'string.empty': '"password" can not be empty'
-          }),
-          auth: joi.boolean().optional()
+          })
         }),
         verifyDbMiddleware.verifyEmailExists,
         clientController.insertClientsController

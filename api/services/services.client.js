@@ -35,9 +35,7 @@ const listClientByIdService = async (clientId) => {
 
 const createClientService = async (body) => {
   try {
-    let data = {}
-
-    const newClient = await client.create({
+    await client.create({
       firstName: body.firstName,
       lastName: body.lastName,
       birthDate: new Date(body.birthDate),
@@ -49,13 +47,12 @@ const createClientService = async (body) => {
       status: 'ENABLE'
     })
 
-    if (body.auth) {
-      data = await serviceUserProvider.createCredentialService(body.email)
-    }
+    const data = await serviceUserProvider.createCredentialService(body.email)
+
     return {
       success: true,
       message: 'Operation performed successfully',
-      data: data?.token ? data : mapperClient.toDTO(newClient)
+      data
     }
   } catch (err) {
     throw new ErrorGeneric(`Internal Server Error! ${err}`)
