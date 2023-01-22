@@ -3,7 +3,7 @@ const { client, provider } = require('../models/models.index')
 const { createHash } = require('../utils/utils.cryptography')
 const mapperClient = require('../mappers/mappers.client')
 const serviceUserProvider = require('./services.user')
-const ErrorGeneric = require('../utils/errors/erros.generic-error')
+const ErrorGeneric = require('../exceptions/erros.generic-error')
 
 const listAllClientService = async () => {
   try {

@@ -1,7 +1,7 @@
 const { product, provider } = require('../models/models.index')
 const fileUtils = require('../utils/utils.file')
 const productMapper = require('../mappers/mappers.product')
-const ErrorGeneric = require('../utils/errors/erros.generic-error')
+const ErrorGeneric = require('../exceptions/erros.generic-error')
 
 const listProductByIdService = async (productId) => {
   try {

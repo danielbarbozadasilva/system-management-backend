@@ -1,9 +1,9 @@
 const { user } = require('../models/models.index')
 const cryptography = require('../utils/utils.cryptography')
 const userMapper = require('../mappers/mappers.user')
-const ErrorGeneric = require('../utils/errors/erros.generic-error')
-const ErrorNotAuthorized = require('../utils/errors/errors.user-not-authorized')
-const ErrorNotAuthenticated = require('../utils/errors/errors.user-not-authenticated')
+const ErrorGeneric = require('../exceptions/erros.generic-error')
+const ErrorNotAuthorized = require('../exceptions/errors.user-not-authorized')
+const ErrorNotAuthenticated = require('../exceptions/errors.user-not-authenticated')
 
 const profile = [
   {

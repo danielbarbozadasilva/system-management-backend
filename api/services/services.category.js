@@ -2,7 +2,7 @@ const { ObjectId } = require('mongodb')
 const { category, product, provider } = require('../models/models.index')
 const categoryMapper = require('../mappers/mappers.category')
 const fileUtils = require('../utils/utils.file')
-const ErrorGeneric = require('../utils/errors/erros.generic-error')
+const ErrorGeneric = require('../exceptions/erros.generic-error')
 
 const searchAllCategoryService = async () => {
   try {

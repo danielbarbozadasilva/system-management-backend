@@ -5,9 +5,9 @@ const {
   client,
   category,
   user
-} = require('../../models/models.index')
-const ErrorUnprocessableEntity = require('../errors/errors.unprocessable-entity')
-const ErrorBusinessRule = require('../errors/errors.business-rule')
+} = require('../models/models.index')
+const ErrorUnprocessableEntity = require('../exceptions/errors.unprocessable-entity')
+const ErrorBusinessRule = require('../exceptions/errors.business-rule')
 
 const verifyIdCategoryDbMiddleware = async (req, res, next) => {
   const categoryDB = await category.findOne({ _id: req.params.categoryid })

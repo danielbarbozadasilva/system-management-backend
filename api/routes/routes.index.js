@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const { name, version } = require('../../package.json')
-const { formatError } = require('../utils/errors/errors.handler')
+const { formatError } = require('../exceptions/errors.handler')
 
 const routesV1User = require('./v1/routes.v1.user')
 const routesV1Category = require('./v1/routes.v1.category')

@@ -1,6 +1,6 @@
 const formidable = require('formidable')
-const fileUtils = require('../utils.file')
-const ErrorBusinessRule = require('../errors/errors.business-rule')
+const fileUtils = require('../utils/utils.file')
+const ErrorBusinessRule = require('../exceptions/errors.business-rule')
 
 const fileUpload = (destiny) => async (req, res, next) => {
   const form = formidable.IncomingForm()

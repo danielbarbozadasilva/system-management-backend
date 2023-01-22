@@ -5,12 +5,12 @@ const {
   client,
   category
 } = require('../models/models.index')
-const emailUtils = require('../utils/utils.email')
+const emailUtils = require('../utils/email/email.index')
 const mapperProvider = require('../mappers/mappers.provider')
 const { createHash } = require('../utils/utils.cryptography')
-const { EmailEnable } = require('../utils/utils.email.message.enable')
-const { EmailDisable } = require('../utils/utils.email.message.disable')
-const ErrorGeneric = require('../utils/errors/erros.generic-error')
+const { EmailEnable } = require('../utils/email/email.message.enable')
+const { EmailDisable } = require('../utils/email/email.message.disable')
+const ErrorGeneric = require('../exceptions/erros.generic-error')
 
 const listAllProviderService = async (filter) => {
   const resultDB = await provider.aggregate([

@@ -1,9 +1,9 @@
 const joi = require('joi').extend(require('@joi/date'))
 const clientController = require('../../controllers/controllers.client')
-const middlewareValidateDTO = require('../../utils/middlewares/middlewares.validate-dto')
-const authenticationMiddleware = require('../../utils/middlewares/middlewares.authentication')
-const authorizationMiddleware = require('../../utils/middlewares/middlewares.authorization')
-const verifyDbMiddleware = require('../../utils/middlewares/middlewares.verify-exists')
+const middlewareValidateDTO = require('../../middlewares/middlewares.validate-dto')
+const authenticationMiddleware = require('../../middlewares/middlewares.authentication')
+const authorizationMiddleware = require('../../middlewares/middlewares.authorization')
+const verifyDbMiddleware = require('../../middlewares/middlewares.verify-exists')
 
 module.exports = (router) => {
   router.route('/client/:clientid').get(
