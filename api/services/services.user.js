@@ -78,7 +78,7 @@ const userIsValidService = async (email, password) => {
   })
 
   if (!userDB) {
-    throw new ErrorNotAuthenticated('Cpf ou senha inválidos!')
+    throw new ErrorNotAuthenticated('E-mail ou senha inválidos!')
   }
   return !!userDB
 }
