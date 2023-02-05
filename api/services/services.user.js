@@ -1,146 +1,98 @@
-const { user, provider } = require('../models/models.index')
+const { user } = require('../models/models.index')
 const cryptography = require('../utils/utils.cryptography')
 const userMapper = require('../mappers/mappers.user')
+const ErrorGeneric = require('../exceptions/erros.generic-error')
+const ErrorNotAuthorized = require('../exceptions/errors.user-not-authorized')
+const ErrorNotAuthenticated = require('../exceptions/errors.user-not-authenticated')
+const profile = require('../utils/utils.rules')
 
-const profile = [
-  {
-    id: 1,
-    description: 'admin',
-    functionality: [
-      'UPDATE_PROVIDER',
-      'REMOVE_PROVIDER',
-      'CHANGE_STATUS_PROVIDER',
-      'CREATE_CATEGORY',
-      'UPDATE_CATEGORY',
-      'REMOVE_CATEGORY'
-    ]
-  },
-  {
-    id: 2,
-    description: 'provider',
-    functionality: [
-      'SEARCH_PRODUCT',
-      'CREATE_PRODUCT',
-      'REMOVE_PRODUCT',
-      'UPDATE_PRODUCT',
-      'CREATE_LIKE_PRODUCT',
-      'REMOVE_LIKE_PRODUCT'
-    ]
-  },
-  {
-    id: 3,
-    description: 'client',
-    functionality: ['CLIENT_LIKE_CREATE', 'CLIENT_LIKE_REMOVE']
+const checkPermissionService = (type, permission) => {
+  const result = profile.find((item) => item.type === type)
+  const check = result?.permission?.includes(permission)
+  if (!check) {
+    throw new ErrorNotAuthorized('Usuário não autorizado!')
   }
-]
-
-const searchTypeUserByIdService = (type) => {
-  return profile.find((item) => {
-    return item.id === type
-  })
+  return !!check
 }
 
 const createCredentialService = async (email) => {
-  const userDB = await user.findOne({ email: email })
+  const userDB = await user.findOne({ email })
   const userDTO = userMapper.toUserDTO(userDB)
-  const userToken = cryptography.UtilCreateToken(userDTO)
+  const userToken = cryptography.createToken(userDTO)
   if (userDTO && userToken) {
     return {
       token: userToken,
       userDTO
     }
-  } else {
-    return false
   }
+  return false
 }
 
-const verifyFunctionalityProfileService = async (typeUser, test) => {
-  const profile = searchTypeUserByIdService(typeUser)
-  if (!!(profile?.functionality?.includes(test) == true && profile.id)) {
-    return false
-  } else {
-    return true
+const userIsActiveService = async (email) => {
+  const resultDB = await user
+    .findOne({ email })
+    .where('status')
+    .nin(['ANALYSIS', 'DISABLE'])
+
+  if (!resultDB) {
+    throw new ErrorNotAuthorized('Sua conta foi desativada pelo Administrador!')
   }
-}
-
-const verifyEmailBodyExistService = async (email) => {
-  const users = await user.find({ email })
-  return !(users.length > 0)
-}
-
-const verifyCnpjExistsService = async (cnpj) => {
-  const result = await provider.find({ cnpj })
-  return result.length > 0
-}
-
-const verifyEmailService = async (id, data) => {
-  const result = await provider
-    .findOne(Object({ email: data }))
-    .where('_id')
-    .ne(id)
-  return !!result
-}
-
-const verifyCnpjService = async (id, data) => {
-  const result = await provider
-    .findOne(Object({ cnpj: data }))
-    .where('_id')
-    .ne(id)
-  return !!result
-}
-
-const authenticateService = async (email, password) => {
-  const resultadoDB = await userIsValidService(email, password)
-  if (!resultadoDB) {
-    return {
-      success: false,
-      message: 'Unable to authenticate user',
-      details: ['Invalid username or password']
-    }
-  }
-  const resCreateCredential = await createCredentialService(email)
-  if (!resCreateCredential) {
-    return {
-      success: false,
-      details: ['it was not possible to create the credential']
-    }
-  }
-  return {
-    success: true,
-    message: 'Successfully authenticated user',
-    data: resCreateCredential
-  }
-}
-
-const verifyStatusProviderService = async (id) => {
-  const result = await user.find({
-    _id: id,
-    kind: 'provider',
-    status: 'ANALYSIS'
-  })
-
-  if (result.length === 0) {
-    return false
-  } else {
-    return true
-  }
+  return !!resultDB
 }
 
 const userIsValidService = async (email, password) => {
-  return !!(await user.findOne({
-    email: email, password: cryptography.UtilCreateHash(password)
-  }))
+  const userDB = await user.findOne({
+    email,
+    password: cryptography.createHash(password)
+  })
+
+  if (!userDB) {
+    throw new ErrorNotAuthenticated('E-mail ou senha inválidos!')
+  }
+  return !!userDB
+}
+
+const authenticateService = async (email, password) => {
+  await userIsValidService(email, password)
+  await userIsActiveService(email)
+  try {
+    const resultCredentials = await createCredentialService(email)
+    if (!resultCredentials) {
+      return {
+        success: false,
+        details: ['Não foi possivel criar a credencial!']
+      }
+    }
+
+    return {
+      success: true,
+      message: 'Usuário autenticado com sucesso!',
+      data: resultCredentials
+    }
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
+  }
+}
+
+const checkIdAuthorizationService = (idToken, idUser, type) => {
+  let authorized = false
+
+  if (idUser && type !== 1) {
+    authorized = idUser != idToken
+
+    if (authorized) {
+      throw new ErrorNotAuthorized(
+        "Usuário não autorizado! Você só pode realizar a operação usando o seu próprio 'Id'"
+      )
+    }
+  }
+  return authorized
 }
 
 module.exports = {
   authenticateService,
-  verifyStatusProviderService,
-  searchTypeUserByIdService,
+  checkPermissionService,
   createCredentialService,
-  verifyCnpjExistsService,
-  verifyEmailBodyExistService,
-  verifyFunctionalityProfileService,
   userIsValidService,
-  verifyEmailService,
-  verifyCnpjService
+  checkIdAuthorizationService
 }

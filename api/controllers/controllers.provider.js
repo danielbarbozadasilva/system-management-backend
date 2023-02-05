@@ -1,9 +1,8 @@
 const providerService = require('../services/services.provider')
-const likeService = require('../services/services.like')
 
 const listAllProvidersController = async (req, res) => {
-  const { params } = req
-  const resultService = await providerService.listAllProviderService(params)
+  const { namefilter } = req.params
+  const resultService = await providerService.listAllProviderService(namefilter)
   const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
@@ -50,32 +49,6 @@ const insertProviderController = async (req, res) => {
   return res.status(code).send({ message, data })
 }
 
-const updateProviderController = async (req, res) => {
-  const { body } = req
-  const { providerid } = req.params
-  const resultService = await providerService.updateProviderService(
-    providerid,
-    body
-  )
-  const code = resultService.success ? 200 : 400
-  const message = resultService.success
-    ? { message: resultService.message }
-    : { details: resultService.details }
-  const data = resultService.data ? resultService.data : ''
-  return res.status(code).send({ message, data })
-}
-
-const removeProviderController = async (req, res) => {
-  const { providerid } = req.params
-  const resultService = await providerService.removeProviderService(providerid)
-  const code = resultService.success ? 200 : 400
-  const message = resultService.success
-    ? { message: resultService.message }
-    : { details: resultService.details }
-  const data = resultService.data ? resultService.data : ''
-  return res.status(code).send({ message, data })
-}
-
 const listProductsByProviderController = async (req, res) => {
   const { providerid } = req.params
   const resultService = await providerService.listProductsProviderService(
@@ -105,7 +78,7 @@ const changeStatusProviderController = async (req, res) => {
 
 const searchLikeProductController = async (req, res) => {
   const { providerid } = req.params
-  const resultService = await likeService.listLikesProviderProductService(
+  const resultService = await providerService.listLikesProviderProductService(
     providerid
   )
   const code = resultService.success ? 200 : 400
@@ -116,9 +89,9 @@ const searchLikeProductController = async (req, res) => {
   return res.status(code).send({ message, data })
 }
 
-const insertLikeProductController = async (req, res) => {
+const createLikeProductController = async (req, res) => {
   const { providerid, productid } = req.params
-  const resultService = await likeService.createLikeProviderProductService(
+  const resultService = await providerService.createLikeProviderProductService(
     providerid,
     productid
   )
@@ -132,7 +105,7 @@ const insertLikeProductController = async (req, res) => {
 
 const deleteLikeProductController = async (req, res) => {
   const { params } = req
-  const resultService = await likeService.removeLikeProviderProductService(
+  const resultService = await providerService.removeLikeProviderProductService(
     params.providerid,
     params.productid
   )
@@ -149,11 +122,9 @@ module.exports = {
   listProviderByIdController,
   listProvidersByLocationController,
   insertProviderController,
-  updateProviderController,
-  removeProviderController,
   listProductsByProviderController,
   changeStatusProviderController,
   searchLikeProductController,
-  insertLikeProductController,
+  createLikeProductController,
   deleteLikeProductController
 }

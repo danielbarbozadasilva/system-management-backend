@@ -1,153 +1,117 @@
-const { verifyEmailService, verifyEmailBodyExistService } = require('./services.user')
-const { client } = require('../models/models.index')
-const { toDTO } = require('../mappers/mappers.client')
-const { UtilCreateHash } = require('../utils/utils.cryptography')
+const { ObjectId } = require('mongodb')
+const { client, provider } = require('../models/models.index')
+const { createHash } = require('../utils/utils.cryptography')
+const mapperClient = require('../mappers/mappers.client')
+const serviceUserProvider = require('./services.user')
+const ErrorGeneric = require('../exceptions/erros.generic-error')
 
 const listAllClientService = async () => {
-  const resultadoDB = await client.find({}).sort({ name: 1 })
-  if (!resultadoDB) {
+  try {
+    const resultDB = await client.find({}).sort({ name: 1 })
+
     return {
-      success: false,
-      details: 'No categories found'
+      success: true,
+      message: 'Operation performed successfully',
+      data: resultDB.map((item) => mapperClient.toDTO(item))
     }
-  }
-  return {
-    success: true,
-    message: 'Operation performed successfully',
-    data: resultadoDB.map((item) => toDTO(item))
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
 const listClientByIdService = async (clientId) => {
-  const resultadoDB = await client.findById({ _id: clientId })
-  if (!resultadoDB) {
+  try {
+    const resultDB = await client.findById({ _id: clientId })
+
     return {
-      success: false,
-      details: 'No categories found'
+      success: true,
+      message: 'Operation performed successfully',
+      data: mapperClient.toDTO(resultDB)
     }
-  }
-  return {
-    success: true,
-    message: 'Operation performed successfully',
-    data: {
-      ...toDTO(resultadoDB)
-    }
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
-const createClientService = async (model) => {
-  const {
-    firstName,
-    lastName,
-    birthDate,
-    phone,
-    uf,
-    city,
-    email,
-    password
-  } = model
+const createClientService = async (body) => {
+  try {
+    await client.create({
+      firstName: body.firstName,
+      lastName: body.lastName,
+      birthDate: new Date(body.birthDate),
+      phone: body.phone,
+      uf: body.uf,
+      city: body.city,
+      email: body.email,
+      password: createHash(body.password),
+      status: 'ENABLE'
+    })
 
-  if (!(await verifyEmailBodyExistService(email))) {
-    return {
-      success: false,
-      message: 'Operation cannot be performed',
-      details: ['There is already a registered user for the network email']
-    }
-  }
+    const data = await serviceUserProvider.createCredentialService(body.email)
 
-  const newClient = await client.create({
-    firstName,
-    lastName,
-    birthDate: new Date(birthDate),
-    phone,
-    uf,
-    city,
-    email,
-    password: UtilCreateHash(password),
-    status: 'ENABLE'
-  })
-  if (!newClient) {
     return {
-      success: false,
-      details: 'No categories found'
+      success: true,
+      message: 'Operation performed successfully',
+      data
     }
-  }
-  return {
-    success: true,
-    message: 'Operation performed successfully',
-    data: {
-      ...toDTO(newClient)
-    }
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
-const updateClientService = async (clientId, body) => {
-  const resultFind = await client.findById({ _id: clientId })
+const listLikesClientService = async (clientId) => {
+  try {
+    const resultLikeDB = await client.aggregate([
+      { $match: { _id: ObjectId(clientId) } },
+      {
+        $lookup: {
+          from: provider.collection.name,
+          localField: 'likes',
+          foreignField: '_id',
+          as: 'result_likes'
+        }
+      }
+    ])
 
-  if (!resultFind) {
     return {
-      success: false,
-      message: 'could not perform the operation',
-      details: ["client id doesn't exist."]
+      success: true,
+      message: 'Operation performed successfully!',
+      data: mapperClient.toDTOListProviderLike(...resultLikeDB)
     }
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
-  if (await verifyEmailService(clientId, body.email)) {
-    return {
-      success: false,
-      message: 'Operation cannot be performed',
-      details: ['There is already a registered user for the network email']
-    }
-  }
+}
+const createLikeService = async (providerId, clientId) => {
+  try {
+    const resultDB = await client.findByIdAndUpdate(clientId, {
+      $push: { likes: providerId }
+    })
 
-  const newClient = await client.updateOne(
-    { _id: clientId },
-    {
-      $set: {
-        firstName: body.firstName,
-        lastName: body.lastName,
-        birthDate: body.birthDate,
-        phone: body.phone,
-        uf: body.uf,
-        city: body.city,
-        email: body.email,
-        password: UtilCreateHash(body.password)
+    if (resultDB) {
+      return {
+        success: true,
+        message: 'Fornecedor curtido com sucesso!'
       }
     }
-  )
-  if (!newClient) {
-    return {
-      success: false,
-      message: 'Error updating data'
-    }
-  }
-
-  return {
-    success: true,
-    message: 'Data updated successfully'
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
-const deleteClientService = async (clientId) => {
-  const resultFind = await client.findById({ _id: clientId })
+const removeLikeService = async (providerId, clientId) => {
+  try {
+    await client.updateOne(
+      { _id: ObjectId(`${clientId}`) },
+      { $pull: { likes: `${providerId}` } }
+    )
 
-  if (!resultFind) {
     return {
-      success: false,
-      message: 'could not perform the operation',
-      details: ["client id doesn't exist."]
+      success: true,
+      message: 'A curtida foi removida com sucesso!'
     }
-  }
-  const deleteProviderDB = await client.deleteOne({ _id: clientId })
-
-  if (!deleteProviderDB) {
-    return {
-      success: false,
-      message: 'Error deleting customer'
-    }
-  }
-  return {
-    success: true,
-    message: 'Client deleted successfully'
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
@@ -155,6 +119,7 @@ module.exports = {
   listAllClientService,
   listClientByIdService,
   createClientService,
-  updateClientService,
-  deleteClientService
+  listLikesClientService,
+  createLikeService,
+  removeLikeService
 }

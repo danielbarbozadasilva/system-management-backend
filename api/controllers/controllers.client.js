@@ -1,5 +1,4 @@
 const clientService = require('../services/services.client')
-const likeService = require('../services/services.like')
 
 const listAllClientsController = async (req, res) => {
   const resultService = await clientService.listAllClientService()
@@ -33,35 +32,9 @@ const insertClientsController = async (req, res) => {
   return res.status(code).send({ message, data })
 }
 
-const updateClientsController = async (req, res) => {
-  const { clientid } = req.params
-  const { body } = req
-
-  const resultService = await clientService.updateClientService(clientid, body)
-  const code = resultService.success ? 200 : 400
-  const message = resultService.success
-    ? { message: resultService.message }
-    : { details: resultService.details }
-  const data = resultService.data ? resultService.data : ''
-  return res.status(code).send({ message, data })
-}
-
-const deleteClientsController = async (req, res) => {
-  const { clientid } = req.params
-  const resultService = await clientService.deleteClientService(clientid)
-  const code = resultService.success ? 200 : 400
-  const message = resultService.success
-    ? { message: resultService.message }
-    : { details: resultService.details }
-  const data = resultService.data ? resultService.data : ''
-  return res.status(code).send({ message, data })
-}
-
 const listLikeClientController = async (req, res) => {
   const { clientid } = req.params
-  const resultService = await likeService.listLikesClientProviderService(
-    clientid
-  )
+  const resultService = await clientService.listLikesClientService(clientid)
   const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
@@ -70,9 +43,9 @@ const listLikeClientController = async (req, res) => {
   return res.status(code).send({ message, data })
 }
 
-const createLikeProviderController = async (req, res) => {
+const createLikeController = async (req, res) => {
   const { providerid, clientid } = req.params
-  const resultService = await likeService.createLikeClientProviderService(
+  const resultService = await clientService.createLikeService(
     providerid,
     clientid
   )
@@ -84,9 +57,9 @@ const createLikeProviderController = async (req, res) => {
   return res.status(code).send({ message, data })
 }
 
-const removeLikeProviderController = async (req, res) => {
+const removeLikeController = async (req, res) => {
   const { providerid, clientid } = req.params
-  const resultService = await likeService.removeLikeClientProviderService(
+  const resultService = await clientService.removeLikeService(
     providerid,
     clientid
   )
@@ -102,9 +75,7 @@ module.exports = {
   listAllClientsController,
   listClientByIdController,
   insertClientsController,
-  updateClientsController,
-  deleteClientsController,
   listLikeClientController,
-  createLikeProviderController,
-  removeLikeProviderController
+  createLikeController,
+  removeLikeController
 }

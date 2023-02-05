@@ -1,18 +1,11 @@
 const productService = require('../services/services.product')
 
 const filterProductController = async (req, res) => {
-  const { name, filter } = req.params
-  const resultService = await productService.listProductWithFilterService(name, filter)
-  const code = resultService.success ? 200 : 400
-  const message = resultService.success
-    ? { message: resultService.message }
-    : { details: resultService.details }
-  const data = resultService.data ? resultService.data : ''
-  return res.status(code).send({ message, data })
-}
-
-const listAllProductsController = async (req, res) => {
-  const resultService = await productService.listAllProductService()
+  const { name, filter } = req.query
+  const resultService = await productService.listProductWithFilterService(
+    name,
+    filter
+  )
   const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
@@ -50,8 +43,8 @@ const insertProductController = async (req, res) => {
 const updateProductController = async (req, res) => {
   const { params, body } = req
   const resultService = await productService.updateProductService(
-    params.productid,
     params.providerid,
+    params.productid,
     body
   )
   const code = resultService.success ? 200 : 400
@@ -64,9 +57,7 @@ const updateProductController = async (req, res) => {
 
 const removeProductController = async (req, res) => {
   const { productid } = req.params
-  const resultService = await productService.deleteProductService({
-    productId: productid
-  })
+  const resultService = await productService.deleteProductService(productid)
   const code = resultService.success ? 200 : 400
   const message = resultService.success
     ? { message: resultService.message }
@@ -77,7 +68,6 @@ const removeProductController = async (req, res) => {
 
 module.exports = {
   filterProductController,
-  listAllProductsController,
   listProductByIdController,
   insertProductController,
   updateProductController,

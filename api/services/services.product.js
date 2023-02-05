@@ -1,77 +1,29 @@
-const { product, category, provider, client, like } = require('../models/models.index')
+const { product, provider } = require('../models/models.index')
 const fileUtils = require('../utils/utils.file')
 const productMapper = require('../mappers/mappers.product')
-
-const listAllProductService = async () => {
-  const productDB = await product.aggregate([
-    {
-      $lookup: {
-        from: category.collection.name,
-        localField: 'category',
-        foreignField: '_id',
-        as: 'result_category'
-      }
-    },
-    {
-      $lookup: {
-        from: like.collection.name,
-        localField: '_id',
-        foreignField: 'product',
-        as: 'result_likes'
-      }
-    },
-
-    {
-      $group: {
-        _id: '$_id',
-        occurances: { $push: { user: '$result_likes.product' } },
-        doc: { $first: '$$ROOT' }
-      }
-    },
-
-    {
-      $replaceRoot: {
-        newRoot: { $mergeObjects: [{ count: '$occurances' }, '$doc'] }
-      }
-    }
-  ])
-
-  if (!productDB.length) {
-    return {
-      success: false,
-      message: 'could not perform the operation',
-      details: ['The product id does not exist.']
-    }
-  }
-  return {
-    success: true,
-    message: 'Operation performed successfully',
-    data: productDB.map((item) => productMapper.toDTO(item))
-  }
-}
+const ErrorGeneric = require('../exceptions/erros.generic-error')
 
 const listProductByIdService = async (productId) => {
-  const productDB = await product.findById({ _id: productId })
-  if (!productDB) {
+  try {
+    const productDB = await product
+      .findById({ _id: productId })
+      .populate('provider')
+
     return {
-      success: false,
-      message: 'could not perform the operation',
-      details: ['The product id does not exist.']
+      success: true,
+      message: 'Operation performed successfully',
+      data: productMapper.toItemListDTO(productDB)
     }
-  }
-  return {
-    success: true,
-    message: 'Operation performed successfully',
-    data: productMapper.toItemListDTO(productDB)
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
 const createProductService = async (body, providerid) => {
-  const [providerDB, categoryDB, moveFile, productDB] = await Promise.all([
-    provider.findById({ _id: Object(providerid) }),
-    category.findById({ _id: Object(body.category) }),
-    fileUtils.UtilMove(body.image.old_path, body.image.new_path),
-    product.create({
+  try {
+    fileUtils.utilMove(body.image.oldPath, body.image.newPath)
+
+    const productDB = await product.create({
       name: body.name,
       description: body.description,
       price: body.price,
@@ -83,166 +35,122 @@ const createProductService = async (body, providerid) => {
         type: body.image.type
       }
     })
-  ])
 
-  if (!providerDB) {
     return {
-      success: false,
-      message: 'Operation cannot be performed',
-      details: ['There is no provider registered for the provided id provider']
+      success: true,
+      message: 'operation performed successfully',
+      data: productMapper.toItemListDTO(productDB)
     }
-  }
-  if (!categoryDB) {
-    return {
-      success: false,
-      message: 'Operation cannot be performed',
-      details: ['There is no category registered for the category id entered']
-    }
-  }
-  if (!productDB) {
-    return {
-      success: false,
-      message: 'Operation cannot be performed',
-      details: ['It is not possible to insert the product']
-    }
-  }
-  if (moveFile !== undefined) {
-    return {
-      success: false,
-      message: 'Operation cannot be performed',
-      details: ['It is not possible to move the product']
-    }
-  }
-  return {
-    success: true,
-    message: 'operation performed successfully',
-    data: {
-      id: productDB._id,
-      name: productDB.name
-    }
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
-const listProductWithFilterService = async (name, filter) => {
-  let search = ''
-  let efilter = { description: 1 }
+const listProductWithFilterService = async (name, filter = '') => {
+  try {
+    const productDB = await product.aggregate([
+      {
+        $match: {
+          name: {
+            $regex: `.*${filter}.*`,
+            $options: 'i'
+          }
+        }
+      },
+      {
+        $lookup: {
+          from: provider.collection.name,
+          localField: '_id',
+          foreignField: 'likes',
+          as: 'likes'
+        }
+      },
+      {
+        $group: {
+          _id: '$_id',
+          occurances: { $push: { $size: '$likes._id' } },
+          doc: { $first: '$$ROOT' }
+        }
+      },
 
-  if (name == 'like') {
-    efilter = { result_likes: -1 }
-  } else if (name == 'price') {
-    efilter = { price: -1 }
-  } else if (name == 'description') {
-    efilter = { description: -1 }
-  } else if (filter == 'nameFilter') {
-    search = name
-  }
+      {
+        $replaceRoot: {
+          newRoot: { $mergeObjects: [{ count: '$occurances' }, '$doc'] }
+        }
+      },
+      {
+        $sort: { [`${name}`]: -1 }
+      }
+    ])
 
-  const productDB = await product.aggregate([
-    { $match: { name: { $regex: `.*${search.replace(' ', '')}.*` } } },
-    {
-      $lookup: {
-        from: like.collection.name,
-        localField: '_id',
-        foreignField: 'product',
-        as: 'result_likes'
-      }
-    },
-    {
-      $group: {
-        _id: '$_id',
-        occurances: { $push: { user: '$result_likes.product' } },
-        doc: { $first: '$$ROOT' }
-      }
-    },
-
-    {
-      $replaceRoot: {
-        newRoot: { $mergeObjects: [{ count: '$occurances' }, '$doc'] }
-      }
-    },
-    {
-      $sort: efilter
+    return {
+      success: true,
+      message: 'operation performed successfully',
+      data: productDB.map((item) => productMapper.toDTO(item))
     }
-  ])
-
-  return {
-    success: true,
-    message: 'operation performed successfully',
-    data: productDB.map((item) => productMapper.toDTO(item))
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
-const updateProductService = async (productId, providerid, model) => {
-  const productDB = await product.findOne({ _id: productId })
-  if (!productDB) {
+const updateProductService = async (providerId, productId, body) => {
+  try {
+    const productDB = await product.findOne({
+      _id: `${productId}`,
+      provider: `${providerId}`
+    })
+
+    productDB.name = body.name
+    productDB.description = body.description
+    productDB.price = body.price
+    productDB.category = body.category
+    productDB.provider = providerId
+
+    if (typeof body.image === 'object') {
+      productDB.image = {
+        origin: body.image.origin,
+        name: body.image.newName,
+        type: body.image.type
+      }
+
+      fileUtils.utilRemove('products', productDB.image.name)
+      fileUtils.utilMove(body.image.oldPath, body.image.newPath)
+    }
+
+    await productDB.save()
+
     return {
-      success: false,
-      message: 'could not perform the operation',
-      details: ['The product id does not exist.']
+      success: true,
+      message: 'Operation performed successfully!',
+      data: productMapper.toItemListDTO(productDB)
     }
-  }
-
-  productDB.name = model.name
-  productDB.description = model.description
-  productDB.price = model.price
-  productDB.category = model.category
-  productDB.provider = model.provider
-
-  if (typeof model.image === 'object') {
-    productDB.image = {
-      origin: model.image.origin,
-      name: model.image.newName,
-      type: model.image.type
-    }
-
-    fileUtils.UtilRemove('products', productDB.image.name)
-    fileUtils.UtilMove(model.image.old_path, model.image.new_path)
-  }
-  const result = await productDB.save()
-  if (!result) {
-    return {
-      success: false,
-      message: 'could not perform the operation',
-      details: ['The product id does not exist.']
-    }
-  }
-  return {
-    success: true,
-    message: 'Operation performed successfully!',
-    data: productMapper.toItemListDTO(productDB)
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error!`)
   }
 }
 
-const deleteProductService = async ({ productId }) => {
-  const productDB = await product.findById(productId)
-  if (!productDB) {
-    return {
-      success: false,
-      message: 'Operation cannot be performed',
-      details: ['O product informed does not exist.']
-    }
-  }
+const deleteProductService = async (productId) => {
+  try {
+    const likeDB = await provider.find({ likes: `${productId}` })
 
-  const resultDB = await product.deleteOne({ _id: productId })
-  if (!resultDB) {
+    if (likeDB.length !== 0) {
+      await provider.updateMany({
+        $pull: { likes: `${productId}` }
+      })
+    }
+
+    await product.deleteOne({ _id: productId })
+
     return {
-      success: false,
-      message: 'Operation cannot be performed',
-      details: ['Error deleting data']
+      success: true,
+      message: 'Operation performed successfully'
     }
-  }
-  return {
-    success: true,
-    message: 'Operation performed successfully',
-    data: {
-      id: productId,
-      name: productDB.name
-    }
+  } catch (err) {
+    throw new ErrorGeneric(`Internal Server Error! ${err}`)
   }
 }
 
 module.exports = {
-  listAllProductService,
   listProductByIdService,
   createProductService,
   listProductWithFilterService,
