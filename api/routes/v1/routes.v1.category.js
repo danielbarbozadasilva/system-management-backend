@@ -1,22 +1,21 @@
 const joi = require('joi')
 const controllerCategory = require('../../controllers/controllers.category')
 
-const middlewareValidateDTO = require('../../utils/middlewares/middlewares.validate_dto')
-const middlewareFileUploadMiddleware = require('../../utils/middlewares/middlewares.file_upload')
-const authorizationMiddleware = require('../../utils/middlewares/middlewares.authorization')
-const asyncMiddleware = require('../../utils/middlewares/middlewares.async')
+const middlewareValidateDTO = require('../../middlewares/middlewares.validate-dto')
+const middlewareFileUploadMiddleware = require('../../middlewares/middlewares.file-upload')
+const authenticationMiddleware = require('../../middlewares/middlewares.authentication')
+const authorizationMiddleware = require('../../middlewares/middlewares.authorization')
+const verifyDbMiddleware = require('../../middlewares/middlewares.verify-exists')
 
 module.exports = (router) => {
   router
     .route('/category')
-    .get(
-      authorizationMiddleware('*'),
-      controllerCategory.listAllCategoryController
-    )
+    .get(controllerCategory.listAllCategoryController)
 
     .post(
+      authenticationMiddleware(),
       authorizationMiddleware('CREATE_CATEGORY'),
-      asyncMiddleware(middlewareFileUploadMiddleware('category', true)),
+      middlewareFileUploadMiddleware('category', true),
       middlewareValidateDTO(
         'body',
         {
@@ -39,6 +38,7 @@ module.exports = (router) => {
   router
     .route('/category/:categoryid')
     .get(
+      authenticationMiddleware(),
       authorizationMiddleware('*'),
       middlewareValidateDTO('params', {
         categoryid: joi
@@ -50,12 +50,14 @@ module.exports = (router) => {
             'string.empty': '"category id" can not be empty'
           })
       }),
-      asyncMiddleware(controllerCategory.listCategoryByIdController)
+      verifyDbMiddleware.verifyIdCategoryDbMiddleware,
+      controllerCategory.listCategoryByIdController
     )
 
     .put(
+      authenticationMiddleware(),
       authorizationMiddleware('UPDATE_CATEGORY'),
-      asyncMiddleware(middlewareFileUploadMiddleware('category')),
+      middlewareFileUploadMiddleware('category'),
       middlewareValidateDTO('params', {
         categoryid: joi
           .string()
@@ -83,10 +85,12 @@ module.exports = (router) => {
           allowUnknown: true
         }
       ),
+      verifyDbMiddleware.verifyIdCategoryDbMiddleware,
       controllerCategory.updateCategoryController
     )
 
     .delete(
+      authenticationMiddleware(),
       authorizationMiddleware('REMOVE_CATEGORY'),
       middlewareValidateDTO('params', {
         categoryid: joi
@@ -99,11 +103,11 @@ module.exports = (router) => {
             'string.regex': '"category id" out of the expected format'
           })
       }),
-      asyncMiddleware(controllerCategory.removeCategoryController)
+      verifyDbMiddleware.verifyIdCategoryDbMiddleware,
+      controllerCategory.removeCategoryController
     )
 
   router.route('/category/:categoryid/product').get(
-    authorizationMiddleware('*'),
     middlewareValidateDTO('params', {
       categoryid: joi
         .string()
@@ -114,6 +118,7 @@ module.exports = (router) => {
           'string.empty': '"category id" can not be empty'
         })
     }),
+    verifyDbMiddleware.verifyIdCategoryDbMiddleware,
     controllerCategory.listCategoryByIdProductController
   )
 }

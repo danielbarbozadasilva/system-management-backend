@@ -1,6 +1,9 @@
 .env
-
+.env.test
+instruções.txt
 api/utils/file/temp/**
+api/utils/file/category/**
+api/utils/file/products/**
 node_modules
 .vscode
 data

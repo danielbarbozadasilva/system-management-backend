@@ -19,7 +19,7 @@ const toUserDTO = (model) => {
   return {
     id: _id,
     email,
-    name: name || socialName || firstName + ' ' + lastName,
+    name: name || socialName || `${firstName} ${lastName}`,
     typeUser: VerifyTypeUser(kind)
   }
 }

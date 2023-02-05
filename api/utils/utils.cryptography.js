@@ -1,50 +1,49 @@
 const md5 = require('md5')
 const jwt = require('jsonwebtoken')
+const ErrorNotAuthenticatedUser = require('../exceptions/errors.user-not-authenticated')
+const ErrorGeneric = require('../exceptions/erros.generic-error')
 
-const md5_hash_secret = process.env.MD5_SECRET
-const jwt_hash_secret = process.env.JWT_SECRET
-const jwt_time_limit = process.env.JWT_VALID_TIME
+const md5HashSecret = process.env.MD5_SECRET
+const jwtHashSecret = process.env.JWT_SECRET
+const jwtTimeLimit = process.env.JWT_VALID_TIME
 
-const UtilCreateHash = (password) => {
-  const verify_hash = md5(password + md5_hash_secret)
-  if (verify_hash) {
-    return verify_hash
-  } else {
-    return false
+const createHash = (password) => {
+  try {
+    return md5(password + md5HashSecret)
+  } catch (error) {
+    throw new ErrorGeneric(`Error creating hash! ${error}`)
   }
 }
 
-const UtilCreateToken = (model) => {
-  const verify_data = jwt.sign({ ...model }, jwt_hash_secret, {
-    expiresIn: `${jwt_time_limit}ms`
-  })
-  if (verify_data) {
-    return verify_data
-  } else {
-    return false
+const createToken = (model) => {
+  try {
+    return jwt.sign({ ...model }, jwtHashSecret, {
+      expiresIn: `${jwtTimeLimit}`
+    })
+  } catch (error) {
+    throw new ErrorGeneric(`Error generating token! ${error}`)
   }
 }
 
-const UtilDecodeToken = (token) => {
-  const verify_decode = jwt.decode(token)
-  if (verify_decode) {
-    return verify_decode
-  } else {
-    return false
+const decodeToken = (token) => {
+  try {
+    return jwt?.decode(token)
+  } catch (error) {
+    throw new ErrorGeneric(`Error decoding token! ${error}`)
   }
 }
-const UtilValidateToken = (token) => {
-  const verify = jwt.verify(token, jwt_hash_secret)
-  if (verify) {
-    return verify
-  } else {
-    return false
+
+const tokenIsValid = (token) => {
+  try {
+    jwt?.verify(token, jwtHashSecret)
+  } catch (err) {
+    throw new ErrorNotAuthenticatedUser('Usuário não autenticado!')
   }
 }
 
 module.exports = {
-  UtilCreateHash,
-  UtilCreateToken,
-  UtilValidateToken,
-  UtilDecodeToken
+  createHash,
+  createToken,
+  tokenIsValid,
+  decodeToken
 }

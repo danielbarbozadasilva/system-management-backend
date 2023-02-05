@@ -1,88 +1,229 @@
-# **Management Node API**
-We are constantly faced with new commercial establishments, many of which do not have a means of promotion or are not easily located. The REGALE System came to solve this problem, with a focus on bakeries, it allows the user, through a web system, to locate the bakeries close to their residence.
+# **Api RESTful Sistema REGALE**
+## **Introdução**
+A todo momento surgem novos estabelecimentos comerciais, muitos dos quais não têm os meios de promoção ou são de difícil localização. O Sistema REGALE possui a proposta de solucionar esse problema, com foco em confeitarias, ele permite ao usuário através de um sistema web localizar as confeitarias mais próximas a sua localidade. Assim como os produtos ofertados por elas.
+A API foi desenvolvida utilizando o NodeJs, ExpressJs e Banco de dados MongoDB.
+<br/>
+<br/>
+O Front-End foi desenvolvido utilizando o ReactJs, e está disponível para consulta no link abaixo:
+```
+git clone https://github.com/danielbarbozadasilva/system-management-frontend.git
+```
 <br/>
 <br/>
 
-> ## Product scope
-The System aims to list the bakeries and manage them, enabling consultation by customers. The project aims to promote the bakeries, especially those that are starting on the market, or that are not well known. Allows you to offer more product options and prices.
+## **Escopo do produto**
+O Sistema tem como objetivo listar as confeitarias e gerenciá-las, possibilitando a consulta por parte dos clientes. O projeto tem como objetivo divulgar as confeitarias, principalmente aquelas que estão começando no mercado, ou que não são muito conhecidas. Permite oferecer mais opções de produtos e preços.
 <br/>
 <br/>
 
-> ## General description
-REGALE is a web system that aims to establish a relationship between the customer and a specific market niche. All of its features were designed and designed to provide comfort and convenience to users.
+## **Descrição geral**
+REGALE é um sistema web que visa estabelecer um relacionamento entre o cliente e um nicho de mercado específico. Todas as suas funcionalidades foram pensadas para proporcionar conforto e comodidade aos seus usuários.
 
-The System's proposal is to publicize the establishment, which is a recurrent problem in bakeries that are just starting on the market, as they still don't have a way to publicize their business.
+A proposta do Sistema é divulgar estabelecimentos, cujo problema se faz presente em confeitarias que estão iniciando no mercado, pois ainda não possuem uma forma eficaz de divulgação.
 
-In addition to publicizing the establishments, the System provides a user-friendly interface for the customer to list the bakeries and manage them and the 'customer' user. The users of the system are the administrator, the owner of the bakery and the customer. Where everyone has access to the system according to their credentials and access permissions. In addition, the System has an initial screen that allows the public to easily navigate between categories, products and suppliers.
+Além de realizar a divulgação, o Sistema disponibiliza uma interface amigável e de fácil uso para o usuário da plataforma. Os usuários do sistema são o administrador, o proprietário da confeitaria (fornecedor) e o cliente. Onde todos têm acesso ao sistema de acordo com suas credenciais e permissões de acesso. 
+
+O Sistema permite ao Administrador gerenciar categorias, fornecedores e clientes. O proprietário da confeitaria pode gerenciar seus produtos, assim como favoritá-los. O cliente possui a opção de avaliar os fornecedores. Além disso, o Sistema possui uma tela inicial que permite ao público em geral navegar facilmente através de filtros de busca entre categorias, produtos e fornecedores.
 <br/>
 <br/>
 
-> ## Functional requirements
-[FR1] It is necessary to handle admin user authentication. Explanation: The System must allow admin access based on his credentials. Blocking any access attempts by other users.
+## **Instalação com Docker**
+Clone o repositório na pasta de sua preferência.
+```
+git clone https://github.com/danielbarbozadasilva/system-management-backend.git
+```
 
-[FR2] Only authorized supplier users can access the system. Explanation: The System must allow access to suppliers based on their credentials. Blocking any access attempts by other users.
+Abra a pasta do repositório clonado, e crie um arquivo ".env", exemplo:
+```
+PORT=3011
 
-[FR3] It is necessary to handle client authentication. Explanation: The System must allow access to clients based on their credentials. Blocking any access attempts by other users.
+MONGO_HOST=localhost:27017
+MONGO_DB_NAME=PROJETO04
 
-[FR4] The admin user must register categories. Explanation: The System will allow the admin user to register new categories.
+MD5_SECRET=teste_secret_password
+JWT_SECRET=dsfsfdsfdsdsdsfdsfs
+JWT_VALID_TIME=9000000000
+URL=http://localhost:3000
+IMAGE_PATH=http://localhost:3011/static/
 
-[FR5] The supplier user must register. Explanation: The System will allow the supplier user to register.
+SENDGRID_SENDER=example@gmail.com
+SENDGRID_API_KEY=example
+```
 
-[FR6] The admin user must authorize vendor access to the system. Explanation: The admin user may or may not authorize the access of suppliers to the system.
+Abra a pasta do repositório clonado, e instale as dependências do projeto através do comando:
+```
+npm install
+```
 
-[FR7] The supplier user can register the product. Explanation: The System makes available to the supplier user the possibility of registering their products in the system.
+Logo após o término da instalação. Instale o Docker e o docker compose através do link: 
+```
+https://docs.docker.com/desktop/windows/install/
+```
+Com o Docker instalado, abra o terminal na pasta do projeto e execute o seguinte comando:
+```
+docker-compose up
+``` 
+Obs.: O comando acima populará o banco de dados com as migrations e os seeders.
+<br />
+<br />
 
-[FR8] The client user must register. Explanation: The System will allow the customer to register in the system.
 
-[FR9] The admin user must be able to view all suppliers listed in alphabetical order. Explanation: The System allows the admin to view the suppliers registered in the system.
+Execute o comando para rodar o projeto:
+```
+npm run dev
+```
 
-[FR10] The supplier user can view the products in a listing and they will have the category information. Explanation: The System should display the supplier user a listing of the products, as well as the category information.
+Com o projeto rodando, abra a documentação do Postman na pasta do projeto:
+```
+docs -> PROJETO04.postman_collection.json
+```
+<br/>
 
-[FR11] The admin user must be able to view products by supplier. Explanation: The System allows the admin user to view the products by their respective suppliers.
+# **Levantamento de requisitos**
 
-[FR12] After access approval/cancellation, the system sends an email message to the supplier. Explanation: The System must send an activation or inactivation confirmation email to the supplier, in case the System admin revokes or allows the access by the supplier.
+## **Requisitos funcionais**
+<br/>
 
-[FR13] The client user can bookmark up to three providers. Explanation: The System should allow only three suppliers to be favored by the customer.
+RF001 – O sistema deve controlar a autenticação dos usuários.
 
-[FR14] The admin user must be able to view customers by supplier. Explanation: The System must allow the administrator user access to the data grouped by customers/supplier
+RF002 – O sistema deve manter cadastro de clientes.
 
-[FR15] The supplier user can mark up to three products as favorites. Explanation: The System should allow only three products to be favored by the supplier.
+RF003 – O sistema deve manter cadastro de fornecedores.
 
-[FR16] All users have the possibility to list the suppliers sorted by number of favorites and in alphabetical order. Explanation: The System should display the supplier data sorted by number of favorites and in alphabetical order.
+RF004 – O sistema deve manter categorias.
 
-[FR17] All users have the ability to list products by category sorted by favorite, by value and by description. Explanation: The System should display products by category sorted by favorite, by value and by description.
+RF005 – O sistema deve manter produtos.
 
-[FR18] All users need to define the location (UF and city) to search. Explanation: The System should display filter users by locality (UF and city).
+RF006 – O sistema deve aprovar ou bloquear o acesso do fornecedor.
+
+RF007 – O sistema deve enviar um e-mail ao fornecedor informando a ativação ou bloqueio da conta.
+
+RF008 – O sistema deve favoritar fornecedores.
+
+RF009 – O sistema deve favoritar produtos.
+
+RF010 – O sistema deve listar os clientes por fornecedor.
+
+RF011 – O sistema deve listar os fornecedores ordenados por número de curtidas e por ordem alfabética.
+
+RF012 – O sistema deve listar os produtos por categoria.
+
+RF013 – O sistema deve filtrar os produtos por nome e ordenação.
+
+RF014 – O sistema deve listar os produtos por fornecedor.
+
+RF015 – O sistema deve filtrar os fornecedores por localidade e ordem alfabética.
+
 <br/>
 <br/>
 
-> ## License
-- GPLv3 License
+## **Requisitos não funcionais**
+<br/>
+
+| Identificação | Classificação | Descrição |
+| --- | --- | --- |
+|RNF001   |Implementação     |O back-end do sistema deve ser desenvolvido em NodeJs e ExpressJs.    |
+|RNF002   |Implementação     | O front-end do sistema deve ser desenvolvido em ReactJs.    |
+|RNF003   |Implementação     |O banco de dados a ser utilizado é o MongoDB.     |
+|RNF004   |Implementação     | O sistema deve funcionar em Sistemas Operacionais Windows, Mac e Linux.    |
+|  |  |  |
+
 <br/>
 <br/>
 
-> ## Methodologies and Designs
-* MVC
-* Conventional Commits
+## **Regras de negócio**
+<br/>
+
+| Identificação | Classificação | Descrição |
+| --- | --- | --- |
+|RN001   |Controle de acesso     |Os acessos permitidos ao sistema serão: Administrador, Fornecedor (confeitaria) e Cliente. O usuário anônimo terá acesso apenas ao portal do site.    |
+|RN002   |Controle de veracidade     | Apenas fornecedores autorizados pelo administrador poderão ter acesso ao sistema.    |
+|RN003   |Limite de ação     |Apenas o Administrador poderá incluir, editar e excluir categorias no sistema.     |
+|RN004   |Limite de ação     | Apenas o Administrador poderá visualizar informações sobre os clientes.    |
+|RN005   |Controle de estoque     | Somente o gerente da confeitaria (fornecedor) terá permissão para incluir, alterar e excluir seus produtos no sistema.    |
+|RN006   |Limite de ação     | Somente o gerente da confeitaria (fornecedor) terá permissão de favoritar os seus próprios produtos.  
+|RN007   |Limite de ação     | O gerente da confeitaria (fornecedor) terá permissão de favoritar apenas 3 (três) de seus próprios produtos.   
+|RN008   |Limite de ação     | Somente o cliente terá permissão de favoritar a confeitaria (fornecedor).  
+|RN009   |Limite de ação     | O cliente terá permissão de favoritar apenas 3 (três) fornecedores.  
+|  |  |  |
+
+<br/>
+<br/>
+
+## **Lista de atores e casos de uso**
+<br/>
+
+## Lista de atores que interagem com o sistema:
+* Administrador
+* Fornecedor (confeitaria)
+* Cliente
+* Anônimo
+<br/>
+<br/>
+
+## Lista de Casos de Uso:
+<br/>
+
+1 - Manter categorias
+
+2 - Manter fornecedores
+
+3 - Manter clientes
+
+4 - Aprovar cadastro de fornecedores
+
+5 - Manter produtos
+
+6 - Avaliar produtos
+
+7 - Avaliar fornecedores
+
+8 - pesquisar categorias
+
+9 - pesquisar produtos
+
+10 - pesquisar fornecedores
+<br/>
+<br/>
+
+## **Diagrama de Casos de uso**
+<br/>
+<img src="./docs/diagrama_de_casos_de_uso.png" alt="Diagrama de Casos de uso"/>
+
+<br/>
+<br/>
+
+> ## Licença
+- Licença GPLv3
+<br/>
+<br/>
+<br/>
+
+> ## Metodologias e Padrões
+* RESTful
+* Conventional commits
 * GitFlow
-* Use Cases
+* Error handler
+
+<br/>
 <br/>
 <br/>
 
-> ## Libraries and Tools
-* NPM
-* Git
+> ## Bibliotecas e Ferramentas
+* SendGrid
 * Docker
 * MongoDb
-* Bcrypt
-* JsonWebToken
-* Validator
-* Express
-* Husky
-* Lint Staged
-* Eslint
-* Standard Javascript Style
+* Formidable
+* Md5
+* Uuid
+* Path
+* Joi
+* Http-status
+* Mongoose
 * Nodemon
+* Git
+* JsonWebToken
+* Express
+* Eslint
+* Prettier
 * FileSystem
-<br/>
-<br/>

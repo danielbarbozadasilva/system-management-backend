@@ -1,94 +1,92 @@
 const fileUtils = require('../utils/utils.file')
 
-const toDTO = (model) => {
-  const {
-    id: _id,
-    cnpj,
-    fantasyName,
-    socialName,
-    email,
-    address,
-    uf,
-    city,
-    responsible,
-    phone,
-    status
-  } = model
+const toDTO = (model) => ({
+  id: model._id,
+  cnpj: model.cnpj,
+  fantasyName: model.fantasyName,
+  socialName: model.socialName,
+  email: model.email,
+  address: model.address,
+  uf: model.uf,
+  city: model.city,
+  responsible: model.responsible,
+  phone: model.phone,
+  status: model.status
+})
 
-  return {
-    id: _id,
-    cnpj,
-    fantasyName,
-    socialName,
-    email,
-    address,
-    uf,
-    city,
-    responsible,
-    phone,
-    status
-  }
-}
+const toItemListDTO = (model) => ({
+  id: model._id,
+  cnpj: model.cnpj,
+  fantasyName: model.fantasyName,
+  socialName: model.socialName,
+  email: model.email,
+  address: model.address,
+  kind: model.kind,
+  uf: model.uf,
+  city: model.city,
+  responsible: model.responsible,
+  phone: model.phone,
+  status: model.status,
+  count_products: model?.result_products?.length,
+  count_likes_products: model?.likes?.length,
+  count_likes_clients: model?.clients?.length,
 
-const toItemListDTO = (model) => {
-  return {
-    id: model._id,
-    cnpj: model.cnpj,
-    fantasyName: model.fantasyName,
-    socialName: model.socialName,
-    email: model.email,
-    address: model.address,
-    kind: model.kind,
-    uf: model.uf,
-    city: model.city,
-    responsible: model.responsible,
-    phone: model.phone,
-    status: model.status,
-    count_products: model?.result_products?.length,
-    count_likes_products: model?.result_likes?.length,
-    count_likes_clients: model?.result_client?.length,
-
-    result_products: model.result_products?.map((item) => {
-      return {
-        id: item?._id,
-        price: parseFloat(item?.price).toLocaleString('pt-br', {
-          style: 'currency',
-          currency: 'BRL'
-        }),
-        category: item?.category,
-        provider: item?.provider,
-        name: item?.name,
-        description: item?.description,
-        image: fileUtils.UtilCreateAddressDownload('product', item.image.name)
-      }
+  result_products: model.result_products?.map((item) => ({
+    id: item?._id,
+    price: parseFloat(item?.price).toLocaleString('pt-br', {
+      style: 'currency',
+      currency: 'BRL'
     }),
+    category: item?.category,
+    provider: item?.provider,
+    name: item?.name,
+    description: item?.description,
+    image: fileUtils.utilCreateAddressDownload('product', item.image.name)
+  })),
 
-    result_client: model.result_client?.map((item) => {
-      return {
-        id: item?._id,
-        name: item?.firstName + ' ' + item?.lastName,
-        email: item?.email,
-        kind: item?.kind
-      }
+  clients: model.clients?.map((item) => ({
+    id: item?._id,
+    name: `${item?.firstName} ${item?.lastName}`,
+    email: item?.email,
+    kind: item?.kind
+  })),
+
+  likes: model.likes?.map((item) => ({
+    id: item?._id,
+    name: item?.name,
+    priceProduct: parseFloat(item?.price).toLocaleString('pt-br', {
+      style: 'currency',
+      currency: 'BRL'
     }),
+    nameProvider: model.fantasyName,
+    email: model.email
+  }))
+})
 
-    result_likes: model.result_likes?.map((item) => {
-      return {
-        id: item?._id,
-        name: item?.name,
-        priceProduct: parseFloat(item?.price).toLocaleString('pt-br', {
-          style: 'currency',
-          currency: 'BRL'
-        }),
-        nameProvider: model.fantasyName,
-        email: model.email
+const toDTOLikeList = (model) => ({
+  id: model._id,
+  name: model.name,
+  description: model.description,
+  price: parseFloat(model.price).toLocaleString('pt-br', {
+    style: 'currency',
+    currency: 'BRL'
+  }),
+  image: fileUtils.utilCreateAddressDownload('products', model.image.name),
+  provider: model.provider[0]._id,
+  category: model.category[0].name,
+  likes: model.provider.map((item) => {
+    for (const i in item.likes) {
+      if (JSON.stringify(item.likes[i]) == JSON.stringify(model._id)) {
+        return true
       }
-    })
-  }
-}
-
+    }
+    return false
+  })[0],
+  result_client: model.result_client
+})
 
 module.exports = {
+  toDTOLikeList,
   toItemListDTO,
   toDTO
 }
